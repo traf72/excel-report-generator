@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelReporter", "ExcelReporter\ExcelReporter.csproj", "{64270919-EF05-443D-AE3D-2348C1F9C2B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelReporter.Tests", "ExcelReporter.Tests\ExcelReporter.Tests.csproj", "{2632C242-3378-4FE0-8F49-098782B75433}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{64270919-EF05-443D-AE3D-2348C1F9C2B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64270919-EF05-443D-AE3D-2348C1F9C2B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64270919-EF05-443D-AE3D-2348C1F9C2B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64270919-EF05-443D-AE3D-2348C1F9C2B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2632C242-3378-4FE0-8F49-098782B75433}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2632C242-3378-4FE0-8F49-098782B75433}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2632C242-3378-4FE0-8F49-098782B75433}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2632C242-3378-4FE0-8F49-098782B75433}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
