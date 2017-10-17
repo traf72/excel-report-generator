@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ExcelReporter.Tests.Helpers
+namespace ExcelReporter.Tests
 {
     public class MyAssert
     {

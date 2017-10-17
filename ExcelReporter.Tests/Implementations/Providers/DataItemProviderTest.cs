@@ -1,10 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ExcelReporter.Exceptions;
-using ExcelReporter.Implementations.Providers;
-using ExcelReporter.Tests.Helpers;
-using System;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ExcelReporter.Tests
+namespace ExcelReporter.Tests.Implementations.Providers
 {
     [TestClass]
     public class DataItemProviderTest

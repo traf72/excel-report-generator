@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ExcelReporter.Implementations.TemplateProcessors;
 
-namespace ExcelReporter.Tests
+namespace ExcelReporter.Tests.Implementations.TemplateProcessors
 {
     [TestClass]
     public class TemplateProcessorTest

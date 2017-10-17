@@ -4,7 +4,6 @@ using ClosedXML.Excel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ExcelReporter.Enums;
 using ExcelReporter.Excel;
-using ExcelReporter.Tests.Helpers;
 
 namespace ExcelReporter.Tests.Excel
 {
@@ -39,7 +38,7 @@ namespace ExcelReporter.Tests.Excel
         }
 
         [TestMethod]
-        public void TestIsRangeBelongsToAnotherRange()
+        public void TestIsRangeInsideAnotherRange()
         {
             XLWorkbook wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
@@ -105,8 +104,7 @@ namespace ExcelReporter.Tests.Excel
             Assert.AreEqual(new CellCoords(4, 5), ExcelHelper.GetCellCoordsRelativeRange(range, ws.Cell(6, 7)));
 
             IXLCell cell = ws.Cell(1, 1);
-            MyAssert.Throws<InvalidOperationException>(() => ExcelHelper.GetCellCoordsRelativeRange(range, cell),
-                $"{range} is not a parent of {cell}");
+            MyAssert.Throws<InvalidOperationException>(() => ExcelHelper.GetCellCoordsRelativeRange(range, cell), $"{range} is not a parent of {cell}");
         }
 
         [TestMethod]
@@ -132,8 +130,7 @@ namespace ExcelReporter.Tests.Excel
             Assert.AreEqual(new RangeCoords(new CellCoords(2, 2), new CellCoords(4, 3)), ExcelHelper.GetRangeCoordsRelativeParent(parentRange, childRange));
 
             childRange = ws.Range(4, 4, 7, 5);
-            MyAssert.Throws<InvalidOperationException>(() => ExcelHelper.GetRangeCoordsRelativeParent(parentRange, childRange),
-                $"{parentRange} is not a parent of {childRange}");
+            MyAssert.Throws<InvalidOperationException>(() => ExcelHelper.GetRangeCoordsRelativeParent(parentRange, childRange), $"{parentRange} is not a parent of {childRange}");
         }
 
         [TestMethod]
@@ -213,7 +210,7 @@ namespace ExcelReporter.Tests.Excel
             Assert.AreEqual(XLBorderStyleValues.Thin, newRange2.FirstCell().Style.Border.TopBorder);
             Assert.AreEqual(XLBorderStyleValues.Thin, newRange2.LastCell().Style.Border.BottomBorder);
 
-            //wb.SaveAs(@"D:\Temp\copy.xlsx");
+            //wb.SaveAs("test.xlsx");
         }
 
         [TestMethod]
@@ -272,6 +269,8 @@ namespace ExcelReporter.Tests.Excel
             Assert.AreEqual(XLBorderStyleValues.Thin, newRange2.LastCell().Style.Border.BottomBorder);
 
             Assert.AreEqual(3, ws.NamedRanges.Count());
+
+            //wb.SaveAs("test.xlsx");
         }
 
         [TestMethod]
@@ -554,7 +553,8 @@ namespace ExcelReporter.Tests.Excel
             Assert.AreEqual(aboveCell2, ws.Cell(5, 4));
             Assert.AreEqual(leftCell1, ws.Cell(7, 4));
             Assert.AreEqual(leftCell2, ws.Cell(10, 4));
-            //wb.SaveAs(@"D:\Temp\copy.xlsx");
+
+            //wb.SaveAs("test.xlsx");
         }
 
         [TestMethod]
@@ -712,7 +712,7 @@ namespace ExcelReporter.Tests.Excel
             Assert.AreEqual(leftCell1, ws.Cell(7, 4));
             Assert.AreEqual(leftCell2, ws.Cell(10, 4));
 
-            //wb.SaveAs(@"D:\Temp\copy.xlsx");
+            //wb.SaveAs("test.xlsx");
         }
 
         [TestMethod]
@@ -762,6 +762,8 @@ namespace ExcelReporter.Tests.Excel
             Assert.AreEqual("RangeEnd", movedRange2.LastCell().Value.ToString());
             Assert.AreEqual(XLBorderStyleValues.Thin, movedRange2.FirstCell().Style.Border.TopBorder);
             Assert.AreEqual(XLBorderStyleValues.Thin, movedRange2.LastCell().Style.Border.BottomBorder);
+
+            //wb.SaveAs("test.xlsx");
         }
 
         [TestMethod]
@@ -819,6 +821,8 @@ namespace ExcelReporter.Tests.Excel
             Assert.AreEqual("RangeEnd", movedRange2.LastCell().Value.ToString());
             Assert.AreEqual(XLBorderStyleValues.Thin, movedRange2.FirstCell().Style.Border.TopBorder);
             Assert.AreEqual(XLBorderStyleValues.Thin, movedRange2.LastCell().Style.Border.BottomBorder);
+
+            //wb.SaveAs("test.xlsx");
         }
 
         private XLWorkbook InitWorkBookForShiftTests()

@@ -65,13 +65,15 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="DataItemProviderTest.cs" />
+    <Compile Include="Implementations\Providers\DataItemProviderTest.cs" />
     <Compile Include="Excel\ExcelHelperTest.cs" />
-    <Compile Include="Helpers\MyAssert.cs" />
-    <Compile Include="NamedPanelTest.cs" />
-    <Compile Include="PanelTest.cs" />
-    <Compile Include="TemplateParserTest.cs" />
-    <Compile Include="TemplateProcessorTest.cs" />
+    <Compile Include="Implementations\Providers\DictionaryParameterProviderTest.cs" />
+    <Compile Include="Implementations\Providers\TypeInstanceProviderTest.cs" />
+    <Compile Include="Implementations\Providers\TypeProviderTest.cs" />
+    <Compile Include="MyAssert.cs" />
+    <Compile Include="Implementations\Panels\NamedPanelTest.cs" />
+    <Compile Include="Implementations\Panels\PanelTest.cs" />
+    <Compile Include="Implementations\TemplateProcessors\TemplateProcessorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,9 @@
-﻿namespace ExcelReporter.Interfaces.Providers
+﻿using System;
+
+namespace ExcelReporter.Interfaces.Providers
 {
     public interface IMethodContextProvider
     {
-        object GetMethodContext(string className);
+        object GetMethodContext(string typeName);
     }
 }
