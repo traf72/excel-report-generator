@@ -66,6 +66,7 @@
     <Compile Include="Excel\ExcelHelper.cs" />
     <Compile Include="Excel\AddressShift.cs" />
     <Compile Include="Exceptions\IncorrectTemplateException.cs" />
+    <Compile Include="Exceptions\TypeNotFoundException.cs" />
     <Compile Include="Exceptions\ParameterNotFoundException.cs" />
     <Compile Include="Exceptions\MemberNotFoundException.cs" />
     <Compile Include="HierarchicalDataItem.cs" />
@@ -73,15 +74,13 @@
     <Compile Include="Implementations\Panels\DataSourcePanel.cs" />
     <Compile Include="Implementations\Panels\NamedPanel.cs" />
     <Compile Include="Implementations\Panels\Panel.cs" />
-    <Compile Include="Implementations\Providers\DataItemValueProviderNew.cs" />
+    <Compile Include="Implementations\Providers\MethodContextProvider.cs" />
     <Compile Include="Implementations\Providers\DataItemValueProvider.cs" />
     <Compile Include="Implementations\Providers\ReflectionParameterProvider.cs" />
     <Compile Include="Implementations\Providers\DictionaryParameterProvider.cs" />
+    <Compile Include="Implementations\Reports\TestReport4.cs" />
     <Compile Include="Implementations\TemplateProcessors\TemplateProcessor.cs" />
-    <Compile Include="Interfaces\DataSources\IDataSource.cs" />
-    <Compile Include="Interfaces\IMethodContext.cs" />
     <Compile Include="Interfaces\Panels\IDataItemPanel.cs" />
-    <Compile Include="Interfaces\Panels\IDataSourcePanel.cs" />
     <Compile Include="Interfaces\Panels\INamedPanel.cs" />
     <Compile Include="Interfaces\Providers\IDataItemValueProvider.cs" />
     <Compile Include="Interfaces\Providers\IMethodContextProvider.cs" />
@@ -95,9 +94,9 @@
     <Compile Include="Excel\CellCoords.cs" />
     <Compile Include="Excel\RangeCoords.cs" />
     <Compile Include="TestDataSource.cs" />
-    <Compile Include="TestReport3.cs" />
-    <Compile Include="TestReport2.cs" />
-    <Compile Include="TestReport.cs" />
+    <Compile Include="Implementations\Reports\TestReport3.cs" />
+    <Compile Include="Implementations\Reports\TestReport2.cs" />
+    <Compile Include="Implementations\Reports\TestReport.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -110,11 +109,12 @@
     <None Include="ExcelTemplates\Template3.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="ExcelTemplates\Template4.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Implementations\Reports\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

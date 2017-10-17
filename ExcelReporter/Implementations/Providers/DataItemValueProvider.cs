@@ -8,7 +8,7 @@ namespace ExcelReporter.Implementations.Providers
 {
     public class DataItemValueProvider : IDataItemValueProvider
     {
-        public object GetValue(string template, object dataItem)
+        public object GetValue(string template, HierarchicalDataItem dataItem)
         {
             if (string.IsNullOrWhiteSpace(template))
             {

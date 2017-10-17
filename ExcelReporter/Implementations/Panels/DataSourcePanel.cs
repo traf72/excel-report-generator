@@ -3,59 +3,54 @@ using ExcelReporter.Enums;
 using ExcelReporter.Excel;
 using ExcelReporter.Interfaces.Panels;
 using ExcelReporter.Interfaces.Reports;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace ExcelReporter.Implementations.Panels
 {
-    public class DataSourcePanel : NamedPanel, IDataSourcePanel
+    public class DataSourcePanel : NamedPanel
     {
-        private readonly string _dataSourceName;
-        private readonly string _dataSourceNethod;
+        private readonly string _dataSourceTemplate;
 
-        public DataSourcePanel(string dataSourceName, string dataSourceNethod, IXLNamedRange namedRange, IExcelReport report)
+        public DataSourcePanel(string dataSourceTemplate, IXLNamedRange namedRange, IExcelReport report)
             : base(namedRange, report)
         {
-            _dataSourceName = dataSourceName;
-            _dataSourceNethod = dataSourceNethod;
+            _dataSourceTemplate = dataSourceTemplate;
         }
-
-        public object Data { get; private set; }
 
         public override void Render()
         {
-            object dataSource = GetDataSourceInstance();
-            object result = CallDataSourceMethod(dataSource);
-            if (result is IEnumerable)
+            HierarchicalDataItem dataItem = GetDataContext();
+            object data = Report.TemplateProcessor.GetValue(_dataSourceTemplate, dataItem);
+            if (data is IEnumerable)
             {
-                IList<object> data = (result as IEnumerable).Cast<object>().ToList();
+                IList<object> listData = (data as IEnumerable).Cast<object>().ToList();
                 // Если данных нет, то просто удаляем сам шаблон
-                if (!data.Any())
+                if (!listData.Any())
                 {
                     DeletePanel(this);
                 }
                 else
                 {
-                    // Создаем панель-шаблон для одного элемента данных
-                    IPanel templatePanel = new Panel(Range, null)
+                    var templatePanel = new DataItemPanel(Range, Report)
                     {
                         Parent = Parent,
                         Children = Children,
+                        RenderPriority = RenderPriority,
+                        ShiftType = ShiftType,
+                        Type = Type,
                     };
 
-                    for (int i = 0; i < data.Count; i++)
+                    for (int i = 0; i < listData.Count; i++)
                     {
-                        IPanel currentPanel;
-                        if (i != data.Count - 1)
+                        DataItemPanel currentPanel;
+                        if (i != listData.Count - 1)
                         {
                             // Сам шаблон сдвигаем вниз или вправо в зависимости от типа панели
                             ShiftTemplatePanel(templatePanel);
                             // Копируем шаблон на его предыдущее место
-                            currentPanel = templatePanel.Copy(ExcelHelper.ShiftCell(templatePanel.Range.FirstCell(), GetNextPanelAddressShift(templatePanel)));
+                            currentPanel = (DataItemPanel) templatePanel.Copy(ExcelHelper.ShiftCell(templatePanel.Range.FirstCell(), GetNextPanelAddressShift(templatePanel)));
                         }
                         // Если это последний элемент данных, то уже на размножаем шаблон, а рендерим данные напрямую в него
                         else
@@ -63,7 +58,7 @@ namespace ExcelReporter.Implementations.Panels
                             currentPanel = templatePanel;
                         }
 
-                        //currentPanel.Report.TemplateProcessor.DataItemValueProvider = new DataItemValueProvider(data[i]);
+                        currentPanel.DataItem = new HierarchicalDataItem { Value = listData[i], Parent = dataItem };
                         // Заполняем шаблон данными
                         currentPanel.Render();
                         // Удаляем все сгенерированные имена Range'ей
@@ -73,32 +68,6 @@ namespace ExcelReporter.Implementations.Panels
                     RemoveName();
                 }
             }
-
-            ////Data = func.Invoke(dataSource, callParameters.ToArray());
-        }
-
-        private object GetDataSourceInstance()
-        {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            // TODO Пока простейший вариант поиска. Тут нужно будет подумать как правильно искать
-            // с учётом того, что основной DataSource может быть переопределён для компании,
-            // а также что могут быть общие DataSource'ы
-            // Возможно сделать какой-то DataSourceProvider
-            Type type = assembly.GetTypes().Single(t => t.Name == _dataSourceName);
-            return Activator.CreateInstance(type);
-        }
-
-        private object CallDataSourceMethod(object dataSource)
-        {
-            Match match = Regex.Match(_dataSourceNethod, @"(.+)\((.*)\)");
-            string methodName = match.Groups[1].Value;
-            string methodParams = match.Groups[2].Value;
-            object[] callParameters = methodParams
-                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(p => Report.TemplateProcessor.GetValue(p.Trim()))
-                .ToArray();
-            MethodInfo method = dataSource.GetType().GetMethod(methodName);
-            return method.Invoke(dataSource, callParameters);
         }
 
         private AddressShift GetNextPanelAddressShift(IPanel currentPanel)
@@ -132,7 +101,7 @@ namespace ExcelReporter.Implementations.Panels
 
         protected override IPanel CopyPanel(IXLCell cell)
         {
-            var panel = new DataSourcePanel(_dataSourceName, _dataSourceNethod, CopyNamedRange(cell), Report);
+            var panel = new DataSourcePanel(_dataSourceTemplate, CopyNamedRange(cell), Report);
             FillCopyProperties(panel);
             return panel;
         }

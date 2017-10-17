@@ -39,7 +39,7 @@ namespace ExcelReporter.Tests
                     {
                         Children = new List<IPanel>
                         {
-                            new DataSourcePanel("DataSource", "Method", namedChildOfChildRange, null)
+                            new DataSourcePanel("fn:DataSource:Method()", namedChildOfChildRange, null)
                         }
                     }
                 }
@@ -280,7 +280,7 @@ namespace ExcelReporter.Tests
                     {
                         Children = new List<IPanel>
                         {
-                            new DataSourcePanel("DataSource", "Method", childOfChildNamedRange, null)
+                            new DataSourcePanel("fn:DataSource:Method()", childOfChildNamedRange, null)
                         }
                     },
                     new NamedPanel(namedChildRange, null)

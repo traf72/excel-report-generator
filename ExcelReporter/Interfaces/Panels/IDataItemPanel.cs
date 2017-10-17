@@ -1,7 +1,7 @@
 ﻿namespace ExcelReporter.Interfaces.Panels
 {
-    public interface IDataItemPanel : IPanel
+    internal interface IDataItemPanel : IPanel
     {
-        object DataItem { get; set; }
+        HierarchicalDataItem DataItem { get; set; }
     }
 }

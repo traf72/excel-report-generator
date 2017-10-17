@@ -29,7 +29,9 @@ namespace ExcelReporter.Implementations.TemplateProcessors
             _dataItemValueProvider = dataItemValueProvider;
         }
 
-        public object GetValue(string template, object dataContext)
+        public string Pattern { get; } = @"\{.+?:.+?\}";
+
+        public object GetValue(string template, HierarchicalDataItem dataItem)
         {
             string templ = template.Trim(_templateBorders);
             int separatorIndex = templ.IndexOf(_typeValueSeparator, StringComparison.InvariantCulture);
@@ -47,31 +49,31 @@ namespace ExcelReporter.Implementations.TemplateProcessors
             if (templ.StartsWith("di"))
             {
                 // Значит это значение из элемента данных
-                if (dataContext == null)
+                if (dataItem == null)
                 {
-                    throw new InvalidOperationException($"Template \"{template}\" contains data reference but dataContext is null");
+                    throw new InvalidOperationException($"Template \"{template}\" contains data reference but dataItem is null");
                 }
                 if (_dataItemValueProvider == null)
                 {
-                    throw new InvalidOperationException($"Template \"{template}\" contains data reference but _dataItemValueProvider is null");
+                    throw new InvalidOperationException($"Template \"{template}\" contains data reference but dataItemValueProvider is null");
                 }
-                return _dataItemValueProvider.GetValue(memberTemplate, dataContext);
+                return _dataItemValueProvider.GetValue(memberTemplate, dataItem);
             }
             if (memberType == "fn")
             {
                 // Значит это вызов метода
                 if (_methodContextProvider == null)
                 {
-                    throw new InvalidOperationException($"Template \"{template}\" contains method call but _methodContextProvider is null");
+                    throw new InvalidOperationException($"Template \"{template}\" contains method call but methodContextProvider is null");
                 }
 
-                return CallMethod(memberTemplate, dataContext);
+                return CallMethod(memberTemplate, dataItem);
             }
 
             throw new IncorrectTemplateException($"Incorrect template \"{template}\". Unknown member type \"{memberType}\"");
         }
 
-        private object CallMethod(string methodTemplate, object dataContext)
+        private object CallMethod(string methodTemplate, HierarchicalDataItem dataItem)
         {
             //string[] parts = methodTemplate.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
             Match match = Regex.Match(methodTemplate, @"(.*:)?(.+)\((.*)\)");
@@ -79,11 +81,11 @@ namespace ExcelReporter.Implementations.TemplateProcessors
             string methodName = match.Groups[2].Value;
             string methodParams = match.Groups[3].Value;
 
-            var context = _methodContextProvider.GetMethodContext(className);
+            object context = _methodContextProvider.GetMethodContext(className.Trim(':'));
 
             object[] callParams = methodParams
                 .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(p => GetValue(p.Trim(), dataContext))
+                .Select(p => GetValue(p.Trim(), dataItem))
                 .ToArray();
 
             MethodInfo method = context.GetType().GetMethod(methodName);

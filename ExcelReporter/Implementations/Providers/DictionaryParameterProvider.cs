@@ -1,16 +1,20 @@
-﻿using System;
-using ExcelReporter.Exceptions;
+﻿using ExcelReporter.Exceptions;
 using ExcelReporter.Interfaces.Providers;
+using System;
 using System.Collections.Generic;
 
 namespace ExcelReporter.Implementations.Providers
 {
-    public struct DictionaryParameterProvider : IParameterProvider
+    public class DictionaryParameterProvider : IParameterProvider
     {
         private readonly IDictionary<string, object> _parameters;
 
         public DictionaryParameterProvider(IDictionary<string, object> parameters)
         {
+            if (parameters == null)
+            {
+                throw new ArgumentNullException(nameof(parameters), Constants.NullParamMessage);
+            }
             _parameters = parameters;
         }
 

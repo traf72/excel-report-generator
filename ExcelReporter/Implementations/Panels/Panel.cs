@@ -12,8 +12,6 @@ namespace ExcelReporter.Implementations.Panels
 {
     public class Panel : IPanel
     {
-        private const string TemplatePattern = @"\{.+?:.+?\}";
-
         protected IPanel _parent;
 
         protected RangeCoords _coordsRelativeParent;
@@ -71,12 +69,12 @@ namespace ExcelReporter.Implementations.Panels
             foreach (IXLCell cell in Range.CellsUsed().Where(c => !childrenCells.Contains(c)))
             {
                 string cellValue = cell.Value.ToString();
-                MatchCollection matches = Regex.Matches(cellValue, TemplatePattern);
+                MatchCollection matches = Regex.Matches(cellValue, Report.TemplateProcessor.Pattern);
                 if (matches.Count == 0)
                 {
                     continue;
                 }
-                if (matches.Count == 1 && Regex.IsMatch(cellValue, $@"^{TemplatePattern}$"))
+                if (matches.Count == 1 && Regex.IsMatch(cellValue, $@"^{Report.TemplateProcessor.Pattern}$"))
                 {
                     cell.Value = Report.TemplateProcessor.GetValue(cellValue, GetDataContext());
                     continue;
@@ -199,8 +197,18 @@ namespace ExcelReporter.Implementations.Panels
             return panel;
         }
 
-        protected virtual object GetDataContext()
+        protected virtual HierarchicalDataItem GetDataContext()
         {
+            IPanel parent = Parent;
+            while (parent != null)
+            {
+                IDataItemPanel dataItemPanel = parent as IDataItemPanel;
+                if (dataItemPanel != null)
+                {
+                    return dataItemPanel.DataItem;
+                }
+                parent = parent.Parent;
+            }
             return null;
         }
     }

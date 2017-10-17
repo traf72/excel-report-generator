@@ -1,11 +1,10 @@
 ﻿using System;
-using ExcelReporter.Interfaces.DataSources;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ExcelReporter
 {
-    public class TestDataSource : IDataSource
+    public class TestDataSource
     {
         private readonly IEnumerable<DataItem> _items = new List<DataItem>
         {
