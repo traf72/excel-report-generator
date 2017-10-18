@@ -2,9 +2,6 @@
 using ExcelReporter.Interfaces.Providers;
 using ExcelReporter.Interfaces.TemplateProcessors;
 using System;
-using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace ExcelReporter.Implementations.TemplateProcessors
 {
@@ -12,11 +9,11 @@ namespace ExcelReporter.Implementations.TemplateProcessors
     {
         private readonly IParameterProvider _parameterProvider;
         private readonly IDataItemValueProvider _dataItemValueProvider;
-        private readonly IMethodContextProvider _methodContextProvider;
+        private readonly IMethodCallValueProvider _methodCallValueProvider;
         private const string _typeValueSeparator = ":";
         private static readonly char[] _templateBorders = { '{', '}' };
 
-        public TemplateProcessor(IParameterProvider parameterProvider, IMethodContextProvider methodContextProvider = null,
+        public TemplateProcessor(IParameterProvider parameterProvider, IMethodCallValueProvider methodCallValueProvider = null,
             IDataItemValueProvider dataItemValueProvider = null)
         {
             if (parameterProvider == null)
@@ -25,7 +22,7 @@ namespace ExcelReporter.Implementations.TemplateProcessors
             }
 
             _parameterProvider = parameterProvider;
-            _methodContextProvider = methodContextProvider;
+            _methodCallValueProvider = methodCallValueProvider;
             _dataItemValueProvider = dataItemValueProvider;
         }
 
@@ -59,37 +56,18 @@ namespace ExcelReporter.Implementations.TemplateProcessors
                 }
                 return _dataItemValueProvider.GetValue(memberTemplate, dataItem);
             }
-            if (memberType == "fn")
+            if (memberType == "m" || memberType == "ms")
             {
                 // Значит это вызов метода
-                if (_methodContextProvider == null)
+                if (_methodCallValueProvider == null)
                 {
                     throw new InvalidOperationException($"Template \"{template}\" contains method call but methodContextProvider is null");
                 }
 
-                return CallMethod(memberTemplate, dataItem);
+                return _methodCallValueProvider.CallMethod(memberTemplate, this, dataItem, memberType == "ms");
             }
 
             throw new IncorrectTemplateException($"Incorrect template \"{template}\". Unknown member type \"{memberType}\"");
-        }
-
-        private object CallMethod(string methodTemplate, HierarchicalDataItem dataItem)
-        {
-            //string[] parts = methodTemplate.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-            Match match = Regex.Match(methodTemplate, @"(.*:)?(.+)\((.*)\)");
-            string className = match.Groups[1].Value;
-            string methodName = match.Groups[2].Value;
-            string methodParams = match.Groups[3].Value;
-
-            object context = _methodContextProvider.GetMethodContext(className.Trim(':'));
-
-            object[] callParams = methodParams
-                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(p => GetValue(p.Trim(), dataItem))
-                .ToArray();
-
-            MethodInfo method = context.GetType().GetMethod(methodName);
-            return method.Invoke(context, callParams);
         }
     }
 }

@@ -33,6 +33,10 @@ namespace ExcelReporter.Tests.Implementations.Providers
             Assert.AreSame(typeof(InnerNamespace.TestType_3), typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers.InnerNamespace:TestType_3"));
             MyAssert.Throws<IncorrectTemplateException>(() => typeProvider.GetType("TestType_3"), "More than one type found by template \"TestType_3\"");
 
+            Assert.AreSame(typeof(InnerNamespace.TestType_5), typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers.InnerNamespace:TestType_5"));
+            Assert.AreSame(typeof(TestType_5), typeProvider.GetType(":TestType_5"));
+            MyAssert.Throws<IncorrectTemplateException>(() => typeProvider.GetType("TestType_5"), "More than one type found by template \"TestType_5\"");
+
             Assert.AreSame(typeof(InnerNamespace.TestType_4), typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers.InnerNamespace:TestType_4"));
             Assert.AreSame(typeof(InnerNamespace.TestType_4), typeProvider.GetType("TestType_4"));
             MyAssert.Throws<IncorrectTemplateException>(() => typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers:TestType_4"),
@@ -63,5 +67,13 @@ namespace ExcelReporter.Tests.Implementations.Providers
         public class TestType_4
         {
         }
+
+        public class TestType_5
+        {
+        }
     }
+}
+
+public class TestType_5
+{
 }

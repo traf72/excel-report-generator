@@ -35,7 +35,6 @@ namespace ExcelReporter.Implementations.Providers
 
         public virtual Type GetType(string typeTemplate)
         {
-            // TODO сделать кеш объектов
             if (string.IsNullOrWhiteSpace(typeTemplate))
             {
                 if (_defaultType != null)
@@ -47,6 +46,7 @@ namespace ExcelReporter.Implementations.Providers
 
             Assembly assembly = GetAssembly();
             string[] typeNameParts = typeTemplate.Split(NamespaceSeparator);
+            bool isNamespaceSpecified = false;
             string @namespace = null;
             string name;
             if (typeNameParts.Length == 1)
@@ -55,7 +55,9 @@ namespace ExcelReporter.Implementations.Providers
             }
             else if (typeNameParts.Length == 2)
             {
+                isNamespaceSpecified = true;
                 @namespace = typeNameParts[0].Trim();
+                @namespace = string.IsNullOrWhiteSpace(@namespace) ? null : @namespace;
                 name = typeNameParts[1].Trim();
             }
             else
@@ -63,9 +65,9 @@ namespace ExcelReporter.Implementations.Providers
                 throw new IncorrectTemplateException($"Type name template \"{typeTemplate}\" is incorrect");
             }
 
-            IList<Type> types = (string.IsNullOrWhiteSpace(@namespace)
-                    ? assembly.GetTypes().Where(t => t.Name == name)
-                    : assembly.GetTypes().Where(t => t.Namespace == @namespace && t.Name == name))
+            IList<Type> types = (isNamespaceSpecified
+                    ? assembly.GetTypes().Where(t => t.Namespace == @namespace && t.Name == name)
+                    : assembly.GetTypes().Where(t => t.Name == name))
                 .ToList();
 
             if (types.Count == 1)

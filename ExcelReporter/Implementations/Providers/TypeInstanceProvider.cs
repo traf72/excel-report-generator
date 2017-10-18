@@ -19,6 +19,7 @@ namespace ExcelReporter.Implementations.Providers
         public virtual object GetInstance(string typeTemplate)
         {
             Type type = _typeProvider.GetType(typeTemplate);
+            // TODO Сделать кеш объектов
             return Activator.CreateInstance(type);
         }
     }

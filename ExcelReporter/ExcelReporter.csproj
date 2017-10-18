@@ -70,10 +70,12 @@
     <Compile Include="Exceptions\ParameterNotFoundException.cs" />
     <Compile Include="Exceptions\MemberNotFoundException.cs" />
     <Compile Include="HierarchicalDataItem.cs" />
+    <Compile Include="Implementations\MethodContext.cs" />
     <Compile Include="Implementations\Panels\DataItemPanel.cs" />
     <Compile Include="Implementations\Panels\DataSourcePanel.cs" />
     <Compile Include="Implementations\Panels\NamedPanel.cs" />
     <Compile Include="Implementations\Panels\Panel.cs" />
+    <Compile Include="Implementations\Providers\MethodCallValueProvider.cs" />
     <Compile Include="Implementations\Providers\TypeInstanceProvider.cs" />
     <Compile Include="Implementations\Providers\DataItemValueProvider.cs" />
     <Compile Include="Implementations\Providers\ReflectionParameterProvider.cs" />
@@ -84,7 +86,7 @@
     <Compile Include="Interfaces\Panels\IDataItemPanel.cs" />
     <Compile Include="Interfaces\Panels\INamedPanel.cs" />
     <Compile Include="Interfaces\Providers\IDataItemValueProvider.cs" />
-    <Compile Include="Interfaces\Providers\IMethodContextProvider.cs" />
+    <Compile Include="Interfaces\Providers\IMethodCallValueProvider.cs" />
     <Compile Include="Interfaces\Providers\ITypeInstanceProvider.cs" />
     <Compile Include="Interfaces\Providers\ITypeProvider.cs" />
     <Compile Include="Interfaces\Reports\IExcelReport.cs" />
