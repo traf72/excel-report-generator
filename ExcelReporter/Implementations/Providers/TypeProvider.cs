@@ -11,25 +11,14 @@ namespace ExcelReporter.Implementations.Providers
     {
         private const char NamespaceSeparator = ':';
 
-        private readonly Type _defaultType;
-
         private Assembly _assembly;
 
         public TypeProvider()
         {
         }
 
-        public TypeProvider(Assembly assembly) : this(null, assembly)
+        public TypeProvider(Assembly assembly)
         {
-        }
-
-        public TypeProvider(Type defaultType) : this(defaultType, null)
-        {
-        }
-
-        public TypeProvider(Type defaultType, Assembly assembly)
-        {
-            _defaultType = defaultType;
             _assembly = assembly;
         }
 
@@ -37,11 +26,7 @@ namespace ExcelReporter.Implementations.Providers
         {
             if (string.IsNullOrWhiteSpace(typeTemplate))
             {
-                if (_defaultType != null)
-                {
-                    return _defaultType;
-                }
-                throw new InvalidOperationException($"Parameter {nameof(typeTemplate)} is null or empty but defaultType is null");
+                throw new ArgumentException(Constants.EmptyStringParamMessage, nameof(typeTemplate));
             }
 
             Assembly assembly = GetAssembly();

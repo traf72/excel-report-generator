@@ -14,7 +14,7 @@ namespace ExcelReporter.Tests.Implementations.Providers
         {
             MyAssert.Throws<ArgumentNullException>(() => new TypeInstanceProvider(null));
 
-            ITypeProvider typeProvider = new TypeProvider(GetType(), Assembly.GetExecutingAssembly());
+            ITypeProvider typeProvider = new TypeProvider(Assembly.GetExecutingAssembly());
             ITypeInstanceProvider typeInstanceProvider = new TypeInstanceProvider(typeProvider);
 
             Assert.AreEqual(GetType().FullName, typeInstanceProvider.GetInstance(null).GetType().FullName);

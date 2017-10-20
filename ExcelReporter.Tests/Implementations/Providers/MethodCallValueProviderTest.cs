@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
 using System.Reflection;
+using ExcelReporter.Exceptions;
 
 namespace ExcelReporter.Tests.Implementations.Providers
 {
@@ -15,7 +16,7 @@ namespace ExcelReporter.Tests.Implementations.Providers
         public void TestParseTemplate()
         {
             var typeProvider = Substitute.For<ITypeProvider>();
-            var methodCallValueProvider = new MethodCallValueProvider(typeProvider);
+            var methodCallValueProvider = new MethodCallValueProvider(typeProvider, null);
             MethodInfo method = methodCallValueProvider.GetType().GetMethod("ParseTemplate", BindingFlags.Instance | BindingFlags.NonPublic);
 
             var result = (MethodCallTemplateParts)method.Invoke(methodCallValueProvider, new[] { "m()" });
@@ -123,7 +124,7 @@ namespace ExcelReporter.Tests.Implementations.Providers
         public void TestParseParams()
         {
             var typeProvider = Substitute.For<ITypeProvider>();
-            var methodCallValueProvider = new MethodCallValueProvider(typeProvider);
+            var methodCallValueProvider = new MethodCallValueProvider(typeProvider, null);
             MethodInfo method = methodCallValueProvider.GetType().GetMethod("ParseParams", BindingFlags.Instance | BindingFlags.NonPublic);
 
             var result = (string[])method.Invoke(methodCallValueProvider, new[] { string.Empty });
@@ -194,83 +195,126 @@ namespace ExcelReporter.Tests.Implementations.Providers
         [TestMethod]
         public void TestCallMethod()
         {
-            MyAssert.Throws<ArgumentNullException>(() => new MethodCallValueProvider(null));
+            MyAssert.Throws<ArgumentNullException>(() => new MethodCallValueProvider(null, new object()));
 
             var typeProvider = Substitute.For<ITypeProvider>();
             typeProvider.GetType(Arg.Any<string>()).Returns(typeof(TestClass));
 
             var templateProcessor = Substitute.For<ITemplateProcessor>();
+            var dataItem = new HierarchicalDataItem();
             templateProcessor.Pattern.Returns(@"\{.+?:.+?\}");
             templateProcessor.GetValue("{p:Name}").Returns("TestName");
-            templateProcessor.GetValue("{p:Desc}").Returns("TestDesc");
-            templateProcessor.GetValue("{p:Value}").Returns(7);
-            templateProcessor.GetValue("{di.Field}").Returns(777);
+            templateProcessor.GetValue("{p:Value}", dataItem).Returns(7);
 
-            var methodCallValueProvider = new MethodCallValueProvider(typeProvider);
-            //Assert.AreEqual("Str", methodCallValueProvider.CallMethod("Method1()", templateProcessor, null));
-            //typeProvider.Received(1).GetType(null);
-            //templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
+            var methodCallValueProvider = new MethodCallValueProvider(typeProvider, new TestClass());
 
-            //typeProvider.ClearReceivedCalls();
-            //Assert.AreEqual("Str", methodCallValueProvider.CallMethod("TestClass:Method1()", templateProcessor, null));
-            //typeProvider.Received(1).GetType("TestClass");
-            //templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
+            MyAssert.Throws<ArgumentException>(() => methodCallValueProvider.CallMethod(null, templateProcessor, new HierarchicalDataItem()));
+            MyAssert.Throws<ArgumentException>(() => methodCallValueProvider.CallMethod(string.Empty, templateProcessor, new HierarchicalDataItem()));
+            MyAssert.Throws<ArgumentException>(() => methodCallValueProvider.CallMethod(" ", templateProcessor, new HierarchicalDataItem()));
 
-            //typeProvider.ClearReceivedCalls();
-            //Assert.AreEqual("Str", methodCallValueProvider.CallMethod("ExcelReporter.Tests.Implementations.Providers:TestClass:Method1()", templateProcessor, null));
-            //typeProvider.Received(1).GetType("ExcelReporter.Tests.Implementations.Providers:TestClass");
-            //templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
-
-            //typeProvider.ClearReceivedCalls();
-            //Assert.AreEqual("Str", methodCallValueProvider.CallMethod(":TestClass2:Method1()", templateProcessor, null));
-            //typeProvider.Received(1).GetType(":TestClass2");
-            //templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
-
-            typeProvider.ClearReceivedCalls();
-            methodCallValueProvider.CallMethod(
-                "Method2(5, {p:Name}, hi, { TestClass:Method3({p:Desc}, { ExcelReporter.Tests.Implementations.Providers:TestClass:Method4({str, {di.Field}})} ) }, Method5(), :TestClass2:Method1())",
-                templateProcessor, null);
-            Assert.AreEqual("Str", methodCallValueProvider.CallMethod(":TestClass2:Method1()", templateProcessor, null));
-            typeProvider.Received(1).GetType(":TestClass2");
+            Assert.AreEqual("Str_1", methodCallValueProvider.CallMethod("Method1()", templateProcessor, null));
+            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
-            MyAssert.Throws<ArgumentException>(() => methodCallValueProvider.CallMethod(null, templateProcessor, null));
+            typeProvider.ClearReceivedCalls();
+            Assert.AreEqual("Str_2", methodCallValueProvider.CallMethod("TestClass:Method1()", templateProcessor, null));
+            typeProvider.Received(1).GetType("TestClass");
+            templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
+
+            typeProvider.ClearReceivedCalls();
+            Assert.AreEqual("Str_3", methodCallValueProvider.CallMethod("ExcelReporter.Tests.Implementations.Providers:TestClass:Method1()", templateProcessor, null));
+            typeProvider.Received(1).GetType("ExcelReporter.Tests.Implementations.Providers:TestClass");
+            templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
+
+            typeProvider.ClearReceivedCalls();
+            Assert.AreEqual("Str_4", methodCallValueProvider.CallMethod(":TestClass:Method1()", templateProcessor, null));
+            typeProvider.Received(1).GetType(":TestClass");
+            templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
+
+            typeProvider.ClearReceivedCalls();
+            Assert.AreEqual(25, methodCallValueProvider.CallMethod("Method2({p:Value}, 18)", templateProcessor, dataItem, true));
+            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            templateProcessor.Received(1).GetValue("{p:Value}", dataItem);
+
+            typeProvider.ClearReceivedCalls();
+            templateProcessor.ClearReceivedCalls();
+            Assert.AreEqual(25, methodCallValueProvider.CallMethod(":TestClass:Method2({p:Value}, 18)", templateProcessor, dataItem, true));
+            typeProvider.Received(1).GetType(":TestClass");
+            templateProcessor.Received(1).GetValue("{p:Value}", dataItem);
+
+            typeProvider.ClearReceivedCalls();
+            templateProcessor.ClearReceivedCalls();
+            Assert.IsNull(methodCallValueProvider.CallMethod("Method3()", templateProcessor, null));
+            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
+
+            templateProcessor.GetValue("{ m:TestClass:Method5({p:Desc}, { ms:ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, {di.Field})} ) }").Returns(10);
+            templateProcessor.GetValue("{m:Method7()}").Returns('c');
+            templateProcessor.GetValue("{m::TestClass2:Method1()}").Returns(long.MaxValue);
+
+            object result = methodCallValueProvider.CallMethod(
+                "Method4(5, {p:Name}, hi, { m:TestClass:Method5({p:Desc}, { ms:ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, {di.Field})} ) }, {m:Method7()}, {m::TestClass2:Method1()})",
+                templateProcessor, null);
+            Assert.AreEqual($"5_TestName_hi_10_c_{long.MaxValue}", result);
+            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            templateProcessor.Received(1).GetValue("{p:Name}");
+            templateProcessor.Received(1).GetValue("{ m:TestClass:Method5({p:Desc}, { ms:ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, {di.Field})} ) }");
+            templateProcessor.Received(1).GetValue("{m:Method7()}");
+            templateProcessor.Received(1).GetValue("{m::TestClass2:Method1()}");
+
+            MyAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("TestClass:BadMethod()", templateProcessor, null),
+                "Could not find public method \"BadMethod\" in type \"TestClass\" and all its parents");
+
+            MyAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("TestClass:BadMethod()", templateProcessor, null, true),
+                "Could not find public static method \"BadMethod\" in type \"TestClass\" and all its parents");
+
+            typeProvider.ClearReceivedCalls();
+            templateProcessor.ClearReceivedCalls();
+            Assert.AreEqual("Str_Parent", methodCallValueProvider.CallMethod("MethodParent()", templateProcessor, null));
+            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
+
+            Assert.AreEqual("Str_Static_Parent", methodCallValueProvider.CallMethod("MethodStaticParent()", templateProcessor, null, true));
+            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
         }
 
-        private class TestClass
+        private class TestClass : TestClassParent
         {
+            private int _counter;
+
             public string Method1()
             {
-                return "Str";
+                _counter++;
+                return $"Str_{_counter}";
             }
 
-            public int Method2(string arg1, string arg2, string arg3, int arg4, Guid arg5, TestClass2 arg6)
+            public static int Method2(int arg1, string arg2)
             {
-                return 25;
+                return arg1 + int.Parse(arg2);
             }
 
-            public static int Method3(int arg1, int arg2)
+            public void Method3()
             {
-                return arg1 + arg2;
             }
 
-            public int Method4(string arg1, int arg2)
+            public string Method4(string arg1, string arg2, string arg3, int arg4, char arg5, long arg6)
             {
-                return 5;
-            }
-
-            public Guid Method5()
-            {
-                return Guid.NewGuid();
+                return $"{arg1}_{arg2}_{arg3}_{arg4}_{arg5}_{arg6}";
             }
         }
-    }
-}
 
-public class TestClass2
-{
-    public TestClass2 Method1()
-    {
-        return new TestClass2();
+        private class TestClassParent
+        {
+            public string MethodParent()
+            {
+                return "Str_Parent";
+            }
+
+            public static string MethodStaticParent()
+            {
+                return "Str_Static_Parent";
+            }
+        }
     }
 }

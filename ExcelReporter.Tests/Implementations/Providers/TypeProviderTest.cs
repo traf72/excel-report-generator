@@ -13,15 +13,11 @@ namespace ExcelReporter.Tests.Implementations.Providers
         [TestMethod]
         public void TestGetType()
         {
-            ITypeProvider typeProvider = new TypeProvider();
-            MyAssert.Throws<InvalidOperationException>(() => typeProvider.GetType(null), "Parameter typeTemplate is null or empty but defaultType is null");
-            MyAssert.Throws<InvalidOperationException>(() => typeProvider.GetType(string.Empty), "Parameter typeTemplate is null or empty but defaultType is null");
-            MyAssert.Throws<InvalidOperationException>(() => typeProvider.GetType(" "), "Parameter typeTemplate is null or empty but defaultType is null");
+            ITypeProvider typeProvider = new TypeProvider(Assembly.GetExecutingAssembly());
 
-            typeProvider = new TypeProvider(GetType(), Assembly.GetExecutingAssembly());
-            Assert.AreSame(GetType(), typeProvider.GetType(null));
-            Assert.AreSame(GetType(), typeProvider.GetType(string.Empty));
-            Assert.AreSame(GetType(), typeProvider.GetType(" "));
+            MyAssert.Throws<ArgumentException>(() => typeProvider.GetType(null));
+            MyAssert.Throws<ArgumentException>(() => typeProvider.GetType(string.Empty));
+            MyAssert.Throws<ArgumentException>(() => typeProvider.GetType(" "));
 
             Assert.AreSame(typeof(TestType_1), typeProvider.GetType("TestType_1"));
             Assert.AreSame(typeof(TestType_1), typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers:TestType_1"));

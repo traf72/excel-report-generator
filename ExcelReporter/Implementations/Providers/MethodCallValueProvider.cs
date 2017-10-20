@@ -13,56 +13,45 @@ namespace ExcelReporter.Implementations.Providers
     public class MethodCallValueProvider : IMethodCallValueProvider
     {
         private readonly ITypeProvider _typeProvider;
+        private readonly object _defaultInstance;
+        private readonly IDictionary<Type, object> _instanceCache = new Dictionary<Type, object>();
 
-        public MethodCallValueProvider(ITypeProvider typeProvider)
+        private string _methodCallTemplate;
+        private ITemplateProcessor _templateProcessor;
+        private HierarchicalDataItem _dataItem;
+        private bool _isStatic;
+
+        public MethodCallValueProvider(ITypeProvider typeProvider, object defaultInstance)
         {
             if (typeProvider == null)
             {
                 throw new ArgumentNullException(nameof(typeProvider), Constants.NullParamMessage);
             }
+
             _typeProvider = typeProvider;
+            _defaultInstance = defaultInstance;
+            if (_defaultInstance != null)
+            {
+                _instanceCache[_defaultInstance.GetType()] = _defaultInstance;
+            }
         }
 
-        public object CallMethod(string methodCallTemplate, ITemplateProcessor templateProcessor, HierarchicalDataItem dataItem, bool isStatic = false)
+        public virtual object CallMethod(string methodCallTemplate, ITemplateProcessor templateProcessor, HierarchicalDataItem dataItem, bool isStatic = false)
         {
             if (string.IsNullOrWhiteSpace(methodCallTemplate))
             {
                 throw new ArgumentException(Constants.EmptyStringParamMessage, nameof(methodCallTemplate));
             }
 
+            _methodCallTemplate = methodCallTemplate;
+            _templateProcessor = templateProcessor;
+            _dataItem = dataItem;
+            _isStatic = isStatic;
+
             MethodCallTemplateParts templateParts = ParseTemplate(methodCallTemplate);
-
-            Type type = _typeProvider.GetType(templateParts.TypeName);
-            object instance = null;
-            if (!isStatic)
-            {
-                instance = CreateInstance(type);
-            }
-
-            IList<object> callParams = new List<object>();
-            foreach (string p in ParseParams(templateParts.MethodParams))
-            {
-                if (Regex.IsMatch(p, $@"^{templateProcessor.Pattern}$"))
-                {
-                    callParams.Add(templateProcessor.GetValue(p, dataItem));
-                }
-                else
-                {
-                    callParams.Add(p);
-                }
-            }
-
-            //object[] callParams = ParseParams(templateParts.MethodParams)
-            //    .Select(p => Regex.IsMatch(p, $@"^{templateProcessor.Pattern}$") ? templateProcessor.GetValue(p, dataItem) : p)
-            //    .ToArray();
-
-            //object[] callParams = templateParts.MethodParams
-            //    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-            //    .Select(p => Regex.IsMatch(p, $@"^{templateProcessor.Pattern}$") ? templateProcessor.GetValue(p.Trim(), dataItem) : p)
-            //    .ToArray();
-
-            MethodInfo method = type.GetMethod(templateParts.MethodName);
-            return method.Invoke(instance, callParams.ToArray());
+            Type type = GetType(templateParts.TypeName);
+            object instance = GetInstance(type);
+            return GetMethod(type, templateParts.MethodName).Invoke(instance, GetParams(templateParts.MethodParams));
         }
 
         protected virtual MethodCallTemplateParts ParseTemplate(string template)
@@ -91,6 +80,58 @@ namespace ExcelReporter.Implementations.Providers
             }
 
             return new MethodCallTemplateParts(typeName, methodName, methodParams);
+        }
+
+        private Type GetType(string typeName)
+        {
+            return string.IsNullOrWhiteSpace(typeName) ? GetDefaultType() : _typeProvider.GetType(typeName);
+        }
+
+        protected virtual Type GetDefaultType()
+        {
+            if (_defaultInstance == null)
+            {
+                throw new InvalidOperationException($"Type name is not specified in template \"{_methodCallTemplate}\" but defaultInstance is null");
+            }
+            return _defaultInstance.GetType();
+        }
+
+        protected virtual object GetInstance(Type type)
+        {
+            if (_isStatic)
+            {
+                return null;
+            }
+
+            object instance;
+            if (_instanceCache.TryGetValue(type, out instance))
+            {
+                return instance;
+            }
+            instance = Activator.CreateInstance(type);
+            _instanceCache[type] = instance;
+            return instance;
+        }
+
+        protected virtual MethodInfo GetMethod(Type type, string methodName)
+        {
+            BindingFlags methodTypeBindingFlag = _isStatic ? BindingFlags.Static : BindingFlags.Instance;
+            MethodInfo method = type.GetMethod(methodName, BindingFlags.Public | methodTypeBindingFlag | BindingFlags.FlattenHierarchy);
+            if (method == null)
+            {
+                throw new MethodNotFoundException($"Could not find public {(_isStatic ? "static " : string.Empty)}method \"{methodName}\" in type \"{type.Name}\" and all its parents");
+            }
+            return method;
+        }
+
+        private object[] GetParams(string methodParams)
+        {
+            IList<object> callParams = new List<object>();
+            foreach (string p in ParseParams(methodParams))
+            {
+                callParams.Add(Regex.IsMatch(p, $@"^{_templateProcessor.Pattern}$") ? _templateProcessor.GetValue(p, _dataItem) : p);
+            }
+            return callParams.ToArray();
         }
 
         protected virtual string[] ParseParams(string methodParams)
@@ -144,11 +185,6 @@ namespace ExcelReporter.Implementations.Providers
             result.Add(param.ToString());
             return result.Select(p => p.Trim()).ToArray();
         }
-
-        protected virtual object CreateInstance(Type type)
-        {
-            return Activator.CreateInstance(type);
-        }
     }
 
     public class MethodCallTemplateParts
@@ -160,10 +196,10 @@ namespace ExcelReporter.Implementations.Providers
             MethodParams = methodParams;
         }
 
-        public string TypeName { get; set; }
+        public string TypeName { get; }
 
-        public string MethodName { get; set; }
+        public string MethodName { get; }
 
-        public string MethodParams { get; set; }
+        public string MethodParams { get; }
     }
 }
