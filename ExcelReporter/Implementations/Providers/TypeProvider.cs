@@ -11,15 +11,11 @@ namespace ExcelReporter.Implementations.Providers
     {
         private const char NamespaceSeparator = ':';
 
-        private Assembly _assembly;
+        private readonly Assembly _assembly;
 
-        public TypeProvider()
+        public TypeProvider(Assembly assembly = null)
         {
-        }
-
-        public TypeProvider(Assembly assembly)
-        {
-            _assembly = assembly;
+            _assembly = assembly ?? Assembly.GetExecutingAssembly();
         }
 
         public virtual Type GetType(string typeTemplate)
@@ -29,30 +25,30 @@ namespace ExcelReporter.Implementations.Providers
                 throw new ArgumentException(Constants.EmptyStringParamMessage, nameof(typeTemplate));
             }
 
-            Assembly assembly = GetAssembly();
             string[] typeNameParts = typeTemplate.Split(NamespaceSeparator);
             bool isNamespaceSpecified = false;
             string @namespace = null;
             string name;
             if (typeNameParts.Length == 1)
             {
-                name = typeNameParts[0].Trim();
+                name = typeNameParts[0];
             }
             else if (typeNameParts.Length == 2)
             {
                 isNamespaceSpecified = true;
-                @namespace = typeNameParts[0].Trim();
-                @namespace = string.IsNullOrWhiteSpace(@namespace) ? null : @namespace;
-                name = typeNameParts[1].Trim();
+                @namespace = typeNameParts[0];
+                @namespace = string.IsNullOrWhiteSpace(@namespace) ? null : @namespace.Trim();
+                name = typeNameParts[1];
             }
             else
             {
                 throw new IncorrectTemplateException($"Type name template \"{typeTemplate}\" is incorrect");
             }
 
+            name = name.Trim();
             IList<Type> types = (isNamespaceSpecified
-                    ? assembly.GetTypes().Where(t => t.Namespace == @namespace && t.Name == name)
-                    : assembly.GetTypes().Where(t => t.Name == name))
+                    ? _assembly.GetTypes().Where(t => t.Namespace == @namespace && t.Name == name)
+                    : _assembly.GetTypes().Where(t => t.Name == name))
                 .ToList();
 
             if (types.Count == 1)
@@ -65,11 +61,6 @@ namespace ExcelReporter.Implementations.Providers
             }
 
             throw new IncorrectTemplateException($"More than one type found by template \"{typeTemplate}\"");
-        }
-
-        private Assembly GetAssembly()
-        {
-            return _assembly ?? (_assembly = Assembly.GetExecutingAssembly());
         }
     }
 }

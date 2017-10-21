@@ -29,6 +29,7 @@ namespace ExcelReporter.Tests.Implementations.Providers
             Assert.AreEqual(paramsDict["BoolParam"], provider.GetParameterValue("BoolParam"));
             Assert.AreEqual(paramsDict["GuidParam"], provider.GetParameterValue("GuidParam"));
 
+            MyAssert.Throws<ParameterNotFoundException>(() => provider.GetParameterValue(" StrParam "), "Cannot find paramater with name \" StrParam \"");
             MyAssert.Throws<ParameterNotFoundException>(() => provider.GetParameterValue("strParam"), "Cannot find paramater with name \"strParam\"");
             MyAssert.Throws<ParameterNotFoundException>(() => provider.GetParameterValue("BadParam"), "Cannot find paramater with name \"BadParam\"");
         }

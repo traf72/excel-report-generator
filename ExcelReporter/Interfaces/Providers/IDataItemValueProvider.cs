@@ -2,6 +2,6 @@
 {
     public interface IDataItemValueProvider
     {
-        object GetValue(string template, HierarchicalDataItem dataItem);
+        object GetValue(string template, HierarchicalDataItem hierarchicalDataItem);
     }
 }

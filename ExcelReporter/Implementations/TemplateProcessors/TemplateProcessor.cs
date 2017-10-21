@@ -61,7 +61,7 @@ namespace ExcelReporter.Implementations.TemplateProcessors
                 // Значит это вызов метода
                 if (_methodCallValueProvider == null)
                 {
-                    throw new InvalidOperationException($"Template \"{template}\" contains method call but methodContextProvider is null");
+                    throw new InvalidOperationException($"Template \"{template}\" contains method call but methodCallValueProvider is null");
                 }
 
                 return _methodCallValueProvider.CallMethod(memberTemplate, this, dataItem, memberType == "ms");
