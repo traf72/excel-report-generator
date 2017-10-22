@@ -22,7 +22,7 @@ namespace ExcelReporter.Implementations.Providers
             ParamsContext = paramsContext;
         }
 
-        public object GetParameterValue(string paramName)
+        public virtual object GetParameterValue(string paramName)
         {
             if (string.IsNullOrWhiteSpace(paramName))
             {

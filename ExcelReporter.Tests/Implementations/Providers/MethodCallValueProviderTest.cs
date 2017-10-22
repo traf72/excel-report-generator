@@ -207,7 +207,7 @@ namespace ExcelReporter.Tests.Implementations.Providers
 
             var templateProcessor = Substitute.For<ITemplateProcessor>();
             var dataItem = new HierarchicalDataItem();
-            templateProcessor.Pattern.Returns(@"\{.+?:.+?\}");
+            templateProcessor.TemplatePattern.Returns(@"\{.+?:.+?\}");
             templateProcessor.GetValue("{p:Name}").Returns("TestName");
             templateProcessor.GetValue("{p:Value}", dataItem).Returns(7);
 

@@ -23,7 +23,7 @@ namespace ExcelReporter.Implementations.Reports
         {
             _ws = Workbook.Worksheet(1);
             IDictionary<string, IPanel> panels = new Dictionary<string, IPanel>();
-            //TemplateProcessor = new TemplateProcessor(new ReflectionParameterProvider(this), new TypeInstanceProvider(null), new DataItemValueProvider());
+            //DefaultTemplateProcessor = new DefaultTemplateProcessor(new ReflectionParameterProvider(this), new TypeInstanceProvider(null), new DataItemValueProvider());
 
             IXLNamedRange simplePanel = _ws.NamedRange("panel");
             panels[simplePanel.Name] = new DataSourcePanel("fn:TestDataSource:GetAllItems()", simplePanel, this);

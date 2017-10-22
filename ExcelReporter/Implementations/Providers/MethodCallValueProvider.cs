@@ -134,7 +134,7 @@ namespace ExcelReporter.Implementations.Providers
             IList<object> callParams = new List<object>();
             foreach (string p in ParseParams(methodParams))
             {
-                callParams.Add(Regex.IsMatch(p, $@"^{TemplateProcessor.Pattern}$") ? TemplateProcessor.GetValue(p, DataItem) : p);
+                callParams.Add(Regex.IsMatch(p, $@"^{TemplateProcessor.TemplatePattern}$") ? TemplateProcessor.GetValue(p, DataItem) : p);
             }
             return callParams.ToArray();
         }

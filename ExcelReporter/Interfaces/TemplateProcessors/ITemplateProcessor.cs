@@ -2,7 +2,7 @@
 {
     public interface ITemplateProcessor
     {
-        string Pattern { get; }
+        string TemplatePattern { get; }
 
         object GetValue(string template, HierarchicalDataItem dataItem = null);
     }

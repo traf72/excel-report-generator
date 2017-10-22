@@ -69,12 +69,12 @@ namespace ExcelReporter.Implementations.Panels
             foreach (IXLCell cell in Range.CellsUsed().Where(c => !childrenCells.Contains(c)))
             {
                 string cellValue = cell.Value.ToString();
-                MatchCollection matches = Regex.Matches(cellValue, Report.TemplateProcessor.Pattern);
+                MatchCollection matches = Regex.Matches(cellValue, Report.TemplateProcessor.TemplatePattern);
                 if (matches.Count == 0)
                 {
                     continue;
                 }
-                if (matches.Count == 1 && Regex.IsMatch(cellValue, $@"^{Report.TemplateProcessor.Pattern}$"))
+                if (matches.Count == 1 && Regex.IsMatch(cellValue, $@"^{Report.TemplateProcessor.TemplatePattern}$"))
                 {
                     cell.Value = Report.TemplateProcessor.GetValue(cellValue, GetDataContext());
                     continue;

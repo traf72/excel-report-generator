@@ -72,7 +72,6 @@
     <Compile Include="Exceptions\ParameterNotFoundException.cs" />
     <Compile Include="Exceptions\MemberNotFoundException.cs" />
     <Compile Include="HierarchicalDataItem.cs" />
-    <Compile Include="Implementations\MethodContext.cs" />
     <Compile Include="Implementations\Panels\DataItemPanel.cs" />
     <Compile Include="Implementations\Panels\DataSourcePanel.cs" />
     <Compile Include="Implementations\Panels\NamedPanel.cs" />
@@ -83,7 +82,7 @@
     <Compile Include="Implementations\Providers\DictionaryParameterProvider.cs" />
     <Compile Include="Implementations\Providers\TypeProvider.cs" />
     <Compile Include="Implementations\Reports\TestReport4.cs" />
-    <Compile Include="Implementations\TemplateProcessors\TemplateProcessor.cs" />
+    <Compile Include="Implementations\TemplateProcessors\DefaultTemplateProcessor.cs" />
     <Compile Include="Interfaces\Panels\IDataItemPanel.cs" />
     <Compile Include="Interfaces\Panels\INamedPanel.cs" />
     <Compile Include="Interfaces\Providers\IDataItemValueProvider.cs" />

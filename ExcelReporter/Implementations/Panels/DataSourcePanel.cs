@@ -21,8 +21,8 @@ namespace ExcelReporter.Implementations.Panels
 
         public override void Render()
         {
-            HierarchicalDataItem dataItem = GetDataContext();
-            object data = Report.TemplateProcessor.GetValue(_dataSourceTemplate, dataItem);
+            HierarchicalDataItem parentDataItem = GetDataContext();
+            object data = Report.TemplateProcessor.GetValue(_dataSourceTemplate, parentDataItem);
             if (data is IEnumerable)
             {
                 IList<object> listData = (data as IEnumerable).Cast<object>().ToList();
@@ -58,7 +58,7 @@ namespace ExcelReporter.Implementations.Panels
                             currentPanel = templatePanel;
                         }
 
-                        currentPanel.DataItem = new HierarchicalDataItem { Value = listData[i], Parent = dataItem };
+                        currentPanel.DataItem = new HierarchicalDataItem { Value = listData[i], Parent = parentDataItem };
                         // Заполняем шаблон данными
                         currentPanel.Render();
                         // Удаляем все сгенерированные имена Range'ей

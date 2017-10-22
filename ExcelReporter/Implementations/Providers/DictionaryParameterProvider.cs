@@ -18,7 +18,7 @@ namespace ExcelReporter.Implementations.Providers
             _parameters = parameters;
         }
 
-        public object GetParameterValue(string paramName)
+        public virtual object GetParameterValue(string paramName)
         {
             if (string.IsNullOrWhiteSpace(paramName))
             {

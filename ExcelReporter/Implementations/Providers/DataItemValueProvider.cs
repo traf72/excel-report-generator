@@ -12,7 +12,7 @@ namespace ExcelReporter.Implementations.Providers
 
         protected virtual string SelfDataItemTemplate => "di";
 
-        public object GetValue(string template, HierarchicalDataItem hierarchicalDataItem)
+        public virtual object GetValue(string template, HierarchicalDataItem hierarchicalDataItem)
         {
             if (string.IsNullOrWhiteSpace(template))
             {
