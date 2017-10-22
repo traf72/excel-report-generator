@@ -2,14 +2,16 @@
 using ExcelReporter.Interfaces.Providers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using ExcelReporter.Attributes;
 
 namespace ExcelReporter.Implementations.Providers
 {
     public class ReflectionParameterProvider : IParameterProvider
     {
-        private readonly object _paramsContext;
-        private readonly IDictionary<string, PropertyInfo> _propsCache = new Dictionary<string, PropertyInfo>();
+        protected readonly object ParamsContext;
+        private List<MemberInfo> _typeParameters;
 
         public ReflectionParameterProvider(object paramsContext)
         {
@@ -17,7 +19,7 @@ namespace ExcelReporter.Implementations.Providers
             {
                 throw new ArgumentNullException(nameof(paramsContext), Constants.NullParamMessage);
             }
-            _paramsContext = paramsContext;
+            ParamsContext = paramsContext;
         }
 
         public object GetParameterValue(string paramName)
@@ -27,20 +29,34 @@ namespace ExcelReporter.Implementations.Providers
                 throw new ArgumentException(Constants.EmptyStringParamMessage, nameof(paramName));
             }
 
-            if (_propsCache.ContainsKey(paramName))
+            paramName = paramName.Trim();
+            MemberInfo paramMember = AllTypeParameters.SingleOrDefault(p => p.Name == paramName);
+            if (paramMember == null)
             {
-                return _propsCache[paramName].GetValue(_paramsContext);
+                throw new ParameterNotFoundException($"Cannot find public instance property or field \"{paramName}\" with attribute \"{nameof(Parameter)}\" in type \"{ParamsContext.GetType().Name}\" and all its parents");
             }
 
-            // TODO Искать только свойства с атрибутом Parameter
-            // TODO Также нужно искать и в родительских классах
-            PropertyInfo prop = _paramsContext.GetType().GetProperty(paramName);
-            if (prop == null)
+            return paramMember is PropertyInfo
+                ? ((PropertyInfo)paramMember).GetValue(ParamsContext) : ((FieldInfo)paramMember).GetValue(ParamsContext);
+        }
+
+        private IEnumerable<MemberInfo> AllTypeParameters
+        {
+            get
             {
-                throw new ParameterNotFoundException($"Cannot find paramater with name \"{paramName}\" in class \"{_paramsContext.GetType().Name}\" and its parents");
+                if (_typeParameters != null)
+                {
+                    return _typeParameters;
+                }
+
+                _typeParameters = new List<MemberInfo>();
+                Type paramsContextType = ParamsContext.GetType();
+                const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
+                Func<MemberInfo, bool> whereClause = m => Attribute.IsDefined(m, typeof(Parameter));
+                _typeParameters.AddRange(paramsContextType.GetProperties(flags).Where(whereClause));
+                _typeParameters.AddRange(paramsContextType.GetFields(flags).Where(whereClause));
+                return _typeParameters;
             }
-            _propsCache[paramName] = prop;
-            return _propsCache[paramName].GetValue(_paramsContext);
         }
     }
 }

@@ -105,54 +105,6 @@ namespace ExcelReporter.Tests.Implementations.Providers
                 "Template \"parent:bad:HierarchyLevel\" is incorrect");
         }
 
-        protected HierarchicalDataItem GetHierarchicalDataItem()
-        {
-            var dataItem1 = new TestClass
-            {
-                HierarchyLevel = 1,
-                IntProp = 5,
-                StrProp = "Str",
-                ObjProp = new TestClass2
-                {
-                    StrProp = "Str2",
-                    ObjProp = new TestClass3
-                    {
-                        GuidProp = Guid.NewGuid()
-                    }
-                },
-                ParentProp = "Parent",
-            };
-
-            var dataItem2 = new TestClass2
-            {
-                HierarchyLevel = 2,
-                StrProp = "Str2",
-                ObjProp = new TestClass3
-                {
-                    GuidProp = Guid.NewGuid()
-                }
-            };
-
-            var dataItem3 = new TestClass3
-            {
-                HierarchyLevel = 3,
-                GuidProp = Guid.NewGuid()
-            };
-
-            return new HierarchicalDataItem
-            {
-                Value = dataItem1,
-                Parent = new HierarchicalDataItem
-                {
-                    Value = dataItem2,
-                    Parent = new HierarchicalDataItem
-                    {
-                        Value = dataItem3,
-                    }
-                }
-            };
-        }
-
         private class TestClass : Parent
         {
             public string StrProp { get; set; }

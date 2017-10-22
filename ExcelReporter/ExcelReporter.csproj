@@ -57,6 +57,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\Parameter.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DataItem2.cs" />
     <Compile Include="DataItem.cs" />
@@ -77,7 +78,6 @@
     <Compile Include="Implementations\Panels\NamedPanel.cs" />
     <Compile Include="Implementations\Panels\Panel.cs" />
     <Compile Include="Implementations\Providers\MethodCallValueProvider.cs" />
-    <Compile Include="Implementations\Providers\TypeInstanceProvider.cs" />
     <Compile Include="Implementations\Providers\DataItemValueProvider.cs" />
     <Compile Include="Implementations\Providers\ReflectionParameterProvider.cs" />
     <Compile Include="Implementations\Providers\DictionaryParameterProvider.cs" />
@@ -88,7 +88,6 @@
     <Compile Include="Interfaces\Panels\INamedPanel.cs" />
     <Compile Include="Interfaces\Providers\IDataItemValueProvider.cs" />
     <Compile Include="Interfaces\Providers\IMethodCallValueProvider.cs" />
-    <Compile Include="Interfaces\Providers\ITypeInstanceProvider.cs" />
     <Compile Include="Interfaces\Providers\ITypeProvider.cs" />
     <Compile Include="Interfaces\Reports\IExcelReport.cs" />
     <Compile Include="Interfaces\Reports\IReport.cs" />

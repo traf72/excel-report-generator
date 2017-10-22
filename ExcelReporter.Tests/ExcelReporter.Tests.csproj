@@ -155,7 +155,7 @@
     <Compile Include="Excel\ExcelHelperTest.cs" />
     <Compile Include="Implementations\Providers\DictionaryParameterProviderTest.cs" />
     <Compile Include="Implementations\Providers\MethodCallValueProviderTest.cs" />
-    <Compile Include="Implementations\Providers\TypeInstanceProviderTest.cs" />
+    <Compile Include="Implementations\Providers\ReflectionParameterProviderTest.cs" />
     <Compile Include="Implementations\Providers\TypeProviderTest.cs" />
     <Compile Include="MyAssert.cs" />
     <Compile Include="Implementations\Panels\NamedPanelTest.cs" />

@@ -42,7 +42,7 @@ namespace ExcelReporter.Implementations.Providers
 
         protected virtual object GetDataItemGivenHierarchy(string template, out string dataItemTemplate)
         {
-            int lastColonIndex = template.LastIndexOf(":");
+            int lastColonIndex = template.LastIndexOf(":", StringComparison.Ordinal);
             if (lastColonIndex == -1)
             {
                 dataItemTemplate = template;
