@@ -157,6 +157,9 @@
     <Compile Include="Implementations\Providers\MethodCallValueProviderTest.cs" />
     <Compile Include="Implementations\Providers\ReflectionParameterProviderTest.cs" />
     <Compile Include="Implementations\Providers\TypeProviderTest.cs" />
+    <Compile Include="Iterators\DataSetIteratorTest.cs" />
+    <Compile Include="Iterators\DataTableIteratorTest.cs" />
+    <Compile Include="Iterators\EnumerableIteratorTest.cs" />
     <Compile Include="MyAssert.cs" />
     <Compile Include="Implementations\Panels\Excel\NamedPanelTest.cs" />
     <Compile Include="Implementations\Panels\Excel\PanelTest.cs" />
