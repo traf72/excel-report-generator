@@ -158,8 +158,8 @@
     <Compile Include="Implementations\Providers\ReflectionParameterProviderTest.cs" />
     <Compile Include="Implementations\Providers\TypeProviderTest.cs" />
     <Compile Include="MyAssert.cs" />
-    <Compile Include="Implementations\Panels\NamedPanelTest.cs" />
-    <Compile Include="Implementations\Panels\PanelTest.cs" />
+    <Compile Include="Implementations\Panels\Excel\NamedPanelTest.cs" />
+    <Compile Include="Implementations\Panels\Excel\PanelTest.cs" />
     <Compile Include="Implementations\TemplateProcessors\DefaultTemplateProcessorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

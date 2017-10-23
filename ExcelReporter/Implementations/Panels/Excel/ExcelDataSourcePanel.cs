@@ -1,19 +1,19 @@
 ﻿using ClosedXML.Excel;
 using ExcelReporter.Enums;
 using ExcelReporter.Excel;
-using ExcelReporter.Interfaces.Panels;
+using ExcelReporter.Interfaces.Panels.Excel;
 using ExcelReporter.Interfaces.Reports;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ExcelReporter.Implementations.Panels
+namespace ExcelReporter.Implementations.Panels.Excel
 {
-    public class DataSourcePanel : NamedPanel
+    public class ExcelDataSourcePanel : ExcelNamedPanel
     {
         private readonly string _dataSourceTemplate;
 
-        public DataSourcePanel(string dataSourceTemplate, IXLNamedRange namedRange, IExcelReport report)
+        public ExcelDataSourcePanel(string dataSourceTemplate, IXLNamedRange namedRange, IExcelReport report)
             : base(namedRange, report)
         {
             _dataSourceTemplate = dataSourceTemplate;
@@ -33,7 +33,7 @@ namespace ExcelReporter.Implementations.Panels
                 }
                 else
                 {
-                    var templatePanel = new DataItemPanel(Range, Report)
+                    var templatePanel = new ExcelDataItemPanel(Range, Report)
                     {
                         Parent = Parent,
                         Children = Children,
@@ -44,13 +44,13 @@ namespace ExcelReporter.Implementations.Panels
 
                     for (int i = 0; i < listData.Count; i++)
                     {
-                        DataItemPanel currentPanel;
+                        ExcelDataItemPanel currentPanel;
                         if (i != listData.Count - 1)
                         {
                             // Сам шаблон сдвигаем вниз или вправо в зависимости от типа панели
                             ShiftTemplatePanel(templatePanel);
                             // Копируем шаблон на его предыдущее место
-                            currentPanel = (DataItemPanel) templatePanel.Copy(ExcelHelper.ShiftCell(templatePanel.Range.FirstCell(), GetNextPanelAddressShift(templatePanel)));
+                            currentPanel = (ExcelDataItemPanel)templatePanel.Copy(ExcelHelper.ShiftCell(templatePanel.Range.FirstCell(), GetNextPanelAddressShift(templatePanel)));
                         }
                         // Если это последний элемент данных, то уже на размножаем шаблон, а рендерим данные напрямую в него
                         else
@@ -70,14 +70,14 @@ namespace ExcelReporter.Implementations.Panels
             }
         }
 
-        private AddressShift GetNextPanelAddressShift(IPanel currentPanel)
+        private AddressShift GetNextPanelAddressShift(IExcelPanel currentPanel)
         {
             return Type == PanelType.Vertical
                 ? new AddressShift(-currentPanel.Range.RowCount(), 0)
                 : new AddressShift(0, -currentPanel.Range.ColumnCount());
         }
 
-        private void ShiftTemplatePanel(IPanel templatePanel)
+        private void ShiftTemplatePanel(IExcelPanel templatePanel)
         {
             if (ShiftType == ShiftType.NoShift)
             {
@@ -93,15 +93,15 @@ namespace ExcelReporter.Implementations.Panels
             }
         }
 
-        private void DeletePanel(IPanel panel)
+        private void DeletePanel(IExcelPanel panel)
         {
             RemoveAllNamesRecursive(panel);
             panel.Delete();
         }
 
-        protected override IPanel CopyPanel(IXLCell cell)
+        protected override IExcelPanel CopyPanel(IXLCell cell)
         {
-            var panel = new DataSourcePanel(_dataSourceTemplate, CopyNamedRange(cell), Report);
+            var panel = new ExcelDataSourcePanel(_dataSourceTemplate, CopyNamedRange(cell), Report);
             FillCopyProperties(panel);
             return panel;
         }

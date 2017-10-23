@@ -1,22 +1,23 @@
-﻿using ClosedXML.Excel;
-using ExcelReporter.Enums;
-using ExcelReporter.Excel;
-using ExcelReporter.Interfaces.Panels;
-using ExcelReporter.Interfaces.Reports;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ClosedXML.Excel;
+using ExcelReporter.Enums;
+using ExcelReporter.Excel;
+using ExcelReporter.Interfaces.Panels;
+using ExcelReporter.Interfaces.Panels.Excel;
+using ExcelReporter.Interfaces.Reports;
 
-namespace ExcelReporter.Implementations.Panels
+namespace ExcelReporter.Implementations.Panels.Excel
 {
-    public class Panel : IPanel
+    public class ExcelPanel : IExcelPanel
     {
-        protected IPanel _parent;
+        protected IExcelPanel _parent;
 
         protected RangeCoords _coordsRelativeParent;
 
-        public Panel(IXLRange range, IExcelReport report)
+        public ExcelPanel(IXLRange range, IExcelReport report)
         {
             if (range == null)
             {
@@ -31,7 +32,7 @@ namespace ExcelReporter.Implementations.Panels
             Report = report;
         }
 
-        protected Panel(IExcelReport report)
+        protected ExcelPanel(IExcelReport report)
         {
             if (report == null)
             {
@@ -45,7 +46,7 @@ namespace ExcelReporter.Implementations.Panels
 
         public virtual IXLRange Range { get; private set; }
 
-        public IPanel Parent
+        public IExcelPanel Parent
         {
             get { return _parent; }
             set
@@ -55,7 +56,7 @@ namespace ExcelReporter.Implementations.Panels
             }
         }
 
-        public IEnumerable<IPanel> Children { get; set; } = new List<IPanel>();
+        public IEnumerable<IExcelPanel> Children { get; set; } = new List<IExcelPanel>();
 
         public ShiftType ShiftType { get; set; }
 
@@ -89,32 +90,32 @@ namespace ExcelReporter.Implementations.Panels
                 cell.Value = cellValue;
             }
 
-            foreach (IPanel child in Children.OrderByDescending(p => p.RenderPriority))
+            foreach (IExcelPanel child in Children.OrderByDescending(p => p.RenderPriority))
             {
                 child.Render();
             }
         }
 
-        public virtual IPanel Copy(IXLCell cell, bool recursive = true)
+        public virtual IExcelPanel Copy(IXLCell cell, bool recursive = true)
         {
             if (cell == null)
             {
                 throw new ArgumentNullException(nameof(cell), Constants.NullParamMessage);
             }
 
-            IPanel newPanel = CopyPanel(cell);
+            IExcelPanel newPanel = CopyPanel(cell);
             SetParent(Parent, newPanel);
             if (!recursive)
             {
                 return newPanel;
             }
 
-            IList<IPanel> children = new List<IPanel>(Children.Count());
-            foreach (IPanel child in Children)
+            IList<IExcelPanel> children = new List<IExcelPanel>(Children.Count());
+            foreach (IExcelPanel child in Children)
             {
                 CellCoords firstCellRelativeCoords = ExcelHelper.GetCellCoordsRelativeRange(Range, child.Range.FirstCell());
                 IXLCell firstCell = newPanel.Range.Cell(firstCellRelativeCoords.RowNum, firstCellRelativeCoords.ColNum);
-                IPanel newChild = CopyChild(child, firstCell);
+                IExcelPanel newChild = CopyChild(child, firstCell);
                 SetParent(newPanel, newChild);
                 children.Add(newChild);
             }
@@ -142,7 +143,7 @@ namespace ExcelReporter.Implementations.Panels
 
         protected virtual void MoveChildren()
         {
-            foreach (IPanel child in Children)
+            foreach (IExcelPanel child in Children)
             {
                 child.RecalculateRangeRelativeParentRecursive();
             }
@@ -161,7 +162,7 @@ namespace ExcelReporter.Implementations.Panels
             }
         }
 
-        protected virtual IPanel CopyChild(IPanel fromChild, IXLCell cell)
+        protected virtual IExcelPanel CopyChild(IExcelPanel fromChild, IXLCell cell)
         {
             return fromChild.Copy(cell);
         }
@@ -171,7 +172,7 @@ namespace ExcelReporter.Implementations.Panels
             ExcelHelper.DeleteRange(Range, ShiftType, Type == PanelType.Vertical ? XLShiftDeletedCells.ShiftCellsUp : XLShiftDeletedCells.ShiftCellsLeft);
         }
 
-        protected void SetParent(IPanel probableParent, IPanel child)
+        protected void SetParent(IExcelPanel probableParent, IExcelPanel child)
         {
             if (probableParent != null && ExcelHelper.IsRangeInsideAnotherRange(probableParent.Range, child.Range))
             {
@@ -183,23 +184,23 @@ namespace ExcelReporter.Implementations.Panels
             }
         }
 
-        protected virtual void FillCopyProperties(IPanel panel)
+        protected virtual void FillCopyProperties(IExcelPanel panel)
         {
             panel.Type = Type;
             panel.ShiftType = ShiftType;
         }
 
-        protected virtual IPanel CopyPanel(IXLCell cell)
+        protected virtual IExcelPanel CopyPanel(IXLCell cell)
         {
             IXLRange newRange = ExcelHelper.CopyRange(Range, cell);
-            var panel = new Panel(newRange, Report);
+            var panel = new ExcelPanel(newRange, Report);
             FillCopyProperties(panel);
             return panel;
         }
 
         protected virtual HierarchicalDataItem GetDataContext()
         {
-            IPanel parent = Parent;
+            IExcelPanel parent = Parent;
             while (parent != null)
             {
                 IDataItemPanel dataItemPanel = parent as IDataItemPanel;

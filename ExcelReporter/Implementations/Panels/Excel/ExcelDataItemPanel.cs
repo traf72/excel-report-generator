@@ -1,13 +1,14 @@
 ﻿using ClosedXML.Excel;
 using ExcelReporter.Excel;
 using ExcelReporter.Interfaces.Panels;
+using ExcelReporter.Interfaces.Panels.Excel;
 using ExcelReporter.Interfaces.Reports;
 
-namespace ExcelReporter.Implementations.Panels
+namespace ExcelReporter.Implementations.Panels.Excel
 {
-    internal class DataItemPanel : Panel, IDataItemPanel
+    internal class ExcelDataItemPanel : ExcelPanel, IDataItemPanel
     {
-        public DataItemPanel(IXLRange range, IExcelReport report) : base(range, report)
+        public ExcelDataItemPanel(IXLRange range, IExcelReport report) : base(range, report)
         {
         }
 
@@ -18,10 +19,10 @@ namespace ExcelReporter.Implementations.Panels
             return DataItem;
         }
 
-        protected override IPanel CopyPanel(IXLCell cell)
+        protected override IExcelPanel CopyPanel(IXLCell cell)
         {
             IXLRange newRange = ExcelHelper.CopyRange(Range, cell);
-            var panel = new DataItemPanel(newRange, Report) {DataItem = DataItem};
+            var panel = new ExcelDataItemPanel(newRange, Report) {DataItem = DataItem};
             FillCopyProperties(panel);
             return panel;
         }

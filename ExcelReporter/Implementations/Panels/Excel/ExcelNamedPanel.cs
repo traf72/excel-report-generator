@@ -1,19 +1,19 @@
 ﻿using ClosedXML.Excel;
 using ExcelReporter.Excel;
-using ExcelReporter.Interfaces.Panels;
+using ExcelReporter.Interfaces.Panels.Excel;
 using ExcelReporter.Interfaces.Reports;
 using System;
 using System.Linq;
 
-namespace ExcelReporter.Implementations.Panels
+namespace ExcelReporter.Implementations.Panels.Excel
 {
-    public class NamedPanel : Panel, INamedPanel
+    public class ExcelNamedPanel : ExcelPanel, IExcelNamedPanel
     {
         protected IXLNamedRange _namedRange;
 
         private string _copiedPanelName;
 
-        public NamedPanel(IXLNamedRange namedRange, IExcelReport report) : base(report)
+        public ExcelNamedPanel(IXLNamedRange namedRange, IExcelReport report) : base(report)
         {
             if (namedRange == null)
             {
@@ -27,13 +27,13 @@ namespace ExcelReporter.Implementations.Panels
 
         public override IXLRange Range => _namedRange.Ranges.ElementAt(0);
 
-        public override IPanel Copy(IXLCell cell, bool recursive = true)
+        public override IExcelPanel Copy(IXLCell cell, bool recursive = true)
         {
             string name = $"{Name}_{Guid.NewGuid():N}";
             return Copy(cell, name, recursive);
         }
 
-        public INamedPanel Copy(IXLCell cell, string name, bool recursive = true)
+        public IExcelNamedPanel Copy(IXLCell cell, string name, bool recursive = true)
         {
             if (cell == null)
             {
@@ -45,7 +45,7 @@ namespace ExcelReporter.Implementations.Panels
             }
 
             _copiedPanelName = name;
-            return (INamedPanel)base.Copy(cell, recursive);
+            return (IExcelNamedPanel)base.Copy(cell, recursive);
         }
 
         public void RemoveName(bool recursive = false)
@@ -66,9 +66,9 @@ namespace ExcelReporter.Implementations.Panels
             base.Delete();
         }
 
-        protected override IPanel CopyPanel(IXLCell cell)
+        protected override IExcelPanel CopyPanel(IXLCell cell)
         {
-            var panel = new NamedPanel(CopyNamedRange(cell), Report);
+            var panel = new ExcelNamedPanel(CopyNamedRange(cell), Report);
             FillCopyProperties(panel);
             return panel;
         }
@@ -78,9 +78,9 @@ namespace ExcelReporter.Implementations.Panels
             return ExcelHelper.CopyNamedRange(_namedRange, cell, _copiedPanelName);
         }
 
-        protected override IPanel CopyChild(IPanel fromChild, IXLCell cell)
+        protected override IExcelPanel CopyChild(IExcelPanel fromChild, IXLCell cell)
         {
-            INamedPanel namedChild = fromChild as INamedPanel;
+            IExcelNamedPanel namedChild = fromChild as IExcelNamedPanel;
             return namedChild != null ? namedChild.Copy(cell, $"{_copiedPanelName}_{namedChild.Name}") : fromChild.Copy(cell);
         }
 
@@ -108,12 +108,12 @@ namespace ExcelReporter.Implementations.Panels
             MoveChildren();
         }
 
-        protected INamedPanel GetNearestNamedParent()
+        protected IExcelNamedPanel GetNearestNamedParent()
         {
-            IPanel parent = Parent;
+            IExcelPanel parent = Parent;
             while (parent != null)
             {
-                INamedPanel namedParent = parent as INamedPanel;
+                IExcelNamedPanel namedParent = parent as IExcelNamedPanel;
                 if (namedParent != null)
                 {
                     return namedParent;
@@ -123,14 +123,14 @@ namespace ExcelReporter.Implementations.Panels
             return null;
         }
 
-        public static void RemoveAllNamesRecursive(IPanel panel)
+        public static void RemoveAllNamesRecursive(IExcelPanel panel)
         {
-            foreach (IPanel p in panel.Children)
+            foreach (IExcelPanel p in panel.Children)
             {
                 RemoveAllNamesRecursive(p);
             }
 
-            INamedPanel namedChild = panel as INamedPanel;
+            IExcelNamedPanel namedChild = panel as IExcelNamedPanel;
             namedChild?.RemoveName();
         }
     }

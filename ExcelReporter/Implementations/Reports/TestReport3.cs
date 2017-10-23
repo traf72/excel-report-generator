@@ -26,20 +26,20 @@ namespace ExcelReporter.Implementations.Reports
             //DefaultTemplateProcessor = new DefaultTemplateProcessor(new ReflectionParameterProvider(this));
 
             ////IXLNamedRange panel = _ws.NamedRange("panel");
-            ////panels[panel.Name] = new DataSourcePanel("TestDataSource", "GetAllItems()", panel, report)
+            ////panels[panel.Name] = new ExcelDataSourcePanel("TestDataSource", "GetAllItems()", panel, report)
             ////{
             ////    Type = PanelType.Horizontal
             ////};
 
             ////IXLNamedRange panel = _ws.NamedRange("panel");
-            ////panels[panel.Name] = new DataSourcePanel("TestDataSource", "GetAllItems()", panel, report)
+            ////panels[panel.Name] = new ExcelDataSourcePanel("TestDataSource", "GetAllItems()", panel, report)
             ////{
             ////    Type = PanelType.Horizontal,
             ////    ShiftType = ShiftType.Row,
             ////};
 
             //IXLNamedRange panel = _ws.NamedRange("panel");
-            //panels[panel.Name] = new DataSourcePanel("TestDataSource", "GetAllItems()", panel, this)
+            //panels[panel.Name] = new ExcelDataSourcePanel("TestDataSource", "GetAllItems()", panel, this)
             //{
             //    Type = PanelType.Horizontal,
             //    ShiftType = ShiftType.NoShift,

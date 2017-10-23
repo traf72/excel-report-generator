@@ -72,10 +72,10 @@
     <Compile Include="Exceptions\ParameterNotFoundException.cs" />
     <Compile Include="Exceptions\MemberNotFoundException.cs" />
     <Compile Include="HierarchicalDataItem.cs" />
-    <Compile Include="Implementations\Panels\DataItemPanel.cs" />
-    <Compile Include="Implementations\Panels\DataSourcePanel.cs" />
-    <Compile Include="Implementations\Panels\NamedPanel.cs" />
-    <Compile Include="Implementations\Panels\Panel.cs" />
+    <Compile Include="Implementations\Panels\Excel\ExcelDataItemPanel.cs" />
+    <Compile Include="Implementations\Panels\Excel\ExcelDataSourcePanel.cs" />
+    <Compile Include="Implementations\Panels\Excel\ExcelNamedPanel.cs" />
+    <Compile Include="Implementations\Panels\Excel\ExcelPanel.cs" />
     <Compile Include="Implementations\Providers\MethodCallValueProvider.cs" />
     <Compile Include="Implementations\Providers\DataItemValueProvider.cs" />
     <Compile Include="Implementations\Providers\ReflectionParameterProvider.cs" />
@@ -84,6 +84,8 @@
     <Compile Include="Implementations\Reports\TestReport4.cs" />
     <Compile Include="Implementations\TemplateProcessors\DefaultTemplateProcessor.cs" />
     <Compile Include="Interfaces\Panels\IDataItemPanel.cs" />
+    <Compile Include="Interfaces\Panels\Excel\IExcelPanel.cs" />
+    <Compile Include="Interfaces\Panels\Excel\IExcelNamedPanel.cs" />
     <Compile Include="Interfaces\Panels\INamedPanel.cs" />
     <Compile Include="Interfaces\Providers\IDataItemValueProvider.cs" />
     <Compile Include="Interfaces\Providers\IMethodCallValueProvider.cs" />
