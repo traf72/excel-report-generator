@@ -1,6 +1,6 @@
 ﻿namespace ExcelReporter.Excel
 {
-    public struct AddressShift
+    internal struct AddressShift
     {
         public AddressShift(int rowCount, int colCount)
         {

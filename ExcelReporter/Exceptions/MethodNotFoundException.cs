@@ -2,7 +2,7 @@
 
 namespace ExcelReporter.Exceptions
 {
-    public class MethodNotFoundException : Exception
+    internal class MethodNotFoundException : Exception
     {
         public MethodNotFoundException(string message) : base(message)
         {

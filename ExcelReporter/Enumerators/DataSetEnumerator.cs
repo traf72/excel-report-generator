@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 
-namespace ExcelReporter.Iterators
+namespace ExcelReporter.Enumerators
 {
-    public class DataSetIterator : IIterator<DataRow>
+    internal class DataSetEnumerator : IEnumerator<DataRow>
     {
-        private readonly DataTableIterator _dataTableIterator;
+        private readonly IEnumerator<DataRow> _dataTableEnumerator;
 
-        public DataSetIterator(DataSet dataSet, string tableName = null)
+        public DataSetEnumerator(DataSet dataSet, string tableName = null)
         {
             if (dataSet == null)
             {
@@ -32,22 +34,26 @@ namespace ExcelReporter.Iterators
                 dataTable = dataSet.Tables[0];
             }
 
-            _dataTableIterator = new DataTableIterator(dataTable);
+            _dataTableEnumerator = dataTable.AsEnumerable().GetEnumerator();
         }
 
-        public DataRow Next()
-        {
-            return _dataTableIterator.Next();
-        }
+        public DataRow Current => _dataTableEnumerator.Current;
 
-        public bool HaxNext()
+        object IEnumerator.Current => Current;
+
+        public bool MoveNext()
         {
-            return _dataTableIterator.HaxNext();
+            return _dataTableEnumerator.MoveNext();
         }
 
         public void Reset()
         {
-            _dataTableIterator.Reset();
+            _dataTableEnumerator.Reset();
+        }
+
+        public void Dispose()
+        {
+            _dataTableEnumerator.Dispose();
         }
     }
 }

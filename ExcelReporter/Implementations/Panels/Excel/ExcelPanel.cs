@@ -11,7 +11,7 @@ using ExcelReporter.Interfaces.Reports;
 
 namespace ExcelReporter.Implementations.Panels.Excel
 {
-    public class ExcelPanel : IExcelPanel
+    internal class ExcelPanel : IExcelPanel
     {
         protected IExcelPanel _parent;
 

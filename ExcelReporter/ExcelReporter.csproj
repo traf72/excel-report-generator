@@ -61,6 +61,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="DataItem2.cs" />
     <Compile Include="DataItem.cs" />
+    <Compile Include="Enumerators\EnumeratorFactory.cs" />
     <Compile Include="Enums\Direction.cs" />
     <Compile Include="Enums\PanelType.cs" />
     <Compile Include="Enums\ShiftType.cs" />
@@ -95,10 +96,8 @@
     <Compile Include="Interfaces\Panels\IPanel.cs" />
     <Compile Include="Interfaces\Providers\IParameterProvider.cs" />
     <Compile Include="Interfaces\TemplateProcessors\ITemplateProcessor.cs" />
-    <Compile Include="Iterators\DataSetIterator.cs" />
-    <Compile Include="Iterators\DataTableIterator.cs" />
-    <Compile Include="Iterators\EnumerableIterator.cs" />
-    <Compile Include="Iterators\IIterator.cs" />
+    <Compile Include="Enumerators\DataReaderEnumerator.cs" />
+    <Compile Include="Enumerators\DataSetEnumerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Excel\CellCoords.cs" />

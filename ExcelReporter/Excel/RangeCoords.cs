@@ -1,6 +1,6 @@
 ﻿namespace ExcelReporter.Excel
 {
-    public struct RangeCoords
+    internal struct RangeCoords
     {
         public RangeCoords(CellCoords firstCell, CellCoords lastCell)
         {

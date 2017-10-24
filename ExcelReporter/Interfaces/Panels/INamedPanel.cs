@@ -1,6 +1,6 @@
 ﻿namespace ExcelReporter.Interfaces.Panels
 {
-    public interface INamedPanel : IPanel
+    internal interface INamedPanel : IPanel
     {
         string Name { get; }
     }

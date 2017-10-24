@@ -1,6 +1,6 @@
 ﻿namespace ExcelReporter.Enums
 {
-    public enum PanelType
+    internal enum PanelType
     {
         Vertical,
         Horizontal,

@@ -1,6 +1,6 @@
 ﻿namespace ExcelReporter.Enums
 {
-    public enum Direction
+    internal enum Direction
     {
         Bottom,
         Right,

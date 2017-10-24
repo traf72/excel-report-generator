@@ -6,7 +6,7 @@ using ExcelReporter.Enums;
 
 namespace ExcelReporter.Excel
 {
-    public static class ExcelHelper
+    internal static class ExcelHelper
     {
         public static bool IsCellInsideRange(IXLCell cell, IXLRange range)
         {

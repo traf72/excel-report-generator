@@ -1,6 +1,6 @@
 ﻿namespace ExcelReporter.Enums
 {
-    public enum ShiftType
+    internal enum ShiftType
     {
         Cells,
         Row,

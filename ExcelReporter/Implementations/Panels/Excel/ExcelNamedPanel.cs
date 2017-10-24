@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace ExcelReporter.Implementations.Panels.Excel
 {
-    public class ExcelNamedPanel : ExcelPanel, IExcelNamedPanel
+    internal class ExcelNamedPanel : ExcelPanel, IExcelNamedPanel
     {
         protected IXLNamedRange _namedRange;
 

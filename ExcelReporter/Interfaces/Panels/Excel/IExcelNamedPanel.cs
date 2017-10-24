@@ -2,7 +2,7 @@
 
 namespace ExcelReporter.Interfaces.Panels.Excel
 {
-    public interface IExcelNamedPanel : INamedPanel, IExcelPanel
+    internal interface IExcelNamedPanel : INamedPanel, IExcelPanel
     {
         IExcelNamedPanel Copy(IXLCell cell, string name, bool recursive = true);
 

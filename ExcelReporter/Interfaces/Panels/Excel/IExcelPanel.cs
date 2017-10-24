@@ -5,7 +5,7 @@ using ExcelReporter.Interfaces.Reports;
 
 namespace ExcelReporter.Interfaces.Panels.Excel
 {
-    public interface IExcelPanel : IPanel
+    internal interface IExcelPanel : IPanel
     {
         IExcelPanel Parent { get; set; }
 

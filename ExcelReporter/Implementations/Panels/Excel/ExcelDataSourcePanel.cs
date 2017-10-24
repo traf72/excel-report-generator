@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace ExcelReporter.Implementations.Panels.Excel
 {
-    public class ExcelDataSourcePanel : ExcelNamedPanel
+    internal class ExcelDataSourcePanel : ExcelNamedPanel
     {
         private readonly string _dataSourceTemplate;
 

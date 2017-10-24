@@ -2,7 +2,7 @@
 
 namespace ExcelReporter.Exceptions
 {
-    public class MemberNotFoundException : Exception
+    internal class MemberNotFoundException : Exception
     {
         public MemberNotFoundException(string message) : base(message)
         {
