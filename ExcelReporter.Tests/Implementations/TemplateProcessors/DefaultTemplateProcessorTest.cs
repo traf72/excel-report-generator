@@ -4,6 +4,7 @@ using ExcelReporter.Interfaces.Providers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
+using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
 
 namespace ExcelReporter.Tests.Implementations.TemplateProcessors
 {
@@ -15,7 +16,7 @@ namespace ExcelReporter.Tests.Implementations.TemplateProcessors
         {
             var parameterProvider = Substitute.For<IParameterProvider>();
             var methodCallValueProvider = Substitute.For<IMethodCallValueProvider>();
-            var dataItemValueProvider = Substitute.For<IDataItemValueProvider>();
+            var dataItemValueProvider = Substitute.For<IGenericDataItemValueProvider<HierarchicalDataItem>>();
             var dataItem = new HierarchicalDataItem();
 
             MyAssert.Throws<ArgumentNullException>(() => new DefaultTemplateProcessor(null, methodCallValueProvider, dataItemValueProvider));

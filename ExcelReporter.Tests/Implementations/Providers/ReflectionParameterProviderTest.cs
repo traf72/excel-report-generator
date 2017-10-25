@@ -59,7 +59,7 @@ namespace ExcelReporter.Tests.Implementations.Providers
             public string FieldParameter;
 
             [Parameter]
-            protected string NotParam1;
+            protected string NotParam1 = "NotParam1";
 
             public string NotParam2 { get; set; }
         }

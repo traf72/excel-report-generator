@@ -2,19 +2,20 @@
 using ExcelReporter.Interfaces.Providers;
 using ExcelReporter.Interfaces.TemplateProcessors;
 using System;
+using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
 
 namespace ExcelReporter.Implementations.TemplateProcessors
 {
     public class DefaultTemplateProcessor : ITemplateProcessor
     {
         private readonly IParameterProvider _parameterProvider;
-        private readonly IDataItemValueProvider _dataItemValueProvider;
+        private readonly IGenericDataItemValueProvider<HierarchicalDataItem> _dataItemValueProvider;
         private readonly IMethodCallValueProvider _methodCallValueProvider;
         private const string _typeValueSeparator = ":";
         private static readonly char[] _templateBorders = { '{', '}' };
 
         public DefaultTemplateProcessor(IParameterProvider parameterProvider, IMethodCallValueProvider methodCallValueProvider = null,
-            IDataItemValueProvider dataItemValueProvider = null)
+            IGenericDataItemValueProvider<HierarchicalDataItem> dataItemValueProvider = null)
         {
             if (parameterProvider == null)
             {

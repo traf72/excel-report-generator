@@ -152,8 +152,12 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Enumerators\EnumeratorFactoryTest.cs" />
-    <Compile Include="Implementations\Providers\DataItemValueProviderTest.cs" />
+    <Compile Include="Implementations\Providers\DataItemValueProviders\DataItemValueProviderFactoryTest.cs" />
+    <Compile Include="Implementations\Providers\DataItemValueProviders\DataReaderValueProviderTest.cs" />
+    <Compile Include="Implementations\Providers\DataItemValueProviders\DataRowValueProviderTest.cs" />
+    <Compile Include="Implementations\Providers\DataItemValueProviders\HierarchicalDataItemValueProviderTest.cs" />
     <Compile Include="Excel\ExcelHelperTest.cs" />
+    <Compile Include="Implementations\Providers\DataItemValueProviders\ObjectPropertyValueProviderTest.cs" />
     <Compile Include="Implementations\Providers\DictionaryParameterProviderTest.cs" />
     <Compile Include="Implementations\Providers\MethodCallValueProviderTest.cs" />
     <Compile Include="Implementations\Providers\ReflectionParameterProviderTest.cs" />

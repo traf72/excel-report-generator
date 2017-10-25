@@ -69,6 +69,7 @@
     <Compile Include="Excel\AddressShift.cs" />
     <Compile Include="Exceptions\IncorrectTemplateException.cs" />
     <Compile Include="Exceptions\MethodNotFoundException.cs" />
+    <Compile Include="Exceptions\ColumnNotFoundException.cs" />
     <Compile Include="Exceptions\TypeNotFoundException.cs" />
     <Compile Include="Exceptions\ParameterNotFoundException.cs" />
     <Compile Include="Exceptions\MemberNotFoundException.cs" />
@@ -77,8 +78,12 @@
     <Compile Include="Implementations\Panels\Excel\ExcelDataSourcePanel.cs" />
     <Compile Include="Implementations\Panels\Excel\ExcelNamedPanel.cs" />
     <Compile Include="Implementations\Panels\Excel\ExcelPanel.cs" />
+    <Compile Include="Implementations\Providers\DataItemValueProviders\DefaultDataItemValueProviderFactory.cs" />
+    <Compile Include="Implementations\Providers\DataItemValueProviders\DataReaderValueProvider.cs" />
+    <Compile Include="Implementations\Providers\DataItemValueProviders\DataRowValueProvider.cs" />
+    <Compile Include="Implementations\Providers\DataItemValueProviders\ObjectPropertyValueProvider.cs" />
     <Compile Include="Implementations\Providers\MethodCallValueProvider.cs" />
-    <Compile Include="Implementations\Providers\DataItemValueProvider.cs" />
+    <Compile Include="Implementations\Providers\DataItemValueProviders\HierarchicalDataItemValueProvider.cs" />
     <Compile Include="Implementations\Providers\ReflectionParameterProvider.cs" />
     <Compile Include="Implementations\Providers\DictionaryParameterProvider.cs" />
     <Compile Include="Implementations\Providers\TypeProvider.cs" />
@@ -88,7 +93,9 @@
     <Compile Include="Interfaces\Panels\Excel\IExcelPanel.cs" />
     <Compile Include="Interfaces\Panels\Excel\IExcelNamedPanel.cs" />
     <Compile Include="Interfaces\Panels\INamedPanel.cs" />
-    <Compile Include="Interfaces\Providers\IDataItemValueProvider.cs" />
+    <Compile Include="Interfaces\Providers\DataItemValueProviders\IDataItemValueProviderFactory.cs" />
+    <Compile Include="Interfaces\Providers\DataItemValueProviders\IDataItemValueProvider.cs" />
+    <Compile Include="Interfaces\Providers\DataItemValueProviders\IGenericDataItemValueProvider.cs" />
     <Compile Include="Interfaces\Providers\IMethodCallValueProvider.cs" />
     <Compile Include="Interfaces\Providers\ITypeProvider.cs" />
     <Compile Include="Interfaces\Reports\IExcelReport.cs" />
