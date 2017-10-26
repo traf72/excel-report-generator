@@ -56,7 +56,7 @@ namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
                 }
                 dataItem = dataItem.Parent;
             }
-            dataItemTemplate = template.Substring(lastColonIndex + 1);
+            dataItemTemplate = template.Substring(lastColonIndex + 1).Trim();
             return dataItem?.Value;
         }
 
