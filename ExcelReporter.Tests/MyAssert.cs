@@ -27,5 +27,25 @@ namespace ExcelReporter.Tests
 
             Assert.Fail("No exception was thrown");
         }
+
+        public static void ThrowsBaseException<T>(Action action, string expectedMessage = null) where T : Exception
+        {
+            try
+            {
+                action.Invoke();
+            }
+            catch (Exception e)
+            {
+                Exception baseException = e.GetBaseException();
+                Assert.IsInstanceOfType(baseException, typeof(T), "Wrong type of exception was thrown");
+                if (expectedMessage != null)
+                {
+                    Assert.AreEqual(expectedMessage, baseException.Message, "Wrong exception message was returned");
+                }
+                return;
+            }
+
+            Assert.Fail("No exception was thrown");
+        }
     }
 }

@@ -61,14 +61,19 @@ namespace ExcelReporter.Implementations.Providers
 
         protected virtual MethodCallTemplateParts ParseTemplate(string template)
         {
-            int parenthesisCount = Regex.Matches(template, @"\(|\)").Count;
-            if (parenthesisCount == 0 || parenthesisCount % 2 != 0)
+            string incorrectTemplateMessage = $"Template \"{template}\" is incorrect";
+            int firstParenthesisIndex = template.IndexOf('(');
+            if (firstParenthesisIndex == -1)
             {
-                throw new IncorrectTemplateException($"Template \"{template}\" is incorrect");
+                throw new IncorrectTemplateException(incorrectTemplateMessage);
             }
 
-            int firstParenthesisIndex = template.IndexOf('(');
             int lastParenthesisIndex = template.LastIndexOf(')');
+            if (lastParenthesisIndex == -1)
+            {
+                throw new IncorrectTemplateException(incorrectTemplateMessage);
+            }
+
             string methodParams = template.Substring(firstParenthesisIndex + 1, lastParenthesisIndex - firstParenthesisIndex - 1);
             string typeWithMethodName = template.Substring(0, firstParenthesisIndex);
             string methodName;
@@ -132,11 +137,37 @@ namespace ExcelReporter.Implementations.Providers
         private object[] GetParams(string methodParams)
         {
             IList<object> callParams = new List<object>();
+            string pattern = GetTemplatePatternWithoutBorders();
             foreach (string p in ParseParams(methodParams))
             {
-                callParams.Add(Regex.IsMatch(p, $@"^{TemplateProcessor.TemplatePattern}$") ? TemplateProcessor.GetValue(p, DataItem) : p);
+                if (p.StartsWith("\"") && p.EndsWith("\""))
+                {
+                    callParams.Add(p.Substring(1, p.Length - 2));
+                }
+                else if (Regex.IsMatch(p, $@"^{pattern}$"))
+                {
+                    callParams.Add(TemplateProcessor.GetValue(p, DataItem));
+                }
+                else
+                {
+                    callParams.Add(p);
+                }
             }
             return callParams.ToArray();
+        }
+
+        private string GetTemplatePatternWithoutBorders()
+        {
+            string pattern = TemplateProcessor.TemplatePattern;
+            if (TemplateProcessor.LeftTemplateBorder != null)
+            {
+                pattern = pattern.Substring(TemplateProcessor.LeftTemplateBorder.Length);
+            }
+            if (TemplateProcessor.RightTemplateBorder != null)
+            {
+                pattern = pattern.Substring(0, pattern.Length - TemplateProcessor.RightTemplateBorder.Length);
+            }
+            return pattern;
         }
 
         protected virtual string[] ParseParams(string methodParams)
@@ -148,7 +179,7 @@ namespace ExcelReporter.Implementations.Providers
 
             IList<string> result = new List<string>();
             int currentSymbolIndex = 0;
-            int templateNesting = 0;
+            int methodNesting = 0;
             StringBuilder param = new StringBuilder();
             while (currentSymbolIndex < methodParams.Length)
             {
@@ -157,7 +188,7 @@ namespace ExcelReporter.Implementations.Providers
                 char? nextSymbol = nextSymbolExists ? (char?)methodParams[currentSymbolIndex + 1] : null;
                 if (currentSymbol == ',')
                 {
-                    if (nextSymbol == ',' || templateNesting > 0)
+                    if (nextSymbol == ',' || methodNesting > 0)
                     {
                         param.Append(currentSymbol);
                         if (nextSymbol == ',')
@@ -173,13 +204,13 @@ namespace ExcelReporter.Implementations.Providers
                 }
                 else
                 {
-                    if (currentSymbol == '{')
+                    if (currentSymbol == '(')
                     {
-                        templateNesting++;
+                        methodNesting++;
                     }
-                    else if (currentSymbol == '}')
+                    else if (currentSymbol == ')')
                     {
-                        templateNesting--;
+                        methodNesting--;
                     }
                     param.Append(currentSymbol);
                 }

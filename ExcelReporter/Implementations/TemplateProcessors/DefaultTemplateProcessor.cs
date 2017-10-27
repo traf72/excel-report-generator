@@ -8,11 +8,13 @@ namespace ExcelReporter.Implementations.TemplateProcessors
 {
     public class DefaultTemplateProcessor : ITemplateProcessor
     {
+        private const string TypeValueSeparator = ":";
+        private const string LeftBorder = "{";
+        private const string RightBorder = "}";
+
         private readonly IParameterProvider _parameterProvider;
         private readonly IGenericDataItemValueProvider<HierarchicalDataItem> _dataItemValueProvider;
         private readonly IMethodCallValueProvider _methodCallValueProvider;
-        private const string _typeValueSeparator = ":";
-        private static readonly char[] _templateBorders = { '{', '}' };
 
         public DefaultTemplateProcessor(IParameterProvider parameterProvider, IMethodCallValueProvider methodCallValueProvider = null,
             IGenericDataItemValueProvider<HierarchicalDataItem> dataItemValueProvider = null)
@@ -27,7 +29,11 @@ namespace ExcelReporter.Implementations.TemplateProcessors
             _dataItemValueProvider = dataItemValueProvider;
         }
 
-        public string TemplatePattern { get; } = @"\{.+?:.+?\}";
+        public string LeftTemplateBorder => LeftBorder;
+
+        public string RightTemplateBorder => RightBorder;
+
+        public string TemplatePattern { get; } = $@"{LeftBorder}.+?{TypeValueSeparator}.+?{RightBorder}";
 
         public virtual object GetValue(string template, HierarchicalDataItem dataItem)
         {
@@ -36,11 +42,11 @@ namespace ExcelReporter.Implementations.TemplateProcessors
                 throw new ArgumentNullException(nameof(template), Constants.EmptyStringParamMessage);
             }
 
-            string templ = template.Trim().Trim(_templateBorders).Trim();
-            int separatorIndex = templ.IndexOf(_typeValueSeparator, StringComparison.InvariantCulture);
+            string templ = template.Trim(LeftTemplateBorder[0], RightTemplateBorder[0], ' ');
+            int separatorIndex = templ.IndexOf(TypeValueSeparator, StringComparison.InvariantCulture);
             if (separatorIndex == -1)
             {
-                throw new IncorrectTemplateException($"Incorrect template \"{template}\". Cannot find separator \"{_typeValueSeparator}\" between member type and member template");
+                throw new IncorrectTemplateException($"Incorrect template \"{template}\". Cannot find separator \"{TypeValueSeparator}\" between member type and member template");
             }
 
             string memberType = templ.Substring(0, separatorIndex).ToLower().Trim();

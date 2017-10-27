@@ -64,65 +64,89 @@ namespace ExcelReporter.Tests.Implementations.Providers
             Assert.AreEqual("ExcelReporter.Tests.Implementations.Providers:TestClass", typeNameProp.GetValue(result));
             Assert.AreEqual(string.Empty, methodParamsProp.GetValue(result));
 
-            result = method.Invoke(methodCallValueProvider, new[] { "Method1({m:Method2({p:Name})})" });
+            result = method.Invoke(methodCallValueProvider, new[] { "Method1(,)" });
             Assert.AreEqual("Method1", methodNameProp.GetValue(result));
             Assert.IsNull(typeNameProp.GetValue(result));
-            Assert.AreEqual("{m:Method2({p:Name})}", methodParamsProp.GetValue(result));
+            Assert.AreEqual(",", methodParamsProp.GetValue(result));
 
-            result = method.Invoke(methodCallValueProvider, new[] { "TestClass:Method1({m:Method2({p:Name})})" });
-            Assert.AreEqual("Method1", methodNameProp.GetValue(result));
-            Assert.AreEqual("TestClass", typeNameProp.GetValue(result));
-            Assert.AreEqual("{m:Method2({p:Name})}", methodParamsProp.GetValue(result));
-
-            result = method.Invoke(methodCallValueProvider, new[] { ":TestClass:Method1({m:Method2({p:Name})})" });
-            Assert.AreEqual("Method1", methodNameProp.GetValue(result));
-            Assert.AreEqual(":TestClass", typeNameProp.GetValue(result));
-            Assert.AreEqual("{m:Method2({p:Name})}", methodParamsProp.GetValue(result));
-
-            result = method.Invoke(methodCallValueProvider, new[] { "ExcelReporter.Tests.Implementations.Providers:TestClass:Method1({m:Method2({p:Name})})" });
-            Assert.AreEqual("Method1", methodNameProp.GetValue(result));
-            Assert.AreEqual("ExcelReporter.Tests.Implementations.Providers:TestClass", typeNameProp.GetValue(result));
-            Assert.AreEqual("{m:Method2({p:Name})}", methodParamsProp.GetValue(result));
-
-            result = method.Invoke(methodCallValueProvider, new[] { "Method1( {p:Name}, {m:Method2({p:Name})}, {di:Field} )" });
+            result = method.Invoke(methodCallValueProvider, new[] { "Method1( , )" });
             Assert.AreEqual("Method1", methodNameProp.GetValue(result));
             Assert.IsNull(typeNameProp.GetValue(result));
-            Assert.AreEqual("{p:Name}, {m:Method2({p:Name})}, {di:Field}", methodParamsProp.GetValue(result));
+            Assert.AreEqual(",", methodParamsProp.GetValue(result));
 
-            result = method.Invoke(methodCallValueProvider, new[] { "TestClass:Method1( {p:Name}, {m:Method2({p:Name})}, {di:Field} )" });
-            Assert.AreEqual("Method1", methodNameProp.GetValue(result));
-            Assert.AreEqual("TestClass", typeNameProp.GetValue(result));
-            Assert.AreEqual("{p:Name}, {m:Method2({p:Name})}, {di:Field}", methodParamsProp.GetValue(result));
-
-            result = method.Invoke(methodCallValueProvider, new[] { ":TestClass:Method1( {p:Name}, {m:Method2({p:Name})}, {di:Field} )" });
-            Assert.AreEqual("Method1", methodNameProp.GetValue(result));
-            Assert.AreEqual(":TestClass", typeNameProp.GetValue(result));
-            Assert.AreEqual("{p:Name}, {m:Method2({p:Name})}, {di:Field}", methodParamsProp.GetValue(result));
-
-            result = method.Invoke(methodCallValueProvider, new[] { "ExcelReporter.Tests.Implementations.Providers:TestClass:Method1( {p:Name}, {m:Method2({p:Name})}, {di:Field} )" });
-            Assert.AreEqual("Method1", methodNameProp.GetValue(result));
-            Assert.AreEqual("ExcelReporter.Tests.Implementations.Providers:TestClass", typeNameProp.GetValue(result));
-            Assert.AreEqual("{p:Name}, {m:Method2({p:Name})}, {di:Field}", methodParamsProp.GetValue(result));
-
-            result = method.Invoke(methodCallValueProvider, new[] { "Method1({p:Name}, {m:Method2({p:Name}, { p:value }, {ms:Method3(hi, 5, {p:Desc})})}, {di:Field})" });
+            result = method.Invoke(methodCallValueProvider, new[] { "Method1(\"\",\" \")" });
             Assert.AreEqual("Method1", methodNameProp.GetValue(result));
             Assert.IsNull(typeNameProp.GetValue(result));
-            Assert.AreEqual("{p:Name}, {m:Method2({p:Name}, { p:value }, {ms:Method3(hi, 5, {p:Desc})})}, {di:Field}", methodParamsProp.GetValue(result));
+            Assert.AreEqual("\"\",\" \"", methodParamsProp.GetValue(result));
 
-            result = method.Invoke(methodCallValueProvider, new[] { "TestClass:Method1({p:Name}, {m:Method2({p:Name}, { p:value }, {ms:Method3(hi, 5, {p:Desc})})}, {di:Field})" });
+            result = method.Invoke(methodCallValueProvider, new[] { "Method1(()" });
+            Assert.AreEqual("Method1", methodNameProp.GetValue(result));
+            Assert.IsNull(typeNameProp.GetValue(result));
+            Assert.AreEqual("(", methodParamsProp.GetValue(result));
+
+            result = method.Invoke(methodCallValueProvider, new[] { "Method1(m:Method2(p:Name))" });
+            Assert.AreEqual("Method1", methodNameProp.GetValue(result));
+            Assert.IsNull(typeNameProp.GetValue(result));
+            Assert.AreEqual("m:Method2(p:Name)", methodParamsProp.GetValue(result));
+
+            result = method.Invoke(methodCallValueProvider, new[] { "TestClass:Method1(m:Method2(p:Name))" });
             Assert.AreEqual("Method1", methodNameProp.GetValue(result));
             Assert.AreEqual("TestClass", typeNameProp.GetValue(result));
-            Assert.AreEqual("{p:Name}, {m:Method2({p:Name}, { p:value }, {ms:Method3(hi, 5, {p:Desc})})}, {di:Field}", methodParamsProp.GetValue(result));
+            Assert.AreEqual("m:Method2(p:Name)", methodParamsProp.GetValue(result));
 
-            result = method.Invoke(methodCallValueProvider, new[] { ":TestClass:Method1({p:Name}, {m:Method2({p:Name}, { p:value }, {ms:Method3(hi, 5, {p:Desc})})}, {di:Field})" });
+            result = method.Invoke(methodCallValueProvider, new[] { ":TestClass:Method1(m:Method2(p:Name))" });
             Assert.AreEqual("Method1", methodNameProp.GetValue(result));
             Assert.AreEqual(":TestClass", typeNameProp.GetValue(result));
-            Assert.AreEqual("{p:Name}, {m:Method2({p:Name}, { p:value }, {ms:Method3(hi, 5, {p:Desc})})}, {di:Field}", methodParamsProp.GetValue(result));
+            Assert.AreEqual("m:Method2(p:Name)", methodParamsProp.GetValue(result));
 
-            result = method.Invoke(methodCallValueProvider, new[] { "ExcelReporter.Tests.Implementations.Providers:TestClass:Method1({p:Name}, {m:Method2({p:Name}, { p:value }, {ms:Method3(hi, 5, {p:Desc})})}, {di:Field})" });
+            result = method.Invoke(methodCallValueProvider, new[] { "ExcelReporter.Tests.Implementations.Providers:TestClass:Method1(m:Method2(p:Name))" });
             Assert.AreEqual("Method1", methodNameProp.GetValue(result));
             Assert.AreEqual("ExcelReporter.Tests.Implementations.Providers:TestClass", typeNameProp.GetValue(result));
-            Assert.AreEqual("{p:Name}, {m:Method2({p:Name}, { p:value }, {ms:Method3(hi, 5, {p:Desc})})}, {di:Field}", methodParamsProp.GetValue(result));
+            Assert.AreEqual("m:Method2(p:Name)", methodParamsProp.GetValue(result));
+
+            result = method.Invoke(methodCallValueProvider, new[] { "Method1( p:Name, m:Method2(p:Name), di:Field )" });
+            Assert.AreEqual("Method1", methodNameProp.GetValue(result));
+            Assert.IsNull(typeNameProp.GetValue(result));
+            Assert.AreEqual("p:Name, m:Method2(p:Name), di:Field", methodParamsProp.GetValue(result));
+
+            result = method.Invoke(methodCallValueProvider, new[] { "TestClass:Method1( p:Name, m:Method2(p:Name), di:Field )" });
+            Assert.AreEqual("Method1", methodNameProp.GetValue(result));
+            Assert.AreEqual("TestClass", typeNameProp.GetValue(result));
+            Assert.AreEqual("p:Name, m:Method2(p:Name), di:Field", methodParamsProp.GetValue(result));
+
+            result = method.Invoke(methodCallValueProvider, new[] { ":TestClass:Method1( p:Name, m:Method2(p:Name), di:Field )" });
+            Assert.AreEqual("Method1", methodNameProp.GetValue(result));
+            Assert.AreEqual(":TestClass", typeNameProp.GetValue(result));
+            Assert.AreEqual("p:Name, m:Method2(p:Name), di:Field", methodParamsProp.GetValue(result));
+
+            result = method.Invoke(methodCallValueProvider, new[] { "ExcelReporter.Tests.Implementations.Providers:TestClass:Method1( p:Name, m:Method2(p:Name), di:Field )" });
+            Assert.AreEqual("Method1", methodNameProp.GetValue(result));
+            Assert.AreEqual("ExcelReporter.Tests.Implementations.Providers:TestClass", typeNameProp.GetValue(result));
+            Assert.AreEqual("p:Name, m:Method2(p:Name), di:Field", methodParamsProp.GetValue(result));
+
+            result = method.Invoke(methodCallValueProvider, new[] { "Method1(p:Name, m:Method2(p:Name,  p:value , ms:Method3(\"hi\", 5, p:Desc)), di:Field)" });
+            Assert.AreEqual("Method1", methodNameProp.GetValue(result));
+            Assert.IsNull(typeNameProp.GetValue(result));
+            Assert.AreEqual("p:Name, m:Method2(p:Name,  p:value , ms:Method3(\"hi\", 5, p:Desc)), di:Field", methodParamsProp.GetValue(result));
+
+            result = method.Invoke(methodCallValueProvider, new[] { "TestClass:Method1(p:Name, m:Method2(p:Name,  p:value , ms:Method3(\"(\", 5, p:Desc)), di:Field)" });
+            Assert.AreEqual("Method1", methodNameProp.GetValue(result));
+            Assert.AreEqual("TestClass", typeNameProp.GetValue(result));
+            Assert.AreEqual("p:Name, m:Method2(p:Name,  p:value , ms:Method3(\"(\", 5, p:Desc)), di:Field", methodParamsProp.GetValue(result));
+
+            result = method.Invoke(methodCallValueProvider, new[] { ":TestClass:Method1(p:Name, m:Method2(p:Name,  p:value , ms:Method3(hi, 5, p:Desc)), di:Field)" });
+            Assert.AreEqual("Method1", methodNameProp.GetValue(result));
+            Assert.AreEqual(":TestClass", typeNameProp.GetValue(result));
+            Assert.AreEqual("p:Name, m:Method2(p:Name,  p:value , ms:Method3(hi, 5, p:Desc)), di:Field", methodParamsProp.GetValue(result));
+
+            result = method.Invoke(methodCallValueProvider, new[] { "ExcelReporter.Tests.Implementations.Providers:TestClass:Method1(p:Name, m:Method2(p:Name,  p:value , ms:Method3(hi, 5, p:Desc)), di:Field)" });
+            Assert.AreEqual("Method1", methodNameProp.GetValue(result));
+            Assert.AreEqual("ExcelReporter.Tests.Implementations.Providers:TestClass", typeNameProp.GetValue(result));
+            Assert.AreEqual("p:Name, m:Method2(p:Name,  p:value , ms:Method3(hi, 5, p:Desc)), di:Field", methodParamsProp.GetValue(result));
+
+            MyAssert.ThrowsBaseException<IncorrectTemplateException>(() => method.Invoke(methodCallValueProvider, new[] { "Method1" }), "Template \"Method1\" is incorrect");
+            MyAssert.ThrowsBaseException<IncorrectTemplateException>(() => method.Invoke(methodCallValueProvider, new[] { "Method1(" }), "Template \"Method1(\" is incorrect");
+            MyAssert.ThrowsBaseException<IncorrectTemplateException>(() => method.Invoke(methodCallValueProvider, new[] { "Method1)" }), "Template \"Method1)\" is incorrect");
         }
 
         [TestMethod]
@@ -138,63 +162,78 @@ namespace ExcelReporter.Tests.Implementations.Providers
             result = (string[])method.Invoke(methodCallValueProvider, new[] { (string)null });
             Assert.AreEqual(0, result.Length);
 
+            result = (string[])method.Invoke(methodCallValueProvider, new[] { "\"\"" });
+            Assert.AreEqual(1, result.Length);
+            Assert.AreEqual("\"\"", result[0]);
+
             result = (string[])method.Invoke(methodCallValueProvider, new[] { " " });
             Assert.AreEqual(0, result.Length);
+
+            result = (string[])method.Invoke(methodCallValueProvider, new[] { "\" \"" });
+            Assert.AreEqual(1, result.Length);
+            Assert.AreEqual("\" \"", result[0]);
 
             result = (string[])method.Invoke(methodCallValueProvider, new[] { "4" });
             Assert.AreEqual(1, result.Length);
             Assert.AreEqual("4", result[0]);
 
-            result = (string[])method.Invoke(methodCallValueProvider, new[] { " {p:Name} " });
+            result = (string[])method.Invoke(methodCallValueProvider, new[] { " p:Name " });
             Assert.AreEqual(1, result.Length);
-            Assert.AreEqual("{p:Name}", result[0]);
+            Assert.AreEqual("p:Name", result[0]);
 
-            result = (string[])method.Invoke(methodCallValueProvider, new[] { "{ m:Method() }" });
+            result = (string[])method.Invoke(methodCallValueProvider, new[] { " m:Method() " });
             Assert.AreEqual(1, result.Length);
-            Assert.AreEqual("{ m:Method() }", result[0]);
+            Assert.AreEqual("m:Method()", result[0]);
 
-            result = (string[])method.Invoke(methodCallValueProvider, new[] { "{ms:TestClass:Method()}" });
+            result = (string[])method.Invoke(methodCallValueProvider, new[] { "ms:TestClass:Method()" });
             Assert.AreEqual(1, result.Length);
-            Assert.AreEqual("{ms:TestClass:Method()}", result[0]);
+            Assert.AreEqual("ms:TestClass:Method()", result[0]);
 
-            result = (string[])method.Invoke(methodCallValueProvider, new[] { "{m:Namespace.TestClass:Method()}" });
+            result = (string[])method.Invoke(methodCallValueProvider, new[] { "m:Namespace.TestClass:Method()" });
             Assert.AreEqual(1, result.Length);
-            Assert.AreEqual("{m:Namespace.TestClass:Method()}", result[0]);
+            Assert.AreEqual("m:Namespace.TestClass:Method()", result[0]);
 
-            result = (string[])method.Invoke(methodCallValueProvider, new[] { "{m::TestClass:Method()}" });
+            result = (string[])method.Invoke(methodCallValueProvider, new[] { "m::TestClass:Method()" });
             Assert.AreEqual(1, result.Length);
-            Assert.AreEqual("{m::TestClass:Method()}", result[0]);
+            Assert.AreEqual("m::TestClass:Method()", result[0]);
 
-            result = (string[])method.Invoke(methodCallValueProvider, new[] { "{ms:Method({p:Name})}" });
+            result = (string[])method.Invoke(methodCallValueProvider, new[] { "ms:Method(p:Name)" });
             Assert.AreEqual(1, result.Length);
-            Assert.AreEqual("{ms:Method({p:Name})}", result[0]);
+            Assert.AreEqual("ms:Method(p:Name)", result[0]);
 
-            result = (string[])method.Invoke(methodCallValueProvider, new[] { "{p:Name}, 11, {m:TestClass:Method({p:Name})}, {di:Desc}, hi, {m:Namespace.TestClass:Method({ ms:Method2() })}" });
+            result = (string[])method.Invoke(methodCallValueProvider, new[] { "p:Name, 11, m:TestClass:Method(p:Name), di:Desc, hi, m:Namespace.TestClass:Method( ms:Method2() )" });
             Assert.AreEqual(6, result.Length);
-            Assert.AreEqual("{p:Name}", result[0]);
+            Assert.AreEqual("p:Name", result[0]);
             Assert.AreEqual("11", result[1]);
-            Assert.AreEqual("{m:TestClass:Method({p:Name})}", result[2]);
-            Assert.AreEqual("{di:Desc}", result[3]);
+            Assert.AreEqual("m:TestClass:Method(p:Name)", result[2]);
+            Assert.AreEqual("di:Desc", result[3]);
             Assert.AreEqual("hi", result[4]);
-            Assert.AreEqual("{m:Namespace.TestClass:Method({ ms:Method2() })}", result[5]);
+            Assert.AreEqual("m:Namespace.TestClass:Method( ms:Method2() )", result[5]);
 
-            result = (string[])method.Invoke(methodCallValueProvider, new[] { "{ m:Method({p:Name}, {di:Desc}) }" });
+            result = (string[])method.Invoke(methodCallValueProvider, new[] { " m:Method(p:Name, di:Desc) " });
             Assert.AreEqual(1, result.Length);
-            Assert.AreEqual("{ m:Method({p:Name}, {di:Desc}) }", result[0]);
+            Assert.AreEqual("m:Method(p:Name, di:Desc)", result[0]);
 
-            result = (string[])method.Invoke(methodCallValueProvider, new[] { "{ m:Method({p:Name}, {di:Desc}) }, 11, { m:Method2({m:Namespace.TestClass:Method({ ms:Method2({di:Field}, 777) }, 12, {p:Name})}, 11, {p:Value}) }, ," });
+            result = (string[])method.Invoke(methodCallValueProvider, new[] { " m:Method(p:Name, di:Desc) , 11,  m:Method2(m:Namespace.TestClass:Method( ms:Method2(di:Field, 777) , 12, p:Name), 11, p:Value) , ," });
             Assert.AreEqual(5, result.Length);
-            Assert.AreEqual("{ m:Method({p:Name}, {di:Desc}) }", result[0]);
+            Assert.AreEqual("m:Method(p:Name, di:Desc)", result[0]);
             Assert.AreEqual("11", result[1]);
-            Assert.AreEqual("{ m:Method2({m:Namespace.TestClass:Method({ ms:Method2({di:Field}, 777) }, 12, {p:Name})}, 11, {p:Value}) }", result[2]);
+            Assert.AreEqual("m:Method2(m:Namespace.TestClass:Method( ms:Method2(di:Field, 777) , 12, p:Name), 11, p:Value)", result[2]);
             Assert.AreEqual(string.Empty, result[3]);
             Assert.AreEqual(string.Empty, result[4]);
 
             // Экранирование
-            result = (string[])method.Invoke(methodCallValueProvider, new[] { "Привет,, медвед!,{{m:Method(10,{p:Name})}}" });
+            result = (string[])method.Invoke(methodCallValueProvider, new[] { "Привет,, медвед!,m:Method(10,p:Name)" });
             Assert.AreEqual(2, result.Length);
             Assert.AreEqual("Привет, медвед!", result[0]);
-            Assert.AreEqual("{{m:Method(10,{p:Name})}}", result[1]);
+            Assert.AreEqual("m:Method(10,p:Name)", result[1]);
+
+            result = (string[])method.Invoke(methodCallValueProvider, new[] { "(Test1), \"(Test2)\", (), m:Method((Test3), \"(Test4)\", (), (Test5))" });
+            Assert.AreEqual(4, result.Length);
+            Assert.AreEqual("(Test1)", result[0]);
+            Assert.AreEqual("\"(Test2)\"", result[1]);
+            Assert.AreEqual("()", result[2]);
+            Assert.AreEqual("m:Method((Test3), \"(Test4)\", (), (Test5))", result[3]);
         }
 
         [TestMethod]
@@ -207,9 +246,11 @@ namespace ExcelReporter.Tests.Implementations.Providers
 
             var templateProcessor = Substitute.For<ITemplateProcessor>();
             var dataItem = new HierarchicalDataItem();
-            templateProcessor.TemplatePattern.Returns(@"\{.+?:.+?\}");
-            templateProcessor.GetValue("{p:Name}").Returns("TestName");
-            templateProcessor.GetValue("{p:Value}", dataItem).Returns(7);
+            templateProcessor.TemplatePattern.Returns(@"{.+?:.+?}");
+            templateProcessor.LeftTemplateBorder.Returns("{");
+            templateProcessor.RightTemplateBorder.Returns("}");
+            templateProcessor.GetValue("p:Name").Returns("TestName");
+            templateProcessor.GetValue("p:Value", dataItem).Returns(7);
 
             var methodCallValueProvider = new MethodCallValueProvider(typeProvider, new TestClass());
 
@@ -237,15 +278,15 @@ namespace ExcelReporter.Tests.Implementations.Providers
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
             typeProvider.ClearReceivedCalls();
-            Assert.AreEqual(25, methodCallValueProvider.CallMethod("Method2({p:Value}, 18)", templateProcessor, dataItem, true));
+            Assert.AreEqual(25, methodCallValueProvider.CallMethod("Method2(p:Value, 18)", templateProcessor, dataItem, true));
             typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
-            templateProcessor.Received(1).GetValue("{p:Value}", dataItem);
+            templateProcessor.Received(1).GetValue("p:Value", dataItem);
 
             typeProvider.ClearReceivedCalls();
             templateProcessor.ClearReceivedCalls();
-            Assert.AreEqual(25, methodCallValueProvider.CallMethod(" : TestClass : Method2({p:Value}, 18) ", templateProcessor, dataItem, true));
+            Assert.AreEqual(25, methodCallValueProvider.CallMethod(" : TestClass : Method2(p:Value, 18) ", templateProcessor, dataItem, true));
             typeProvider.Received(1).GetType(": TestClass");
-            templateProcessor.Received(1).GetValue("{p:Value}", dataItem);
+            templateProcessor.Received(1).GetValue("p:Value", dataItem);
 
             typeProvider.ClearReceivedCalls();
             templateProcessor.ClearReceivedCalls();
@@ -253,19 +294,32 @@ namespace ExcelReporter.Tests.Implementations.Providers
             typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
-            templateProcessor.GetValue("{ m:TestClass:Method5({p:Desc}, { ms:ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, {di.Field})} ) }").Returns(10);
-            templateProcessor.GetValue("{m:Method7()}").Returns('c');
-            templateProcessor.GetValue("{m::TestClass2:Method1()}").Returns(long.MaxValue);
+            templateProcessor.GetValue("m:TestClass:Method5(p:Desc,  ms:ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, di.Field) )").Returns(10);
+            templateProcessor.GetValue("m:Method7()").Returns('c');
+            templateProcessor.GetValue("m::TestClass2:Method1()").Returns(long.MaxValue);
 
             object result = methodCallValueProvider.CallMethod(
-                "Method4(5, {p:Name}, hi, { m:TestClass:Method5({p:Desc}, { ms:ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, {di.Field})} ) }, {m:Method7()}, {m::TestClass2:Method1()})",
+                "Method4(5, p:Name, hi,  m:TestClass:Method5(p:Desc,  ms:ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, di.Field) ) , m:Method7(), m::TestClass2:Method1())",
                 templateProcessor, null);
             Assert.AreEqual($"5_TestName_hi_10_c_{long.MaxValue}", result);
             typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
-            templateProcessor.Received(1).GetValue("{p:Name}");
-            templateProcessor.Received(1).GetValue("{ m:TestClass:Method5({p:Desc}, { ms:ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, {di.Field})} ) }");
-            templateProcessor.Received(1).GetValue("{m:Method7()}");
-            templateProcessor.Received(1).GetValue("{m::TestClass2:Method1()}");
+            templateProcessor.Received(1).GetValue("p:Name");
+            templateProcessor.Received(1).GetValue("m:TestClass:Method5(p:Desc,  ms:ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, di.Field) )");
+            templateProcessor.Received(1).GetValue("m:Method7()");
+            templateProcessor.Received(1).GetValue("m::TestClass2:Method1()");
+
+            templateProcessor.ClearReceivedCalls();
+            Assert.AreEqual("_ ", methodCallValueProvider.CallMethod("Method5(\"\", \" \")", templateProcessor, null));
+            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
+
+            Assert.AreEqual("p:Name_m:Method6()", methodCallValueProvider.CallMethod("Method5(\"p:Name\", \"m:Method6()\")", templateProcessor, null));
+            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
+
+            Assert.AreEqual("\"p:Name\"_\"\"", methodCallValueProvider.CallMethod("Method5(\"\"p:Name\"\", \"\"\"\")", templateProcessor, null));
+            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
             MyAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("TestClass:BadMethod()", templateProcessor, null),
                 "Could not find public method \"BadMethod\" in type \"TestClass\" and all its parents");
@@ -306,6 +360,11 @@ namespace ExcelReporter.Tests.Implementations.Providers
             public string Method4(string arg1, string arg2, string arg3, int arg4, char arg5, long arg6)
             {
                 return $"{arg1}_{arg2}_{arg3}_{arg4}_{arg5}_{arg6}";
+            }
+
+            public string Method5(string arg1, string arg2)
+            {
+                return $"{arg1}_{arg2}";
             }
         }
 

@@ -25,7 +25,6 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel
             IXLRange childRange = ws.Range(2, 1, 3, 4);
             IXLRange childOfChildRange = ws.Range(3, 1, 3, 4);
 
-
             var panel = new ExcelPanel(range, excelReport)
             {
                 Children = new List<IExcelPanel>
