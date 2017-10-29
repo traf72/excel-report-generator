@@ -1,4 +1,5 @@
 ﻿using ExcelReporter.Exceptions;
+using ExcelReporter.Extensions;
 using ExcelReporter.Interfaces.Providers;
 using ExcelReporter.Interfaces.TemplateProcessors;
 using System;
@@ -13,6 +14,8 @@ namespace ExcelReporter.Implementations.Providers
     public class MethodCallValueProvider : IMethodCallValueProvider
     {
         private readonly IDictionary<Type, object> _instanceCache = new Dictionary<Type, object>();
+
+        private IList<InputParameter> _inputParameters;
 
         public MethodCallValueProvider(ITypeProvider typeProvider, object defaultInstance)
         {
@@ -56,7 +59,28 @@ namespace ExcelReporter.Implementations.Providers
             MethodCallTemplateParts templateParts = ParseTemplate(MethodCallTemplate);
             Type type = GetType(templateParts.TypeName);
             object instance = GetInstance(type);
-            return GetMethod(type, templateParts.MethodName).Invoke(instance, GetParams(templateParts.MethodParams));
+            FillInputParameters(templateParts.MethodParams);
+            return CallMethod(instance, GetMethod(type, templateParts.MethodName));
+        }
+
+        private object CallMethod(object instance, MethodInfo method)
+        {
+            ParameterInfo[] methodParameters = method.GetParameters();
+            object[] callParams = methodParameters.Select(p => p.HasDefaultValue ? p.DefaultValue : null).ToArray();
+            for (int i = 0; i < _inputParameters.Count; i++)
+            {
+                InputParameter param = _inputParameters[i];
+                if (param.Type != null || param.Value == null)
+                {
+                    callParams[i] = param.Value;
+                }
+                else
+                {
+                    Type paramType = methodParameters[i].ParameterType;
+                    callParams[i] = Convert.ChangeType(param.Value, paramType);
+                }
+            }
+            return method.Invoke(instance, callParams);
         }
 
         protected virtual MethodCallTemplateParts ParseTemplate(string template)
@@ -123,37 +147,161 @@ namespace ExcelReporter.Implementations.Providers
             return instance;
         }
 
-        protected virtual MethodInfo GetMethod(Type type, string methodName)
+        private void FillInputParameters(string methodParams)
         {
-            BindingFlags methodTypeBindingFlag = IsStatic ? BindingFlags.Static : BindingFlags.Instance;
-            MethodInfo method = type.GetMethod(methodName, BindingFlags.Public | methodTypeBindingFlag | BindingFlags.FlattenHierarchy);
-            if (method == null)
-            {
-                throw new MethodNotFoundException($"Could not find public {(IsStatic ? "static " : string.Empty)}method \"{methodName}\" in type \"{type.Name}\" and all its parents");
-            }
-            return method;
-        }
-
-        private object[] GetParams(string methodParams)
-        {
-            IList<object> callParams = new List<object>();
+            _inputParameters = new List<InputParameter>();
             string pattern = GetTemplatePatternWithoutBorders();
             foreach (string p in ParseParams(methodParams))
             {
                 if (p.StartsWith("\"") && p.EndsWith("\""))
                 {
-                    callParams.Add(p.Substring(1, p.Length - 2));
+                    _inputParameters.Add(new InputParameter
+                    {
+                        Value = p.Substring(1, p.Length - 2),
+                        Type = typeof(string),
+                    });
                 }
                 else if (Regex.IsMatch(p, $@"^{pattern}$"))
                 {
-                    callParams.Add(TemplateProcessor.GetValue(p, DataItem));
+                    object value = TemplateProcessor.GetValue(p, DataItem);
+                    _inputParameters.Add(new InputParameter
+                    {
+                        Value = value,
+                        Type = value?.GetType(),
+                    });
                 }
                 else
                 {
-                    callParams.Add(p);
+                    object value = p;
+                    Type type = null;
+                    Match match = Regex.Match(p, @"^\[(.+)\](.+)$");
+                    if (match.Success)
+                    {
+                        type = GetTypeByCode(match.Groups[1].Value);
+                        value = Convert.ChangeType(match.Groups[2].Value.Trim(), type);
+                    }
+                    _inputParameters.Add(new InputParameter { Value = value, Type = type });
                 }
             }
-            return callParams.ToArray();
+        }
+
+        private Type GetTypeByCode(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                return null;
+            }
+
+            switch (code.Trim().ToLower())
+            {
+                case "byte":
+                    return typeof(sbyte);
+
+                case "short":
+                case "int16":
+                    return typeof(short);
+
+                case "int":
+                case "int32":
+                    return typeof(int);
+
+                case "long":
+                case "int64":
+                    return typeof(long);
+
+                case "float":
+                case "single":
+                    return typeof(float);
+
+                case "double":
+                    return typeof(double);
+
+                case "decimal":
+                    return typeof(decimal);
+
+                case "bool":
+                case "boolean":
+                    return typeof(bool);
+
+                case "char":
+                    return typeof(char);
+
+                case "string":
+                    return typeof(string);
+
+                case "datetime":
+                case "date":
+                    return typeof(DateTime);
+            }
+
+            throw new NotSupportedException($"Type \"{code}\" is not supported");
+        }
+
+        protected virtual MethodInfo GetMethod(Type type, string methodName)
+        {
+            string methodNotFoundMessageTemplate = $"Could not find public {(IsStatic ? "static " : string.Empty)}method \"{methodName}\" in type \"{type.Name}\" and all its parents";
+            BindingFlags methodTypeBindingFlag = IsStatic ? BindingFlags.Static : BindingFlags.Instance;
+            IList<MethodInfo> methods = type.GetMethods(BindingFlags.Public | methodTypeBindingFlag | BindingFlags.FlattenHierarchy).Where(m => m.Name == methodName).ToList();
+            if (!methods.Any())
+            {
+                throw new MethodNotFoundException($"{methodNotFoundMessageTemplate}. MethodCallTemplate: {MethodCallTemplate}");
+            }
+            if (methods.Any(m => m.GetParameters().Any(p => p.IsParams())))
+            {
+                throw new NotSupportedException($"Methods which have \"params\" argument is not supported. MethodCallTemplate: {MethodCallTemplate}");
+            }
+            if (methods.Count == 1)
+            {
+                return methods.First();
+            }
+
+            methods = methods.Where(m =>
+            {
+                ParameterInfo[] allParams = m.GetParameters();
+                IEnumerable<ParameterInfo> optionalParams = allParams.Where(p => p.IsOptional);
+                int paramsCountDiff = allParams.Length - _inputParameters.Count;
+                return paramsCountDiff >= 0 && paramsCountDiff <= optionalParams.Count();
+            }).ToList();
+
+            if (methods.Count == 1)
+            {
+                return methods.First();
+            }
+            if (!methods.Any())
+            {
+                throw new MethodNotFoundException($"{methodNotFoundMessageTemplate} with suitable number of parameters. MethodCallTemplate: {MethodCallTemplate}");
+            }
+            if (_inputParameters.Any(p => p.Value != null && p.Type == null))
+            {
+                throw new NotSupportedException($"More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: {MethodCallTemplate}");
+            }
+
+            MethodInfo method = null;
+            foreach (MethodInfo m in methods)
+            {
+                bool isSuitable = true;
+                ParameterInfo[] parameters = m.GetParameters();
+                for (int i = 0; i < _inputParameters.Count; i++)
+                {
+                    if (parameters[i].ParameterType != _inputParameters[i].Type)
+                    {
+                        isSuitable = false;
+                        break;
+                    }
+                }
+                if (isSuitable)
+                {
+                    method = m;
+                    break;
+                }
+            }
+
+            if (method == null)
+            {
+                throw new NotSupportedException($"More than one method found with suitable number of parameters. In this case the method is chosen by exact match of parameter types. None of methods is suitable. MethodCallTemplate: {MethodCallTemplate}");
+            }
+
+            return method;
         }
 
         private string GetTemplatePatternWithoutBorders()
@@ -236,6 +384,13 @@ namespace ExcelReporter.Implementations.Providers
             public string MethodName { get; }
 
             public string MethodParams { get; }
+        }
+
+        private class InputParameter
+        {
+            public object Value { get; set; }
+
+            public Type Type { get; set; }
         }
     }
 }

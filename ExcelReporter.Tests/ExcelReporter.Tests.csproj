@@ -152,6 +152,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Enumerators\EnumeratorFactoryTest.cs" />
+    <Compile Include="Extensions\ParameterInfoExtensionTest.cs" />
     <Compile Include="Implementations\Panels\Excel\ExcelRenderTests\PanelRenderTest.cs" />
     <Compile Include="Implementations\Providers\DataItemValueProviders\DataItemValueProviderFactoryTest.cs" />
     <Compile Include="Implementations\Providers\DataItemValueProviders\DataReaderValueProviderTest.cs" />

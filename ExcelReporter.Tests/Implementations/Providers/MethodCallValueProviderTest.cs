@@ -1,11 +1,11 @@
-﻿using ExcelReporter.Implementations.Providers;
+﻿using ExcelReporter.Exceptions;
+using ExcelReporter.Implementations.Providers;
 using ExcelReporter.Interfaces.Providers;
 using ExcelReporter.Interfaces.TemplateProcessors;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
 using System.Reflection;
-using ExcelReporter.Exceptions;
 
 namespace ExcelReporter.Tests.Implementations.Providers
 {
@@ -201,24 +201,24 @@ namespace ExcelReporter.Tests.Implementations.Providers
             Assert.AreEqual(1, result.Length);
             Assert.AreEqual("ms:Method(p:Name)", result[0]);
 
-            result = (string[])method.Invoke(methodCallValueProvider, new[] { "p:Name, 11, m:TestClass:Method(p:Name), di:Desc, hi, m:Namespace.TestClass:Method( ms:Method2() )" });
+            result = (string[])method.Invoke(methodCallValueProvider, new[] { "p:Name, 11, m:TestClass:Method(p:Name), di:Desc, [string]hi, m:Namespace.TestClass:Method( ms:Method2() )" });
             Assert.AreEqual(6, result.Length);
             Assert.AreEqual("p:Name", result[0]);
             Assert.AreEqual("11", result[1]);
             Assert.AreEqual("m:TestClass:Method(p:Name)", result[2]);
             Assert.AreEqual("di:Desc", result[3]);
-            Assert.AreEqual("hi", result[4]);
+            Assert.AreEqual("[string]hi", result[4]);
             Assert.AreEqual("m:Namespace.TestClass:Method( ms:Method2() )", result[5]);
 
             result = (string[])method.Invoke(methodCallValueProvider, new[] { " m:Method(p:Name, di:Desc) " });
             Assert.AreEqual(1, result.Length);
             Assert.AreEqual("m:Method(p:Name, di:Desc)", result[0]);
 
-            result = (string[])method.Invoke(methodCallValueProvider, new[] { " m:Method(p:Name, di:Desc) , 11,  m:Method2(m:Namespace.TestClass:Method( ms:Method2(di:Field, 777) , 12, p:Name), 11, p:Value) , ," });
+            result = (string[])method.Invoke(methodCallValueProvider, new[] { " m:Method(p:Name, di:Desc) , [Int32] 11,  m:Method2(m:Namespace.TestClass:Method( ms:Method2(di:Field, [long]777) , 12, p:Name), [short]11, p:Value) , ," });
             Assert.AreEqual(5, result.Length);
             Assert.AreEqual("m:Method(p:Name, di:Desc)", result[0]);
-            Assert.AreEqual("11", result[1]);
-            Assert.AreEqual("m:Method2(m:Namespace.TestClass:Method( ms:Method2(di:Field, 777) , 12, p:Name), 11, p:Value)", result[2]);
+            Assert.AreEqual("[Int32] 11", result[1]);
+            Assert.AreEqual("m:Method2(m:Namespace.TestClass:Method( ms:Method2(di:Field, [long]777) , 12, p:Name), [short]11, p:Value)", result[2]);
             Assert.AreEqual(string.Empty, result[3]);
             Assert.AreEqual(string.Empty, result[4]);
 
@@ -322,10 +322,10 @@ namespace ExcelReporter.Tests.Implementations.Providers
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
             MyAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("TestClass:BadMethod()", templateProcessor, null),
-                "Could not find public method \"BadMethod\" in type \"TestClass\" and all its parents");
+                "Could not find public method \"BadMethod\" in type \"TestClass\" and all its parents. MethodCallTemplate: TestClass:BadMethod()");
 
             MyAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("TestClass:BadMethod()", templateProcessor, null, true),
-                "Could not find public static method \"BadMethod\" in type \"TestClass\" and all its parents");
+                "Could not find public static method \"BadMethod\" in type \"TestClass\" and all its parents. MethodCallTemplate: TestClass:BadMethod()");
 
             typeProvider.ClearReceivedCalls();
             templateProcessor.ClearReceivedCalls();
@@ -336,6 +336,71 @@ namespace ExcelReporter.Tests.Implementations.Providers
             Assert.AreEqual("Str_Static_Parent", methodCallValueProvider.CallMethod("MethodStaticParent()", templateProcessor, null, true));
             typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
+        }
+
+        [TestMethod]
+        public void TestCallMethodWithOverloading()
+        {
+            var typeProvider = Substitute.For<ITypeProvider>();
+            typeProvider.GetType(Arg.Any<string>()).Returns(typeof(TestOverloading));
+
+            var templateProcessor = Substitute.For<ITemplateProcessor>();
+            templateProcessor.TemplatePattern.Returns(@"{.+?:.+?}");
+            templateProcessor.LeftTemplateBorder.Returns("{");
+            templateProcessor.RightTemplateBorder.Returns("}");
+            templateProcessor.GetValue("p:Name").Returns("TestName");
+            templateProcessor.GetValue("p:Value").Returns(7);
+            templateProcessor.GetValue("p:Value2").Returns((short)77);
+
+            var methodCallValueProvider = new MethodCallValueProvider(typeProvider, new TestOverloading());
+
+            Assert.AreEqual("Method1()", methodCallValueProvider.CallMethod("Method1()", templateProcessor, null));
+
+            Assert.AreEqual("Method2(int), a = 15", methodCallValueProvider.CallMethod("Method2([int]15)", templateProcessor, null));
+            Assert.AreEqual("Method2(int), a = 15", methodCallValueProvider.CallMethod("Method2([ Int32 ] 15)", templateProcessor, null));
+            Assert.AreEqual("Method2(int), a = 7", methodCallValueProvider.CallMethod("Method2(p:Value)", templateProcessor, null));
+            Assert.AreEqual("Method2(string), a = str", methodCallValueProvider.CallMethod("Method2([string]str)", templateProcessor, null));
+            Assert.AreEqual("Method2(string), a = str", methodCallValueProvider.CallMethod("Method2(\"str\")", templateProcessor, null));
+            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(15)", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2(15)");
+            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2([short] 15)", templateProcessor, null), "More than one method found with suitable number of parameters. In this case the method is chosen by exact match of parameter types. None of methods is suitable. MethodCallTemplate: Method2([short] 15)");
+            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(p:Value2)", templateProcessor, null), "More than one method found with suitable number of parameters. In this case the method is chosen by exact match of parameter types. None of methods is suitable. MethodCallTemplate: Method2(p:Value2)");
+
+            Assert.AreEqual("Method2(int, string), a = 15, b = str", methodCallValueProvider.CallMethod("Method2([int]15, \"str\")", templateProcessor, null));
+            Assert.AreEqual("Method2(int, string), a = 15, b = str", methodCallValueProvider.CallMethod("Method2([Int32]15, [String]str)", templateProcessor, null));
+            Assert.AreEqual("Method2(int, string), a = 15, b = TestName", methodCallValueProvider.CallMethod("Method2([Int32]15, p:Name)", templateProcessor, null));
+            Assert.AreEqual("Method2(int, string), a = 7, b = TestName", methodCallValueProvider.CallMethod("Method2(p:Value, p:Name)", templateProcessor, null));
+            Assert.AreEqual("Method2(int, string), a = 7, b = p:Name", methodCallValueProvider.CallMethod("Method2(p:Value, \"p:Name\")", templateProcessor, null));
+            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(15, str)", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2(15, str)");
+            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2([int]15, str)", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2([int]15, str)");
+            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(15, [string]str)", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2(15, [string]str)");
+            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(15, \"str\")", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2(15, \"str\")");
+            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(p:Value2, p:Name)", templateProcessor, null), "More than one method found with suitable number of parameters. In this case the method is chosen by exact match of parameter types. None of methods is suitable. MethodCallTemplate: Method2(p:Value2, p:Name)");
+
+            Assert.AreEqual("Method2(string, int), a = str, b = 15", methodCallValueProvider.CallMethod("Method2(\"str\", [int]15)", templateProcessor, null));
+            Assert.AreEqual("Method2(string, int), a = str, b = 15", methodCallValueProvider.CallMethod("Method2([String]str, [Int32]15)", templateProcessor, null));
+            Assert.AreEqual("Method2(string, int), a = TestName, b = 7", methodCallValueProvider.CallMethod("Method2(p:Name, p:Value)", templateProcessor, null));
+
+            Assert.AreEqual("Method2(int, string, long), a = 15, b = str, c = 20", methodCallValueProvider.CallMethod("Method2([int]15, [string]str, [long]20)", templateProcessor, null));
+            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2([int]15, [string]str, 20)", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2([int]15, [string]str, 20)");
+            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2([int]15, [string]str, [short]20)", templateProcessor, null), "More than one method found with suitable number of parameters. In this case the method is chosen by exact match of parameter types. None of methods is suitable. MethodCallTemplate: Method2([int]15, [string]str, [short]20)");
+
+            Assert.AreEqual("Method2(int, string, long, short), a = 15, b = str, c = 20, d = 200", methodCallValueProvider.CallMethod("Method2(15, str, 20, 200)", templateProcessor, null));
+            Assert.AreEqual("Method2(int, string, long, short), a = 15, b = str, c = 20, d = 200", methodCallValueProvider.CallMethod("Method2([short]15, str, 20, 200)", templateProcessor, null));
+            Assert.AreEqual("Method2(int, string, long, short), a = 7, b = TestName, c = 7, d = 77", methodCallValueProvider.CallMethod("Method2(p:Value, p:Name, p:Value, p:Value2)", templateProcessor, null));
+            MyAssert.Throws<ArgumentException>(() => methodCallValueProvider.CallMethod("Method2(p:Value, p:Name, p:Value2, p:Value)", templateProcessor, null));
+            MyAssert.Throws<FormatException>(() => methodCallValueProvider.CallMethod("Method2(p:Value, p:Name, str, p:Value)", templateProcessor, null));
+            MyAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("Method2(15, str, 20, 200, str2)", templateProcessor, null), "Could not find public method \"Method2\" in type \"TestOverloading\" and all its parents with suitable number of parameters. MethodCallTemplate: Method2(15, str, 20, 200, str2)");
+
+            Assert.AreEqual("Method3(int, string, sbyte), a = 15, b = str, c = 1", methodCallValueProvider.CallMethod("Method3(15)", templateProcessor, null));
+            Assert.AreEqual("Method3(int, string, sbyte), a = 15, b = str2, c = 1", methodCallValueProvider.CallMethod("Method3(15, str2)", templateProcessor, null));
+            Assert.AreEqual("Method3(int, string, sbyte), a = 15, b = str2, c = 127", methodCallValueProvider.CallMethod("Method3(15, str2, 127)", templateProcessor, null));
+            MyAssert.Throws<FormatException>(() => methodCallValueProvider.CallMethod("Method3(str, str2, 127)", templateProcessor, null));
+            MyAssert.Throws<FormatException>(() => methodCallValueProvider.CallMethod("Method3([int]str, str2, 127)", templateProcessor, null));
+            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method3([int33]15)", templateProcessor, null), "Type \"int33\" is not supported");
+            MyAssert.Throws<OverflowException>(() => methodCallValueProvider.CallMethod("Method3(15, str2, 200)", templateProcessor, null));
+
+            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method4([int]15)", templateProcessor, null), "Methods which have \"params\" argument is not supported. MethodCallTemplate: Method4([int]15)");
+            MyAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("Method5()", templateProcessor, null), "Could not find public method \"Method5\" in type \"TestOverloading\" and all its parents. MethodCallTemplate: Method5()");
         }
 
         private class TestClass : TestClassParent
@@ -378,6 +443,62 @@ namespace ExcelReporter.Tests.Implementations.Providers
             public static string MethodStaticParent()
             {
                 return "Str_Static_Parent";
+            }
+        }
+
+        private class TestOverloading : TestOverloadingParent
+        {
+            public string Method1()
+            {
+                return "Method1()";
+            }
+
+            public string Method2(int a)
+            {
+                return $"Method2(int), a = {a}";
+            }
+
+            public string Method2(int a, string b)
+            {
+                return $"Method2(int, string), a = {a}, b = {b}";
+            }
+
+            public string Method2(int a, string b, long c)
+            {
+                return $"Method2(int, string, long), a = {a}, b = {b}, c = {c}";
+            }
+
+            public string Method2(string a)
+            {
+                return $"Method2(string), a = {a}";
+            }
+
+            public string Method2(string a, int b = 10)
+            {
+                return $"Method2(string, int), a = {a}, b = {b}";
+            }
+
+            internal string Method2(int a, string b, short c)
+            {
+                return $"Method2(int, string, short), a = {a}, b = {b}, c = {c}";
+            }
+
+            public string Method3(int a, string b = "str", sbyte c = 1)
+            {
+                return $"Method3(int, string, sbyte), a = {a}, b = {b}, c = {c}";
+            }
+
+            public string Method4(int a, params string[] b)
+            {
+                return $"Method4(int, params string[]), a = {a}, b = {b}";
+            }
+        }
+
+        private class TestOverloadingParent
+        {
+            public string Method2(int a, string b, long c, short d = 16)
+            {
+                return $"Method2(int, string, long, short), a = {a}, b = {b}, c = {c}, d = {d}";
             }
         }
     }

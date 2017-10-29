@@ -73,6 +73,7 @@
     <Compile Include="Exceptions\TypeNotFoundException.cs" />
     <Compile Include="Exceptions\ParameterNotFoundException.cs" />
     <Compile Include="Exceptions\MemberNotFoundException.cs" />
+    <Compile Include="Extensions\ParameterInfoExtension.cs" />
     <Compile Include="HierarchicalDataItem.cs" />
     <Compile Include="Implementations\Panels\Excel\ExcelDataItemPanel.cs" />
     <Compile Include="Implementations\Panels\Excel\ExcelDataSourcePanel.cs" />
