@@ -66,6 +66,17 @@ namespace ExcelReporter.Implementations.Providers
         private object CallMethod(object instance, MethodInfo method)
         {
             ParameterInfo[] methodParameters = method.GetParameters();
+            if (_inputParameters.Count > methodParameters.Length)
+            {
+                throw new InvalidOperationException($"Mismatch parameters count. Input pararameters count: {_inputParameters.Count}. Method parameters count: {methodParameters.Length}. MethodCallTemplate: {MethodCallTemplate}");
+            }
+
+            ParameterInfo[] requiredParams = methodParameters.Where(p => !p.IsOptional).ToArray();
+            if (_inputParameters.Count < requiredParams.Length)
+            {
+                throw new InvalidOperationException($"Mismatch parameters count. Input pararameters count: {_inputParameters.Count}. Method required parameters count: {requiredParams.Length}. MethodCallTemplate: {MethodCallTemplate}");
+            }
+
             object[] callParams = methodParameters.Select(p => p.HasDefaultValue ? p.DefaultValue : null).ToArray();
             for (int i = 0; i < _inputParameters.Count; i++)
             {
@@ -248,7 +259,7 @@ namespace ExcelReporter.Implementations.Providers
             }
             if (methods.Any(m => m.GetParameters().Any(p => p.IsParams())))
             {
-                throw new NotSupportedException($"Methods which have \"params\" argument is not supported. MethodCallTemplate: {MethodCallTemplate}");
+                throw new NotSupportedException($"Methods which have \"params\" argument are not supported. MethodCallTemplate: {MethodCallTemplate}");
             }
             if (methods.Count == 1)
             {

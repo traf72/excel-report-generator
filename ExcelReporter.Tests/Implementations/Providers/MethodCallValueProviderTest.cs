@@ -351,6 +351,7 @@ namespace ExcelReporter.Tests.Implementations.Providers
             templateProcessor.GetValue("p:Name").Returns("TestName");
             templateProcessor.GetValue("p:Value").Returns(7);
             templateProcessor.GetValue("p:Value2").Returns((short)77);
+            templateProcessor.GetValue("p:Value3").Returns(null);
 
             var methodCallValueProvider = new MethodCallValueProvider(typeProvider, new TestOverloading());
 
@@ -394,12 +395,16 @@ namespace ExcelReporter.Tests.Implementations.Providers
             Assert.AreEqual("Method3(int, string, sbyte), a = 15, b = str, c = 1", methodCallValueProvider.CallMethod("Method3(15)", templateProcessor, null));
             Assert.AreEqual("Method3(int, string, sbyte), a = 15, b = str2, c = 1", methodCallValueProvider.CallMethod("Method3(15, str2)", templateProcessor, null));
             Assert.AreEqual("Method3(int, string, sbyte), a = 15, b = str2, c = 127", methodCallValueProvider.CallMethod("Method3(15, str2, 127)", templateProcessor, null));
+            Assert.AreEqual("Method3(int, string, sbyte), a = 15, b = str2, c = 0", methodCallValueProvider.CallMethod("Method3(15, str2, p:Value3)", templateProcessor, null));
+            Assert.AreEqual("Method3(int, string, sbyte), a = 0, b = str2, c = 1", methodCallValueProvider.CallMethod("Method3(p:Value3, str2)", templateProcessor, null));
             MyAssert.Throws<FormatException>(() => methodCallValueProvider.CallMethod("Method3(str, str2, 127)", templateProcessor, null));
             MyAssert.Throws<FormatException>(() => methodCallValueProvider.CallMethod("Method3([int]str, str2, 127)", templateProcessor, null));
             MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method3([int33]15)", templateProcessor, null), "Type \"int33\" is not supported");
             MyAssert.Throws<OverflowException>(() => methodCallValueProvider.CallMethod("Method3(15, str2, 200)", templateProcessor, null));
+            MyAssert.Throws<InvalidOperationException>(() => methodCallValueProvider.CallMethod("Method3()", templateProcessor, null), "Mismatch parameters count. Input pararameters count: 0. Method required parameters count: 1. MethodCallTemplate: Method3()");
+            MyAssert.Throws<InvalidOperationException>(() => methodCallValueProvider.CallMethod("Method3(1, 2, 3, 4)", templateProcessor, null), "Mismatch parameters count. Input pararameters count: 4. Method parameters count: 3. MethodCallTemplate: Method3(1, 2, 3, 4)");
 
-            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method4([int]15)", templateProcessor, null), "Methods which have \"params\" argument is not supported. MethodCallTemplate: Method4([int]15)");
+            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method4([int]15)", templateProcessor, null), "Methods which have \"params\" argument are not supported. MethodCallTemplate: Method4([int]15)");
             MyAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("Method5()", templateProcessor, null), "Could not find public method \"Method5\" in type \"TestOverloading\" and all its parents. MethodCallTemplate: Method5()");
         }
 
