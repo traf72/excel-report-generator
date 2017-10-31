@@ -1,9 +1,8 @@
 ﻿using ExcelReporter.Exceptions;
-using ExcelReporter.Interfaces.Providers;
+using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
 
 namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
 {

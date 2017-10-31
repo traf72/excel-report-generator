@@ -13,6 +13,8 @@ namespace ExcelReporter.Implementations.Providers
 
         private readonly Assembly _assembly;
 
+        private readonly IDictionary<string, Type> _typesCache = new Dictionary<string, Type>();
+
         public TypeProvider(Assembly assembly = null)
         {
             _assembly = assembly ?? Assembly.GetExecutingAssembly();
@@ -23,6 +25,11 @@ namespace ExcelReporter.Implementations.Providers
             if (string.IsNullOrWhiteSpace(typeTemplate))
             {
                 throw new ArgumentException(Constants.EmptyStringParamMessage, nameof(typeTemplate));
+            }
+
+            if (_typesCache.ContainsKey(typeTemplate))
+            {
+                return _typesCache[typeTemplate];
             }
 
             string[] typeNameParts = typeTemplate.Split(NamespaceSeparator);
@@ -53,7 +60,8 @@ namespace ExcelReporter.Implementations.Providers
 
             if (types.Count == 1)
             {
-                return types.First();
+                _typesCache[typeTemplate] = types.First();
+                return _typesCache[typeTemplate];
             }
             if (!types.Any())
             {

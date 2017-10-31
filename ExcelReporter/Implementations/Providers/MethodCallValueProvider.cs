@@ -13,9 +13,9 @@ namespace ExcelReporter.Implementations.Providers
 {
     public class MethodCallValueProvider : IMethodCallValueProvider
     {
-        private readonly IDictionary<Type, object> _instanceCache = new Dictionary<Type, object>();
+        private static readonly Stack<string> TemplateStack = new Stack<string>();
 
-        private IList<InputParameter> _inputParameters;
+        private readonly IDictionary<Type, object> _instanceCache = new Dictionary<Type, object>();
 
         public MethodCallValueProvider(ITypeProvider typeProvider, object defaultInstance)
         {
@@ -34,15 +34,12 @@ namespace ExcelReporter.Implementations.Providers
 
         protected ITypeProvider TypeProvider { get; }
 
+        /// <summary>
+        /// Default instance where methods are searched if template does not specify the type explicitly
+        /// </summary>
         protected object DefaultInstance { get; }
 
-        protected string MethodCallTemplate { get; private set; }
-
-        protected ITemplateProcessor TemplateProcessor { get; private set; }
-
-        protected HierarchicalDataItem DataItem { get; private set; }
-
-        protected bool IsStatic { get; private set; }
+        private string MethodCallTemplate => TemplateStack.Peek();
 
         public virtual object CallMethod(string methodCallTemplate, ITemplateProcessor templateProcessor, HierarchicalDataItem dataItem, bool isStatic = false)
         {
@@ -51,36 +48,37 @@ namespace ExcelReporter.Implementations.Providers
                 throw new ArgumentException(Constants.EmptyStringParamMessage, nameof(methodCallTemplate));
             }
 
-            MethodCallTemplate = methodCallTemplate.Trim();
-            TemplateProcessor = templateProcessor;
-            DataItem = dataItem;
-            IsStatic = isStatic;
+            TemplateStack.Push(methodCallTemplate.Trim());
 
             MethodCallTemplateParts templateParts = ParseTemplate(MethodCallTemplate);
             Type type = GetType(templateParts.TypeName);
-            object instance = GetInstance(type);
-            FillInputParameters(templateParts.MethodParams);
-            return CallMethod(instance, GetMethod(type, templateParts.MethodName));
+            object instance = GetInstance(type, isStatic);
+            IList<InputParameter> inputParams = GetInputParameters(templateParts.MethodParams, templateProcessor, dataItem);
+            MethodInfo method = GetMethod(type, templateParts.MethodName, inputParams, isStatic);
+
+            TemplateStack.Pop();
+
+            return CallMethod(instance, method, inputParams);
         }
 
-        private object CallMethod(object instance, MethodInfo method)
+        private object CallMethod(object instance, MethodInfo method, IList<InputParameter> inputParameters)
         {
             ParameterInfo[] methodParameters = method.GetParameters();
-            if (_inputParameters.Count > methodParameters.Length)
+            if (inputParameters.Count > methodParameters.Length)
             {
-                throw new InvalidOperationException($"Mismatch parameters count. Input pararameters count: {_inputParameters.Count}. Method parameters count: {methodParameters.Length}. MethodCallTemplate: {MethodCallTemplate}");
+                throw new InvalidOperationException($"Mismatch parameters count. Input pararameters count: {inputParameters.Count}. Method parameters count: {methodParameters.Length}. MethodCallTemplate: {MethodCallTemplate}");
             }
 
             ParameterInfo[] requiredParams = methodParameters.Where(p => !p.IsOptional).ToArray();
-            if (_inputParameters.Count < requiredParams.Length)
+            if (inputParameters.Count < requiredParams.Length)
             {
-                throw new InvalidOperationException($"Mismatch parameters count. Input pararameters count: {_inputParameters.Count}. Method required parameters count: {requiredParams.Length}. MethodCallTemplate: {MethodCallTemplate}");
+                throw new InvalidOperationException($"Mismatch parameters count. Input pararameters count: {inputParameters.Count}. Method required parameters count: {requiredParams.Length}. MethodCallTemplate: {MethodCallTemplate}");
             }
 
             object[] callParams = methodParameters.Select(p => p.HasDefaultValue ? p.DefaultValue : null).ToArray();
-            for (int i = 0; i < _inputParameters.Count; i++)
+            for (int i = 0; i < inputParameters.Count; i++)
             {
-                InputParameter param = _inputParameters[i];
+                InputParameter param = inputParameters[i];
                 if (param.Type != null || param.Value == null)
                 {
                     callParams[i] = param.Value;
@@ -141,9 +139,9 @@ namespace ExcelReporter.Implementations.Providers
             return DefaultInstance.GetType();
         }
 
-        protected virtual object GetInstance(Type type)
+        protected virtual object GetInstance(Type type, bool isMethodStatic)
         {
-            if (IsStatic)
+            if (isMethodStatic)
             {
                 return null;
             }
@@ -158,15 +156,15 @@ namespace ExcelReporter.Implementations.Providers
             return instance;
         }
 
-        private void FillInputParameters(string methodParams)
+        protected virtual IList<InputParameter> GetInputParameters(string methodParams, ITemplateProcessor templateProcessor, HierarchicalDataItem dataItem)
         {
-            _inputParameters = new List<InputParameter>();
-            string pattern = GetTemplatePatternWithoutBorders();
+            IList<InputParameter> inputParameters = new List<InputParameter>();
+            string pattern = GetTemplatePatternWithoutBorders(templateProcessor);
             foreach (string p in ParseParams(methodParams))
             {
                 if (p.StartsWith("\"") && p.EndsWith("\""))
                 {
-                    _inputParameters.Add(new InputParameter
+                    inputParameters.Add(new InputParameter
                     {
                         Value = p.Substring(1, p.Length - 2),
                         Type = typeof(string),
@@ -174,8 +172,8 @@ namespace ExcelReporter.Implementations.Providers
                 }
                 else if (Regex.IsMatch(p, $@"^{pattern}$"))
                 {
-                    object value = TemplateProcessor.GetValue(p, DataItem);
-                    _inputParameters.Add(new InputParameter
+                    object value = templateProcessor.GetValue(p, dataItem);
+                    inputParameters.Add(new InputParameter
                     {
                         Value = value,
                         Type = value?.GetType(),
@@ -191,9 +189,10 @@ namespace ExcelReporter.Implementations.Providers
                         type = GetTypeByCode(match.Groups[1].Value);
                         value = Convert.ChangeType(match.Groups[2].Value.Trim(), type);
                     }
-                    _inputParameters.Add(new InputParameter { Value = value, Type = type });
+                    inputParameters.Add(new InputParameter { Value = value, Type = type });
                 }
             }
+            return inputParameters;
         }
 
         private Type GetTypeByCode(string code)
@@ -248,10 +247,10 @@ namespace ExcelReporter.Implementations.Providers
             throw new NotSupportedException($"Type \"{code}\" is not supported");
         }
 
-        protected virtual MethodInfo GetMethod(Type type, string methodName)
+        protected virtual MethodInfo GetMethod(Type type, string methodName, IList<InputParameter> inputParameters, bool isStatic)
         {
-            string methodNotFoundMessageTemplate = $"Could not find public {(IsStatic ? "static " : string.Empty)}method \"{methodName}\" in type \"{type.Name}\" and all its parents";
-            BindingFlags methodTypeBindingFlag = IsStatic ? BindingFlags.Static : BindingFlags.Instance;
+            string methodNotFoundMessageTemplate = $"Could not find public {(isStatic ? "static " : string.Empty)}method \"{methodName}\" in type \"{type.Name}\" and all its parents";
+            BindingFlags methodTypeBindingFlag = isStatic ? BindingFlags.Static : BindingFlags.Instance;
             IList<MethodInfo> methods = type.GetMethods(BindingFlags.Public | methodTypeBindingFlag | BindingFlags.FlattenHierarchy).Where(m => m.Name == methodName).ToList();
             if (!methods.Any())
             {
@@ -270,7 +269,7 @@ namespace ExcelReporter.Implementations.Providers
             {
                 ParameterInfo[] allParams = m.GetParameters();
                 IEnumerable<ParameterInfo> optionalParams = allParams.Where(p => p.IsOptional);
-                int paramsCountDiff = allParams.Length - _inputParameters.Count;
+                int paramsCountDiff = allParams.Length - inputParameters.Count;
                 return paramsCountDiff >= 0 && paramsCountDiff <= optionalParams.Count();
             }).ToList();
 
@@ -282,7 +281,7 @@ namespace ExcelReporter.Implementations.Providers
             {
                 throw new MethodNotFoundException($"{methodNotFoundMessageTemplate} with suitable number of parameters. MethodCallTemplate: {MethodCallTemplate}");
             }
-            if (_inputParameters.Any(p => p.Value != null && p.Type == null))
+            if (inputParameters.Any(p => p.Value != null && p.Type == null))
             {
                 throw new NotSupportedException($"More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: {MethodCallTemplate}");
             }
@@ -292,9 +291,9 @@ namespace ExcelReporter.Implementations.Providers
             {
                 bool isSuitable = true;
                 ParameterInfo[] parameters = m.GetParameters();
-                for (int i = 0; i < _inputParameters.Count; i++)
+                for (int i = 0; i < inputParameters.Count; i++)
                 {
-                    if (parameters[i].ParameterType != _inputParameters[i].Type)
+                    if (parameters[i].ParameterType != inputParameters[i].Type)
                     {
                         isSuitable = false;
                         break;
@@ -315,21 +314,21 @@ namespace ExcelReporter.Implementations.Providers
             return method;
         }
 
-        private string GetTemplatePatternWithoutBorders()
+        private string GetTemplatePatternWithoutBorders(ITemplateProcessor templateProcessor)
         {
-            string pattern = TemplateProcessor.TemplatePattern;
-            if (TemplateProcessor.LeftTemplateBorder != null)
+            string pattern = templateProcessor.TemplatePattern;
+            if (templateProcessor.LeftTemplateBorder != null)
             {
-                pattern = pattern.Substring(TemplateProcessor.LeftTemplateBorder.Length);
+                pattern = pattern.Substring(templateProcessor.LeftTemplateBorder.Length);
             }
-            if (TemplateProcessor.RightTemplateBorder != null)
+            if (templateProcessor.RightTemplateBorder != null)
             {
-                pattern = pattern.Substring(0, pattern.Length - TemplateProcessor.RightTemplateBorder.Length);
+                pattern = pattern.Substring(0, pattern.Length - templateProcessor.RightTemplateBorder.Length);
             }
             return pattern;
         }
 
-        protected virtual string[] ParseParams(string methodParams)
+        private string[] ParseParams(string methodParams)
         {
             if (string.IsNullOrWhiteSpace(methodParams))
             {
@@ -397,7 +396,7 @@ namespace ExcelReporter.Implementations.Providers
             public string MethodParams { get; }
         }
 
-        private class InputParameter
+        protected class InputParameter
         {
             public object Value { get; set; }
 
