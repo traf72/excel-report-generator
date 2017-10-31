@@ -20,7 +20,8 @@ namespace ExcelReporter.Implementations.Providers
 
         private readonly IDictionary<Type, object> _instanceCache = new Dictionary<Type, object>();
 
-        /// <param name="defaultInstance">Default instance where methods are searched if template does not specify the type explicitly</param>
+        /// <param name="typeProvider">Type provider which will be used for type search</param>
+        /// <param name="defaultInstance">Instance on which method will be called if template does not specify the type explicitly</param>
         public MethodCallValueProvider(ITypeProvider typeProvider, object defaultInstance)
         {
             if (typeProvider == null)
@@ -36,15 +37,25 @@ namespace ExcelReporter.Implementations.Providers
             }
         }
 
+        /// <summary>
+        /// Type provider used for type search
+        /// </summary>
         protected ITypeProvider TypeProvider { get; }
 
         /// <summary>
-        /// Default instance where methods are searched if template does not specify the type explicitly
+        /// Instance on which method are called if template does not specify the type explicitly
         /// </summary>
         protected object DefaultInstance { get; }
 
         private string MethodCallTemplate => TemplateStack.Peek();
 
+        /// <summary>
+        /// Call method by template
+        /// </summary>
+        /// <param name="templateProcessor">Template processor that will be used for parameters specified as templates</param>
+        /// <param name="dataItem">Data item that will be used for parameters specified as data item templates</param>
+        /// <param name="isStatic">Is called method static</param>
+        /// <returns>Method result</returns>
         public virtual object CallMethod(string methodCallTemplate, ITemplateProcessor templateProcessor, object dataItem, bool isStatic = false)
         {
             if (string.IsNullOrWhiteSpace(methodCallTemplate))
@@ -57,7 +68,7 @@ namespace ExcelReporter.Implementations.Providers
             MethodCallTemplateParts templateParts = ParseTemplate(MethodCallTemplate);
             Type type = GetType(templateParts.TypeName);
             object instance = GetInstance(type, isStatic);
-            IList<InputParameter> inputParams = GetInputParameters(templateParts.MethodParams, templateProcessor, dataItem);
+            IList<InputParameter> inputParams = GetInputParametersValues(templateParts.MethodParams, templateProcessor, dataItem);
             MethodInfo method = GetMethod(type, templateParts.MethodName, inputParams, isStatic);
 
             TemplateStack.Pop();
@@ -65,6 +76,8 @@ namespace ExcelReporter.Implementations.Providers
             return CallMethod(instance, method, inputParams);
         }
 
+        /// <param name="instance">Instance on which method will be called</param>
+        /// <param name="inputParameters">Parameters with which method will be called</param>
         private object CallMethod(object instance, MethodInfo method, IList<InputParameter> inputParameters)
         {
             ParameterInfo[] methodParameters = method.GetParameters();
@@ -134,6 +147,9 @@ namespace ExcelReporter.Implementations.Providers
             return string.IsNullOrWhiteSpace(typeName) ? GetDefaultType() : TypeProvider.GetType(typeName);
         }
 
+        /// <summary>
+        /// Provides the default type where methods are searched if template does not specify the type explicitly
+        /// </summary>
         protected virtual Type GetDefaultType()
         {
             if (DefaultInstance == null)
@@ -143,6 +159,10 @@ namespace ExcelReporter.Implementations.Providers
             return DefaultInstance.GetType();
         }
 
+        /// <summary>
+        /// Provides instance on which method will be called
+        /// </summary>
+        /// <param name="type">Instance type</param>
         protected virtual object GetInstance(Type type, bool isMethodStatic)
         {
             if (isMethodStatic)
@@ -160,11 +180,16 @@ namespace ExcelReporter.Implementations.Providers
             return instance;
         }
 
-        protected virtual IList<InputParameter> GetInputParameters(string methodParams, ITemplateProcessor templateProcessor, object dataItem)
+        /// <summary>
+        /// Parse input parameters string and returns list of input parameters values
+        /// </summary>
+        /// <param name="templateProcessor">Template processor that will be used for parameters specified as templates</param>
+        /// <param name="dataItem">Data item that will be used for parameters specified as data item templates</param>
+        protected virtual IList<InputParameter> GetInputParametersValues(string inputParamsAsString, ITemplateProcessor templateProcessor, object dataItem)
         {
             IList<InputParameter> inputParameters = new List<InputParameter>();
             string pattern = GetTemplatePatternWithoutBorders(templateProcessor);
-            foreach (string p in ParseParams(methodParams))
+            foreach (string p in ParseInputParams(inputParamsAsString))
             {
                 if (p.StartsWith("\"") && p.EndsWith("\""))
                 {
@@ -251,6 +276,12 @@ namespace ExcelReporter.Implementations.Providers
             throw new NotSupportedException($"Type \"{code}\" is not supported");
         }
 
+        /// <summary>
+        /// Find method by name in specified type 
+        /// </summary>
+        /// <param name="type">Type where method will be searched</param>
+        /// <param name="inputParameters">List of input method parameters</param>
+        /// <param name="isStatic">Is method static</param>
         protected virtual MethodInfo GetMethod(Type type, string methodName, IList<InputParameter> inputParameters, bool isStatic)
         {
             string methodNotFoundMessageTemplate = $"Could not find public {(isStatic ? "static " : string.Empty)}method \"{methodName}\" in type \"{type.Name}\" and all its parents";
@@ -332,9 +363,12 @@ namespace ExcelReporter.Implementations.Providers
             return pattern;
         }
 
-        private string[] ParseParams(string methodParams)
+        /// <summary>
+        /// Parse input parameters string into array
+        /// </summary>
+        private string[] ParseInputParams(string inputParamsAsString)
         {
-            if (string.IsNullOrWhiteSpace(methodParams))
+            if (string.IsNullOrWhiteSpace(inputParamsAsString))
             {
                 return new string[0];
             }
@@ -343,11 +377,11 @@ namespace ExcelReporter.Implementations.Providers
             int currentSymbolIndex = 0;
             int methodNesting = 0;
             StringBuilder param = new StringBuilder();
-            while (currentSymbolIndex < methodParams.Length)
+            while (currentSymbolIndex < inputParamsAsString.Length)
             {
-                char currentSymbol = methodParams[currentSymbolIndex];
-                bool nextSymbolExists = currentSymbolIndex != methodParams.Length - 1;
-                char? nextSymbol = nextSymbolExists ? (char?)methodParams[currentSymbolIndex + 1] : null;
+                char currentSymbol = inputParamsAsString[currentSymbolIndex];
+                bool nextSymbolExists = currentSymbolIndex != inputParamsAsString.Length - 1;
+                char? nextSymbol = nextSymbolExists ? (char?)inputParamsAsString[currentSymbolIndex + 1] : null;
                 if (currentSymbol == ',')
                 {
                     if (nextSymbol == ',' || methodNesting > 0)
@@ -384,6 +418,9 @@ namespace ExcelReporter.Implementations.Providers
             return result.Select(p => p.Trim()).ToArray();
         }
 
+        /// <summary>
+        /// Represent parts from which template consist of
+        /// </summary>
         protected class MethodCallTemplateParts
         {
             public MethodCallTemplateParts(string typeName, string methodName, string methodParams)
@@ -400,6 +437,9 @@ namespace ExcelReporter.Implementations.Providers
             public string MethodParams { get; }
         }
 
+        /// <summary>
+        /// Represent input method parameter
+        /// </summary>
         protected class InputParameter
         {
             public object Value { get; set; }
