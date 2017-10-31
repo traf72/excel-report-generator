@@ -6,6 +6,9 @@ namespace ExcelReporter.Interfaces.Reports
     {
         void Run();
 
+        /// <summary>
+        /// Handles report templates
+        /// </summary>
         ITemplateProcessor TemplateProcessor { get; set; }
     }
 }

@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace ExcelReporter.Implementations.Providers
 {
+    /// <summary>
+    /// Provides parameters values from dictionary
+    /// </summary>
     public class DictionaryParameterProvider : IParameterProvider
     {
         private readonly IDictionary<string, object> _parameters;

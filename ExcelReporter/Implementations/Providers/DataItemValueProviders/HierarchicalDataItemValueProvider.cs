@@ -4,6 +4,9 @@ using System;
 
 namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
 {
+    /// <summary>
+    /// Provides values from hierarchical data item
+    /// </summary>
     public class HierarchicalDataItemValueProvider : IGenericDataItemValueProvider<HierarchicalDataItem>
     {
         private readonly IDataItemValueProviderFactory _factory;
@@ -19,6 +22,9 @@ namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
 
         protected HierarchicalDataItem HierarchicalDataItem { get; private set; }
 
+        /// <summary>
+        /// Returns value from hierarchical data item based on template
+        /// </summary>
         public virtual object GetValue(string template, HierarchicalDataItem hierarchicalDataItem)
         {
             if (string.IsNullOrWhiteSpace(template))
@@ -37,6 +43,10 @@ namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
             return _factory.Create(dataItem)?.GetValue(dataItemTemplate, dataItem);
         }
 
+        /// <summary>
+        /// Returns real data item object given hierarchy
+        /// </summary>
+        /// <param name="dataItemTemplate">Template corresponding real data item object (trim template parts which indicate the parent)</param>
         protected virtual object GetDataItemGivenHierarchy(string template, out string dataItemTemplate)
         {
             int lastColonIndex = template.LastIndexOf(":", StringComparison.Ordinal);

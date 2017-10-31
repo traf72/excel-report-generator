@@ -6,6 +6,9 @@ using System;
 
 namespace ExcelReporter.Implementations.TemplateProcessors
 {
+    /// <summary>
+    /// Handles report templates
+    /// </summary>
     public class DefaultTemplateProcessor : IGenericTemplateProcessor<HierarchicalDataItem>
     {
         private const string TypeValueSeparator = ":";
@@ -35,6 +38,10 @@ namespace ExcelReporter.Implementations.TemplateProcessors
 
         public string TemplatePattern { get; } = $@"{LeftBorder}.+?{TypeValueSeparator}.+?{RightBorder}";
 
+        /// <summary>
+        /// Get value based on template
+        /// </summary>
+        /// <param name="dataItem">Data item that will be used if template is data item template</param>
         public virtual object GetValue(string template, HierarchicalDataItem dataItem = null)
         {
             if (string.IsNullOrWhiteSpace(template))
@@ -53,12 +60,12 @@ namespace ExcelReporter.Implementations.TemplateProcessors
             string memberTemplate = templ.Substring(separatorIndex + 1).Trim();
             if (templ.StartsWith("p"))
             {
-                // Значит это значение параметра
+                // Parameter value
                 return _parameterProvider.GetParameterValue(memberTemplate);
             }
             if (templ.StartsWith("di"))
             {
-                // Значит это значение из элемента данных
+                // Data item value
                 if (dataItem == null)
                 {
                     throw new InvalidOperationException($"Template \"{template}\" contains data reference but dataItem is null");
@@ -71,7 +78,7 @@ namespace ExcelReporter.Implementations.TemplateProcessors
             }
             if (memberType == "m" || memberType == "ms")
             {
-                // Значит это вызов метода
+                // Method invocation
                 if (_methodCallValueProvider == null)
                 {
                     throw new InvalidOperationException($"Template \"{template}\" contains method call but methodCallValueProvider is null");

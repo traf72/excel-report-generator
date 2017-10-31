@@ -5,11 +5,17 @@ using System.Data;
 
 namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
 {
+    /// <summary>
+    /// Provides values from data row
+    /// </summary>
     public class DataRowValueProvider : IGenericDataItemValueProvider<DataRow>
     {
         private string _columnName;
         private DataRow _dataRow;
 
+        /// <summary>
+        /// Returns value from specified column of data row
+        /// </summary>
         public virtual object GetValue(string columnName, DataRow dataRow)
         {
             if (string.IsNullOrWhiteSpace(columnName))

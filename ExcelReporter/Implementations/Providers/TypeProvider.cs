@@ -15,11 +15,15 @@ namespace ExcelReporter.Implementations.Providers
 
         private readonly IDictionary<string, Type> _typesCache = new Dictionary<string, Type>();
 
+        /// <param name="assembly">Assembly where type will be searched (default = current executing assembly)</param>
         public TypeProvider(Assembly assembly = null)
         {
             _assembly = assembly ?? Assembly.GetExecutingAssembly();
         }
 
+        /// <summary>
+        /// Provides type based on template
+        /// </summary>
         public virtual Type GetType(string typeTemplate)
         {
             if (string.IsNullOrWhiteSpace(typeTemplate))

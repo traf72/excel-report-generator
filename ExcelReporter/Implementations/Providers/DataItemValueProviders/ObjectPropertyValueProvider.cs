@@ -6,6 +6,9 @@ using System.Reflection;
 
 namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
 {
+    /// <summary>
+    /// Provides properties values from object instance
+    /// </summary>
     public class ObjectPropertyValueProvider : IDataItemValueProvider
     {
         private string _propTemplate;
@@ -13,6 +16,9 @@ namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
 
         protected virtual string SelfObjectTemplate => "di";
 
+        /// <summary>
+        /// Returns property value from data item object
+        /// </summary>
         public virtual object GetValue(string propTemplate, object dataItem)
         {
             if (string.IsNullOrWhiteSpace(propTemplate))
@@ -50,6 +56,9 @@ namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
             return obj;
         }
 
+        /// <summary>
+        /// Returns property based on type and name
+        /// </summary>
         protected virtual PropertyInfo GetProperty(Type type, string name)
         {
             PropertyInfo prop = type.GetProperty(name, BindingFlags.Instance | BindingFlags.Public);

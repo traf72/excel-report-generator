@@ -8,11 +8,15 @@ using ExcelReporter.Attributes;
 
 namespace ExcelReporter.Implementations.Providers
 {
+    /// <summary>
+    /// Provides parameters values from instance members via reflection
+    /// </summary>
     public class ReflectionParameterProvider : IParameterProvider
     {
         protected readonly object ParamsContext;
         private List<MemberInfo> _typeParameters;
 
+        /// <param name="paramsContext">Object where parameters will be searched</param>
         public ReflectionParameterProvider(object paramsContext)
         {
             if (paramsContext == null)

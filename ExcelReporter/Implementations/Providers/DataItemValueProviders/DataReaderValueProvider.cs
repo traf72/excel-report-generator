@@ -5,11 +5,17 @@ using System.Data;
 
 namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
 {
+    /// <summary>
+    /// Provides values from data reader
+    /// </summary>
     public class DataReaderValueProvider : IGenericDataItemValueProvider<IDataReader>
     {
         private string _columnName;
         private IDataReader _dataReader;
 
+        /// <summary>
+        /// Returns value from specified column of data reader
+        /// </summary>
         public virtual object GetValue(string columnName, IDataReader dataReader)
         {
             if (string.IsNullOrWhiteSpace(columnName))
