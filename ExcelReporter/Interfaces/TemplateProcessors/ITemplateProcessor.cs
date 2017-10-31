@@ -8,6 +8,6 @@
 
         string RightTemplateBorder { get; }
 
-        object GetValue(string template, HierarchicalDataItem dataItem = null);
+        object GetValue(string template, object dataItem = null);
     }
 }

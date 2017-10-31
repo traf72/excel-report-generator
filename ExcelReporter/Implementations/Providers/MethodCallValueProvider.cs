@@ -11,12 +11,16 @@ using System.Text.RegularExpressions;
 
 namespace ExcelReporter.Implementations.Providers
 {
+    /// <summary>
+    /// Provides result of method call
+    /// </summary>
     public class MethodCallValueProvider : IMethodCallValueProvider
     {
         private static readonly Stack<string> TemplateStack = new Stack<string>();
 
         private readonly IDictionary<Type, object> _instanceCache = new Dictionary<Type, object>();
 
+        /// <param name="defaultInstance">Default instance where methods are searched if template does not specify the type explicitly</param>
         public MethodCallValueProvider(ITypeProvider typeProvider, object defaultInstance)
         {
             if (typeProvider == null)
@@ -41,7 +45,7 @@ namespace ExcelReporter.Implementations.Providers
 
         private string MethodCallTemplate => TemplateStack.Peek();
 
-        public virtual object CallMethod(string methodCallTemplate, ITemplateProcessor templateProcessor, HierarchicalDataItem dataItem, bool isStatic = false)
+        public virtual object CallMethod(string methodCallTemplate, ITemplateProcessor templateProcessor, object dataItem, bool isStatic = false)
         {
             if (string.IsNullOrWhiteSpace(methodCallTemplate))
             {
@@ -156,7 +160,7 @@ namespace ExcelReporter.Implementations.Providers
             return instance;
         }
 
-        protected virtual IList<InputParameter> GetInputParameters(string methodParams, ITemplateProcessor templateProcessor, HierarchicalDataItem dataItem)
+        protected virtual IList<InputParameter> GetInputParameters(string methodParams, ITemplateProcessor templateProcessor, object dataItem)
         {
             IList<InputParameter> inputParameters = new List<InputParameter>();
             string pattern = GetTemplatePatternWithoutBorders(templateProcessor);

@@ -1,12 +1,12 @@
 ﻿using ExcelReporter.Exceptions;
 using ExcelReporter.Interfaces.Providers;
+using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
 using ExcelReporter.Interfaces.TemplateProcessors;
 using System;
-using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
 
 namespace ExcelReporter.Implementations.TemplateProcessors
 {
-    public class DefaultTemplateProcessor : ITemplateProcessor
+    public class DefaultTemplateProcessor : IGenericTemplateProcessor<HierarchicalDataItem>
     {
         private const string TypeValueSeparator = ":";
         private const string LeftBorder = "{";
@@ -35,7 +35,7 @@ namespace ExcelReporter.Implementations.TemplateProcessors
 
         public string TemplatePattern { get; } = $@"{LeftBorder}.+?{TypeValueSeparator}.+?{RightBorder}";
 
-        public virtual object GetValue(string template, HierarchicalDataItem dataItem)
+        public virtual object GetValue(string template, HierarchicalDataItem dataItem = null)
         {
             if (string.IsNullOrWhiteSpace(template))
             {
@@ -80,6 +80,11 @@ namespace ExcelReporter.Implementations.TemplateProcessors
             }
 
             throw new IncorrectTemplateException($"Incorrect template \"{template}\". Unknown member type \"{memberType}\"");
+        }
+
+        object ITemplateProcessor.GetValue(string template, object dataItem)
+        {
+            return GetValue(template, (HierarchicalDataItem)dataItem);
         }
     }
 }

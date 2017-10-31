@@ -103,6 +103,7 @@
     <Compile Include="Interfaces\Reports\IReport.cs" />
     <Compile Include="Interfaces\Panels\IPanel.cs" />
     <Compile Include="Interfaces\Providers\IParameterProvider.cs" />
+    <Compile Include="Interfaces\TemplateProcessors\IGenericTemplateProcessor.cs" />
     <Compile Include="Interfaces\TemplateProcessors\ITemplateProcessor.cs" />
     <Compile Include="Enumerators\DataReaderEnumerator.cs" />
     <Compile Include="Enumerators\DataSetEnumerator.cs" />
