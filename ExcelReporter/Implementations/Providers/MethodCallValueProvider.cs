@@ -64,16 +64,19 @@ namespace ExcelReporter.Implementations.Providers
             }
 
             TemplateStack.Push(methodCallTemplate.Trim());
-
-            MethodCallTemplateParts templateParts = ParseTemplate(MethodCallTemplate);
-            Type type = GetType(templateParts.TypeName);
-            object instance = GetInstance(type, isStatic);
-            IList<InputParameter> inputParams = GetInputParametersValues(templateParts.MethodParams, templateProcessor, dataItem);
-            MethodInfo method = GetMethod(type, templateParts.MethodName, inputParams, isStatic);
-
-            TemplateStack.Pop();
-
-            return CallMethod(instance, method, inputParams);
+            try
+            {
+                MethodCallTemplateParts templateParts = ParseTemplate(MethodCallTemplate);
+                Type type = GetType(templateParts.TypeName);
+                object instance = GetInstance(type, isStatic);
+                IList<InputParameter> inputParams = GetInputParametersValues(templateParts.MethodParams, templateProcessor, dataItem);
+                MethodInfo method = GetMethod(type, templateParts.MethodName, inputParams, isStatic);
+                return CallMethod(instance, method, inputParams);
+            }
+            finally
+            {
+                TemplateStack.Pop();
+            }
         }
 
         /// <param name="instance">Instance on which method will be called</param>
@@ -277,7 +280,7 @@ namespace ExcelReporter.Implementations.Providers
         }
 
         /// <summary>
-        /// Find method by name in specified type 
+        /// Find method by name in specified type
         /// </summary>
         /// <param name="type">Type where method will be searched</param>
         /// <param name="inputParameters">List of input method parameters</param>

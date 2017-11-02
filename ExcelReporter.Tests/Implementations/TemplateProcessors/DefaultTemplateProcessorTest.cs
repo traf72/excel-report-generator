@@ -1,10 +1,10 @@
 ﻿using ExcelReporter.Exceptions;
 using ExcelReporter.Implementations.TemplateProcessors;
 using ExcelReporter.Interfaces.Providers;
+using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
-using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
 
 namespace ExcelReporter.Tests.Implementations.TemplateProcessors
 {
@@ -26,27 +26,27 @@ namespace ExcelReporter.Tests.Implementations.TemplateProcessors
             var templateProcessor = new DefaultTemplateProcessor(parameterProvider, methodCallValueProvider, dataItemValueProvider);
 
             MyAssert.Throws<ArgumentNullException>(() => templateProcessor.GetValue(null, dataItem));
-            MyAssert.Throws<IncorrectTemplateException>(() => templateProcessor.GetValue("{p-Name}", null), "Incorrect template \"{p-Name}\". Cannot find separator \":\" between member type and member template");
-            MyAssert.Throws<IncorrectTemplateException>(() => templateProcessor.GetValue("{bad:Name}", null), "Incorrect template \"{bad:Name}\". Unknown member type \"bad\"");
+            MyAssert.Throws<IncorrectTemplateException>(() => templateProcessor.GetValue("{p-Name}"), "Incorrect template \"{p-Name}\". Cannot find separator \":\" between member type and member template");
+            MyAssert.Throws<IncorrectTemplateException>(() => templateProcessor.GetValue("{bad:Name}"), "Incorrect template \"{bad:Name}\". Unknown member type \"bad\"");
 
-            templateProcessor.GetValue("{p:Name}", null);
+            templateProcessor.GetValue("{p:Name}");
 
             parameterProvider.Received(1).GetParameterValue("Name");
-            methodCallValueProvider.DidNotReceiveWithAnyArgs().CallMethod(Arg.Any<string>(), null, null);
+            methodCallValueProvider.DidNotReceiveWithAnyArgs().CallMethod(null, null, null);
             dataItemValueProvider.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>(), null);
 
             parameterProvider.ClearReceivedCalls();
-            templateProcessor.GetValue(" { p : Name } ", null);
+            templateProcessor.GetValue(" { p : Name } ");
 
             parameterProvider.Received(1).GetParameterValue("Name");
-            methodCallValueProvider.DidNotReceiveWithAnyArgs().CallMethod(Arg.Any<string>(), null, null);
+            methodCallValueProvider.DidNotReceiveWithAnyArgs().CallMethod(null, null, null);
             dataItemValueProvider.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>(), null);
 
             parameterProvider.ClearReceivedCalls();
-            templateProcessor.GetValue(" p : Name ", null);
+            templateProcessor.GetValue(" p : Name ");
 
             parameterProvider.Received(1).GetParameterValue("Name");
-            methodCallValueProvider.DidNotReceiveWithAnyArgs().CallMethod(Arg.Any<string>(), null, null);
+            methodCallValueProvider.DidNotReceiveWithAnyArgs().CallMethod(null, null, null);
             dataItemValueProvider.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>(), null);
 
             parameterProvider.ClearReceivedCalls();
@@ -67,11 +67,11 @@ namespace ExcelReporter.Tests.Implementations.TemplateProcessors
 
             templateProcessor.GetValue("{di:Field}", dataItem);
             parameterProvider.DidNotReceiveWithAnyArgs().GetParameterValue(Arg.Any<string>());
-            methodCallValueProvider.DidNotReceiveWithAnyArgs().CallMethod(Arg.Any<string>(), null, null);
+            methodCallValueProvider.DidNotReceiveWithAnyArgs().CallMethod(null, null, null);
             dataItemValueProvider.Received(1).GetValue("Field", dataItem);
 
             dataItemValueProvider.ClearReceivedCalls();
-            MyAssert.Throws<InvalidOperationException>(() => templateProcessor.GetValue("{di:Field}", null), "Template \"{di:Field}\" contains data reference but dataItem is null");
+            MyAssert.Throws<InvalidOperationException>(() => templateProcessor.GetValue("{di:Field}"), "Template \"{di:Field}\" contains data reference but dataItem is null");
             MyAssert.Throws<InvalidOperationException>(() => new DefaultTemplateProcessor(parameterProvider).GetValue("{di:Field}", dataItem), "Template \"{di:Field}\" contains data reference but dataItemValueProvider is null");
         }
     }

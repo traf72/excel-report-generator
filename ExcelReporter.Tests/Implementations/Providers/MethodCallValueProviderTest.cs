@@ -154,7 +154,7 @@ namespace ExcelReporter.Tests.Implementations.Providers
         {
             var typeProvider = Substitute.For<ITypeProvider>();
             var methodCallValueProvider = new MethodCallValueProvider(typeProvider, null);
-            MethodInfo method = methodCallValueProvider.GetType().GetMethod("ParseParams", BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo method = methodCallValueProvider.GetType().GetMethod("ParseInputParams", BindingFlags.Instance | BindingFlags.NonPublic);
 
             var result = (string[])method.Invoke(methodCallValueProvider, new[] { string.Empty });
             Assert.AreEqual(0, result.Length);
@@ -336,6 +336,15 @@ namespace ExcelReporter.Tests.Implementations.Providers
             Assert.AreEqual("Str_Static_Parent", methodCallValueProvider.CallMethod("MethodStaticParent()", templateProcessor, null, true));
             typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
+
+            methodCallValueProvider = new MethodCallValueProvider(typeProvider, null);
+
+            Assert.AreEqual("Str_1", methodCallValueProvider.CallMethod(":TestClass:Method1()", templateProcessor, null));
+            typeProvider.Received(1).GetType(":TestClass");
+            templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
+
+            MyAssert.Throws<InvalidOperationException>(() => methodCallValueProvider.CallMethod("Method2(p:Value, 18)", templateProcessor, null),
+                "Type name is not specified in template \"Method2(p:Value, 18)\" but defaultInstance is null");
         }
 
         [TestMethod]
@@ -406,6 +415,7 @@ namespace ExcelReporter.Tests.Implementations.Providers
 
             MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method4([int]15)", templateProcessor, null), "Methods which have \"params\" argument are not supported. MethodCallTemplate: Method4([int]15)");
             MyAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("Method5()", templateProcessor, null), "Could not find public method \"Method5\" in type \"TestOverloading\" and all its parents. MethodCallTemplate: Method5()");
+            MyAssert.Throws<IncorrectTemplateException>(() => methodCallValueProvider.CallMethod("BadClass:Method5()", templateProcessor, null), "Cannot find type by template \"BadClass\"");
         }
 
         private class TestClass : TestClassParent
