@@ -1,4 +1,7 @@
-﻿using ClosedXML.Excel;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using ClosedXML.Excel;
 using ExcelReporter.Attributes;
 using ExcelReporter.Implementations.Panels.Excel;
 using ExcelReporter.Implementations.Providers;
@@ -7,11 +10,8 @@ using ExcelReporter.Implementations.TemplateProcessors;
 using ExcelReporter.Interfaces.Reports;
 using ExcelReporter.Interfaces.TemplateProcessors;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Linq;
-using System.Reflection;
 
-namespace ExcelReporter.Tests.Implementations.Panels.Excel.ExcelRenderTests
+namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
 {
     [TestClass]
     public class PanelRenderTest
