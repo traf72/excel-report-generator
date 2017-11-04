@@ -88,7 +88,6 @@
     <Compile Include="Implementations\Providers\ReflectionParameterProvider.cs" />
     <Compile Include="Implementations\Providers\DictionaryParameterProvider.cs" />
     <Compile Include="Implementations\Providers\TypeProvider.cs" />
-    <Compile Include="Implementations\Reports\TestReport4.cs" />
     <Compile Include="Implementations\TemplateProcessors\DefaultTemplateProcessor.cs" />
     <Compile Include="Interfaces\Panels\IDataItemPanel.cs" />
     <Compile Include="Interfaces\Panels\Excel\IExcelPanel.cs" />

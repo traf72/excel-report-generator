@@ -1,11 +1,10 @@
 ﻿using ClosedXML.Excel;
+using ExcelReporter.Enumerators;
 using ExcelReporter.Enums;
 using ExcelReporter.Excel;
 using ExcelReporter.Interfaces.Panels.Excel;
 using ExcelReporter.Interfaces.Reports;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ExcelReporter.Implementations.Panels.Excel
 {
@@ -21,53 +20,63 @@ namespace ExcelReporter.Implementations.Panels.Excel
 
         public override void Render()
         {
+            // Получаем контекст родительского элемента данных, если он есть
             HierarchicalDataItem parentDataItem = GetDataContext();
+
             object data = Report.TemplateProcessor.GetValue(_dataSourceTemplate, parentDataItem);
-            if (data is IEnumerable)
+            IEnumerator enumerator = EnumeratorFactory.Create(data);
+            
+            // Если данных нет, то просто удаляем сам шаблон
+            if (enumerator == null || !enumerator.MoveNext())
             {
-                IList<object> listData = (data as IEnumerable).Cast<object>().ToList();
-                // Если данных нет, то просто удаляем сам шаблон
-                if (!listData.Any())
+                DeletePanel(this);
+                return;
+            }
+
+            object currentItem = enumerator.Current;
+            var templatePanel = new ExcelDataItemPanel(Range, Report)
+            {
+                Parent = Parent,
+                Children = Children,
+                RenderPriority = RenderPriority,
+                ShiftType = ShiftType,
+                Type = Type,
+            };
+            while (true)
+            {
+                ExcelDataItemPanel currentPanel;
+                bool nextItemExist = false;
+                object nextItem = null;
+                if (!enumerator.MoveNext())
                 {
-                    DeletePanel(this);
+                    // Если это последний элемент данных, то уже на размножаем шаблон, а рендерим данные напрямую в него
+                    currentPanel = templatePanel;
                 }
                 else
                 {
-                    var templatePanel = new ExcelDataItemPanel(Range, Report)
-                    {
-                        Parent = Parent,
-                        Children = Children,
-                        RenderPriority = RenderPriority,
-                        ShiftType = ShiftType,
-                        Type = Type,
-                    };
-
-                    for (int i = 0; i < listData.Count; i++)
-                    {
-                        ExcelDataItemPanel currentPanel;
-                        if (i != listData.Count - 1)
-                        {
-                            // Сам шаблон сдвигаем вниз или вправо в зависимости от типа панели
-                            ShiftTemplatePanel(templatePanel);
-                            // Копируем шаблон на его предыдущее место
-                            currentPanel = (ExcelDataItemPanel)templatePanel.Copy(ExcelHelper.ShiftCell(templatePanel.Range.FirstCell(), GetNextPanelAddressShift(templatePanel)));
-                        }
-                        // Если это последний элемент данных, то уже на размножаем шаблон, а рендерим данные напрямую в него
-                        else
-                        {
-                            currentPanel = templatePanel;
-                        }
-
-                        currentPanel.DataItem = new HierarchicalDataItem { Value = listData[i], Parent = parentDataItem };
-                        // Заполняем шаблон данными
-                        currentPanel.Render();
-                        // Удаляем все сгенерированные имена Range'ей
-                        RemoveAllNamesRecursive(currentPanel);
-                    }
-                    // Удаляем имя самого шаблона
-                    RemoveName();
+                    nextItemExist = true;
+                    nextItem = enumerator.Current;
+                    // Сам шаблон сдвигаем вниз или вправо в зависимости от типа панели
+                    ShiftTemplatePanel(templatePanel);
+                    // Копируем шаблон на его предыдущее место
+                    currentPanel = (ExcelDataItemPanel)templatePanel.Copy(ExcelHelper.ShiftCell(templatePanel.Range.FirstCell(), GetNextPanelAddressShift(templatePanel)));
                 }
+
+                currentPanel.DataItem = new HierarchicalDataItem { Value = currentItem, Parent = parentDataItem };
+                // Заполняем шаблон данными
+                currentPanel.Render();
+                // Удаляем все сгенерированные имена Range'ей
+                RemoveAllNamesRecursive(currentPanel);
+
+                if (!nextItemExist)
+                {
+                    break;
+                }
+
+                currentItem = nextItem;
             }
+
+            RemoveName();
         }
 
         private AddressShift GetNextPanelAddressShift(IExcelPanel currentPanel)

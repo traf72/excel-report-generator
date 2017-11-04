@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ClosedXML.Excel;
-using ExcelReporter.Enums;
-using ExcelReporter.Implementations.Panels;
+﻿using ClosedXML.Excel;
+using ExcelReporter.Implementations.Panels.Excel;
 using ExcelReporter.Implementations.Providers;
+using ExcelReporter.Implementations.Providers.DataItemValueProviders;
 using ExcelReporter.Implementations.TemplateProcessors;
-using ExcelReporter.Interfaces.Panels;
+using ExcelReporter.Interfaces.Panels.Excel;
 using ExcelReporter.Interfaces.Reports;
 using ExcelReporter.Interfaces.TemplateProcessors;
+using System.Collections.Generic;
+using System.Linq;
+using ExcelReporter.Enums;
 
 namespace ExcelReporter.Implementations.Reports
 {
@@ -15,37 +16,37 @@ namespace ExcelReporter.Implementations.Reports
     {
         private const string TemplateName = "Template2";
 
-        private IXLWorksheet _ws;
+        public IXLWorksheet _ws;
 
         public XLWorkbook Workbook { get; set; } = new XLWorkbook($@"ExcelTemplates\{TemplateName}.xlsx");
 
         public void Run()
         {
-            //_ws = Workbook.Worksheet(1);
-            //IDictionary<string, IPanel> panels = new Dictionary<string, IPanel>();
-            //TemplateProcessor = new TemplateProcessor(new ReflectionParameterProvider(this));
-
-            ////IXLNamedRange panel = _ws.NamedRange("panel");
-            ////panels[panel.Name] = new ExcelDataSourcePanel("TestDataSource", "GetAllItems()", panel, report);
-
-            ////IXLNamedRange panel = _ws.NamedRange("panel");
-            ////panels[panel.Name] = new ExcelDataSourcePanel("TestDataSource", "GetAllItems()", panel, report)
-            ////{
-            ////    ShiftType = ShiftType.Row,
-            ////};
+            _ws = Workbook.Worksheet(1);
+            IDictionary<string, IExcelPanel> panels = new Dictionary<string, IExcelPanel>();
+            TemplateProcessor = new DefaultTemplateProcessor(new ReflectionParameterProvider(this), new MethodCallValueProvider(new TypeProvider(), this), new HierarchicalDataItemValueProvider());
 
             //IXLNamedRange panel = _ws.NamedRange("panel");
-            //panels[panel.Name] = new ExcelDataSourcePanel("TestDataSource", "GetAllItems()", panel, this)
+            //panels[panel.Name] = new ExcelDataSourcePanel("m:TestDataSource:GetAllItems()", panel, this);
+
+            //IXLNamedRange panel = _ws.NamedRange("panel");
+            //panels[panel.Name] = new ExcelDataSourcePanel("m:TestDataSource:GetAllItems()", panel, this)
             //{
-            //    ShiftType = ShiftType.NoShift,
+            //    ShiftType = ShiftType.Row,
             //};
 
-            //foreach (KeyValuePair<string, IPanel> p in panels.OrderByDescending(p => p.Value.RenderPriority))
-            //{
-            //    p.Value.Render();
-            //}
+            IXLNamedRange panel = _ws.NamedRange("panel");
+            panels[panel.Name] = new ExcelDataSourcePanel("m:TestDataSource:GetAllItems()", panel, this)
+            {
+                ShiftType = ShiftType.NoShift,
+            };
 
-            //Workbook.SaveAs($@"{TemplateName}_result.xlsx");
+            foreach (KeyValuePair<string, IExcelPanel> p in panels.OrderByDescending(p => p.Value.RenderPriority))
+            {
+                p.Value.Render();
+            }
+
+            Workbook.SaveAs($@"{TemplateName}_result.xlsx");
         }
 
         public ITemplateProcessor TemplateProcessor { get; set; }
