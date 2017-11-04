@@ -57,7 +57,7 @@ namespace ExcelReporter.Excel
         {
             if (!IsCellInsideRange(cell, range))
             {
-                throw new InvalidOperationException($"{range} is not a parent of {cell}");
+                throw new InvalidOperationException($"Cell {cell} is outside of the range {range}");
             }
 
             return new CellCoords(cell.Address.RowNumber - range.FirstRow().RowNumber() + 1,
@@ -68,7 +68,7 @@ namespace ExcelReporter.Excel
         {
             if (!IsRangeInsideAnotherRange(parentRange, childRange))
             {
-                throw new InvalidOperationException($"{parentRange} is not a parent of {childRange}");
+                throw new InvalidOperationException($"Range {parentRange} is not a parent of the range {childRange}. Child range is outside of the parent range.");
             }
 
             CellCoords firstCell = new CellCoords(childRange.FirstRow().RowNumber() - parentRange.FirstRow().RowNumber() + 1,
