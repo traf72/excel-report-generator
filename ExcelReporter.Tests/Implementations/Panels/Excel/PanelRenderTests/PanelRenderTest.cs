@@ -17,7 +17,7 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
     public class PanelRenderTest
     {
         [TestMethod]
-        public void TestRenderParameters()
+        public void TestRender()
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");

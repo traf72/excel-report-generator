@@ -69,7 +69,7 @@ namespace ExcelReporter.Implementations.Providers
             }
             if (!types.Any())
             {
-                throw new IncorrectTemplateException($"Cannot find type by template \"{typeTemplate}\"");
+                throw new TypeNotFoundException($"Cannot find type by template \"{typeTemplate}\"");
             }
 
             throw new IncorrectTemplateException($"More than one type found by template \"{typeTemplate}\"");

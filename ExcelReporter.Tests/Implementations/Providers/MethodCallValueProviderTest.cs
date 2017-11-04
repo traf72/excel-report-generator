@@ -415,7 +415,6 @@ namespace ExcelReporter.Tests.Implementations.Providers
 
             MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method4([int]15)", templateProcessor, null), "Methods which have \"params\" argument are not supported. MethodCallTemplate: Method4([int]15)");
             MyAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("Method5()", templateProcessor, null), "Could not find public method \"Method5\" in type \"TestOverloading\" and all its parents. MethodCallTemplate: Method5()");
-            MyAssert.Throws<IncorrectTemplateException>(() => methodCallValueProvider.CallMethod("BadClass:Method5()", templateProcessor, null), "Cannot find type by template \"BadClass\"");
         }
 
         private class TestClass : TestClassParent

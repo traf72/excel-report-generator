@@ -36,7 +36,7 @@ namespace ExcelReporter.Tests.Implementations.Providers
 
             Assert.AreSame(typeof(InnerNamespace.TestType_4), typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers.InnerNamespace:TestType_4"));
             Assert.AreSame(typeof(InnerNamespace.TestType_4), typeProvider.GetType("TestType_4"));
-            MyAssert.Throws<IncorrectTemplateException>(() => typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers:TestType_4"),
+            MyAssert.Throws<TypeNotFoundException>(() => typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers:TestType_4"),
                 "Cannot find type by template \"ExcelReporter.Tests.Implementations.Providers:TestType_4\"");
 
             MyAssert.Throws<IncorrectTemplateException>(() => typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers:InnerNamespace:TestType_4"),
