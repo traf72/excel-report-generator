@@ -19,27 +19,13 @@ namespace ExcelReporter.Implementations.Panels.Excel
 
         public ExcelPanel(IXLRange range, IExcelReport report)
         {
-            if (range == null)
-            {
-                throw new ArgumentNullException(nameof(range), Constants.NullParamMessage);
-            }
-            if (report == null)
-            {
-                throw new ArgumentNullException(nameof(report), Constants.NullParamMessage);
-            }
-
-            Range = range;
-            Report = report;
+            Range = range ?? throw new ArgumentNullException(nameof(range), Constants.NullParamMessage);
+            Report = report ?? throw new ArgumentNullException(nameof(report), Constants.NullParamMessage);
         }
 
         protected ExcelPanel(IExcelReport report)
         {
-            if (report == null)
-            {
-                throw new ArgumentNullException(nameof(report), Constants.NullParamMessage);
-            }
-
-            Report = report;
+            Report = report ?? throw new ArgumentNullException(nameof(report), Constants.NullParamMessage);
         }
 
         public IExcelReport Report { get; set; }
@@ -48,7 +34,7 @@ namespace ExcelReporter.Implementations.Panels.Excel
 
         public IExcelPanel Parent
         {
-            get { return _parent; }
+            get => _parent;
             set
             {
                 _parent = value;
@@ -207,8 +193,7 @@ namespace ExcelReporter.Implementations.Panels.Excel
             IExcelPanel parent = Parent;
             while (parent != null)
             {
-                IDataItemPanel dataItemPanel = parent as IDataItemPanel;
-                if (dataItemPanel != null)
+                if (parent is IDataItemPanel dataItemPanel)
                 {
                     return dataItemPanel.DataItem;
                 }

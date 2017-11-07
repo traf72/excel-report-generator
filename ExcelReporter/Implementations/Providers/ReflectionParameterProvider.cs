@@ -19,11 +19,7 @@ namespace ExcelReporter.Implementations.Providers
         /// <param name="paramsContext">Object where parameters will be searched</param>
         public ReflectionParameterProvider(object paramsContext)
         {
-            if (paramsContext == null)
-            {
-                throw new ArgumentNullException(nameof(paramsContext), Constants.NullParamMessage);
-            }
-            ParamsContext = paramsContext;
+            ParamsContext = paramsContext ?? throw new ArgumentNullException(nameof(paramsContext), Constants.NullParamMessage);
         }
 
         public virtual object GetParameterValue(string paramName)
@@ -53,12 +49,13 @@ namespace ExcelReporter.Implementations.Providers
                     return _typeParameters;
                 }
 
+                bool GetOnlyParams(MemberInfo member) => Attribute.IsDefined(member, typeof(Parameter));
+
                 _typeParameters = new List<MemberInfo>();
                 Type paramsContextType = ParamsContext.GetType();
                 const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
-                Func<MemberInfo, bool> whereClause = m => Attribute.IsDefined(m, typeof(Parameter));
-                _typeParameters.AddRange(paramsContextType.GetProperties(flags).Where(whereClause));
-                _typeParameters.AddRange(paramsContextType.GetFields(flags).Where(whereClause));
+                _typeParameters.AddRange(paramsContextType.GetProperties(flags).Where(GetOnlyParams));
+                _typeParameters.AddRange(paramsContextType.GetFields(flags).Where(GetOnlyParams));
                 return _typeParameters;
             }
         }

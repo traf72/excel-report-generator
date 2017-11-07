@@ -24,12 +24,7 @@ namespace ExcelReporter.Implementations.Providers
         /// <param name="defaultInstance">Instance on which method will be called if template does not specify the type explicitly</param>
         public MethodCallValueProvider(ITypeProvider typeProvider, object defaultInstance)
         {
-            if (typeProvider == null)
-            {
-                throw new ArgumentNullException(nameof(typeProvider), Constants.NullParamMessage);
-            }
-
-            TypeProvider = typeProvider;
+            TypeProvider = typeProvider ?? throw new ArgumentNullException(nameof(typeProvider), Constants.NullParamMessage);
             DefaultInstance = defaultInstance;
             if (DefaultInstance != null)
             {
@@ -173,8 +168,7 @@ namespace ExcelReporter.Implementations.Providers
                 return null;
             }
 
-            object instance;
-            if (_instanceCache.TryGetValue(type, out instance))
+            if (_instanceCache.TryGetValue(type, out object instance))
             {
                 return instance;
             }

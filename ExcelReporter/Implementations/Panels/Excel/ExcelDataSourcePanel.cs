@@ -16,6 +16,10 @@ namespace ExcelReporter.Implementations.Panels.Excel
         public ExcelDataSourcePanel(string dataSourceTemplate, IXLNamedRange namedRange, IExcelReport report)
             : base(namedRange, report)
         {
+            if (string.IsNullOrWhiteSpace(dataSourceTemplate))
+            {
+                throw new ArgumentException(Constants.EmptyStringParamMessage, nameof(dataSourceTemplate));
+            }
             _dataSourceTemplate = dataSourceTemplate;
         }
 

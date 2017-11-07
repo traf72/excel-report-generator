@@ -15,12 +15,7 @@ namespace ExcelReporter.Implementations.Panels.Excel
 
         public ExcelNamedPanel(IXLNamedRange namedRange, IExcelReport report) : base(report)
         {
-            if (namedRange == null)
-            {
-                throw new ArgumentNullException(nameof(namedRange), Constants.NullParamMessage);
-            }
-
-            _namedRange = namedRange;
+            _namedRange = namedRange ?? throw new ArgumentNullException(nameof(namedRange), Constants.NullParamMessage);
         }
 
         public virtual string Name => _namedRange.Name;
@@ -80,8 +75,7 @@ namespace ExcelReporter.Implementations.Panels.Excel
 
         protected override IExcelPanel CopyChild(IExcelPanel fromChild, IXLCell cell)
         {
-            IExcelNamedPanel namedChild = fromChild as IExcelNamedPanel;
-            return namedChild != null ? namedChild.Copy(cell, $"{_copiedPanelName}_{namedChild.Name}") : fromChild.Copy(cell);
+            return fromChild is IExcelNamedPanel namedChild ? namedChild.Copy(cell, $"{_copiedPanelName}_{namedChild.Name}") : fromChild.Copy(cell);
         }
 
         protected override void MoveRange(IXLCell cell)
@@ -113,8 +107,7 @@ namespace ExcelReporter.Implementations.Panels.Excel
             IExcelPanel parent = Parent;
             while (parent != null)
             {
-                IExcelNamedPanel namedParent = parent as IExcelNamedPanel;
-                if (namedParent != null)
+                if (parent is IExcelNamedPanel namedParent)
                 {
                     return namedParent;
                 }

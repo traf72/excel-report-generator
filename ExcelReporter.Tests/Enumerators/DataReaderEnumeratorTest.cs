@@ -23,16 +23,16 @@ namespace ExcelReporter.Tests.Enumerators
             });
 
             var enumerator = new DataReaderEnumerator(reader);
-            MyAssert.Throws<InvalidOperationException>(() => { IDataReader current = enumerator.Current; }, "Enumerator has not been started. Call MoveNext() method.");
-            MyAssert.Throws<InvalidOperationException>(() => { IDataReader current = enumerator.Current; }, "Enumerator has not been started. Call MoveNext() method.");
+            MyAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has not been started. Call MoveNext() method.");
+            MyAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has not been started. Call MoveNext() method.");
             while (enumerator.MoveNext())
             {
             }
 
             MyAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "Enumerator has been finished");
             MyAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "Enumerator has been finished");
-            MyAssert.Throws<InvalidOperationException>(() => { IDataReader current = enumerator.Current; }, "Enumerator has been finished");
-            MyAssert.Throws<InvalidOperationException>(() => { IDataReader current = enumerator.Current; }, "Enumerator has been finished");
+            MyAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has been finished");
+            MyAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has been finished");
             reader.Received(4).Read();
 
             MyAssert.Throws<NotSupportedException>(() => enumerator.Reset(), $"{nameof(DataReaderEnumerator)} does not support reset method");
@@ -44,7 +44,7 @@ namespace ExcelReporter.Tests.Enumerators
             reader.IsClosed.Returns(true);
 
             MyAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "DataReader has been closed");
-            MyAssert.Throws<InvalidOperationException>(() => { IDataReader current = enumerator.Current; }, "DataReader has been closed");
+            MyAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "DataReader has been closed");
         }
     }
 }

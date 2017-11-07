@@ -22,13 +22,9 @@ namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
             {
                 throw new ArgumentException(Constants.EmptyStringParamMessage, nameof(columnName));
             }
-            if (dataRow == null)
-            {
-                throw new ArgumentNullException(nameof(dataRow), Constants.NullParamMessage);
-            }
 
+            _dataRow = dataRow ?? throw new ArgumentNullException(nameof(dataRow), Constants.NullParamMessage);
             _columnName = columnName.Trim();
-            _dataRow = dataRow;
             return dataRow.ItemArray[GetColumnIndex()];
         }
 

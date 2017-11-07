@@ -16,11 +16,7 @@ namespace ExcelReporter.Enumerators
 
         public DataReaderEnumerator(IDataReader dataReader)
         {
-            if (dataReader == null)
-            {
-                throw new ArgumentNullException(nameof(dataReader), Constants.NullParamMessage);
-            }
-            _dataReader = dataReader;
+            _dataReader = dataReader ?? throw new ArgumentNullException(nameof(dataReader), Constants.NullParamMessage);
         }
 
         public IDataReader Current
@@ -60,14 +56,8 @@ namespace ExcelReporter.Enumerators
             return !_isFinished;
         }
 
-        public void Reset()
-        {
-            throw new NotSupportedException($"{nameof(DataReaderEnumerator)} does not support reset method");
-        }
+        public void Reset() => throw new NotSupportedException($"{nameof(DataReaderEnumerator)} does not support reset method");
 
-        public void Dispose()
-        {
-            _dataReader.Close();
-        }
+        public void Dispose() => _dataReader.Close();
     }
 }

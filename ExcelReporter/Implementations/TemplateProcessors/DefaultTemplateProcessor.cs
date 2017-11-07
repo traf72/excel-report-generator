@@ -22,12 +22,7 @@ namespace ExcelReporter.Implementations.TemplateProcessors
         public DefaultTemplateProcessor(IParameterProvider parameterProvider, IMethodCallValueProvider methodCallValueProvider = null,
             IGenericDataItemValueProvider<HierarchicalDataItem> dataItemValueProvider = null)
         {
-            if (parameterProvider == null)
-            {
-                throw new ArgumentNullException(nameof(parameterProvider), Constants.NullParamMessage);
-            }
-
-            _parameterProvider = parameterProvider;
+            _parameterProvider = parameterProvider ?? throw new ArgumentNullException(nameof(parameterProvider), Constants.NullParamMessage);
             _methodCallValueProvider = methodCallValueProvider;
             _dataItemValueProvider = dataItemValueProvider;
         }

@@ -31,29 +31,21 @@ namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
             {
                 throw new ArgumentException(Constants.EmptyStringParamMessage, nameof(template));
             }
-            if (hierarchicalDataItem == null)
-            {
-                throw new ArgumentNullException(nameof(hierarchicalDataItem), Constants.NullParamMessage);
-            }
+            HierarchicalDataItem = hierarchicalDataItem ?? throw new ArgumentNullException(nameof(hierarchicalDataItem), Constants.NullParamMessage);
 
-            HierarchicalDataItem = hierarchicalDataItem;
-
-            string dataItemTemplate;
-            object dataItem = GetDataItemGivenHierarchy(template, out dataItemTemplate);
+            var (dataItem, dataItemTemplate) = GetDataItemGivenHierarchy(template);
             return _factory.Create(dataItem)?.GetValue(dataItemTemplate, dataItem);
         }
 
         /// <summary>
-        /// Returns real data item object given hierarchy
+        /// Returns real data item object given hierarchy and template for this data item based on input template
         /// </summary>
-        /// <param name="dataItemTemplate">Template corresponding real data item object (trim template parts which indicate the parent)</param>
-        protected virtual object GetDataItemGivenHierarchy(string template, out string dataItemTemplate)
+        protected virtual (object dataItem, string dataItemTemplate) GetDataItemGivenHierarchy(string template)
         {
             int lastColonIndex = template.LastIndexOf(":", StringComparison.Ordinal);
             if (lastColonIndex == -1)
             {
-                dataItemTemplate = template;
-                return HierarchicalDataItem.Value;
+                return (HierarchicalDataItem.Value, template);
             }
 
             string[] parentTemplateParts = template.Substring(0, lastColonIndex).Split(':');
@@ -66,8 +58,7 @@ namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
                 }
                 dataItem = dataItem.Parent;
             }
-            dataItemTemplate = template.Substring(lastColonIndex + 1).Trim();
-            return dataItem?.Value;
+            return (dataItem?.Value, template.Substring(lastColonIndex + 1).Trim());
         }
 
         object IDataItemValueProvider.GetValue(string template, object hierarchicalDataItem)

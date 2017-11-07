@@ -11,10 +11,7 @@ namespace ExcelReporter.Enumerators
 
         public DataSetEnumerator(DataSet dataSet, string tableName = null)
         {
-            if (dataSet == null)
-            {
-                throw new ArgumentNullException(nameof(dataSet), Constants.NullParamMessage);
-            }
+            _ = dataSet ?? throw new ArgumentNullException(nameof(dataSet), Constants.NullParamMessage);
             if (dataSet.Tables.Count == 0)
             {
                 throw new InvalidOperationException("DataSet does not contain any table");
@@ -41,19 +38,10 @@ namespace ExcelReporter.Enumerators
 
         object IEnumerator.Current => Current;
 
-        public bool MoveNext()
-        {
-            return _dataTableEnumerator.MoveNext();
-        }
+        public bool MoveNext() => _dataTableEnumerator.MoveNext();
 
-        public void Reset()
-        {
-            _dataTableEnumerator.Reset();
-        }
+        public void Reset() => _dataTableEnumerator.Reset();
 
-        public void Dispose()
-        {
-            _dataTableEnumerator.Dispose();
-        }
+        public void Dispose() => _dataTableEnumerator.Dispose();
     }
 }

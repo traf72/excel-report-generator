@@ -14,11 +14,7 @@ namespace ExcelReporter.Implementations.Providers
 
         public DictionaryParameterProvider(IDictionary<string, object> parameters)
         {
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters), Constants.NullParamMessage);
-            }
-            _parameters = parameters;
+            _parameters = parameters ?? throw new ArgumentNullException(nameof(parameters), Constants.NullParamMessage);
         }
 
         public virtual object GetParameterValue(string paramName)

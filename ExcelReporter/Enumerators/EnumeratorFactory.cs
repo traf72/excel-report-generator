@@ -7,27 +7,16 @@ namespace ExcelReporter.Enumerators
     {
         public static IEnumerator Create(object instance)
         {
-            if (instance == null)
+            switch (instance)
             {
-                return null;
-            }
-
-            var enumerable = instance as IEnumerable;
-            if (enumerable != null)
-            {
-                return enumerable.GetEnumerator();
-            }
-
-            var dataTable = instance as DataTable;
-            if (dataTable != null)
-            {
-                return dataTable.AsEnumerable().GetEnumerator();
-            }
-
-            var dataSet = instance as DataSet;
-            if (dataSet != null)
-            {
-                return new DataSetEnumerator(dataSet);
+                case null:
+                    return null;
+                case IEnumerable e:
+                    return e.GetEnumerator();
+                case DataTable dt:
+                    return dt.AsEnumerable().GetEnumerator();
+                case DataSet ds:
+                    return new DataSetEnumerator(ds);
             }
 
             return new[] { instance }.GetEnumerator();

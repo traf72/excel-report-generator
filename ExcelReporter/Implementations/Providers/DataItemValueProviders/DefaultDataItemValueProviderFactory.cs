@@ -7,21 +7,14 @@ namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
     {
         public virtual IDataItemValueProvider Create(object data)
         {
-            if (data == null)
+            switch (data)
             {
-                return new ObjectPropertyValueProvider();
-            }
-
-            var dataRow = data as DataRow;
-            if (dataRow != null)
-            {
-                return new DataRowValueProvider();
-            }
-
-            var dataReader = data as IDataReader;
-            if (dataReader != null)
-            {
-                return new DataReaderValueProvider();
+                case null:
+                    return new ObjectPropertyValueProvider();
+                case DataRow _:
+                    return new DataRowValueProvider();
+                case IDataReader _:
+                    return new DataReaderValueProvider();
             }
 
             return new ObjectPropertyValueProvider();
