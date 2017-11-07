@@ -1,15 +1,8 @@
 ﻿using ClosedXML.Excel;
-using ExcelReporter.Attributes;
 using ExcelReporter.Implementations.Panels.Excel;
-using ExcelReporter.Implementations.Providers;
-using ExcelReporter.Implementations.Providers.DataItemValueProviders;
-using ExcelReporter.Implementations.TemplateProcessors;
-using ExcelReporter.Interfaces.Reports;
-using ExcelReporter.Interfaces.TemplateProcessors;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using System.Reflection;
 
 namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
 {
@@ -75,6 +68,11 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             Assert.AreEqual("{m:Counter()}", ws.Cell(5, 2).Value);
             Assert.AreEqual("Plain text outside range", ws.Cell(6, 1).Value);
 
+            Assert.AreEqual(0, ws.NamedRanges.Count());
+            Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
+
+            Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
+
             //report.Workbook.SaveAs("test.xlsx");
         }
 
@@ -108,7 +106,7 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             ws.Cell(5, 2).Value = "{m:Counter()}";
             ws.Cell(6, 1).Value = "Plain text outside range";
 
-            var panel = new ExcelNamedPanel(report.Workbook.NamedRange("NamedPanel"), report);
+            var panel = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel"), report);
             panel.Render();
 
             Assert.AreEqual(21, ws.CellsUsed().Count());
@@ -139,10 +137,12 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             Assert.AreEqual("Plain text outside range", ws.Cell(6, 1).Value);
 
             Assert.AreEqual(0, ws.NamedRanges.Count());
-            Assert.AreEqual(1, report.Workbook.NamedRanges.Count());
+            Assert.AreEqual(1, ws.Workbook.NamedRanges.Count());
 
-            Assert.AreEqual(1, report.Workbook.NamedRange("NamedPanel").Ranges.Count);
-            Assert.AreEqual(range, report.Workbook.NamedRange("NamedPanel").Ranges.ElementAt(0));
+            Assert.AreEqual(1, ws.Workbook.NamedRange("NamedPanel").Ranges.Count);
+            Assert.AreEqual(range, ws.Workbook.NamedRange("NamedPanel").Ranges.ElementAt(0));
+
+            Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
 
             IXLRange range2 = ws.Range(8, 1, 11, 5);
             range2.AddToNamed("NamedPanel2", XLScope.Worksheet);
@@ -200,14 +200,15 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             Assert.AreEqual("Plain text outside range", ws.Cell(13, 1).Value);
 
             Assert.AreEqual(1, ws.NamedRanges.Count());
-            Assert.AreEqual(1, report.Workbook.NamedRanges.Count());
+            Assert.AreEqual(1, ws.Workbook.NamedRanges.Count());
 
-            Assert.AreEqual(1, report.Workbook.NamedRange("NamedPanel").Ranges.Count);
-            Assert.AreEqual(range, report.Workbook.NamedRange("NamedPanel").Ranges.ElementAt(0));
+            Assert.AreEqual(1, ws.Workbook.NamedRange("NamedPanel").Ranges.Count);
+            Assert.AreEqual(range, ws.Workbook.NamedRange("NamedPanel").Ranges.ElementAt(0));
 
             Assert.AreEqual(1, ws.NamedRange("NamedPanel2").Ranges.Count);
             Assert.AreEqual(range2, ws.NamedRange("NamedPanel2").Ranges.ElementAt(0));
 
+            Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
             //report.Workbook.SaveAs("test.xlsx");
         }
 
@@ -229,7 +230,7 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             IXLRange range3 = ws.Range(1, 3, 6, 5);
             ws.Cell(1, 3).Value = "Panel3: {p:IntParam}";
             range3.AddToNamed("NamedPanel1");
-            var panel3 = new ExcelNamedPanel(report.Workbook.NamedRange("NamedPanel1"), report) { Parent = panel1 };
+            var panel3 = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel1"), report) { Parent = panel1 };
 
             IXLRange range4 = ws.Range(5, 6, 9, 8);
             ws.Cell(5, 6).Value = "Panel4: {p:IntParam}";
@@ -243,7 +244,7 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             IXLRange range6 = ws.Range(6, 1, 8, 2);
             ws.Cell(6, 1).Value = "Panel6: {p:IntParam}";
             range6.AddToNamed("NamedPanel3");
-            var panel6 = new ExcelNamedPanel(report.Workbook.NamedRange("NamedPanel3"), report) { Parent = panel2 };
+            var panel6 = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel3"), report) { Parent = panel2 };
 
             IXLRange range7 = ws.Range(6, 1, 6, 2);
             ws.Cell(6, 2).Value = "Panel7: {p:IntParam}";
@@ -270,7 +271,7 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             IXLRange range12 = ws.Range(8, 6, 9, 8);
             ws.Cell(9, 8).Value = "Panel12: {p:IntParam}";
             range12.AddToNamed("NamedPanel6");
-            var panel12 = new ExcelNamedPanel(report.Workbook.NamedRange("NamedPanel6"), report) { Parent = panel11 };
+            var panel12 = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel6"), report) { Parent = panel11 };
 
             panel1.Children = new[] { panel2, panel3, panel4 };
             panel2.Children = new[] { panel5, panel6 };
@@ -300,17 +301,17 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             Assert.AreEqual("Panel12: 10", ws.Cell(9, 8).Value);
             Assert.AreEqual("Outside panel: {p:IntParam}", ws.Cell(11, 8).Value);
 
-            Assert.AreEqual(3, report.Workbook.NamedRanges.Count());
+            Assert.AreEqual(3, ws.Workbook.NamedRanges.Count());
             Assert.AreEqual(3, ws.NamedRanges.Count());
 
-            Assert.AreEqual(1, report.Workbook.NamedRange("NamedPanel1").Ranges.Count);
-            Assert.AreEqual(range3, report.Workbook.NamedRange("NamedPanel1").Ranges.ElementAt(0));
+            Assert.AreEqual(1, ws.Workbook.NamedRange("NamedPanel1").Ranges.Count);
+            Assert.AreEqual(range3, ws.Workbook.NamedRange("NamedPanel1").Ranges.ElementAt(0));
 
             Assert.AreEqual(1, ws.NamedRange("NamedPanel2").Ranges.Count);
             Assert.AreEqual(range4, ws.NamedRange("NamedPanel2").Ranges.ElementAt(0));
 
-            Assert.AreEqual(1, report.Workbook.NamedRange("NamedPanel3").Ranges.Count);
-            Assert.AreEqual(range6, report.Workbook.NamedRange("NamedPanel3").Ranges.ElementAt(0));
+            Assert.AreEqual(1, ws.Workbook.NamedRange("NamedPanel3").Ranges.Count);
+            Assert.AreEqual(range6, ws.Workbook.NamedRange("NamedPanel3").Ranges.ElementAt(0));
 
             Assert.AreEqual(1, ws.NamedRange("NamedPanel4").Ranges.Count);
             Assert.AreEqual(range8, ws.NamedRange("NamedPanel4").Ranges.ElementAt(0));
@@ -318,66 +319,11 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             Assert.AreEqual(1, ws.NamedRange("NamedPanel5").Ranges.Count);
             Assert.AreEqual(range9, ws.NamedRange("NamedPanel5").Ranges.ElementAt(0));
 
-            Assert.AreEqual(1, report.Workbook.NamedRange("NamedPanel6").Ranges.Count);
-            Assert.AreEqual(range12, report.Workbook.NamedRange("NamedPanel6").Ranges.ElementAt(0));
+            Assert.AreEqual(1, ws.Workbook.NamedRange("NamedPanel6").Ranges.Count);
+            Assert.AreEqual(range12, ws.Workbook.NamedRange("NamedPanel6").Ranges.ElementAt(0));
 
+            Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
             //report.Workbook.SaveAs("test.xlsx");
-        }
-
-        private class TestReport : BaseReport
-        {
-            private int _counter;
-
-            [Parameter]
-            public string StrParam { get; } = "String parameter";
-
-            [Parameter]
-            public int IntParam { get; } = 10;
-
-            [Parameter]
-            public DateTime DateParam { get; } = new DateTime(2017, 10, 25);
-
-            [Parameter]
-            public TimeSpan TimeSpanParam { get; set; } = new TimeSpan(36500, 22, 30, 40);
-
-            public string Format(DateTime date, string format = "yyyyMMdd")
-            {
-                return date.ToString(format);
-            }
-
-            public int Counter()
-            {
-                return ++_counter;
-            }
-        }
-
-        private class BaseReport : IExcelReport
-        {
-            protected BaseReport()
-            {
-                Workbook = new XLWorkbook();
-
-                TemplateProcessor = new DefaultTemplateProcessor(new ReflectionParameterProvider(this),
-                    new MethodCallValueProvider(new TypeProvider(Assembly.GetExecutingAssembly()), this),
-                    new HierarchicalDataItemValueProvider(new DefaultDataItemValueProviderFactory()));
-            }
-
-            [Parameter]
-            public bool BoolParam { get; set; } = true;
-
-            public ITemplateProcessor TemplateProcessor { get; set; }
-
-            public XLWorkbook Workbook { get; set; }
-
-            public static DateTime AddDays(DateTime date, int daysCount)
-            {
-                return date.AddDays(daysCount);
-            }
-
-            public void Run()
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }

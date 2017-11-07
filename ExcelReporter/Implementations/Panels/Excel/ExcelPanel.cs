@@ -192,10 +192,14 @@ namespace ExcelReporter.Implementations.Panels.Excel
 
         protected virtual IExcelPanel CopyPanel(IXLCell cell)
         {
-            IXLRange newRange = ExcelHelper.CopyRange(Range, cell);
-            var panel = new ExcelPanel(newRange, Report);
+            var panel = new ExcelPanel(CopyRange(cell), Report);
             FillCopyProperties(panel);
             return panel;
+        }
+
+        protected IXLRange CopyRange(IXLCell cell)
+        {
+            return ExcelHelper.CopyRange(Range, cell);
         }
 
         protected virtual HierarchicalDataItem GetDataContext()
