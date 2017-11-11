@@ -2,6 +2,7 @@
 using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
 using System;
 using System.Data;
+using ExcelReporter.Extensions;
 
 namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
 {
@@ -34,7 +35,7 @@ namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
             _columnName = columnName.Trim();
             _dataReader = dataReader;
 
-            return dataReader.GetValue(GetColumnIndex());
+            return dataReader.SafeGetValue(GetColumnIndex());
         }
 
         private int GetColumnIndex()

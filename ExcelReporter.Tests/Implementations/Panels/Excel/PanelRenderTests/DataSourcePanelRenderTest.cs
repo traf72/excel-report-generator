@@ -1,16 +1,25 @@
 ﻿using ClosedXML.Excel;
+using ExcelReporter.Enums;
 using ExcelReporter.Implementations.Panels.Excel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
-using ExcelReporter.Enums;
 
 namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
 {
     [TestClass]
     public class DataSourcePanelRenderTest
     {
+        public DataSourcePanelRenderTest()
+        {
+            TestHelper.InitDataDirectory();
+        }
+
         [TestMethod]
         public void TestRenderOneItem()
         {
@@ -21,7 +30,7 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
 
             ws.Cell(2, 2).Value = "{di:Name}";
             ws.Cell(2, 3).Value = "{di:Date}";
-            ws.Cell(2, 4).Value = "{di:Sum}";
+            ws.Cell(2, 4).Value = "{m:Multiply(di:Sum, 5)}";
             ws.Cell(2, 5).Value = "{di:Contacts}";
             ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
             ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
@@ -42,7 +51,7 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             Assert.AreEqual(15, ws.CellsUsed().Count());
             Assert.AreEqual("Test", ws.Cell(2, 2).Value);
             Assert.AreEqual(new DateTime(2017, 11, 1), ws.Cell(2, 3).Value);
-            Assert.AreEqual(55.76, ws.Cell(2, 4).Value);
+            Assert.AreEqual(278.8, ws.Cell(2, 4).Value);
             Assert.AreEqual("15_345", ws.Cell(2, 5).Value);
             Assert.AreEqual(15d, ws.Cell(3, 2).Value);
             Assert.AreEqual(345d, ws.Cell(3, 3).Value);
@@ -256,6 +265,8 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             range.FirstCell().Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
             range.FirstCell().Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
 
+            ws.Cell(3, 5).Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
+
             ws.Cell(2, 4).DataType = XLCellValues.Number;
 
             ws.Cell(2, 2).Value = "{di:Name}";
@@ -275,6 +286,16 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(4, 4).Value = "{di:Name}";
             ws.Cell(8, 5).Value = "{di:Date}";
+
+            ws.Cell(8, 5).Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
+            ws.Cell(8, 5).Style.Border.SetRightBorder(XLBorderStyleValues.Thin);
+            ws.Cell(8, 5).Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
+            ws.Cell(8, 5).Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
+
+            ws.Cell(8, 5).Style.Border.SetTopBorderColor(XLColor.Red);
+            ws.Cell(8, 5).Style.Border.SetRightBorderColor(XLColor.Red);
+            ws.Cell(8, 5).Style.Border.SetBottomBorderColor(XLColor.Red);
+            ws.Cell(8, 5).Style.Border.SetLeftBorderColor(XLColor.Red);
 
             var panel = new ExcelDataSourcePanel("m:TestDataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report)
             {
@@ -327,6 +348,18 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             Assert.AreEqual("{di:Name}", ws.Cell(3, 6).Value);
             Assert.AreEqual("{di:Name}", ws.Cell(1, 4).Value);
             Assert.AreEqual("{di:Date}", ws.Cell(8, 5).Value);
+
+            Assert.AreEqual(XLBorderStyleValues.Thin, ws.Cell(8, 5).Style.Border.TopBorder);
+            Assert.AreEqual(XLBorderStyleValues.Thin, ws.Cell(8, 5).Style.Border.RightBorder);
+            Assert.AreEqual(XLBorderStyleValues.Thin, ws.Cell(8, 5).Style.Border.BottomBorder);
+            Assert.AreEqual(XLBorderStyleValues.Thin, ws.Cell(8, 5).Style.Border.LeftBorder);
+
+            Assert.AreEqual(XLColor.Black, ws.Cell(7, 5).Style.Border.BottomBorderColor);
+
+            Assert.AreEqual(XLColor.Red, ws.Cell(8, 5).Style.Border.TopBorderColor);
+            Assert.AreEqual(XLColor.Red, ws.Cell(8, 5).Style.Border.RightBorderColor);
+            Assert.AreEqual(XLColor.Red, ws.Cell(8, 5).Style.Border.BottomBorderColor);
+            Assert.AreEqual(XLColor.Red, ws.Cell(8, 5).Style.Border.LeftBorderColor);
 
             Assert.AreEqual(0, ws.NamedRanges.Count());
             Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
@@ -612,6 +645,67 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             //report.Workbook.SaveAs("test.xlsx");
         }
 
+        [TestMethod]
+        public void TestRenderIDataReader()
+        {
+            var report = new TestReport();
+            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
+            IXLRange range = ws.Range(2, 2, 2, 6);
+            range.AddToNamed("TestRange", XLScope.Worksheet);
+
+            ws.Cell(2, 2).Value = "{di:Id}";
+            ws.Cell(2, 3).Value = "{di:Name}";
+            ws.Cell(2, 4).Value = "{di:IsVip}";
+            ws.Cell(2, 5).Value = "{di:Description}";
+            ws.Cell(2, 6).Value = "{di:Type}";
+
+            ws.Cell(1, 1).Value = "{di:Name}";
+            ws.Cell(3, 1).Value = "{di:Name}";
+            ws.Cell(1, 7).Value = "{di:Name}";
+            ws.Cell(3, 7).Value = "{di:Name}";
+            ws.Cell(2, 1).Value = "{di:Name}";
+            ws.Cell(2, 7).Value = "{di:Name}";
+            ws.Cell(1, 4).Value = "{di:Name}";
+            ws.Cell(3, 4).Value = "{di:Name}";
+
+            var panel = new ExcelDataSourcePanel("m:TestDataProvider:GetDataReader()", ws.NamedRange("TestRange"), report);
+            panel.Render();
+
+            Assert.AreEqual(19, ws.CellsUsed().Count());
+            Assert.AreEqual(1d, ws.Cell(2, 2).Value);
+            Assert.AreEqual("Customer 1", ws.Cell(2, 3).Value);
+            Assert.AreEqual(false, ws.Cell(2, 4).Value);
+            Assert.AreEqual(string.Empty, ws.Cell(2, 5).Value);
+            Assert.AreEqual(string.Empty, ws.Cell(2, 6).Value);
+            Assert.AreEqual(2d, ws.Cell(3, 2).Value);
+            Assert.AreEqual("Customer 2", ws.Cell(3, 3).Value);
+            Assert.AreEqual(true, ws.Cell(3, 4).Value);
+            Assert.AreEqual("Reliable", ws.Cell(3, 5).Value);
+            Assert.AreEqual(1d, ws.Cell(3, 6).Value);
+            Assert.AreEqual(3d, ws.Cell(4, 2).Value);
+            Assert.AreEqual("Customer 3", ws.Cell(4, 3).Value);
+            Assert.AreEqual(string.Empty, ws.Cell(4, 4).Value);
+            Assert.AreEqual("Lost", ws.Cell(4, 5).Value);
+            Assert.AreEqual(string.Empty, ws.Cell(4, 6).Value);
+
+
+            Assert.AreEqual("{di:Name}", ws.Cell(1, 1).Value);
+            Assert.AreEqual("{di:Name}", ws.Cell(3, 1).Value);
+            Assert.AreEqual("{di:Name}", ws.Cell(1, 7).Value);
+            Assert.AreEqual("{di:Name}", ws.Cell(3, 7).Value);
+            Assert.AreEqual("{di:Name}", ws.Cell(2, 1).Value);
+            Assert.AreEqual("{di:Name}", ws.Cell(2, 7).Value);
+            Assert.AreEqual("{di:Name}", ws.Cell(1, 4).Value);
+            Assert.AreEqual("{di:Name}", ws.Cell(5, 4).Value);
+
+            Assert.AreEqual(0, ws.NamedRanges.Count());
+            Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
+
+            Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
+
+            //report.Workbook.SaveAs("test.xlsx");
+        }
+
         private class TestItem
         {
             public TestItem(string name, DateTime date, decimal sum, Contacts contacts = null)
@@ -662,8 +756,18 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
                 {
                     new TestItem("Test1", new DateTime(2017, 11, 1), 55.76m, new Contacts("15", "345")),
                     new TestItem("Test2", new DateTime(2017, 11, 2), 110m, new Contacts("76", "753465")),
-                    new TestItem("Test3", new DateTime(2017, 11, 3), 5500.80m, new Contacts("1533", "5456")), 
+                    new TestItem("Test3", new DateTime(2017, 11, 3), 5500.80m, new Contacts("1533", "5456")),
                 };
+            }
+
+            public IDataReader GetDataReader()
+            {
+                string conStr = ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString;
+                IDbConnection connection = new SqlConnection(conStr);
+                IDbCommand command = connection.CreateCommand();
+                command.CommandText = "SELECT * FROM Customers";
+                connection.Open();
+                return command.ExecuteReader(CommandBehavior.CloseConnection);
             }
         }
     }

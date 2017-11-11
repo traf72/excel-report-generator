@@ -41,6 +41,7 @@ namespace ExcelReporter.Implementations.Panels.Excel
                 }
 
                 object currentItem = enumerator.Current;
+                // Создаём шаблон панели, который дальше будет размножаться
                 var templatePanel = new ExcelDataItemPanel(Range, Report)
                 {
                     Parent = Parent,

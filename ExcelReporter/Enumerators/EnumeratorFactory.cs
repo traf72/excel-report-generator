@@ -11,12 +11,14 @@ namespace ExcelReporter.Enumerators
             {
                 case null:
                     return null;
-                case IEnumerable e:
-                    return e.GetEnumerator();
+                case IDataReader dr:
+                    return new DataReaderEnumerator(dr);
                 case DataTable dt:
                     return dt.AsEnumerable().GetEnumerator();
                 case DataSet ds:
                     return new DataSetEnumerator(ds);
+                case IEnumerable e:
+                    return e.GetEnumerator();
             }
 
             return new[] { instance }.GetEnumerator();

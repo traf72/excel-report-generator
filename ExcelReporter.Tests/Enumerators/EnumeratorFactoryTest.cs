@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using ExcelReporter.Enumerators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
 
 namespace ExcelReporter.Tests.Enumerators
 {
@@ -22,6 +23,9 @@ namespace ExcelReporter.Tests.Enumerators
 
             enumerator = EnumeratorFactory.Create(new int[0]);
             Assert.AreEqual("SZArrayEnumerator", enumerator.GetType().Name);
+
+            var dataReader = Substitute.For<IDataReader>();
+            Assert.IsInstanceOfType(EnumeratorFactory.Create(dataReader), typeof(DataReaderEnumerator));
 
             enumerator = EnumeratorFactory.Create(new DataTable());
             Assert.IsTrue(enumerator.GetType().IsGenericType);

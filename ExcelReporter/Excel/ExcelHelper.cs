@@ -105,7 +105,7 @@ namespace ExcelReporter.Excel
                 IXLWorksheet tempWs = null;
                 try
                 {
-                    tempWs = GetTempWorksheet(range.Worksheet.Workbook);
+                    tempWs = AddTempWorksheet(range.Worksheet.Workbook);
                     IXLRange tempRange = range.CopyTo(tempWs.FirstCell());
                     newRange.Clear();
                     tempRange.CopyTo(newRange);
@@ -218,7 +218,7 @@ namespace ExcelReporter.Excel
             IXLWorksheet tempWs = null;
             try
             {
-                tempWs = GetTempWorksheet(range.Worksheet.Workbook);
+                tempWs = AddTempWorksheet(range.Worksheet.Workbook);
                 IXLRange tempRange = CopyRange(range, tempWs.FirstCell());
                 range.Clear();
                 return CopyRange(tempRange, cell);
@@ -238,7 +238,7 @@ namespace ExcelReporter.Excel
             return cell.Worksheet.NamedRange(name);
         }
 
-        public static IXLWorksheet GetTempWorksheet(XLWorkbook wb)
+        public static IXLWorksheet AddTempWorksheet(XLWorkbook wb)
         {
             // Отсекаем один символ от Guid'а, так как наименование листа не может быть больше 31 символа
             return wb.AddWorksheet(Guid.NewGuid().ToString("N").Substring(1));

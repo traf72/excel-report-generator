@@ -1,14 +1,23 @@
-﻿using System;
-using System.Data;
-using ExcelReporter.Enumerators;
+﻿using ExcelReporter.Enumerators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using System;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace ExcelReporter.Tests.Enumerators
 {
     [TestClass]
     public class DataReaderEnumeratorTest
     {
+        private readonly string _conStr = ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString;
+
+        public DataReaderEnumeratorTest()
+        {
+            TestHelper.InitDataDirectory();
+        }
+
         [TestMethod]
         public void TestEnumerator()
         {
@@ -45,6 +54,77 @@ namespace ExcelReporter.Tests.Enumerators
 
             MyAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "DataReader has been closed");
             MyAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "DataReader has been closed");
+        }
+
+        [TestMethod]
+        public void TestEnumeratorWithRealSqlReader()
+        {
+            IDataReader reader = GetTestData();
+            var enumerator = new DataReaderEnumerator(reader);
+
+            Assert.IsTrue(enumerator.MoveNext());
+            DataRow dataRow = enumerator.Current;
+            Assert.AreEqual(1, dataRow.ItemArray[dataRow.Table.Columns["Id"].Ordinal]);
+            Assert.AreEqual("Customer 1", dataRow.ItemArray[dataRow.Table.Columns["Name"].Ordinal]);
+            Assert.AreEqual(false, dataRow.ItemArray[dataRow.Table.Columns["IsVip"].Ordinal]);
+            Assert.AreEqual(DBNull.Value, dataRow.ItemArray[dataRow.Table.Columns["Type"].Ordinal]);
+
+            Assert.IsTrue(enumerator.MoveNext());
+            dataRow = enumerator.Current;
+            Assert.AreEqual(2, dataRow.ItemArray[dataRow.Table.Columns["Id"].Ordinal]);
+            Assert.AreEqual("Customer 2", dataRow.ItemArray[dataRow.Table.Columns["Name"].Ordinal]);
+            Assert.AreEqual(true, dataRow.ItemArray[dataRow.Table.Columns["IsVip"].Ordinal]);
+            Assert.AreEqual(1, dataRow.ItemArray[dataRow.Table.Columns["Type"].Ordinal]);
+
+            dataRow = enumerator.Current;
+            Assert.AreEqual(2, dataRow.ItemArray[dataRow.Table.Columns["Id"].Ordinal]);
+            Assert.AreEqual("Customer 2", dataRow.ItemArray[dataRow.Table.Columns["Name"].Ordinal]);
+            Assert.AreEqual(true, dataRow.ItemArray[dataRow.Table.Columns["IsVip"].Ordinal]);
+            Assert.AreEqual(1, dataRow.ItemArray[dataRow.Table.Columns["Type"].Ordinal]);
+
+            Assert.IsTrue(enumerator.MoveNext());
+            dataRow = enumerator.Current;
+            Assert.AreEqual(3, dataRow.ItemArray[dataRow.Table.Columns["Id"].Ordinal]);
+            Assert.AreEqual("Customer 3", dataRow.ItemArray[dataRow.Table.Columns["Name"].Ordinal]);
+            Assert.AreEqual(DBNull.Value, dataRow.ItemArray[dataRow.Table.Columns["IsVip"].Ordinal]);
+            Assert.AreEqual(DBNull.Value, dataRow.ItemArray[dataRow.Table.Columns["Type"].Ordinal]);
+
+            Assert.IsFalse(enumerator.MoveNext());
+            MyAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has been finished");
+            MyAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "Enumerator has been finished");
+
+            enumerator.Dispose();
+        }
+
+        [TestMethod]
+        public void TestEmptyEnumeratorWithRealSqlReader()
+        {
+            IDataReader reader = GetEmptyDataReader();
+            var enumerator = new DataReaderEnumerator(reader);
+
+            Assert.IsFalse(enumerator.MoveNext());
+            MyAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has been finished");
+            MyAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "Enumerator has been finished");
+
+            enumerator.Dispose();
+        }
+
+        private IDataReader GetTestData()
+        {
+            IDbConnection connection = new SqlConnection(_conStr);
+            IDbCommand command = connection.CreateCommand();
+            command.CommandText = "SELECT Id, Name, IsVip, Type FROM Customers ORDER BY Id";
+            connection.Open();
+            return command.ExecuteReader(CommandBehavior.CloseConnection);
+        }
+
+        private IDataReader GetEmptyDataReader()
+        {
+            IDbConnection connection = new SqlConnection(_conStr);
+            IDbCommand command = connection.CreateCommand();
+            command.CommandText = "SELECT Id, Name, IsVip, Type FROM Customers WHERE 1 <> 1";
+            connection.Open();
+            return command.ExecuteReader(CommandBehavior.CloseConnection);
         }
     }
 }

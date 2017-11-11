@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using ClosedXML.Excel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ExcelReporter.Enums;
 using ExcelReporter.Excel;
+using ExcelReporter.Interfaces.Panels.Excel;
 
 namespace ExcelReporter.Tests.Excel
 {
@@ -847,6 +849,16 @@ namespace ExcelReporter.Tests.Excel
             ws.Cell(10, 4).Value = "LeftCell_2";
 
             return wb;
+        }
+
+        [TestMethod]
+        public void TestAddTempWorksheet()
+        {
+            XLWorkbook wb = new XLWorkbook();
+            ExcelHelper.AddTempWorksheet(wb);
+
+            Assert.AreEqual(1, wb.Worksheets.Count);
+            Assert.IsTrue(Regex.IsMatch(wb.Worksheets.First().Name, "[0-9a-f]{31}"));
         }
     }
 }

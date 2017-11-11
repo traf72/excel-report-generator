@@ -1,18 +1,26 @@
-﻿using System;
-using System.Data;
-using ExcelReporter.Exceptions;
+﻿using ExcelReporter.Exceptions;
 using ExcelReporter.Implementations.Providers.DataItemValueProviders;
-using ExcelReporter.Interfaces.Providers;
 using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using System;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
 {
     [TestClass]
     public class DataReaderValueProviderTest
     {
+        private readonly string _conStr = ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString;
+
+        public DataReaderValueProviderTest()
+        {
+            TestHelper.InitDataDirectory();
+        }
+
         [TestMethod]
         public void TestGetValue()
         {
@@ -42,6 +50,43 @@ namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
 
             dataReader.IsClosed.Returns(true);
             MyAssert.Throws<InvalidOperationException>(() => provider.GetValue("Column1", dataReader), "DataReader is closed");
+        }
+
+        [TestMethod]
+        public void TestGetValueWithRealSqlReader()
+        {
+            IGenericDataItemValueProvider<IDataReader> provider = new DataReaderValueProvider();
+            IDataReader reader = GetTestData();
+
+            reader.Read();
+            Assert.AreEqual(1, provider.GetValue("Id", reader));
+            Assert.AreEqual(1, provider.GetValue("id", reader));
+            Assert.AreEqual("Customer 1", provider.GetValue("Name", reader));
+            Assert.AreEqual(false, provider.GetValue("IsVip", reader));
+            Assert.IsNull(provider.GetValue("Type", reader));
+
+            reader.Read();
+            Assert.AreEqual(2, provider.GetValue("Id", reader));
+            Assert.AreEqual("Customer 2", provider.GetValue("Name", reader));
+            Assert.AreEqual(true, provider.GetValue("IsVip", reader));
+            Assert.AreEqual(1, provider.GetValue("Type", reader));
+
+            reader.Read();
+            Assert.AreEqual(3, provider.GetValue("Id", reader));
+            Assert.AreEqual("Customer 3", provider.GetValue("Name", reader));
+            Assert.IsNull(provider.GetValue("IsVip", reader));
+            Assert.IsNull(provider.GetValue("Type", reader));
+
+            reader.Close();
+        }
+
+        private IDataReader GetTestData()
+        {
+            IDbConnection connection = new SqlConnection(_conStr);
+            IDbCommand command = connection.CreateCommand();
+            command.CommandText = "SELECT Id, Name, IsVip, Type FROM Customers ORDER BY Id";
+            connection.Open();
+            return command.ExecuteReader(CommandBehavior.CloseConnection);
         }
     }
 }

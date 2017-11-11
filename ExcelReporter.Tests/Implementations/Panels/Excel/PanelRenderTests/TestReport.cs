@@ -31,6 +31,11 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             return date.ToString(format);
         }
 
+        public decimal Multiply(decimal num1, decimal num2)
+        {
+            return  num1 * num2;
+        }
+
         public int Counter()
         {
             return ++_counter;
