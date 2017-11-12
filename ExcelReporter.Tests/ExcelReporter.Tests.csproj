@@ -169,7 +169,14 @@
     <Compile Include="Enumerators\EnumeratorFactoryTest.cs" />
     <Compile Include="Extensions\DataReaderExtensionsTest.cs" />
     <Compile Include="Extensions\ParameterInfoExtensionTest.cs" />
-    <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTest.cs" />
+    <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataProvider.cs" />
+    <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataTableRenderTest.cs" />
+    <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataSetRenderTest.cs" />
+    <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelEmptyIEnumerableRenderTest.cs" />
+    <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelOneItemRenderTest.cs" />
+    <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelNullItemRenderTest.cs" />
+    <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelIEnumerableRenderTest.cs" />
+    <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataReaderRenderTest.cs" />
     <Compile Include="Implementations\Panels\Excel\PanelRenderTests\PanelRenderTest.cs" />
     <Compile Include="Implementations\Panels\Excel\PanelRenderTests\TestReport.cs" />
     <Compile Include="Implementations\Providers\DataItemValueProviders\DataItemValueProviderFactoryTest.cs" />
