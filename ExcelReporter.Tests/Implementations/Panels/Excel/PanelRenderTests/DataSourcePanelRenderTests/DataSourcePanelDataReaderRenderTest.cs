@@ -27,8 +27,7 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             ws.Cell(2, 5).Value = "{di:Description}";
             ws.Cell(2, 6).Value = "{di:Type}";
 
-            var panel = new ExcelDataSourcePanel("m:TestDataProvider:GetAllCustomersDataReader()",
-                ws.NamedRange("TestRange"), report);
+            var panel = new ExcelDataSourcePanel("m:TestDataProvider:GetAllCustomersDataReader()", ws.NamedRange("TestRange"), report);
             panel.Render();
 
             Assert.AreEqual(11, ws.CellsUsed().Count());
@@ -70,8 +69,7 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             ws.Cell(2, 5).Value = "{di:Description}";
             ws.Cell(2, 6).Value = "{di:Type}";
 
-            var panel = new ExcelDataSourcePanel("m:TestDataProvider:GetEmptyDataReader()", ws.NamedRange("TestRange"),
-                report);
+            var panel = new ExcelDataSourcePanel("m:TestDataProvider:GetEmptyDataReader()", ws.NamedRange("TestRange"), report);
             panel.Render();
 
             Assert.AreEqual(0, ws.CellsUsed().Count());

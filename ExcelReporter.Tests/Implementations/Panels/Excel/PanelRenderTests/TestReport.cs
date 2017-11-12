@@ -36,6 +36,11 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             return  num1 * num2;
         }
 
+        public string Concat(object item1, object item2)
+        {
+            return $"{item1}_{item2}";
+        }
+
         public int Counter()
         {
             return ++_counter;

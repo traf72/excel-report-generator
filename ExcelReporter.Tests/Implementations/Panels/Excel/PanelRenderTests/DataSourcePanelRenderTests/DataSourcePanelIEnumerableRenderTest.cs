@@ -24,9 +24,9 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
 
             ws.Cell(2, 4).DataType = XLCellValues.Number;
 
-            ws.Cell(2, 2).Value = "{di:Name}";
+            ws.Cell(2, 2).Value = "{m:Concat(di:Name, m:Format(di:Date, dd.MM.yyyy))}";
             ws.Cell(2, 3).Value = "{di:Date}";
-            ws.Cell(2, 4).Value = "{di:Sum}";
+            ws.Cell(2, 4).Value = "{m:Multiply(di:Sum, 5)}";
             ws.Cell(2, 5).Value = "{di:Contacts}";
             ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
             ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
@@ -45,9 +45,9 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             panel.Render();
 
             Assert.AreEqual(29, ws.CellsUsed().Count());
-            Assert.AreEqual("Test1", ws.Cell(2, 2).Value);
+            Assert.AreEqual("Test1_01.11.2017", ws.Cell(2, 2).Value);
             Assert.AreEqual(new DateTime(2017, 11, 1), ws.Cell(2, 3).Value);
-            Assert.AreEqual(55.76, ws.Cell(2, 4).Value);
+            Assert.AreEqual(278.8, ws.Cell(2, 4).Value);
             Assert.AreEqual("15_345", ws.Cell(2, 5).Value);
             Assert.AreEqual(15d, ws.Cell(3, 2).Value);
             Assert.AreEqual(345d, ws.Cell(3, 3).Value);
@@ -57,9 +57,9 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             Assert.AreEqual(XLBorderStyleValues.Thin, ws.Cell(2, 2).Style.Border.LeftBorder);
             Assert.AreEqual(XLCellValues.Number, ws.Cell(2, 4).DataType);
 
-            Assert.AreEqual("Test2", ws.Cell(4, 2).Value);
+            Assert.AreEqual("Test2_02.11.2017", ws.Cell(4, 2).Value);
             Assert.AreEqual(new DateTime(2017, 11, 2), ws.Cell(4, 3).Value);
-            Assert.AreEqual(110d, ws.Cell(4, 4).Value);
+            Assert.AreEqual(550d, ws.Cell(4, 4).Value);
             Assert.AreEqual("76_753465", ws.Cell(4, 5).Value);
             Assert.AreEqual(76d, ws.Cell(5, 2).Value);
             Assert.AreEqual(753465d, ws.Cell(5, 3).Value);
@@ -69,9 +69,9 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             Assert.AreEqual(XLBorderStyleValues.Thin, ws.Cell(4, 2).Style.Border.LeftBorder);
             Assert.AreEqual(XLCellValues.Number, ws.Cell(4, 4).DataType);
 
-            Assert.AreEqual("Test3", ws.Cell(6, 2).Value);
+            Assert.AreEqual("Test3_03.11.2017", ws.Cell(6, 2).Value);
             Assert.AreEqual(new DateTime(2017, 11, 3), ws.Cell(6, 3).Value);
-            Assert.AreEqual(5500.80, ws.Cell(6, 4).Value);
+            Assert.AreEqual(27504d, ws.Cell(6, 4).Value);
             Assert.AreEqual("1533_5456", ws.Cell(6, 5).Value);
             Assert.AreEqual(1533d, ws.Cell(7, 2).Value);
             Assert.AreEqual(5456d, ws.Cell(7, 3).Value);

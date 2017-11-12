@@ -38,8 +38,7 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
 
             public IDataReader GetAllCustomersDataReader()
             {
-                string conStr = ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString;
-                IDbConnection connection = new SqlConnection(conStr);
+                IDbConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString);
                 IDbCommand command = connection.CreateCommand();
                 command.CommandText = "SELECT * FROM Customers";
                 connection.Open();
@@ -48,12 +47,55 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
 
             public IDataReader GetEmptyDataReader()
             {
-                string conStr = ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString;
-                IDbConnection connection = new SqlConnection(conStr);
+                IDbConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString);
                 IDbCommand command = connection.CreateCommand();
                 command.CommandText = "SELECT * FROM Customers WHERE 1 <> 1";
                 connection.Open();
                 return command.ExecuteReader(CommandBehavior.CloseConnection);
+            }
+
+            public DataTable GetAllCustomersDataTable()
+            {
+                var dataReader = GetAllCustomersDataReader();
+                var dataTable = new DataTable();
+                dataTable.Load(dataReader);
+                dataReader.Close();
+                return dataTable;
+            }
+
+            public DataTable GetEmptyDataTable()
+            {
+                var dataReader = GetEmptyDataReader();
+                var dataTable = new DataTable();
+                dataTable.Load(dataReader);
+                dataReader.Close();
+                return dataTable;
+            }
+
+            public DataSet GetAllCustomersDataSet()
+            {
+                using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString))
+                {
+                    conn.Open();
+                    var command = new SqlCommand("SELECT * FROM Customers", conn);
+                    var adapter = new SqlDataAdapter(command);
+                    var ds = new DataSet();
+                    adapter.Fill(ds);
+                    return ds;
+                }
+            }
+
+            public DataSet GetEmptyDataSet()
+            {
+                using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString))
+                {
+                    conn.Open();
+                    var command = new SqlCommand("SELECT * FROM Customers WHERE 1 <> 1", conn);
+                    var adapter = new SqlDataAdapter(command);
+                    var ds = new DataSet();
+                    adapter.Fill(ds);
+                    return ds;
+                }
             }
         }
 
