@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using ClosedXML.Excel;
 using ExcelReporter.Enums;
 using ExcelReporter.Excel;
+using ExcelReporter.Exceptions;
 using ExcelReporter.Interfaces.Panels;
 using ExcelReporter.Interfaces.Panels.Excel;
 using ExcelReporter.Interfaces.Reports;
@@ -50,8 +52,14 @@ namespace ExcelReporter.Implementations.Panels.Excel
 
         public int RenderPriority { get; set; }
 
+        public string BeforeRenderMethodName { get; set; }
+
+        public string AfterRenderMethodName { get; set; }
+
         public virtual void Render()
         {
+            CallBeforeRenderMethod();
+
             IList<IXLCell> childrenCells = Children.SelectMany(c => c.Range.CellsUsed()).ToList();
             foreach (IXLCell cell in Range.CellsUsed().Where(c => !childrenCells.Contains(c)))
             {
@@ -80,6 +88,8 @@ namespace ExcelReporter.Implementations.Panels.Excel
             {
                 child.Render();
             }
+
+            CallAfterRenderMethod();
         }
 
         public virtual IExcelPanel Copy(IXLCell cell, bool recursive = true)
@@ -174,6 +184,8 @@ namespace ExcelReporter.Implementations.Panels.Excel
         {
             panel.Type = Type;
             panel.ShiftType = ShiftType;
+            panel.BeforeRenderMethodName = BeforeRenderMethodName;
+            panel.AfterRenderMethodName = AfterRenderMethodName;
         }
 
         protected virtual IExcelPanel CopyPanel(IXLCell cell)
@@ -200,6 +212,29 @@ namespace ExcelReporter.Implementations.Panels.Excel
                 parent = parent.Parent;
             }
             return null;
+        }
+
+        private void CallBeforeRenderMethod()
+        {
+            CallLifeCycleMethod(BeforeRenderMethodName);
+        }
+
+        private void CallAfterRenderMethod()
+        {
+            CallLifeCycleMethod(AfterRenderMethodName);
+        }
+
+        private void CallLifeCycleMethod(string methodName)
+        {
+            if (!string.IsNullOrWhiteSpace(methodName))
+            {
+                MethodInfo method = Report.GetType().GetMethod(methodName);
+                if (method == null)
+                {
+                    throw new MethodNotFoundException($"Cannot find public instance method \"{methodName}\" in type \"{Report.GetType().Name}\"");
+                }
+                method.Invoke(Report, new object[] { this });
+            }
         }
     }
 }

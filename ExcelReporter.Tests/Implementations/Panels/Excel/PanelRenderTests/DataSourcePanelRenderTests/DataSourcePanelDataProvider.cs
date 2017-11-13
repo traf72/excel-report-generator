@@ -11,6 +11,47 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
     {
         private class TestDataProvider
         {
+            private readonly IEnumerable<TestItem> _testData = new[]
+            {
+                new TestItem("Test1", new DateTime(2017, 11, 1), 55.76m, new Contacts("15", "345"))
+                {
+                    Children = new List<ChildItem>
+                    {
+                        new ChildItem("Test1_Child1_F1", "Test1_Child1_F2")
+                        {
+                            Children = new []
+                            {
+                                new ChildOfChildItem("Test1_Child1_ChildOfChild1_F1", "Test1_Child1_ChildOfChild1_F2"), 
+                                new ChildOfChildItem("Test1_Child1_ChildOfChild2_F1", "Test1_Child1_ChildOfChild2_F2"), 
+                            }
+                        },
+                        new ChildItem("Test1_Child2_F1", "Test1_Child2_F2"),
+                        new ChildItem("Test1_Child3_F1", "Test1_Child3_F2")
+                        {
+                            Children = new []
+                            {
+                                new ChildOfChildItem("Test1_Child3_ChildOfChild1_F1", "Test1_Child3_ChildOfChild1_F2"),
+                            }
+                        }
+                    }
+                },
+                new TestItem("Test2", new DateTime(2017, 11, 2), 110m, new Contacts("76", "753465")),
+                new TestItem("Test3", new DateTime(2017, 11, 3), 5500.80m, new Contacts("1533", "5456"))
+                {
+                    Children = new List<ChildItem>
+                    {
+                        new ChildItem("Test3_Child1_F1", "Test3_Child1_F2")
+                        {
+                            Children = new []
+                            {
+                                new ChildOfChildItem("Test3_Child1_ChildOfChild1_F1", "Test3_Child1_ChildOfChild1_F2"),
+                            }
+                        },
+                        new ChildItem("Test3_Child2_F1", "Test3_Child2_F2"),
+                    }
+                },
+            };
+
             public TestItem GetSingleItem()
             {
                 return new TestItem("Test", new DateTime(2017, 11, 1), 55.76m, new Contacts("15", "345"));
@@ -23,12 +64,12 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
 
             public IEnumerable<TestItem> GetIEnumerable()
             {
-                return new[]
-                {
-                    new TestItem("Test1", new DateTime(2017, 11, 1), 55.76m, new Contacts("15", "345")),
-                    new TestItem("Test2", new DateTime(2017, 11, 2), 110m, new Contacts("76", "753465")),
-                    new TestItem("Test3", new DateTime(2017, 11, 3), 5500.80m, new Contacts("1533", "5456")),
-                };
+                return _testData;
+            }
+
+            public IEnumerable<ChildItem> GetChildIEnumerable(string parentName)
+            {
+                return _testData.SingleOrDefault(x => x.Name == parentName)?.Children;
             }
 
             public IEnumerable<TestItem> GetEmptyIEnumerable()
@@ -116,6 +157,36 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             public decimal Sum { get; set; }
 
             public Contacts Contacts { get; set; }
+
+            public IEnumerable<ChildItem> Children { get; set; }
+        }
+
+        private class ChildItem
+        {
+            public ChildItem(string field1, string field2)
+            {
+                Field1 = field1;
+                Field2 = field2;
+            }
+
+            public string Field1 { get; set; }
+
+            public string Field2 { get; set; }
+
+            public ChildOfChildItem[] Children { get; set; }
+        }
+
+        private class ChildOfChildItem
+        {
+            public ChildOfChildItem(string field1, string field2)
+            {
+                Field1 = field1;
+                Field2 = field2;
+            }
+
+            public string Field1 { get; set; }
+
+            public string Field2 { get; set; }
         }
 
         private class Contacts

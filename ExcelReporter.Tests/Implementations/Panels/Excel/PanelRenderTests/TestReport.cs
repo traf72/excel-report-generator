@@ -3,6 +3,7 @@ using ExcelReporter.Attributes;
 using ExcelReporter.Implementations.Providers;
 using ExcelReporter.Implementations.Providers.DataItemValueProviders;
 using ExcelReporter.Implementations.TemplateProcessors;
+using ExcelReporter.Interfaces.Panels.Excel;
 using ExcelReporter.Interfaces.Reports;
 using ExcelReporter.Interfaces.TemplateProcessors;
 using System;
@@ -33,7 +34,7 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
 
         public decimal Multiply(decimal num1, decimal num2)
         {
-            return  num1 * num2;
+            return num1 * num2;
         }
 
         public string Concat(object item1, object item2)
@@ -44,6 +45,30 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
         public int Counter()
         {
             return ++_counter;
+        }
+
+        public void BeforeRenderParentDataSourcePanel(IExcelPanel panel)
+        {
+            panel.Range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+        }
+
+        public void AfterRenderParentDataSourcePanelChildBottom(IExcelPanel panel)
+        {
+            panel.Range.LastRow().Delete(XLShiftDeletedCells.ShiftCellsUp);
+            panel.Range.LastRow().Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+            panel.Range.LastRow().Style.Border.BottomBorderColor = XLColor.Black;
+        }
+
+        public void AfterRenderParentDataSourcePanelChildTop(IExcelPanel panel)
+        {
+            panel.Range.FirstRow().Delete(XLShiftDeletedCells.ShiftCellsUp);
+            panel.Range.FirstRow().Style.Border.TopBorder = XLBorderStyleValues.Thin;
+            panel.Range.FirstRow().Style.Border.TopBorderColor = XLColor.Black;
+        }
+
+        public void AfterRenderChildDataSourcePanel(IExcelPanel panel)
+        {
+            panel.Range.LastRow().Delete(XLShiftDeletedCells.ShiftCellsUp);
         }
     }
 

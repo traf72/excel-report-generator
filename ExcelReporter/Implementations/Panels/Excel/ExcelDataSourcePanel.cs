@@ -6,6 +6,7 @@ using ExcelReporter.Interfaces.Panels.Excel;
 using ExcelReporter.Interfaces.Reports;
 using System;
 using System.Collections;
+using System.Linq;
 
 namespace ExcelReporter.Implementations.Panels.Excel
 {
@@ -42,14 +43,7 @@ namespace ExcelReporter.Implementations.Panels.Excel
 
                 object currentItem = enumerator.Current;
                 // Создаём шаблон панели, который дальше будет размножаться
-                var templatePanel = new ExcelDataItemPanel(Range, Report)
-                {
-                    Parent = Parent,
-                    Children = Children,
-                    RenderPriority = RenderPriority,
-                    ShiftType = ShiftType,
-                    Type = Type,
-                };
+                var templatePanel = CreateTemplatePanel();
                 while (true)
                 {
                     ExcelDataItemPanel currentPanel;
@@ -90,6 +84,27 @@ namespace ExcelReporter.Implementations.Panels.Excel
             {
                 (enumerator as IDisposable)?.Dispose();
             }
+        }
+
+        private ExcelDataItemPanel CreateTemplatePanel()
+        {
+            var templatePanel = new ExcelDataItemPanel(Range, Report)
+            {
+                Parent = Parent,
+                Children = Children.Select(c => c.Copy(c.Range.FirstCell())).ToList(),
+                RenderPriority = RenderPriority,
+                ShiftType = ShiftType,
+                Type = Type,
+                BeforeRenderMethodName = BeforeRenderMethodName,
+                AfterRenderMethodName = AfterRenderMethodName,
+            };
+
+            foreach (IExcelPanel child in templatePanel.Children)
+            {
+                child.Parent = templatePanel;
+            }
+
+            return templatePanel;
         }
 
         private AddressShift GetNextPanelAddressShift(IExcelPanel currentPanel)
