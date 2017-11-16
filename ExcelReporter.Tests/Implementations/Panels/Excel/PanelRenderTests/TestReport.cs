@@ -66,6 +66,20 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
             panel.Range.FirstRow().Style.Border.TopBorderColor = XLColor.Black;
         }
 
+        public void AfterRenderParentDataSourcePanelChildRight(IExcelPanel panel)
+        {
+            panel.Range.LastColumn().Delete(XLShiftDeletedCells.ShiftCellsLeft);
+            panel.Range.LastColumn().Style.Border.RightBorder = XLBorderStyleValues.Thin;
+            panel.Range.LastColumn().Style.Border.RightBorderColor = XLColor.Black;
+        }
+
+        public void AfterRenderParentDataSourcePanelChildLeft(IExcelPanel panel)
+        {
+            panel.Range.FirstColumn().Delete(XLShiftDeletedCells.ShiftCellsLeft);
+            panel.Range.FirstColumn().Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+            panel.Range.FirstColumn().Style.Border.LeftBorderColor = XLColor.Black;
+        }
+
         public void AfterRenderChildDataSourcePanel(IExcelPanel panel)
         {
             panel.Range.LastRow().Delete(XLShiftDeletedCells.ShiftCellsUp);
