@@ -7,6 +7,7 @@ using ExcelReporter.Interfaces.Panels.Excel;
 using ExcelReporter.Interfaces.Reports;
 using ExcelReporter.Interfaces.TemplateProcessors;
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
@@ -75,9 +76,19 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests
 
         public void AfterRenderParentDataSourcePanelChildLeft(IExcelPanel panel)
         {
+            //// Стандартный способ не работает, Range почему-то становится Invalid (возможно базе ClosedXml)
+            //panel.Range.FirstColumn().Delete(XLShiftDeletedCells.ShiftCellsLeft);
+            //panel.Range.FirstColumn().Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+            //panel.Range.FirstColumn().Style.Border.LeftBorderColor = XLColor.Black;
+
+            IXLWorksheet worksheet = panel.Range.Worksheet;
+            IXLAddress firstColumnFirstCellAddress = panel.Range.FirstColumn().FirstCell().Address;
+            IXLAddress firstColumnLastCellAddress = panel.Range.FirstColumn().LastCell().Address;
+
             panel.Range.FirstColumn().Delete(XLShiftDeletedCells.ShiftCellsLeft);
-            panel.Range.FirstColumn().Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-            panel.Range.FirstColumn().Style.Border.LeftBorderColor = XLColor.Black;
+            IXLRange range = worksheet.Range(firstColumnFirstCellAddress, firstColumnLastCellAddress);
+            range.Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+            range.Style.Border.LeftBorderColor = XLColor.Black;
         }
 
         public void AfterRenderChildDataSourcePanel(IExcelPanel panel)
