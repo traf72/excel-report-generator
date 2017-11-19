@@ -3,8 +3,6 @@ using ExcelReporter.Enums;
 using ExcelReporter.Implementations.Panels.Excel;
 using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Linq;
 
 namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.DataSourcePanelRenderTests
 {

@@ -214,24 +214,74 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="TestData\DataSourcePanelDataReaderRenderTest\TestRenderDataReader.xlsx" />
+    <None Include="TestData\DataSourcePanelDataSetRenderTest\TestRenderDataSet.xlsx" />
+    <None Include="TestData\DataSourcePanelDataTableRenderTest\TestRenderDataTable.xlsx" />
+    <None Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableHorizontalCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableHorizontalNoShift.xlsx" />
+    <None Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableHorizontalRowsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalNoShift.xlsx" />
+    <None Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalRowsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalNoShift.xlsx" />
+    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalRowsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalNoShift.xlsx" />
+    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalRowsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemHorizontalCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemHorizontalNoShift.xlsx" />
+    <None Include="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemHorizontalRowShift.xlsx" />
+    <None Include="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalNoShift.xlsx" />
+    <None Include="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalRowShift.xlsx" />
+    <None Include="TestData\DataSourcePanelOneItemRenderTest\TestRenderOneItemHorizontalCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelOneItemRenderTest\TestRenderOneItemHorizontalNoShift.xlsx" />
+    <None Include="TestData\DataSourcePanelOneItemRenderTest\TestRenderOneItemHorizontalRowShift.xlsx" />
+    <None Include="TestData\DataSourcePanelOneItemRenderTest\TestRenderOneItemVerticalCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelOneItemRenderTest\TestRenderOneItemVerticalNoShift.xlsx" />
+    <None Include="TestData\DataSourcePanelOneItemRenderTest\TestRenderOneItemVerticalRowShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\Test_HorizontalPanelsGrouping_ChildLeft_ParentCellsShiftChildCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\Test_HorizontalPanelsGrouping_ChildLeft_ParentCellsShiftChildCellsShift_WithFictitiousColumn.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\Test_HorizontalPanelsGrouping_ChildLeft_ParentCellsShiftChildCellsShift_WithFictitiousColumnWhichDeleteAfterRender.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\Test_HorizontalPanelsGrouping_ChildLeft_ParentNoShiftChildCellsShift_WithFictitiousColumn.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\Test_HorizontalPanelsGrouping_ChildLeft_ParentNoShiftChildRowShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\Test_HorizontalPanelsGrouping_ChildLeft_ParentRowShiftChildCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\Test_HorizontalPanelsGrouping_ChildLeft_ParentRowShiftChildCellsShift_WithFictitiousColumn.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\Test_HorizontalPanelsGrouping_ChildLeft_ParentRowShiftChildRowShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\Test_HorizontalPanelsGrouping_ChildLeft_ParentRowShiftChildRowShift_WithFictitiousColumn.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\Test_HorizontalPanelsGrouping_ChildRight_ParentCellsShiftChildCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\Test_HorizontalPanelsGrouping_ChildRight_ParentCellsShiftChildCellsShift_WithFictitiousColumn.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\Test_HorizontalPanelsGrouping_ChildRight_ParentCellsShiftChildCellsShift_WithFictitiousColumnWhichDeleteAfterRender.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\Test_HorizontalPanelsGrouping_ChildRight_ParentNoShiftChildCellsShift_WithFictitiousColumn.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\Test_HorizontalPanelsGrouping_ChildRight_ParentNoShiftChildRowShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\Test_HorizontalPanelsGrouping_ChildRight_ParentRowShiftChildCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\Test_HorizontalPanelsGrouping_ChildRight_ParentRowShiftChildCellsShift_WithFictitiousColumn.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\Test_HorizontalPanelsGrouping_ChildRight_ParentRowShiftChildRowShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\Test_HorizontalPanelsGrouping_ChildRight_ParentRowShiftChildRowShift_WithFictitiousColumn.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\Test_VerticalPanelsGrouping_ChildBottom_ParentCellsShiftChildCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\Test_VerticalPanelsGrouping_ChildBottom_ParentCellsShiftChildCellsShift_WithFictitiousRow.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\Test_VerticalPanelsGrouping_ChildBottom_ParentCellsShiftChildCellsShift_WithFictitiousRowWhichDeleteAfterRender.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\Test_VerticalPanelsGrouping_ChildBottom_ParentNoShiftChildCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\Test_VerticalPanelsGrouping_ChildBottom_ParentNoShiftChildRowShift_WithFictitiousRow.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\Test_VerticalPanelsGrouping_ChildBottom_ParentRowShiftChildCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\Test_VerticalPanelsGrouping_ChildBottom_ParentRowShiftChildCellsShift_WithFictitiousRow.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\Test_VerticalPanelsGrouping_ChildBottom_ParentRowShiftChildRowShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\Test_VerticalPanelsGrouping_ChildBottom_ParentRowShiftChildRowShift_WithFictitiousRow.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\Test_VerticalPanelsGrouping_ChildTop_ParentCellsShiftChildCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\Test_VerticalPanelsGrouping_ChildTop_ParentCellsShiftChildCellsShift_WithFictitiousRow.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\Test_VerticalPanelsGrouping_ChildTop_ParentCellsShiftChildRowShift_WithFictitiousRow.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\Test_VerticalPanelsGrouping_ChildTop_ParentNoShiftChildCellsShift_WithFictitiousRowWhichDeleteAfterRender.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\Test_VerticalPanelsGrouping_ChildTop_ParentNoShiftChildRowShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\Test_VerticalPanelsGrouping_ChildTop_ParentRowShiftChildCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\Test_VerticalPanelsGrouping_ChildTop_ParentRowShiftChildRowShift.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestDb.mdf" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="TestData\DataSourcePanelDataReaderRenderTest\" />
-    <Folder Include="TestData\DataSourcePanelDataSetRenderTest\" />
-    <Folder Include="TestData\DataSourcePanelDataTableRenderTest\" />
-    <Folder Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\" />
-    <Folder Include="TestData\DataSourcePanelIEnumerableRenderTest\" />
-    <Folder Include="TestData\DataSourcePanelNullItemRenderTest\" />
-    <Folder Include="TestData\DataSourcePanelOneItemRenderTest\" />
-    <Folder Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\" />
-    <Folder Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\" />
     <Folder Include="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\" />
     <Folder Include="TestData\DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent\" />
-    <Folder Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\" />
-    <Folder Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
