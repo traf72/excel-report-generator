@@ -3,6 +3,7 @@ using System.Reflection;
 using ExcelReporter.Exceptions;
 using ExcelReporter.Implementations.Providers;
 using ExcelReporter.Interfaces.Providers;
+using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ExcelReporter.Tests.Implementations.Providers
@@ -15,9 +16,9 @@ namespace ExcelReporter.Tests.Implementations.Providers
         {
             ITypeProvider typeProvider = new TypeProvider(Assembly.GetExecutingAssembly());
 
-            MyAssert.Throws<ArgumentException>(() => typeProvider.GetType(null));
-            MyAssert.Throws<ArgumentException>(() => typeProvider.GetType(string.Empty));
-            MyAssert.Throws<ArgumentException>(() => typeProvider.GetType(" "));
+            ExceptionAssert.Throws<ArgumentException>(() => typeProvider.GetType(null));
+            ExceptionAssert.Throws<ArgumentException>(() => typeProvider.GetType(string.Empty));
+            ExceptionAssert.Throws<ArgumentException>(() => typeProvider.GetType(" "));
 
             Assert.AreSame(typeof(TestType_1), typeProvider.GetType("TestType_1"));
             Assert.AreSame(typeof(TestType_1), typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers:TestType_1"));
@@ -27,19 +28,19 @@ namespace ExcelReporter.Tests.Implementations.Providers
 
             Assert.AreSame(typeof(TestType_3), typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers:TestType_3"));
             Assert.AreSame(typeof(InnerNamespace.TestType_3), typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers.InnerNamespace:TestType_3"));
-            MyAssert.Throws<IncorrectTemplateException>(() => typeProvider.GetType("TestType_3"), "More than one type found by template \"TestType_3\"");
+            ExceptionAssert.Throws<IncorrectTemplateException>(() => typeProvider.GetType("TestType_3"), "More than one type found by template \"TestType_3\"");
 
             Assert.AreSame(typeof(InnerNamespace.TestType_5), typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers.InnerNamespace:TestType_5"));
             Assert.AreSame(typeof(TestType_5), typeProvider.GetType(":TestType_5"));
             Assert.AreSame(typeof(TestType_5), typeProvider.GetType(":TestType_5"));
-            MyAssert.Throws<IncorrectTemplateException>(() => typeProvider.GetType("TestType_5"), "More than one type found by template \"TestType_5\"");
+            ExceptionAssert.Throws<IncorrectTemplateException>(() => typeProvider.GetType("TestType_5"), "More than one type found by template \"TestType_5\"");
 
             Assert.AreSame(typeof(InnerNamespace.TestType_4), typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers.InnerNamespace:TestType_4"));
             Assert.AreSame(typeof(InnerNamespace.TestType_4), typeProvider.GetType("TestType_4"));
-            MyAssert.Throws<TypeNotFoundException>(() => typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers:TestType_4"),
+            ExceptionAssert.Throws<TypeNotFoundException>(() => typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers:TestType_4"),
                 "Cannot find type by template \"ExcelReporter.Tests.Implementations.Providers:TestType_4\"");
 
-            MyAssert.Throws<IncorrectTemplateException>(() => typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers:InnerNamespace:TestType_4"),
+            ExceptionAssert.Throws<IncorrectTemplateException>(() => typeProvider.GetType("ExcelReporter.Tests.Implementations.Providers:InnerNamespace:TestType_4"),
                 "Type name template \"ExcelReporter.Tests.Implementations.Providers:InnerNamespace:TestType_4\" is incorrect");
         }
 

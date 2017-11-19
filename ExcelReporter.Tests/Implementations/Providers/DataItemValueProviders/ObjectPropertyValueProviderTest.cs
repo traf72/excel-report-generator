@@ -4,6 +4,7 @@ using ExcelReporter.Interfaces.Providers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
+using ExcelReporter.Tests.CustomAsserts;
 
 namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
 {
@@ -39,11 +40,11 @@ namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
             Assert.AreEqual(dataItem.ObjProp.ObjProp.GuidProp, dataItemValueProvider.GetValue("ObjProp.ObjProp.GuidProp", dataItem));
             Assert.AreEqual(dataItem.ParentProp, dataItemValueProvider.GetValue("ParentProp", dataItem));
 
-            MyAssert.Throws<MemberNotFoundException>(() => dataItemValueProvider.GetValue("strProp", dataItem),
+            ExceptionAssert.Throws<MemberNotFoundException>(() => dataItemValueProvider.GetValue("strProp", dataItem),
                 "Cannot find public instance property \"strProp\" in class \"TestClass\" and all its parents");
-            MyAssert.Throws<MemberNotFoundException>(() => dataItemValueProvider.GetValue("DoubleProp", dataItem),
+            ExceptionAssert.Throws<MemberNotFoundException>(() => dataItemValueProvider.GetValue("DoubleProp", dataItem),
                 "Cannot find public instance property \"DoubleProp\" in class \"TestClass\" and all its parents");
-            MyAssert.Throws<MemberNotFoundException>(() => dataItemValueProvider.GetValue("ObjProp.GuidProp", dataItem),
+            ExceptionAssert.Throws<MemberNotFoundException>(() => dataItemValueProvider.GetValue("ObjProp.GuidProp", dataItem),
                 "Cannot find public instance property \"GuidProp\" in class \"TestClass2\" and all its parents");
 
             dataItem.StrProp = null;
@@ -51,15 +52,15 @@ namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
 
             Assert.IsNull(dataItemValueProvider.GetValue("StrProp", dataItem));
 
-            MyAssert.Throws<InvalidOperationException>(() => dataItemValueProvider.GetValue("ObjProp.StrProp", dataItem),
+            ExceptionAssert.Throws<InvalidOperationException>(() => dataItemValueProvider.GetValue("ObjProp.StrProp", dataItem),
                 "Cannot get property \"StrProp\" because object is null");
 
-            MyAssert.Throws<InvalidOperationException>(() => dataItemValueProvider.GetValue("IntProp", null),
+            ExceptionAssert.Throws<InvalidOperationException>(() => dataItemValueProvider.GetValue("IntProp", null),
                 "Cannot get property \"IntProp\" because object is null");
 
-            MyAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(null, dataItem));
-            MyAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(string.Empty, dataItem));
-            MyAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(" ", dataItem));
+            ExceptionAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(null, dataItem));
+            ExceptionAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(string.Empty, dataItem));
+            ExceptionAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(" ", dataItem));
         }
 
         private class TestClass : Parent

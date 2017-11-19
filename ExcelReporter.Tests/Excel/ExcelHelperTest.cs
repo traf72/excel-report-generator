@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ExcelReporter.Enums;
 using ExcelReporter.Excel;
 using ExcelReporter.Interfaces.Panels.Excel;
+using ExcelReporter.Tests.CustomAsserts;
 
 namespace ExcelReporter.Tests.Excel
 {
@@ -82,11 +83,11 @@ namespace ExcelReporter.Tests.Excel
             Assert.AreEqual(parentRange3, ExcelHelper.GetNearestParentRange(new[] { parentRange1, parentRange2, notParentRange, parentRange3 }, childRange));
 
             IXLRange parentRange4 = ws.Range(7, 7, 7, 7);
-            MyAssert.Throws<InvalidOperationException>(() => ExcelHelper.GetNearestParentRange(new[] { parentRange1, parentRange2, notParentRange, parentRange3, parentRange4 }, childRange),
+            ExceptionAssert.Throws<InvalidOperationException>(() => ExcelHelper.GetNearestParentRange(new[] { parentRange1, parentRange2, notParentRange, parentRange3, parentRange4 }, childRange),
                 "Found more than one nearest parent ranges");
 
             IXLRange badChildRange = ws.Range(7, 7, 7, 8);
-            MyAssert.Throws<InvalidOperationException>(() => ExcelHelper.GetNearestParentRange(new[] { parentRange1, parentRange2, notParentRange, parentRange3, parentRange4 }, badChildRange),
+            ExceptionAssert.Throws<InvalidOperationException>(() => ExcelHelper.GetNearestParentRange(new[] { parentRange1, parentRange2, notParentRange, parentRange3, parentRange4 }, badChildRange),
                 "Nearest parent range was not found");
         }
 
@@ -106,7 +107,7 @@ namespace ExcelReporter.Tests.Excel
             Assert.AreEqual(new CellCoords(4, 5), ExcelHelper.GetCellCoordsRelativeRange(range, ws.Cell(6, 7)));
 
             IXLCell cell = ws.Cell(1, 1);
-            MyAssert.Throws<InvalidOperationException>(() => ExcelHelper.GetCellCoordsRelativeRange(range, cell), $"Cell {cell} is outside of the range {range}");
+            ExceptionAssert.Throws<InvalidOperationException>(() => ExcelHelper.GetCellCoordsRelativeRange(range, cell), $"Cell {cell} is outside of the range {range}");
         }
 
         [TestMethod]
@@ -132,7 +133,7 @@ namespace ExcelReporter.Tests.Excel
             Assert.AreEqual(new RangeCoords(new CellCoords(2, 2), new CellCoords(4, 3)), ExcelHelper.GetRangeCoordsRelativeParent(parentRange, childRange));
 
             childRange = ws.Range(4, 4, 7, 5);
-            MyAssert.Throws<InvalidOperationException>(() => ExcelHelper.GetRangeCoordsRelativeParent(parentRange, childRange), $"Range {parentRange} is not a parent of the range {childRange}. Child range is outside of the parent range.");
+            ExceptionAssert.Throws<InvalidOperationException>(() => ExcelHelper.GetRangeCoordsRelativeParent(parentRange, childRange), $"Range {parentRange} is not a parent of the range {childRange}. Child range is outside of the parent range.");
         }
 
         [TestMethod]

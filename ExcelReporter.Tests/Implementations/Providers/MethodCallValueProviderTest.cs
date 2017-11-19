@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
 using System.Reflection;
+using ExcelReporter.Tests.CustomAsserts;
 
 namespace ExcelReporter.Tests.Implementations.Providers
 {
@@ -144,9 +145,9 @@ namespace ExcelReporter.Tests.Implementations.Providers
             Assert.AreEqual("ExcelReporter.Tests.Implementations.Providers:TestClass", typeNameProp.GetValue(result));
             Assert.AreEqual("p:Name, m:Method2(p:Name,  p:value , ms:Method3(hi, 5, p:Desc)), di:Field", methodParamsProp.GetValue(result));
 
-            MyAssert.ThrowsBaseException<IncorrectTemplateException>(() => method.Invoke(methodCallValueProvider, new[] { "Method1" }), "Template \"Method1\" is incorrect");
-            MyAssert.ThrowsBaseException<IncorrectTemplateException>(() => method.Invoke(methodCallValueProvider, new[] { "Method1(" }), "Template \"Method1(\" is incorrect");
-            MyAssert.ThrowsBaseException<IncorrectTemplateException>(() => method.Invoke(methodCallValueProvider, new[] { "Method1)" }), "Template \"Method1)\" is incorrect");
+            ExceptionAssert.ThrowsBaseException<IncorrectTemplateException>(() => method.Invoke(methodCallValueProvider, new[] { "Method1" }), "Template \"Method1\" is incorrect");
+            ExceptionAssert.ThrowsBaseException<IncorrectTemplateException>(() => method.Invoke(methodCallValueProvider, new[] { "Method1(" }), "Template \"Method1(\" is incorrect");
+            ExceptionAssert.ThrowsBaseException<IncorrectTemplateException>(() => method.Invoke(methodCallValueProvider, new[] { "Method1)" }), "Template \"Method1)\" is incorrect");
         }
 
         [TestMethod]
@@ -239,7 +240,7 @@ namespace ExcelReporter.Tests.Implementations.Providers
         [TestMethod]
         public void TestCallMethod()
         {
-            MyAssert.Throws<ArgumentNullException>(() => new MethodCallValueProvider(null, new object()));
+            ExceptionAssert.Throws<ArgumentNullException>(() => new MethodCallValueProvider(null, new object()));
 
             var typeProvider = Substitute.For<ITypeProvider>();
             typeProvider.GetType(Arg.Any<string>()).Returns(typeof(TestClass));
@@ -254,9 +255,9 @@ namespace ExcelReporter.Tests.Implementations.Providers
 
             var methodCallValueProvider = new MethodCallValueProvider(typeProvider, new TestClass());
 
-            MyAssert.Throws<ArgumentException>(() => methodCallValueProvider.CallMethod(null, templateProcessor, new HierarchicalDataItem()));
-            MyAssert.Throws<ArgumentException>(() => methodCallValueProvider.CallMethod(string.Empty, templateProcessor, new HierarchicalDataItem()));
-            MyAssert.Throws<ArgumentException>(() => methodCallValueProvider.CallMethod(" ", templateProcessor, new HierarchicalDataItem()));
+            ExceptionAssert.Throws<ArgumentException>(() => methodCallValueProvider.CallMethod(null, templateProcessor, new HierarchicalDataItem()));
+            ExceptionAssert.Throws<ArgumentException>(() => methodCallValueProvider.CallMethod(string.Empty, templateProcessor, new HierarchicalDataItem()));
+            ExceptionAssert.Throws<ArgumentException>(() => methodCallValueProvider.CallMethod(" ", templateProcessor, new HierarchicalDataItem()));
 
             Assert.AreEqual("Str_1", methodCallValueProvider.CallMethod("Method1()", templateProcessor, null));
             typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
@@ -321,10 +322,10 @@ namespace ExcelReporter.Tests.Implementations.Providers
             typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
-            MyAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("TestClass:BadMethod()", templateProcessor, null),
+            ExceptionAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("TestClass:BadMethod()", templateProcessor, null),
                 "Could not find public method \"BadMethod\" in type \"TestClass\" and all its parents. MethodCallTemplate: TestClass:BadMethod()");
 
-            MyAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("TestClass:BadMethod()", templateProcessor, null, true),
+            ExceptionAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("TestClass:BadMethod()", templateProcessor, null, true),
                 "Could not find public static method \"BadMethod\" in type \"TestClass\" and all its parents. MethodCallTemplate: TestClass:BadMethod()");
 
             typeProvider.ClearReceivedCalls();
@@ -343,7 +344,7 @@ namespace ExcelReporter.Tests.Implementations.Providers
             typeProvider.Received(1).GetType(":TestClass");
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
-            MyAssert.Throws<InvalidOperationException>(() => methodCallValueProvider.CallMethod("Method2(p:Value, 18)", templateProcessor, null),
+            ExceptionAssert.Throws<InvalidOperationException>(() => methodCallValueProvider.CallMethod("Method2(p:Value, 18)", templateProcessor, null),
                 "Type name is not specified in template \"Method2(p:Value, 18)\" but defaultInstance is null");
         }
 
@@ -371,50 +372,50 @@ namespace ExcelReporter.Tests.Implementations.Providers
             Assert.AreEqual("Method2(int), a = 7", methodCallValueProvider.CallMethod("Method2(p:Value)", templateProcessor, null));
             Assert.AreEqual("Method2(string), a = str", methodCallValueProvider.CallMethod("Method2([string]str)", templateProcessor, null));
             Assert.AreEqual("Method2(string), a = str", methodCallValueProvider.CallMethod("Method2(\"str\")", templateProcessor, null));
-            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(15)", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2(15)");
-            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2([short] 15)", templateProcessor, null), "More than one method found with suitable number of parameters. In this case the method is chosen by exact match of parameter types. None of methods is suitable. MethodCallTemplate: Method2([short] 15)");
-            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(p:Value2)", templateProcessor, null), "More than one method found with suitable number of parameters. In this case the method is chosen by exact match of parameter types. None of methods is suitable. MethodCallTemplate: Method2(p:Value2)");
+            ExceptionAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(15)", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2(15)");
+            ExceptionAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2([short] 15)", templateProcessor, null), "More than one method found with suitable number of parameters. In this case the method is chosen by exact match of parameter types. None of methods is suitable. MethodCallTemplate: Method2([short] 15)");
+            ExceptionAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(p:Value2)", templateProcessor, null), "More than one method found with suitable number of parameters. In this case the method is chosen by exact match of parameter types. None of methods is suitable. MethodCallTemplate: Method2(p:Value2)");
 
             Assert.AreEqual("Method2(int, string), a = 15, b = str", methodCallValueProvider.CallMethod("Method2([int]15, \"str\")", templateProcessor, null));
             Assert.AreEqual("Method2(int, string), a = 15, b = str", methodCallValueProvider.CallMethod("Method2([Int32]15, [String]str)", templateProcessor, null));
             Assert.AreEqual("Method2(int, string), a = 15, b = TestName", methodCallValueProvider.CallMethod("Method2([Int32]15, p:Name)", templateProcessor, null));
             Assert.AreEqual("Method2(int, string), a = 7, b = TestName", methodCallValueProvider.CallMethod("Method2(p:Value, p:Name)", templateProcessor, null));
             Assert.AreEqual("Method2(int, string), a = 7, b = p:Name", methodCallValueProvider.CallMethod("Method2(p:Value, \"p:Name\")", templateProcessor, null));
-            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(15, str)", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2(15, str)");
-            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2([int]15, str)", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2([int]15, str)");
-            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(15, [string]str)", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2(15, [string]str)");
-            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(15, \"str\")", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2(15, \"str\")");
-            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(p:Value2, p:Name)", templateProcessor, null), "More than one method found with suitable number of parameters. In this case the method is chosen by exact match of parameter types. None of methods is suitable. MethodCallTemplate: Method2(p:Value2, p:Name)");
+            ExceptionAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(15, str)", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2(15, str)");
+            ExceptionAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2([int]15, str)", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2([int]15, str)");
+            ExceptionAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(15, [string]str)", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2(15, [string]str)");
+            ExceptionAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(15, \"str\")", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2(15, \"str\")");
+            ExceptionAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2(p:Value2, p:Name)", templateProcessor, null), "More than one method found with suitable number of parameters. In this case the method is chosen by exact match of parameter types. None of methods is suitable. MethodCallTemplate: Method2(p:Value2, p:Name)");
 
             Assert.AreEqual("Method2(string, int), a = str, b = 15", methodCallValueProvider.CallMethod("Method2(\"str\", [int]15)", templateProcessor, null));
             Assert.AreEqual("Method2(string, int), a = str, b = 15", methodCallValueProvider.CallMethod("Method2([String]str, [Int32]15)", templateProcessor, null));
             Assert.AreEqual("Method2(string, int), a = TestName, b = 7", methodCallValueProvider.CallMethod("Method2(p:Name, p:Value)", templateProcessor, null));
 
             Assert.AreEqual("Method2(int, string, long), a = 15, b = str, c = 20", methodCallValueProvider.CallMethod("Method2([int]15, [string]str, [long]20)", templateProcessor, null));
-            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2([int]15, [string]str, 20)", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2([int]15, [string]str, 20)");
-            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2([int]15, [string]str, [short]20)", templateProcessor, null), "More than one method found with suitable number of parameters. In this case the method is chosen by exact match of parameter types. None of methods is suitable. MethodCallTemplate: Method2([int]15, [string]str, [short]20)");
+            ExceptionAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2([int]15, [string]str, 20)", templateProcessor, null), "More than one method found with suitable number of parameters but some of static parameters does not specify a type explicitly. Specify the type explicitly for all static parameters and try again. MethodCallTemplate: Method2([int]15, [string]str, 20)");
+            ExceptionAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method2([int]15, [string]str, [short]20)", templateProcessor, null), "More than one method found with suitable number of parameters. In this case the method is chosen by exact match of parameter types. None of methods is suitable. MethodCallTemplate: Method2([int]15, [string]str, [short]20)");
 
             Assert.AreEqual("Method2(int, string, long, short), a = 15, b = str, c = 20, d = 200", methodCallValueProvider.CallMethod("Method2(15, str, 20, 200)", templateProcessor, null));
             Assert.AreEqual("Method2(int, string, long, short), a = 15, b = str, c = 20, d = 200", methodCallValueProvider.CallMethod("Method2([short]15, str, 20, 200)", templateProcessor, null));
             Assert.AreEqual("Method2(int, string, long, short), a = 7, b = TestName, c = 7, d = 77", methodCallValueProvider.CallMethod("Method2(p:Value, p:Name, p:Value, p:Value2)", templateProcessor, null));
-            MyAssert.Throws<ArgumentException>(() => methodCallValueProvider.CallMethod("Method2(p:Value, p:Name, p:Value2, p:Value)", templateProcessor, null));
-            MyAssert.Throws<FormatException>(() => methodCallValueProvider.CallMethod("Method2(p:Value, p:Name, str, p:Value)", templateProcessor, null));
-            MyAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("Method2(15, str, 20, 200, str2)", templateProcessor, null), "Could not find public method \"Method2\" in type \"TestOverloading\" and all its parents with suitable number of parameters. MethodCallTemplate: Method2(15, str, 20, 200, str2)");
+            ExceptionAssert.Throws<ArgumentException>(() => methodCallValueProvider.CallMethod("Method2(p:Value, p:Name, p:Value2, p:Value)", templateProcessor, null));
+            ExceptionAssert.Throws<FormatException>(() => methodCallValueProvider.CallMethod("Method2(p:Value, p:Name, str, p:Value)", templateProcessor, null));
+            ExceptionAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("Method2(15, str, 20, 200, str2)", templateProcessor, null), "Could not find public method \"Method2\" in type \"TestOverloading\" and all its parents with suitable number of parameters. MethodCallTemplate: Method2(15, str, 20, 200, str2)");
 
             Assert.AreEqual("Method3(int, string, sbyte), a = 15, b = str, c = 1", methodCallValueProvider.CallMethod("Method3(15)", templateProcessor, null));
             Assert.AreEqual("Method3(int, string, sbyte), a = 15, b = str2, c = 1", methodCallValueProvider.CallMethod("Method3(15, str2)", templateProcessor, null));
             Assert.AreEqual("Method3(int, string, sbyte), a = 15, b = str2, c = 127", methodCallValueProvider.CallMethod("Method3(15, str2, 127)", templateProcessor, null));
             Assert.AreEqual("Method3(int, string, sbyte), a = 15, b = str2, c = 0", methodCallValueProvider.CallMethod("Method3(15, str2, p:Value3)", templateProcessor, null));
             Assert.AreEqual("Method3(int, string, sbyte), a = 0, b = str2, c = 1", methodCallValueProvider.CallMethod("Method3(p:Value3, str2)", templateProcessor, null));
-            MyAssert.Throws<FormatException>(() => methodCallValueProvider.CallMethod("Method3(str, str2, 127)", templateProcessor, null));
-            MyAssert.Throws<FormatException>(() => methodCallValueProvider.CallMethod("Method3([int]str, str2, 127)", templateProcessor, null));
-            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method3([int33]15)", templateProcessor, null), "Type \"int33\" is not supported");
-            MyAssert.Throws<OverflowException>(() => methodCallValueProvider.CallMethod("Method3(15, str2, 200)", templateProcessor, null));
-            MyAssert.Throws<InvalidOperationException>(() => methodCallValueProvider.CallMethod("Method3()", templateProcessor, null), "Mismatch parameters count. Input pararameters count: 0. Method required parameters count: 1. MethodCallTemplate: Method3()");
-            MyAssert.Throws<InvalidOperationException>(() => methodCallValueProvider.CallMethod("Method3(1, 2, 3, 4)", templateProcessor, null), "Mismatch parameters count. Input pararameters count: 4. Method parameters count: 3. MethodCallTemplate: Method3(1, 2, 3, 4)");
+            ExceptionAssert.Throws<FormatException>(() => methodCallValueProvider.CallMethod("Method3(str, str2, 127)", templateProcessor, null));
+            ExceptionAssert.Throws<FormatException>(() => methodCallValueProvider.CallMethod("Method3([int]str, str2, 127)", templateProcessor, null));
+            ExceptionAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method3([int33]15)", templateProcessor, null), "Type \"int33\" is not supported");
+            ExceptionAssert.Throws<OverflowException>(() => methodCallValueProvider.CallMethod("Method3(15, str2, 200)", templateProcessor, null));
+            ExceptionAssert.Throws<InvalidOperationException>(() => methodCallValueProvider.CallMethod("Method3()", templateProcessor, null), "Mismatch parameters count. Input pararameters count: 0. Method required parameters count: 1. MethodCallTemplate: Method3()");
+            ExceptionAssert.Throws<InvalidOperationException>(() => methodCallValueProvider.CallMethod("Method3(1, 2, 3, 4)", templateProcessor, null), "Mismatch parameters count. Input pararameters count: 4. Method parameters count: 3. MethodCallTemplate: Method3(1, 2, 3, 4)");
 
-            MyAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method4([int]15)", templateProcessor, null), "Methods which have \"params\" argument are not supported. MethodCallTemplate: Method4([int]15)");
-            MyAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("Method5()", templateProcessor, null), "Could not find public method \"Method5\" in type \"TestOverloading\" and all its parents. MethodCallTemplate: Method5()");
+            ExceptionAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method4([int]15)", templateProcessor, null), "Methods which have \"params\" argument are not supported. MethodCallTemplate: Method4([int]15)");
+            ExceptionAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("Method5()", templateProcessor, null), "Could not find public method \"Method5\" in type \"TestOverloading\" and all its parents. MethodCallTemplate: Method5()");
         }
 
         private class TestClass : TestClassParent

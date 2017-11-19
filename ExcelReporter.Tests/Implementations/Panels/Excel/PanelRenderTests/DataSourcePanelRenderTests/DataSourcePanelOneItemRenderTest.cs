@@ -1,9 +1,8 @@
 ﻿using ClosedXML.Excel;
 using ExcelReporter.Enums;
 using ExcelReporter.Implementations.Panels.Excel;
+using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Linq;
 
 namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.DataSourcePanelRenderTests
 {
@@ -38,28 +37,8 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             var panel = new ExcelDataSourcePanel("m:TestDataProvider:GetSingleItem()", ws.NamedRange("TestRange"), report);
             panel.Render();
 
-            Assert.AreEqual(15, ws.CellsUsed().Count());
-            Assert.AreEqual("Test", ws.Cell(2, 2).Value);
-            Assert.AreEqual(new DateTime(2017, 11, 1), ws.Cell(2, 3).Value);
-            Assert.AreEqual(278.8, ws.Cell(2, 4).Value);
-            Assert.AreEqual("15_345", ws.Cell(2, 5).Value);
-            Assert.AreEqual(15d, ws.Cell(3, 2).Value);
-            Assert.AreEqual(345d, ws.Cell(3, 3).Value);
-            Assert.AreEqual("String parameter", ws.Cell(3, 4).Value);
-
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(3, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(3, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 4).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 4).Value);
-
-            Assert.AreEqual(0, ws.NamedRanges.Count());
-            Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
-
-            Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelOneItemRenderTest),
+                nameof(TestRenderOneItemVerticalCellsShift)), ws.Workbook);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -95,28 +74,8 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             };
             panel.Render();
 
-            Assert.AreEqual(15, ws.CellsUsed().Count());
-            Assert.AreEqual("Test", ws.Cell(2, 2).Value);
-            Assert.AreEqual(new DateTime(2017, 11, 1), ws.Cell(2, 3).Value);
-            Assert.AreEqual(278.8, ws.Cell(2, 4).Value);
-            Assert.AreEqual("15_345", ws.Cell(2, 5).Value);
-            Assert.AreEqual(15d, ws.Cell(3, 2).Value);
-            Assert.AreEqual(345d, ws.Cell(3, 3).Value);
-            Assert.AreEqual("String parameter", ws.Cell(3, 4).Value);
-
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(3, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(3, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 4).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 4).Value);
-
-            Assert.AreEqual(0, ws.NamedRanges.Count());
-            Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
-
-            Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelOneItemRenderTest),
+                nameof(TestRenderOneItemVerticalRowShift)), ws.Workbook);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -152,28 +111,8 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             };
             panel.Render();
 
-            Assert.AreEqual(15, ws.CellsUsed().Count());
-            Assert.AreEqual("Test", ws.Cell(2, 2).Value);
-            Assert.AreEqual(new DateTime(2017, 11, 1), ws.Cell(2, 3).Value);
-            Assert.AreEqual(278.8, ws.Cell(2, 4).Value);
-            Assert.AreEqual("15_345", ws.Cell(2, 5).Value);
-            Assert.AreEqual(15d, ws.Cell(3, 2).Value);
-            Assert.AreEqual(345d, ws.Cell(3, 3).Value);
-            Assert.AreEqual("String parameter", ws.Cell(3, 4).Value);
-
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(3, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(3, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 4).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 4).Value);
-
-            Assert.AreEqual(0, ws.NamedRanges.Count());
-            Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
-
-            Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelOneItemRenderTest),
+                nameof(TestRenderOneItemVerticalNoShift)), ws.Workbook);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -209,28 +148,8 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             };
             panel.Render();
 
-            Assert.AreEqual(15, ws.CellsUsed().Count());
-            Assert.AreEqual("Test", ws.Cell(2, 2).Value);
-            Assert.AreEqual(new DateTime(2017, 11, 1), ws.Cell(2, 3).Value);
-            Assert.AreEqual(278.8, ws.Cell(2, 4).Value);
-            Assert.AreEqual("15_345", ws.Cell(2, 5).Value);
-            Assert.AreEqual(15d, ws.Cell(3, 2).Value);
-            Assert.AreEqual(345d, ws.Cell(3, 3).Value);
-            Assert.AreEqual("String parameter", ws.Cell(3, 4).Value);
-
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(3, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(3, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 4).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 4).Value);
-
-            Assert.AreEqual(0, ws.NamedRanges.Count());
-            Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
-
-            Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelOneItemRenderTest),
+                nameof(TestRenderOneItemHorizontalCellsShift)), ws.Workbook);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -267,28 +186,8 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             };
             panel.Render();
 
-            Assert.AreEqual(15, ws.CellsUsed().Count());
-            Assert.AreEqual("Test", ws.Cell(2, 2).Value);
-            Assert.AreEqual(new DateTime(2017, 11, 1), ws.Cell(2, 3).Value);
-            Assert.AreEqual(278.8, ws.Cell(2, 4).Value);
-            Assert.AreEqual("15_345", ws.Cell(2, 5).Value);
-            Assert.AreEqual(15d, ws.Cell(3, 2).Value);
-            Assert.AreEqual(345d, ws.Cell(3, 3).Value);
-            Assert.AreEqual("String parameter", ws.Cell(3, 4).Value);
-
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(3, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(3, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 4).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 4).Value);
-
-            Assert.AreEqual(0, ws.NamedRanges.Count());
-            Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
-
-            Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelOneItemRenderTest),
+                nameof(TestRenderOneItemHorizontalRowShift)), ws.Workbook);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -325,28 +224,8 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             };
             panel.Render();
 
-            Assert.AreEqual(15, ws.CellsUsed().Count());
-            Assert.AreEqual("Test", ws.Cell(2, 2).Value);
-            Assert.AreEqual(new DateTime(2017, 11, 1), ws.Cell(2, 3).Value);
-            Assert.AreEqual(278.8, ws.Cell(2, 4).Value);
-            Assert.AreEqual("15_345", ws.Cell(2, 5).Value);
-            Assert.AreEqual(15d, ws.Cell(3, 2).Value);
-            Assert.AreEqual(345d, ws.Cell(3, 3).Value);
-            Assert.AreEqual("String parameter", ws.Cell(3, 4).Value);
-
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(3, 1).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(3, 6).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(1, 4).Value);
-            Assert.AreEqual("{di:Name}", ws.Cell(4, 4).Value);
-
-            Assert.AreEqual(0, ws.NamedRanges.Count());
-            Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
-
-            Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelOneItemRenderTest),
+                nameof(TestRenderOneItemHorizontalNoShift)), ws.Workbook);
 
             //report.Workbook.SaveAs("test.xlsx");
         }

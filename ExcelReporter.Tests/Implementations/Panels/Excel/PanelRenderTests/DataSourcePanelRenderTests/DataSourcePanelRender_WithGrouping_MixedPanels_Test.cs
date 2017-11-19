@@ -103,58 +103,7 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             parentPanel.Children = new[] { childPanel, simplePanel1 };
             parentPanel.Render();
 
-            //Assert.AreEqual(29, ws.CellsUsed().Count());
-            //Assert.AreEqual("Test1_01.11.2017", ws.Cell(2, 2).Value);
-            //Assert.AreEqual(new DateTime(2017, 11, 1), ws.Cell(2, 3).Value);
-            //Assert.AreEqual(278.8, ws.Cell(2, 4).Value);
-            //Assert.AreEqual("15_345", ws.Cell(2, 5).Value);
-            //Assert.AreEqual(15d, ws.Cell(3, 2).Value);
-            //Assert.AreEqual(345d, ws.Cell(3, 3).Value);
-            //Assert.AreEqual("String parameter", ws.Cell(3, 4).Value);
-            //Assert.AreEqual(XLBorderStyleValues.Thin, ws.Cell(2, 2).Style.Border.TopBorder);
-            //Assert.AreEqual(XLBorderStyleValues.Thin, ws.Cell(2, 2).Style.Border.BottomBorder);
-            //Assert.AreEqual(XLBorderStyleValues.Thin, ws.Cell(2, 2).Style.Border.LeftBorder);
-            //Assert.AreEqual(XLCellValues.Number, ws.Cell(2, 4).DataType);
-
-            //Assert.AreEqual("Test2_02.11.2017", ws.Cell(4, 2).Value);
-            //Assert.AreEqual(new DateTime(2017, 11, 2), ws.Cell(4, 3).Value);
-            //Assert.AreEqual(550d, ws.Cell(4, 4).Value);
-            //Assert.AreEqual("76_753465", ws.Cell(4, 5).Value);
-            //Assert.AreEqual(76d, ws.Cell(5, 2).Value);
-            //Assert.AreEqual(753465d, ws.Cell(5, 3).Value);
-            //Assert.AreEqual("String parameter", ws.Cell(5, 4).Value);
-            //Assert.AreEqual(XLBorderStyleValues.Thin, ws.Cell(4, 2).Style.Border.TopBorder);
-            //Assert.AreEqual(XLBorderStyleValues.Thin, ws.Cell(4, 2).Style.Border.BottomBorder);
-            //Assert.AreEqual(XLBorderStyleValues.Thin, ws.Cell(4, 2).Style.Border.LeftBorder);
-            //Assert.AreEqual(XLCellValues.Number, ws.Cell(4, 4).DataType);
-
-            //Assert.AreEqual("Test3_03.11.2017", ws.Cell(6, 2).Value);
-            //Assert.AreEqual(new DateTime(2017, 11, 3), ws.Cell(6, 3).Value);
-            //Assert.AreEqual(27504d, ws.Cell(6, 4).Value);
-            //Assert.AreEqual("1533_5456", ws.Cell(6, 5).Value);
-            //Assert.AreEqual(1533d, ws.Cell(7, 2).Value);
-            //Assert.AreEqual(5456d, ws.Cell(7, 3).Value);
-            //Assert.AreEqual("String parameter", ws.Cell(7, 4).Value);
-            //Assert.AreEqual(XLBorderStyleValues.Thin, ws.Cell(6, 2).Style.Border.TopBorder);
-            //Assert.AreEqual(XLBorderStyleValues.Thin, ws.Cell(6, 2).Style.Border.BottomBorder);
-            //Assert.AreEqual(XLBorderStyleValues.Thin, ws.Cell(6, 2).Style.Border.LeftBorder);
-            //Assert.AreEqual(XLCellValues.Number, ws.Cell(6, 4).DataType);
-
-            //Assert.AreEqual("{di:Name}", ws.Cell(1, 1).Value);
-            //Assert.AreEqual("{di:Name}", ws.Cell(4, 1).Value);
-            //Assert.AreEqual("{di:Name}", ws.Cell(1, 6).Value);
-            //Assert.AreEqual("{di:Name}", ws.Cell(4, 6).Value);
-            //Assert.AreEqual("{di:Name}", ws.Cell(3, 1).Value);
-            //Assert.AreEqual("{di:Name}", ws.Cell(3, 6).Value);
-            //Assert.AreEqual("{di:Name}", ws.Cell(1, 4).Value);
-            //Assert.AreEqual("{di:Name}", ws.Cell(8, 4).Value);
-
-            //Assert.AreEqual(0, ws.NamedRanges.Count());
-            //Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
-
-            //Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
-
-            report.Workbook.SaveAs("test.xlsx");
+            //report.Workbook.SaveAs("test.xlsx");
         }
     }
 }

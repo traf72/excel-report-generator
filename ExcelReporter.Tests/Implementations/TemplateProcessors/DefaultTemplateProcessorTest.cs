@@ -5,6 +5,7 @@ using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
+using ExcelReporter.Tests.CustomAsserts;
 
 namespace ExcelReporter.Tests.Implementations.TemplateProcessors
 {
@@ -19,15 +20,15 @@ namespace ExcelReporter.Tests.Implementations.TemplateProcessors
             var dataItemValueProvider = Substitute.For<IGenericDataItemValueProvider<HierarchicalDataItem>>();
             var dataItem = new HierarchicalDataItem();
 
-            MyAssert.Throws<ArgumentNullException>(() => new DefaultTemplateProcessor(null, methodCallValueProvider, dataItemValueProvider));
+            ExceptionAssert.Throws<ArgumentNullException>(() => new DefaultTemplateProcessor(null, methodCallValueProvider, dataItemValueProvider));
             new DefaultTemplateProcessor(parameterProvider, null, dataItemValueProvider);
             new DefaultTemplateProcessor(parameterProvider, methodCallValueProvider);
 
             var templateProcessor = new DefaultTemplateProcessor(parameterProvider, methodCallValueProvider, dataItemValueProvider);
 
-            MyAssert.Throws<ArgumentNullException>(() => templateProcessor.GetValue(null, dataItem));
-            MyAssert.Throws<IncorrectTemplateException>(() => templateProcessor.GetValue("{p-Name}"), "Incorrect template \"{p-Name}\". Cannot find separator \":\" between member type and member template");
-            MyAssert.Throws<IncorrectTemplateException>(() => templateProcessor.GetValue("{bad:Name}"), "Incorrect template \"{bad:Name}\". Unknown member type \"bad\"");
+            ExceptionAssert.Throws<ArgumentNullException>(() => templateProcessor.GetValue(null, dataItem));
+            ExceptionAssert.Throws<IncorrectTemplateException>(() => templateProcessor.GetValue("{p-Name}"), "Incorrect template \"{p-Name}\". Cannot find separator \":\" between member type and member template");
+            ExceptionAssert.Throws<IncorrectTemplateException>(() => templateProcessor.GetValue("{bad:Name}"), "Incorrect template \"{bad:Name}\". Unknown member type \"bad\"");
 
             templateProcessor.GetValue("{p:Name}");
 
@@ -63,7 +64,7 @@ namespace ExcelReporter.Tests.Implementations.TemplateProcessors
             dataItemValueProvider.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>(), null);
 
             methodCallValueProvider.ClearReceivedCalls();
-            MyAssert.Throws<InvalidOperationException>(() => new DefaultTemplateProcessor(parameterProvider).GetValue("{ms:Method()}", null), "Template \"{ms:Method()}\" contains method call but methodCallValueProvider is null");
+            ExceptionAssert.Throws<InvalidOperationException>(() => new DefaultTemplateProcessor(parameterProvider).GetValue("{ms:Method()}", null), "Template \"{ms:Method()}\" contains method call but methodCallValueProvider is null");
 
             templateProcessor.GetValue("{di:Field}", dataItem);
             parameterProvider.DidNotReceiveWithAnyArgs().GetParameterValue(Arg.Any<string>());
@@ -71,8 +72,8 @@ namespace ExcelReporter.Tests.Implementations.TemplateProcessors
             dataItemValueProvider.Received(1).GetValue("Field", dataItem);
 
             dataItemValueProvider.ClearReceivedCalls();
-            MyAssert.Throws<InvalidOperationException>(() => templateProcessor.GetValue("{di:Field}"), "Template \"{di:Field}\" contains data reference but dataItem is null");
-            MyAssert.Throws<InvalidOperationException>(() => new DefaultTemplateProcessor(parameterProvider).GetValue("{di:Field}", dataItem), "Template \"{di:Field}\" contains data reference but dataItemValueProvider is null");
+            ExceptionAssert.Throws<InvalidOperationException>(() => templateProcessor.GetValue("{di:Field}"), "Template \"{di:Field}\" contains data reference but dataItem is null");
+            ExceptionAssert.Throws<InvalidOperationException>(() => new DefaultTemplateProcessor(parameterProvider).GetValue("{di:Field}", dataItem), "Template \"{di:Field}\" contains data reference but dataItemValueProvider is null");
         }
     }
 }

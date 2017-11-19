@@ -166,6 +166,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CustomAsserts\ExcelAssert.cs" />
     <Compile Include="Enumerators\EnumeratorFactoryTest.cs" />
     <Compile Include="Extensions\DataReaderExtensionsTest.cs" />
     <Compile Include="Extensions\ParameterInfoExtensionTest.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataTableRenderTest.cs" />
     <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataSetRenderTest.cs" />
     <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelEmptyIEnumerableRenderTest.cs" />
+    <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent.cs" />
     <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test.cs" />
     <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_MixedPanels_Test.cs" />
     <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test.cs" />
@@ -196,7 +198,7 @@
     <Compile Include="Implementations\Providers\TypeProviderTest.cs" />
     <Compile Include="Enumerators\DataReaderEnumeratorTest.cs" />
     <Compile Include="Enumerators\DataSetEnumeratorTest.cs" />
-    <Compile Include="MyAssert.cs" />
+    <Compile Include="CustomAsserts\ExceptionAssert.cs" />
     <Compile Include="Implementations\Panels\Excel\NamedPanelTest.cs" />
     <Compile Include="Implementations\Panels\Excel\PanelTest.cs" />
     <Compile Include="Implementations\TemplateProcessors\DefaultTemplateProcessorTest.cs" />
@@ -215,6 +217,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestDb.mdf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TestData\DataSourcePanelDataReaderRenderTest\" />
+    <Folder Include="TestData\DataSourcePanelDataSetRenderTest\" />
+    <Folder Include="TestData\DataSourcePanelDataTableRenderTest\" />
+    <Folder Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\" />
+    <Folder Include="TestData\DataSourcePanelIEnumerableRenderTest\" />
+    <Folder Include="TestData\DataSourcePanelNullItemRenderTest\" />
+    <Folder Include="TestData\DataSourcePanelOneItemRenderTest\" />
+    <Folder Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\" />
+    <Folder Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\" />
+    <Folder Include="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\" />
+    <Folder Include="TestData\DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent\" />
+    <Folder Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\" />
+    <Folder Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
@@ -243,6 +260,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(ProjectDir)TestData" "$(TargetDir)TestData\" /S /Y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

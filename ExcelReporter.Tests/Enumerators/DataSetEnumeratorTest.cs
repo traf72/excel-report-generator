@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using ExcelReporter.Enumerators;
+using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ExcelReporter.Tests.Enumerators
@@ -12,10 +13,10 @@ namespace ExcelReporter.Tests.Enumerators
         [TestMethod]
         public void TestEnumerator()
         {
-            MyAssert.Throws<ArgumentNullException>(() => new DataSetEnumerator(null));
+            ExceptionAssert.Throws<ArgumentNullException>(() => new DataSetEnumerator(null));
 
             DataSet dataSet = new DataSet();
-            MyAssert.Throws<InvalidOperationException>(() => new DataSetEnumerator(dataSet), "DataSet does not contain any table");
+            ExceptionAssert.Throws<InvalidOperationException>(() => new DataSetEnumerator(dataSet), "DataSet does not contain any table");
 
             DataTable dataTable1 = new DataTable("Table1");
             dataTable1.Columns.Add("Column", typeof(int));
@@ -33,7 +34,7 @@ namespace ExcelReporter.Tests.Enumerators
 
             dataSet.Tables.Add(dataTable1);
             dataSet.Tables.Add(dataTable2);
-            MyAssert.Throws<InvalidOperationException>(() => new DataSetEnumerator(dataSet, "BadTable"), "DataSet does not contain table with name \"BadTable\"");
+            ExceptionAssert.Throws<InvalidOperationException>(() => new DataSetEnumerator(dataSet, "BadTable"), "DataSet does not contain table with name \"BadTable\"");
 
             IList<int> result = new List<int>(dataTable1.Rows.Count);
             var enumerator = new DataSetEnumerator(dataSet);
@@ -56,7 +57,7 @@ namespace ExcelReporter.Tests.Enumerators
             Assert.AreEqual(2, result[1]);
             Assert.AreEqual(3, result[2]);
 
-            MyAssert.Throws<NotSupportedException>(() => enumerator.Reset());
+            ExceptionAssert.Throws<NotSupportedException>(() => enumerator.Reset());
 
             result.Clear();
             enumerator = new DataSetEnumerator(dataSet, "Table2");

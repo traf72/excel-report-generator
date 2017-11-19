@@ -5,6 +5,7 @@ using NSubstitute;
 using System;
 using System.Data;
 using ExcelReporter.Exceptions;
+using ExcelReporter.Tests.CustomAsserts;
 
 namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
 {
@@ -52,13 +53,13 @@ namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
             factory.Create(dataItem3).Returns(dataReaderValueProvider);
             factory.Create(dataItem4).Returns(objectPropertyValueProvider);
 
-            MyAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(null, hierarchicalDataItem));
-            MyAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(string.Empty, hierarchicalDataItem));
-            MyAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(" ", hierarchicalDataItem));
+            ExceptionAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(null, hierarchicalDataItem));
+            ExceptionAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(string.Empty, hierarchicalDataItem));
+            ExceptionAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(" ", hierarchicalDataItem));
 
-            MyAssert.Throws<ArgumentNullException>(() => dataItemValueProvider.GetValue("Template", null));
-            MyAssert.Throws<ArgumentNullException>(() => dataItemValueProvider.GetValue("Template", null));
-            MyAssert.Throws<ArgumentNullException>(() => dataItemValueProvider.GetValue("Template", null));
+            ExceptionAssert.Throws<ArgumentNullException>(() => dataItemValueProvider.GetValue("Template", null));
+            ExceptionAssert.Throws<ArgumentNullException>(() => dataItemValueProvider.GetValue("Template", null));
+            ExceptionAssert.Throws<ArgumentNullException>(() => dataItemValueProvider.GetValue("Template", null));
 
             objectPropertyValueProvider.ClearReceivedCalls();
             dataItemValueProvider.GetValue("Prop", hierarchicalDataItem);
@@ -97,7 +98,7 @@ namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
             dataRowValueProvider.DidNotReceiveWithAnyArgs().GetValue(null, null);
             dataReaderValueProvider.DidNotReceiveWithAnyArgs().GetValue(null, null);
 
-            MyAssert.Throws<IncorrectTemplateException>(() => dataItemValueProvider.GetValue("par:Prop", hierarchicalDataItem), "Template \"par:Prop\" is incorrect");
+            ExceptionAssert.Throws<IncorrectTemplateException>(() => dataItemValueProvider.GetValue("par:Prop", hierarchicalDataItem), "Template \"par:Prop\" is incorrect");
         }
 
         private class TestClass

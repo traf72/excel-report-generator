@@ -33,9 +33,13 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
                                 new ChildOfChildItem("Test1_Child3_ChildOfChild1_F1", "Test1_Child3_ChildOfChild1_F2"),
                             }
                         }
-                    }
+                    },
+                    ChildrenPrimitive = new[] {1},
                 },
-                new TestItem("Test2", new DateTime(2017, 11, 2), 110m, new Contacts("76", "753465")),
+                new TestItem("Test2", new DateTime(2017, 11, 2), 110m, new Contacts("76", "753465"))
+                {
+                    ChildrenPrimitive = new[] {2, 3, 4},
+                },
                 new TestItem("Test3", new DateTime(2017, 11, 3), 5500.80m, new Contacts("1533", "5456"))
                 {
                     Children = new List<ChildItem>
@@ -48,7 +52,8 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
                             }
                         },
                         new ChildItem("Test3_Child2_F1", "Test3_Child2_F2"),
-                    }
+                    },
+                    ChildrenPrimitive = new[] {5, 6},
                 },
             };
 
@@ -159,6 +164,8 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             public Contacts Contacts { get; set; }
 
             public IEnumerable<ChildItem> Children { get; set; }
+
+            public IEnumerable<int> ChildrenPrimitive { get; set; }
         }
 
         private class ChildItem

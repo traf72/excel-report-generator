@@ -5,6 +5,7 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using ExcelReporter.Tests.CustomAsserts;
 
 namespace ExcelReporter.Tests.Enumerators
 {
@@ -21,7 +22,7 @@ namespace ExcelReporter.Tests.Enumerators
         [TestMethod]
         public void TestEnumerator()
         {
-            MyAssert.Throws<ArgumentNullException>(() => new DataReaderEnumerator(null));
+            ExceptionAssert.Throws<ArgumentNullException>(() => new DataReaderEnumerator(null));
 
             int counter = 0;
             IDataReader reader = Substitute.For<IDataReader>();
@@ -32,19 +33,19 @@ namespace ExcelReporter.Tests.Enumerators
             });
 
             var enumerator = new DataReaderEnumerator(reader);
-            MyAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has not been started. Call MoveNext() method.");
-            MyAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has not been started. Call MoveNext() method.");
+            ExceptionAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has not been started. Call MoveNext() method.");
+            ExceptionAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has not been started. Call MoveNext() method.");
             while (enumerator.MoveNext())
             {
             }
 
-            MyAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "Enumerator has been finished");
-            MyAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "Enumerator has been finished");
-            MyAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has been finished");
-            MyAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has been finished");
+            ExceptionAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "Enumerator has been finished");
+            ExceptionAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "Enumerator has been finished");
+            ExceptionAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has been finished");
+            ExceptionAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has been finished");
             reader.Received(4).Read();
 
-            MyAssert.Throws<NotSupportedException>(() => enumerator.Reset(), $"{nameof(DataReaderEnumerator)} does not support reset method");
+            ExceptionAssert.Throws<NotSupportedException>(() => enumerator.Reset(), $"{nameof(DataReaderEnumerator)} does not support reset method");
 
             reader.DidNotReceive().Close();
             enumerator.Dispose();
@@ -52,8 +53,8 @@ namespace ExcelReporter.Tests.Enumerators
 
             reader.IsClosed.Returns(true);
 
-            MyAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "DataReader has been closed");
-            MyAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "DataReader has been closed");
+            ExceptionAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "DataReader has been closed");
+            ExceptionAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "DataReader has been closed");
         }
 
         [TestMethod]
@@ -90,8 +91,8 @@ namespace ExcelReporter.Tests.Enumerators
             Assert.AreEqual(DBNull.Value, dataRow.ItemArray[dataRow.Table.Columns["Type"].Ordinal]);
 
             Assert.IsFalse(enumerator.MoveNext());
-            MyAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has been finished");
-            MyAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "Enumerator has been finished");
+            ExceptionAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has been finished");
+            ExceptionAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "Enumerator has been finished");
 
             enumerator.Dispose();
         }
@@ -103,8 +104,8 @@ namespace ExcelReporter.Tests.Enumerators
             var enumerator = new DataReaderEnumerator(reader);
 
             Assert.IsFalse(enumerator.MoveNext());
-            MyAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has been finished");
-            MyAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "Enumerator has been finished");
+            ExceptionAssert.Throws<InvalidOperationException>(() => { _ = enumerator.Current; }, "Enumerator has been finished");
+            ExceptionAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "Enumerator has been finished");
 
             enumerator.Dispose();
         }

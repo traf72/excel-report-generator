@@ -4,6 +4,7 @@ using ExcelReporter.Exceptions;
 using ExcelReporter.Implementations.Providers.DataItemValueProviders;
 using ExcelReporter.Interfaces.Providers;
 using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
+using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
@@ -33,11 +34,11 @@ namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
             Assert.AreEqual(dataTable.Rows[2].ItemArray[0], provider.GetValue("Column1", dataTable.Rows[2]));
             Assert.AreEqual(dataTable.Rows[2].ItemArray[1], provider.GetValue("Column2", dataTable.Rows[2]));
 
-            MyAssert.Throws<ColumnNotFoundException>(() => provider.GetValue("BadColumn", dataTable.Rows[0]), "DataRow does not contain column \"BadColumn\"");
-            MyAssert.Throws<ArgumentException>(() => provider.GetValue(null, dataTable.Rows[0]));
-            MyAssert.Throws<ArgumentException>(() => provider.GetValue(string.Empty, dataTable.Rows[0]));
-            MyAssert.Throws<ArgumentException>(() => provider.GetValue(" ", dataTable.Rows[0]));
-            MyAssert.Throws<ArgumentNullException>(() => provider.GetValue("Column1", null));
+            ExceptionAssert.Throws<ColumnNotFoundException>(() => provider.GetValue("BadColumn", dataTable.Rows[0]), "DataRow does not contain column \"BadColumn\"");
+            ExceptionAssert.Throws<ArgumentException>(() => provider.GetValue(null, dataTable.Rows[0]));
+            ExceptionAssert.Throws<ArgumentException>(() => provider.GetValue(string.Empty, dataTable.Rows[0]));
+            ExceptionAssert.Throws<ArgumentException>(() => provider.GetValue(" ", dataTable.Rows[0]));
+            ExceptionAssert.Throws<ArgumentNullException>(() => provider.GetValue("Column1", null));
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ExcelReporter.Tests
+namespace ExcelReporter.Tests.CustomAsserts
 {
-    public class MyAssert
+    public class ExceptionAssert
     {
         public static void Throws<T>(Action action, string expectedMessage = null) where T : Exception
         {

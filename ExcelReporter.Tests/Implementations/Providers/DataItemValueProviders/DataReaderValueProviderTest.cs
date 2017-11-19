@@ -8,6 +8,7 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using ExcelReporter.Tests.CustomAsserts;
 
 namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
 {
@@ -41,15 +42,15 @@ namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
             Assert.AreEqual(5, provider.GetValue(" column1 ", dataReader));
             Assert.AreEqual("Five", provider.GetValue("Column2", dataReader));
 
-            MyAssert.Throws<ColumnNotFoundException>(() => provider.GetValue("BadColumn", dataReader), "DataReader does not contain column \"BadColumn\"");
-            MyAssert.Throws<ColumnNotFoundException>(() => provider.GetValue("BadColumn2", dataReader), "DataReader does not contain column \"BadColumn2\"");
-            MyAssert.Throws<ArgumentException>(() => provider.GetValue(null, dataReader));
-            MyAssert.Throws<ArgumentException>(() => provider.GetValue(string.Empty, dataReader));
-            MyAssert.Throws<ArgumentException>(() => provider.GetValue(" ", dataReader));
-            MyAssert.Throws<ArgumentNullException>(() => provider.GetValue("Column1", null));
+            ExceptionAssert.Throws<ColumnNotFoundException>(() => provider.GetValue("BadColumn", dataReader), "DataReader does not contain column \"BadColumn\"");
+            ExceptionAssert.Throws<ColumnNotFoundException>(() => provider.GetValue("BadColumn2", dataReader), "DataReader does not contain column \"BadColumn2\"");
+            ExceptionAssert.Throws<ArgumentException>(() => provider.GetValue(null, dataReader));
+            ExceptionAssert.Throws<ArgumentException>(() => provider.GetValue(string.Empty, dataReader));
+            ExceptionAssert.Throws<ArgumentException>(() => provider.GetValue(" ", dataReader));
+            ExceptionAssert.Throws<ArgumentNullException>(() => provider.GetValue("Column1", null));
 
             dataReader.IsClosed.Returns(true);
-            MyAssert.Throws<InvalidOperationException>(() => provider.GetValue("Column1", dataReader), "DataReader is closed");
+            ExceptionAssert.Throws<InvalidOperationException>(() => provider.GetValue("Column1", dataReader), "DataReader is closed");
         }
 
         [TestMethod]
