@@ -87,6 +87,7 @@
     <Compile Include="Implementations\Providers\DataItemValueProviders\DefaultDataItemValueProviderFactory.cs" />
     <Compile Include="Implementations\Providers\DataItemValueProviders\DataReaderValueProvider.cs" />
     <Compile Include="Implementations\Providers\DataItemValueProviders\DataRowValueProvider.cs" />
+    <Compile Include="Implementations\Providers\DataItemValueProviders\DictionaryValueProvider.cs" />
     <Compile Include="Implementations\Providers\DataItemValueProviders\ObjectPropertyValueProvider.cs" />
     <Compile Include="Implementations\Providers\MethodCallValueProvider.cs" />
     <Compile Include="Implementations\Providers\DataItemValueProviders\HierarchicalDataItemValueProvider.cs" />

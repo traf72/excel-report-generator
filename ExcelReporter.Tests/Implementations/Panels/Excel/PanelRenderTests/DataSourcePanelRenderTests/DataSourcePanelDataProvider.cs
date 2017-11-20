@@ -143,6 +143,16 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
                     return ds;
                 }
             }
+
+            public IEnumerable<IDictionary<string, object>> GetDictionaryEnumerable()
+            {
+                return new List<IDictionary<string, object>>
+                {
+                    new Dictionary<string, object> { ["Name"] = "Name_1", ["Value"] = 25.7, ["IsVip"] = true },
+                    new Dictionary<string, object> { ["Name"] = "Name_2", ["Value"] = 250.7, ["IsVip"] = false },
+                    new Dictionary<string, object> { ["Name"] = "Name_3", ["Value"] = 2500.7, ["IsVip"] = true },
+                };
+            }
         }
 
         private class TestItem

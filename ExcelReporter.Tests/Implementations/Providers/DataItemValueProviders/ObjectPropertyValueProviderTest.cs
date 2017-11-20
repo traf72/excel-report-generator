@@ -3,6 +3,7 @@ using ExcelReporter.Implementations.Providers.DataItemValueProviders;
 using ExcelReporter.Interfaces.Providers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
 using ExcelReporter.Tests.CustomAsserts;
 
@@ -61,6 +62,16 @@ namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
             ExceptionAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(null, dataItem));
             ExceptionAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(string.Empty, dataItem));
             ExceptionAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(" ", dataItem));
+        }
+
+        [TestMethod]
+        public void TestGetValueFromKeyValuePair()
+        {
+            IDataItemValueProvider dataItemValueProvider = new ObjectPropertyValueProvider();
+            var dataItem = new KeyValuePair<string, string>("key", "val");
+            Assert.AreEqual(dataItem, dataItemValueProvider.GetValue("di", dataItem));
+            Assert.AreEqual(dataItem.Key, dataItemValueProvider.GetValue("Key", dataItem));
+            Assert.AreEqual(dataItem.Value, dataItemValueProvider.GetValue(" Value ", dataItem));
         }
 
         private class TestClass : Parent

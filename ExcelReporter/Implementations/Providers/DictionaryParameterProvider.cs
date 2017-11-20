@@ -1,5 +1,7 @@
 ﻿using ExcelReporter.Exceptions;
+using ExcelReporter.Implementations.Providers.DataItemValueProviders;
 using ExcelReporter.Interfaces.Providers;
+using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
 using System;
 using System.Collections.Generic;
 
@@ -10,6 +12,7 @@ namespace ExcelReporter.Implementations.Providers
     /// </summary>
     public class DictionaryParameterProvider : IParameterProvider
     {
+        private readonly IDataItemValueProvider _valueProvider = new DictionaryValueProvider();
         private readonly IDictionary<string, object> _parameters;
 
         public DictionaryParameterProvider(IDictionary<string, object> parameters)
@@ -24,11 +27,14 @@ namespace ExcelReporter.Implementations.Providers
                 throw new ArgumentException(Constants.EmptyStringParamMessage, nameof(paramName));
             }
 
-            if (!_parameters.ContainsKey(paramName))
+            try
             {
-                throw new ParameterNotFoundException($"Cannot find paramater with name \"{paramName}\"");
+                return _valueProvider.GetValue(paramName, _parameters);
             }
-            return _parameters[paramName];
+            catch (KeyNotFoundException e)
+            {
+                throw new ParameterNotFoundException($"Cannot find paramater with name \"{paramName}\"", e);
+            }
         }
     }
 }
