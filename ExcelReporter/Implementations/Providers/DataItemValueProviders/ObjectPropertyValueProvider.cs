@@ -49,6 +49,7 @@ namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
                     throw new InvalidOperationException($"Cannot get property \"{propName}\" because object is null");
                 }
 
+                // TODO Возможно добавить также поиск публичного поля (в таком случае добавить также публичные поля при извлечении колонок)
                 PropertyInfo prop = GetProperty(obj.GetType(), propName);
                 obj = GetPropertyValue(prop, obj);
             }

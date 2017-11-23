@@ -24,6 +24,13 @@ namespace ExcelReporter.Tests.Enumerators
             enumerator = EnumeratorFactory.Create(new int[0]);
             Assert.AreEqual("SZArrayEnumerator", enumerator.GetType().Name);
 
+            enumerator = EnumeratorFactory.Create(new Dictionary<string, object>());
+            Assert.AreEqual("Enumerator", enumerator.GetType().Name);
+            Assert.IsTrue(enumerator.GetType().IsGenericType);
+            Assert.AreEqual(2, enumerator.GetType().GetGenericArguments().Length);
+            Assert.AreEqual("String", enumerator.GetType().GetGenericArguments().First().Name);
+            Assert.AreEqual("Object", enumerator.GetType().GetGenericArguments().Last().Name);
+
             var dataReader = Substitute.For<IDataReader>();
             Assert.IsInstanceOfType(EnumeratorFactory.Create(dataReader), typeof(DataReaderEnumerator));
 

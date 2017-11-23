@@ -7,9 +7,9 @@ using System.Linq;
 
 namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.DataSourcePanelRenderTests
 {
-    public class DataSourcePanelDataProvider
+    internal class DataSourcePanelDataProvider
     {
-        private class TestDataProvider
+        public class TestDataProvider
         {
             private readonly IEnumerable<TestItem> _testData = new[]
             {
@@ -21,8 +21,8 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
                         {
                             Children = new []
                             {
-                                new ChildOfChildItem("Test1_Child1_ChildOfChild1_F1", "Test1_Child1_ChildOfChild1_F2"), 
-                                new ChildOfChildItem("Test1_Child1_ChildOfChild2_F1", "Test1_Child1_ChildOfChild2_F2"), 
+                                new ChildOfChildItem("Test1_Child1_ChildOfChild1_F1", "Test1_Child1_ChildOfChild1_F2"),
+                                new ChildOfChildItem("Test1_Child1_ChildOfChild2_F1", "Test1_Child1_ChildOfChild2_F2"),
                             }
                         },
                         new ChildItem("Test1_Child2_F1", "Test1_Child2_F2"),
@@ -155,7 +155,7 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             }
         }
 
-        private class TestItem
+        internal class TestItem
         {
             public TestItem(string name, DateTime date, decimal sum, Contacts contacts = null)
             {
@@ -178,7 +178,7 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             public IEnumerable<int> ChildrenPrimitive { get; set; }
         }
 
-        private class ChildItem
+        internal class ChildItem
         {
             public ChildItem(string field1, string field2)
             {
@@ -193,7 +193,7 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             public ChildOfChildItem[] Children { get; set; }
         }
 
-        private class ChildOfChildItem
+        internal class ChildOfChildItem
         {
             public ChildOfChildItem(string field1, string field2)
             {
@@ -206,7 +206,7 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
             public string Field2 { get; set; }
         }
 
-        private class Contacts
+        internal class Contacts
         {
             public Contacts(string phone, string fax)
             {

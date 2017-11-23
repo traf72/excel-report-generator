@@ -1,11 +1,10 @@
 ﻿using ExcelReporter.Exceptions;
 using ExcelReporter.Implementations.Providers.DataItemValueProviders;
-using ExcelReporter.Interfaces.Providers;
+using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
+using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
-using ExcelReporter.Tests.CustomAsserts;
 
 namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
 {

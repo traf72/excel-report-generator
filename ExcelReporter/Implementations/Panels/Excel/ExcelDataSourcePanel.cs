@@ -13,6 +13,7 @@ namespace ExcelReporter.Implementations.Panels.Excel
     internal class ExcelDataSourcePanel : ExcelNamedPanel
     {
         private readonly string _dataSourceTemplate;
+        private object _data;
 
         public ExcelDataSourcePanel(string dataSourceTemplate, IXLNamedRange namedRange, IExcelReport report)
             : base(namedRange, report)
@@ -24,16 +25,21 @@ namespace ExcelReporter.Implementations.Panels.Excel
             _dataSourceTemplate = dataSourceTemplate;
         }
 
+        public ExcelDataSourcePanel(object data, IXLNamedRange namedRange, IExcelReport report) : base(namedRange, report)
+        {
+            _data = data;
+        }
+
         public override void Render()
         {
             // Получаем контекст родительского элемента данных, если он есть
             HierarchicalDataItem parentDataItem = GetDataContext();
 
-            object data = Report.TemplateProcessor.GetValue(_dataSourceTemplate, parentDataItem);
+            _data = _data ?? Report.TemplateProcessor.GetValue(_dataSourceTemplate, parentDataItem);
             IEnumerator enumerator = null;
             try
             {
-                enumerator = EnumeratorFactory.Create(data);
+                enumerator = EnumeratorFactory.Create(_data);
                 // Если данных нет, то просто удаляем сам шаблон
                 if (enumerator == null || !enumerator.MoveNext())
                 {
@@ -130,7 +136,7 @@ namespace ExcelReporter.Implementations.Panels.Excel
             }
         }
 
-        private void DeletePanel(IExcelPanel panel)
+        protected void DeletePanel(IExcelPanel panel)
         {
             RemoveAllNamesRecursive(panel);
             panel.Delete();
