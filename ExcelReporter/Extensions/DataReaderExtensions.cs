@@ -2,7 +2,7 @@
 
 namespace ExcelReporter.Extensions
 {
-    public static class DataReaderExtensions
+    internal static class DataReaderExtensions
     {
         public static object SafeGetValue(this IDataReader reader, int columnIndex)
         {

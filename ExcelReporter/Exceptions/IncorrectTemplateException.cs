@@ -2,7 +2,7 @@
 
 namespace ExcelReporter.Exceptions
 {
-    internal class IncorrectTemplateException : Exception
+    public class IncorrectTemplateException : Exception
     {
         public IncorrectTemplateException(string message) : base(message)
         {

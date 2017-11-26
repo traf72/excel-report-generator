@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ExcelReporter.Helpers
 {
-    public static class TypeHelper
+    internal static class TypeHelper
     {
         public static bool IsKeyValuePair(Type type)
         {

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using ExcelReporter.Helpers;
 
 namespace ExcelReporter.Enumerators
 {
@@ -18,7 +19,7 @@ namespace ExcelReporter.Enumerators
 
         public DataReaderEnumerator(IDataReader dataReader)
         {
-            _dataReader = dataReader ?? throw new ArgumentNullException(nameof(dataReader), Constants.NullParamMessage);
+            _dataReader = dataReader ?? throw new ArgumentNullException(nameof(dataReader), ArgumentHelper.NullParamMessage);
             CreateDataTable();
         }
 

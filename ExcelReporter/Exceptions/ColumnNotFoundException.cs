@@ -2,7 +2,7 @@
 
 namespace ExcelReporter.Exceptions
 {
-    internal class ColumnNotFoundException : Exception
+    public class ColumnNotFoundException : Exception
     {
         public ColumnNotFoundException(string message) : base(message)
         {

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using ExcelReporter.Helpers;
 
 namespace ExcelReporter.Enumerators
 {
@@ -11,7 +12,7 @@ namespace ExcelReporter.Enumerators
 
         public DataSetEnumerator(DataSet dataSet, string tableName = null)
         {
-            _ = dataSet ?? throw new ArgumentNullException(nameof(dataSet), Constants.NullParamMessage);
+            _ = dataSet ?? throw new ArgumentNullException(nameof(dataSet), ArgumentHelper.NullParamMessage);
             if (dataSet.Tables.Count == 0)
             {
                 throw new InvalidOperationException("DataSet does not contain any table");

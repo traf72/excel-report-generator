@@ -5,7 +5,6 @@ using ClosedXML.Excel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ExcelReporter.Enums;
 using ExcelReporter.Excel;
-using ExcelReporter.Interfaces.Panels.Excel;
 using ExcelReporter.Tests.CustomAsserts;
 
 namespace ExcelReporter.Tests.Excel

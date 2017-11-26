@@ -2,7 +2,7 @@
 
 namespace ExcelReporter.Exceptions
 {
-    internal class ParameterNotFoundException : Exception
+    public class ParameterNotFoundException : Exception
     {
         public ParameterNotFoundException(string message) : base(message)
         {
