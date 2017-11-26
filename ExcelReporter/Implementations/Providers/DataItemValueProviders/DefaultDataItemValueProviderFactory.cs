@@ -1,5 +1,5 @@
-﻿using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
-using System.Collections.Generic;
+﻿using ExcelReporter.Helpers;
+using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
 using System.Data;
 
 namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
@@ -18,9 +18,11 @@ namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
 
                 case IDataReader _:
                     return new DataReaderValueProvider();
+            }
 
-                case IDictionary<string, object> _:
-                    return new DictionaryValueProvider();
+            if (TypeHelper.IsDictionaryStringObject(data.GetType()))
+            {
+                return new DictionaryValueProvider();
             }
 
             return new ObjectPropertyValueProvider();

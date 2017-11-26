@@ -15,6 +15,8 @@ namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
             var factory = new DefaultDataItemValueProviderFactory();
             Assert.IsInstanceOfType(factory.Create(null), typeof(ObjectPropertyValueProvider));
             Assert.IsInstanceOfType(factory.Create(new Dictionary<string, object>()), typeof(DictionaryValueProvider));
+            Assert.IsInstanceOfType(factory.Create(new Dictionary<string, int>()), typeof(DictionaryValueProvider));
+            Assert.IsInstanceOfType(factory.Create(new Dictionary<string, string>()), typeof(DictionaryValueProvider));
 
             var dataTable = new DataTable();
             dataTable.Columns.Add("Column", typeof(int));
@@ -25,6 +27,7 @@ namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
 
             Assert.IsInstanceOfType(factory.Create(new int()), typeof(ObjectPropertyValueProvider));
             Assert.IsInstanceOfType(factory.Create(new object()), typeof(ObjectPropertyValueProvider));
+            Assert.IsInstanceOfType(factory.Create(new Dictionary<object, string>()), typeof(ObjectPropertyValueProvider));
         }
     }
 }

@@ -2,11 +2,13 @@
 
 namespace ExcelReporter.Implementations.Providers.DataItemColumnsProvider
 {
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+    // Пока оставил возможность применения только к свойствам
+    //[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Property)]
     public class ExcelColumnAttribute : Attribute
     {
         public string Caption { get; set; }
 
-        public double? Width { get; set; }
+        public double Width { get; set; }
     }
 }

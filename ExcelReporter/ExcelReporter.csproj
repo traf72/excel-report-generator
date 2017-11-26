@@ -79,6 +79,7 @@
     <Compile Include="Exceptions\MemberNotFoundException.cs" />
     <Compile Include="Extensions\DataReaderExtensions.cs" />
     <Compile Include="Extensions\ParameterInfoExtension.cs" />
+    <Compile Include="Helpers\TypeHelper.cs" />
     <Compile Include="HierarchicalDataItem.cs" />
     <Compile Include="Implementations\Panels\Excel\ExcelDataItemPanel.cs" />
     <Compile Include="Implementations\Panels\Excel\ExcelDynamicPanel.cs" />
@@ -90,10 +91,11 @@
     <Compile Include="Implementations\Providers\DataItemColumnsProvider\DataReaderColumnsProvider.cs" />
     <Compile Include="Implementations\Providers\DataItemColumnsProvider\DefaultColumnsProviderFactory.cs" />
     <Compile Include="Implementations\Providers\DataItemColumnsProvider\DictionaryColumnsProvider.cs" />
+    <Compile Include="Implementations\Providers\DataItemColumnsProvider\EnumerableColumnsProvider.cs" />
     <Compile Include="Implementations\Providers\DataItemColumnsProvider\TypeColumnsProvider.cs" />
     <Compile Include="Implementations\Providers\DataItemColumnsProvider\ObjectColumnsProvider.cs" />
     <Compile Include="Implementations\Providers\DataItemColumnsProvider\KeyValuePairColumnsProvider.cs" />
-    <Compile Include="Implementations\Providers\DataItemColumnsProvider\EnumerableColumnsProvider.cs" />
+    <Compile Include="Implementations\Providers\DataItemColumnsProvider\GenericEnumerableColumnsProvider.cs" />
     <Compile Include="Implementations\Providers\DataItemColumnsProvider\ExcelColumnAttribute.cs" />
     <Compile Include="Implementations\Providers\DataItemValueProviders\DefaultDataItemValueProviderFactory.cs" />
     <Compile Include="Implementations\Providers\DataItemValueProviders\DataReaderValueProvider.cs" />

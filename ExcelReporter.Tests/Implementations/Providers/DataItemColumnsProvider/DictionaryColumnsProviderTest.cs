@@ -11,13 +11,14 @@ namespace ExcelReporter.Tests.Implementations.Providers.DataItemColumnsProvider
         [TestMethod]
         public void TestGetColumnsList()
         {
+            IDataItemColumnsProvider columnsProvider = new DictionaryColumnsProvider();
+
             var dictArray = new[]
             {
                 new Dictionary<string, object> { ["Id"] = 1, ["Name"] = "One", ["IsVip"] = true },
                 new Dictionary<string, object> { ["Id"] = 2, ["Name"] = "Two" },
             };
 
-            IDataItemColumnsProvider columnsProvider = new DictionaryColumnsProvider();
             IList<ExcelDynamicColumn> columns = columnsProvider.GetColumnsList(dictArray);
 
             Assert.AreEqual(3, columns.Count);
@@ -33,6 +34,24 @@ namespace ExcelReporter.Tests.Implementations.Providers.DataItemColumnsProvider
             Assert.AreEqual("IsVip", columns[2].Name);
             Assert.AreEqual("IsVip", columns[2].Caption);
             Assert.IsNull(columns[2].Width);
+
+            dictArray = new[]
+            {
+                new Dictionary<string, object> { ["Id"] = 2, ["Name"] = "Two" },
+                new Dictionary<string, object> { ["Id"] = 1, ["Name"] = "One", ["IsVip"] = true },
+            };
+
+            columns = columnsProvider.GetColumnsList(dictArray);
+
+            Assert.AreEqual(2, columns.Count);
+
+            Assert.AreEqual("Id", columns[0].Name);
+            Assert.AreEqual("Id", columns[0].Caption);
+            Assert.IsNull(columns[0].Width);
+
+            Assert.AreEqual("Name", columns[1].Name);
+            Assert.AreEqual("Name", columns[1].Caption);
+            Assert.IsNull(columns[1].Width);
         }
 
         [TestMethod]

@@ -1,15 +1,16 @@
-﻿using ExcelReporter.Interfaces.Providers.DataItemColumnsProvider;
+﻿using System;
+using ExcelReporter.Interfaces.Providers.DataItemColumnsProvider;
 using System.Collections.Generic;
 
 namespace ExcelReporter.Implementations.Providers.DataItemColumnsProvider
 {
     internal class ObjectColumnsProvider : IDataItemColumnsProvider
     {
-        private readonly IDataItemColumnsProvider _typeColumnsProvider;
+        private readonly IGenericDataItemColumnsProvider<Type> _typeColumnsProvider;
 
-        public ObjectColumnsProvider(IDataItemColumnsProvider typeColumnsProvider)
+        public ObjectColumnsProvider(IGenericDataItemColumnsProvider<Type> typeColumnsProvider)
         {
-            _typeColumnsProvider = typeColumnsProvider;
+            _typeColumnsProvider = typeColumnsProvider ?? throw new ArgumentNullException(nameof(typeColumnsProvider), Constants.NullParamMessage);
         }
 
         public IList<ExcelDynamicColumn> GetColumnsList(object dataItem)

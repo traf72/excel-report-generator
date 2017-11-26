@@ -170,6 +170,7 @@
     <Compile Include="Enumerators\EnumeratorFactoryTest.cs" />
     <Compile Include="Extensions\DataReaderExtensionsTest.cs" />
     <Compile Include="Extensions\ParameterInfoExtensionTest.cs" />
+    <Compile Include="Helpers\TypeHelperTest.cs" />
     <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataProvider.cs" />
     <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DynamicPanelDataReaderRenderTest.cs" />
     <Compile Include="Implementations\Panels\Excel\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDictionaryRenderTest.cs" />
@@ -189,6 +190,11 @@
     <Compile Include="Implementations\Panels\Excel\PanelRenderTests\PanelRenderTest.cs" />
     <Compile Include="Implementations\Panels\Excel\PanelRenderTests\TestReport.cs" />
     <Compile Include="Implementations\Providers\DataItemColumnsProvider\DataSetColumnsProviderTest.cs" />
+    <Compile Include="Implementations\Providers\DataItemColumnsProvider\DefaultColumnsProviderFactoryTest.cs" />
+    <Compile Include="Implementations\Providers\DataItemColumnsProvider\EnumerableColumnsProviderTest.cs" />
+    <Compile Include="Implementations\Providers\DataItemColumnsProvider\GenericEnumerableColumnsProviderTest.cs" />
+    <Compile Include="Implementations\Providers\DataItemColumnsProvider\ObjectColumnsProviderTest.cs" />
+    <Compile Include="Implementations\Providers\DataItemColumnsProvider\TypeColumnsProviderTest.cs" />
     <Compile Include="Implementations\Providers\DataItemColumnsProvider\KeyValuePairColumnsProviderTest.cs" />
     <Compile Include="Implementations\Providers\DataItemColumnsProvider\DictionaryColumnsProviderTest.cs" />
     <Compile Include="Implementations\Providers\DataItemColumnsProvider\DataTableColumnsProviderTest.cs" />

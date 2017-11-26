@@ -1,6 +1,10 @@
-﻿using ExcelReporter.Interfaces.Providers.DataItemColumnsProvider;
+﻿using ExcelReporter.Helpers;
+using ExcelReporter.Interfaces.Providers.DataItemColumnsProvider;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace ExcelReporter.Implementations.Providers.DataItemColumnsProvider
 {
@@ -21,16 +25,32 @@ namespace ExcelReporter.Implementations.Providers.DataItemColumnsProvider
 
                 case DataSet _:
                     return new DataSetColumnsProvider(new DataTableColumnsProvider());
+            }
 
-                case KeyValuePair<object, object> _:
-                case IEnumerable<KeyValuePair<object, object>> _:
+            Type dataType = data.GetType();
+            if (TypeHelper.IsKeyValuePair(dataType))
+            {
+                return new KeyValuePairColumnsProvider();
+            }
+
+            Type genericEnumerable = dataType.GetInterfaces().SingleOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+            if (genericEnumerable != null)
+            {
+                Type genericType = genericEnumerable.GetGenericArguments()[0];
+                if (TypeHelper.IsKeyValuePair(genericType))
+                {
                     return new KeyValuePairColumnsProvider();
-
-                case IEnumerable<IDictionary<string, object>> _:
+                }
+                if (TypeHelper.IsDictionaryStringObject(genericType))
+                {
                     return new DictionaryColumnsProvider();
+                }
+                return new GenericEnumerableColumnsProvider(new TypeColumnsProvider());
+            }
 
-                case IEnumerable<object> _:
-                    return new EnumerableColumnsProvider(new TypeColumnsProvider());
+            if (data is IEnumerable)
+            {
+                return new EnumerableColumnsProvider(new TypeColumnsProvider());
             }
 
             return new ObjectColumnsProvider(new TypeColumnsProvider());
