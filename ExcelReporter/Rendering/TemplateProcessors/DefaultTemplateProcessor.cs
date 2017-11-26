@@ -1,8 +1,10 @@
-﻿using System;
-using ExcelReporter.Exceptions;
+﻿using ExcelReporter.Exceptions;
+using ExcelReporter.Extensions;
 using ExcelReporter.Helpers;
 using ExcelReporter.Rendering.Providers;
 using ExcelReporter.Rendering.Providers.DataItemValueProviders;
+using System;
+using ExcelReporter.Rendering.Providers.ParameterProviders;
 
 namespace ExcelReporter.Rendering.TemplateProcessors
 {
@@ -27,11 +29,13 @@ namespace ExcelReporter.Rendering.TemplateProcessors
             _dataItemValueProvider = dataItemValueProvider;
         }
 
-        public string LeftTemplateBorder => LeftBorder;
+        // TODO Обязательно протестировать переопределение границ (в том числе на границы с более, чем одним символом)
+        public virtual string LeftTemplateBorder => LeftBorder;
 
-        public string RightTemplateBorder => RightBorder;
+        // TODO Обязательно протестировать переопределение границ (в том числе на границы с более, чем одним символом)
+        public virtual string RightTemplateBorder => RightBorder;
 
-        public string TemplatePattern { get; } = $@"{LeftBorder}.+?{TypeValueSeparator}.+?{RightBorder}";
+        public string TemplatePattern => $@"{LeftTemplateBorder}.+?{TypeValueSeparator}.+?{RightTemplateBorder}";
 
         /// <summary>
         /// Get value based on template
@@ -44,7 +48,7 @@ namespace ExcelReporter.Rendering.TemplateProcessors
                 throw new ArgumentNullException(nameof(template), ArgumentHelper.EmptyStringParamMessage);
             }
 
-            string templ = template.Trim(LeftTemplateBorder[0], RightTemplateBorder[0], ' ');
+            string templ = this.GetTemplateWithoutBorders(template).Trim();
             int separatorIndex = templ.IndexOf(TypeValueSeparator, StringComparison.InvariantCulture);
             if (separatorIndex == -1)
             {

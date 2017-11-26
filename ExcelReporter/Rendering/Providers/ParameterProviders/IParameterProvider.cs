@@ -1,4 +1,4 @@
-﻿namespace ExcelReporter.Rendering.Providers
+﻿namespace ExcelReporter.Rendering.Providers.ParameterProviders
 {
     public interface IParameterProvider
     {

@@ -1,10 +1,10 @@
-﻿using ExcelReporter.Exceptions;
+﻿using System;
+using System.Collections.Generic;
+using ExcelReporter.Exceptions;
 using ExcelReporter.Helpers;
 using ExcelReporter.Rendering.Providers.DataItemValueProviders;
-using System;
-using System.Collections.Generic;
 
-namespace ExcelReporter.Rendering.Providers
+namespace ExcelReporter.Rendering.Providers.ParameterProviders
 {
     /// <summary>
     /// Provides parameters values from dictionary

@@ -227,7 +227,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
         {
             if (!string.IsNullOrWhiteSpace(methodName))
             {
-                MethodInfo method = Report.GetType().GetMethod(methodName);
+                MethodInfo method = Report.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                 if (method == null)
                 {
                     throw new MethodNotFoundException($"Cannot find public instance method \"{methodName}\" in type \"{Report.GetType().Name}\"");

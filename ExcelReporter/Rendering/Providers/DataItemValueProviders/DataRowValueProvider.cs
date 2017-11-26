@@ -8,7 +8,7 @@ namespace ExcelReporter.Rendering.Providers.DataItemValueProviders
     /// <summary>
     /// Provides values from data row
     /// </summary>
-    public class DataRowValueProvider : IGenericDataItemValueProvider<DataRow>
+    internal class DataRowValueProvider : IGenericDataItemValueProvider<DataRow>
     {
         private string _columnName;
         private DataRow _dataRow;

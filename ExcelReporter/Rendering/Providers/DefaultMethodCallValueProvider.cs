@@ -14,7 +14,7 @@ namespace ExcelReporter.Rendering.Providers
     /// <summary>
     /// Provides result of method call
     /// </summary>
-    public class MethodCallValueProvider : IMethodCallValueProvider
+    public class DefaultMethodCallValueProvider : IMethodCallValueProvider
     {
         private static readonly Stack<string> TemplateStack = new Stack<string>();
 
@@ -22,7 +22,7 @@ namespace ExcelReporter.Rendering.Providers
 
         /// <param name="typeProvider">Type provider which will be used for type search</param>
         /// <param name="defaultInstance">Instance on which method will be called if template does not specify the type explicitly</param>
-        public MethodCallValueProvider(ITypeProvider typeProvider, object defaultInstance)
+        public DefaultMethodCallValueProvider(ITypeProvider typeProvider, object defaultInstance)
         {
             TypeProvider = typeProvider ?? throw new ArgumentNullException(nameof(typeProvider), ArgumentHelper.NullParamMessage);
             DefaultInstance = defaultInstance;
@@ -185,7 +185,7 @@ namespace ExcelReporter.Rendering.Providers
         protected virtual IList<InputParameter> GetInputParametersValues(string inputParamsAsString, ITemplateProcessor templateProcessor, object dataItem)
         {
             IList<InputParameter> inputParameters = new List<InputParameter>();
-            string pattern = GetTemplatePatternWithoutBorders(templateProcessor);
+            string pattern = templateProcessor.GetTemplateWithoutBorders(templateProcessor.TemplatePattern);
             foreach (string p in ParseInputParams(inputParamsAsString))
             {
                 if (p.StartsWith("\"") && p.EndsWith("\""))
@@ -344,20 +344,6 @@ namespace ExcelReporter.Rendering.Providers
             }
 
             return method;
-        }
-
-        private string GetTemplatePatternWithoutBorders(ITemplateProcessor templateProcessor)
-        {
-            string pattern = templateProcessor.TemplatePattern;
-            if (templateProcessor.LeftTemplateBorder != null)
-            {
-                pattern = pattern.Substring(templateProcessor.LeftTemplateBorder.Length);
-            }
-            if (templateProcessor.RightTemplateBorder != null)
-            {
-                pattern = pattern.Substring(0, pattern.Length - templateProcessor.RightTemplateBorder.Length);
-            }
-            return pattern;
         }
 
         /// <summary>

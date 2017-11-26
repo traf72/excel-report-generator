@@ -3,6 +3,7 @@ using ExcelReporter.Exceptions;
 using ExcelReporter.Rendering;
 using ExcelReporter.Rendering.Providers;
 using ExcelReporter.Rendering.Providers.DataItemValueProviders;
+using ExcelReporter.Rendering.Providers.ParameterProviders;
 using ExcelReporter.Rendering.TemplateProcessors;
 using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

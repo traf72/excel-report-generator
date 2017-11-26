@@ -6,10 +6,10 @@ using ExcelReporter.Attributes;
 using ExcelReporter.Exceptions;
 using ExcelReporter.Helpers;
 
-namespace ExcelReporter.Rendering.Providers
+namespace ExcelReporter.Rendering.Providers.ParameterProviders
 {
     /// <summary>
-    /// Provides parameters values from instance members via reflection
+    /// Provides parameters values from instance public properties or fields via reflection
     /// </summary>
     public class ReflectionParameterProvider : IParameterProvider
     {

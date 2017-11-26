@@ -7,7 +7,7 @@ using ExcelReporter.Helpers;
 
 namespace ExcelReporter.Rendering.Providers
 {
-    public class TypeProvider : ITypeProvider
+    public class DefaultTypeProvider : ITypeProvider
     {
         private const char NamespaceSeparator = ':';
 
@@ -16,7 +16,7 @@ namespace ExcelReporter.Rendering.Providers
         private readonly IDictionary<string, Type> _typesCache = new Dictionary<string, Type>();
 
         /// <param name="assembly">Assembly where type will be searched (default = current executing assembly)</param>
-        public TypeProvider(Assembly assembly = null)
+        public DefaultTypeProvider(Assembly assembly = null)
         {
             _assembly = assembly ?? Assembly.GetExecutingAssembly();
         }

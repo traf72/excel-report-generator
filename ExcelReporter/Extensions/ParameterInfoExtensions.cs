@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace ExcelReporter.Extensions
 {
-    internal static class ParameterInfoExtension
+    internal static class ParameterInfoExtensions
     {
         public static bool IsParams(this ParameterInfo parameter)
         {

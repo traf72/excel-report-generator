@@ -2,6 +2,7 @@
 using ExcelReporter.Attributes;
 using ExcelReporter.Exceptions;
 using ExcelReporter.Rendering.Providers;
+using ExcelReporter.Rendering.Providers.ParameterProviders;
 using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

@@ -13,7 +13,7 @@ namespace ExcelReporter.Tests.Rendering.Providers
         [TestMethod]
         public void TestGetType()
         {
-            ITypeProvider typeProvider = new TypeProvider(Assembly.GetExecutingAssembly());
+            ITypeProvider typeProvider = new DefaultTypeProvider(Assembly.GetExecutingAssembly());
 
             ExceptionAssert.Throws<ArgumentException>(() => typeProvider.GetType(null));
             ExceptionAssert.Throws<ArgumentException>(() => typeProvider.GetType(string.Empty));

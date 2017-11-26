@@ -9,7 +9,7 @@ namespace ExcelReporter.Rendering.Providers.DataItemValueProviders
     /// <summary>
     /// Provides properties values from object instance
     /// </summary>
-    public class ObjectPropertyValueProvider : IDataItemValueProvider
+    internal class ObjectPropertyValueProvider : IDataItemValueProvider
     {
         private string _propTemplate;
         private object _dataItem;

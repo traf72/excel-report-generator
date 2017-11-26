@@ -9,7 +9,7 @@ namespace ExcelReporter.Rendering.Providers.DataItemValueProviders
     /// <summary>
     /// Provides values from data reader
     /// </summary>
-    public class DataReaderValueProvider : IGenericDataItemValueProvider<IDataReader>
+    internal class DataReaderValueProvider : IGenericDataItemValueProvider<IDataReader>
     {
         private string _columnName;
         private IDataReader _dataReader;

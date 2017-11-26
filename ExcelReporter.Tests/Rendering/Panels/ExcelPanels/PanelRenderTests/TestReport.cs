@@ -1,16 +1,17 @@
-﻿using System;
-using System.Reflection;
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
 using ExcelReporter.Attributes;
 using ExcelReporter.Rendering.Panels.ExcelPanels;
 using ExcelReporter.Rendering.Providers;
 using ExcelReporter.Rendering.Providers.DataItemValueProviders;
 using ExcelReporter.Rendering.TemplateProcessors;
 using ExcelReporter.Reports;
+using System;
+using System.Reflection;
+using ExcelReporter.Rendering.Providers.ParameterProviders;
 
 namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 {
-    internal class TestReport : BaseReport
+    public class TestReport : BaseReport
     {
         private int _counter;
 
@@ -46,33 +47,33 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             return ++_counter;
         }
 
-        public void BeforeRenderParentDataSourcePanel(IExcelPanel panel)
+        internal void BeforeRenderParentDataSourcePanel(IExcelPanel panel)
         {
             panel.Range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
         }
 
-        public void AfterRenderParentDataSourcePanelChildBottom(IExcelPanel panel)
+        internal void AfterRenderParentDataSourcePanelChildBottom(IExcelPanel panel)
         {
             panel.Range.LastRow().Delete(XLShiftDeletedCells.ShiftCellsUp);
             panel.Range.LastRow().Style.Border.BottomBorder = XLBorderStyleValues.Thin;
             panel.Range.LastRow().Style.Border.BottomBorderColor = XLColor.Black;
         }
 
-        public void AfterRenderParentDataSourcePanelChildTop(IExcelPanel panel)
+        internal void AfterRenderParentDataSourcePanelChildTop(IExcelPanel panel)
         {
             panel.Range.FirstRow().Delete(XLShiftDeletedCells.ShiftCellsUp);
             panel.Range.FirstRow().Style.Border.TopBorder = XLBorderStyleValues.Thin;
             panel.Range.FirstRow().Style.Border.TopBorderColor = XLColor.Black;
         }
 
-        public void AfterRenderParentDataSourcePanelChildRight(IExcelPanel panel)
+        internal void AfterRenderParentDataSourcePanelChildRight(IExcelPanel panel)
         {
             panel.Range.LastColumn().Delete(XLShiftDeletedCells.ShiftCellsLeft);
             panel.Range.LastColumn().Style.Border.RightBorder = XLBorderStyleValues.Thin;
             panel.Range.LastColumn().Style.Border.RightBorderColor = XLColor.Black;
         }
 
-        public void AfterRenderParentDataSourcePanelChildLeft(IExcelPanel panel)
+        internal void AfterRenderParentDataSourcePanelChildLeft(IExcelPanel panel)
         {
             //// Стандартный способ не работает, Range почему-то становится Invalid (возможно баг ClosedXml)
             //panel.Range.FirstColumn().Delete(XLShiftDeletedCells.ShiftCellsLeft);
@@ -89,20 +90,20 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             range.Style.Border.LeftBorderColor = XLColor.Black;
         }
 
-        public void AfterRenderChildDataSourcePanel(IExcelPanel panel)
+        internal void AfterRenderChildDataSourcePanel(IExcelPanel panel)
         {
             panel.Range.LastRow().Delete(XLShiftDeletedCells.ShiftCellsUp);
         }
     }
 
-    internal class BaseReport : IExcelReport
+    public class BaseReport : IExcelReport
     {
         protected BaseReport()
         {
             Workbook = new XLWorkbook();
 
             TemplateProcessor = new DefaultTemplateProcessor(new ReflectionParameterProvider(this),
-                new MethodCallValueProvider(new TypeProvider(Assembly.GetExecutingAssembly()), this),
+                new DefaultMethodCallValueProvider(new DefaultTypeProvider(Assembly.GetExecutingAssembly()), this),
                 new HierarchicalDataItemValueProvider(new DefaultDataItemValueProviderFactory()));
         }
 

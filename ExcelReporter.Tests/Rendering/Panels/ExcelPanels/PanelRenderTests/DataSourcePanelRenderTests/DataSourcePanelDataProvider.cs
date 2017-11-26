@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourcePanelRenderTests
 {
-    internal class DataSourcePanelDataProvider
+    public class DataSourcePanelDataProvider
     {
         public class TestDataProvider
         {
@@ -155,7 +155,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             }
         }
 
-        internal class TestItem
+        public class TestItem
         {
             public TestItem(string name, DateTime date, decimal sum, Contacts contacts = null)
             {
@@ -178,7 +178,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             public IEnumerable<int> ChildrenPrimitive { get; set; }
         }
 
-        internal class ChildItem
+        public class ChildItem
         {
             public ChildItem(string field1, string field2)
             {
@@ -193,7 +193,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             public ChildOfChildItem[] Children { get; set; }
         }
 
-        internal class ChildOfChildItem
+        public class ChildOfChildItem
         {
             public ChildOfChildItem(string field1, string field2)
             {
@@ -206,7 +206,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             public string Field2 { get; set; }
         }
 
-        internal class Contacts
+        public class Contacts
         {
             public Contacts(string phone, string fax)
             {

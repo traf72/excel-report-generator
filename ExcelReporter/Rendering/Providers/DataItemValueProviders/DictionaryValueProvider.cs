@@ -7,7 +7,7 @@ namespace ExcelReporter.Rendering.Providers.DataItemValueProviders
     /// <summary>
     /// Provides values from dictionary
     /// </summary>
-    public class DictionaryValueProvider<TValue> : IGenericDataItemValueProvider<IDictionary<string, TValue>>
+    internal class DictionaryValueProvider<TValue> : IGenericDataItemValueProvider<IDictionary<string, TValue>>
     {
         public object GetValue(string key, IDictionary<string, TValue> dataItem)
         {

@@ -15,7 +15,7 @@ namespace ExcelReporter.Rendering.Providers.DataItemValueProviders
         {
         }
 
-        public HierarchicalDataItemValueProvider(IDataItemValueProviderFactory dataItemValueProviderFactory)
+        internal HierarchicalDataItemValueProvider(IDataItemValueProviderFactory dataItemValueProviderFactory)
         {
             _factory = dataItemValueProviderFactory;
         }
