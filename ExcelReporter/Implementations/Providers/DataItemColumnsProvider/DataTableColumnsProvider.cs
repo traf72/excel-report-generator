@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace ExcelReporter.Implementations.Providers.DataItemColumnsProvider
 {
+    /// <summary>
+    /// Provides columns info from DataTable
+    /// </summary>
     internal class DataTableColumnsProvider : IGenericDataItemColumnsProvider<DataTable>
     {
         public IList<ExcelDynamicColumn> GetColumnsList(DataTable dataTable)

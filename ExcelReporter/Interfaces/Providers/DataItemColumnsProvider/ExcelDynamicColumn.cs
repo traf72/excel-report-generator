@@ -2,6 +2,9 @@
 
 namespace ExcelReporter.Interfaces.Providers.DataItemColumnsProvider
 {
+    /// <summary>
+    /// Describes excel dynamic column
+    /// </summary>
     internal struct ExcelDynamicColumn
     {
         private string _caption;

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace ExcelReporter.Implementations.Providers.DataItemColumnsProvider
 {
+    /// <summary>
+    /// Provides columns info from KeyValuePair
+    /// </summary>
     internal class KeyValuePairColumnsProvider : IDataItemColumnsProvider
     {
         public IList<ExcelDynamicColumn> GetColumnsList(object data)

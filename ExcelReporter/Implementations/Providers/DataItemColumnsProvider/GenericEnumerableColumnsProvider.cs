@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace ExcelReporter.Implementations.Providers.DataItemColumnsProvider
 {
+    /// <summary>
+    /// Provides columns info from generic enumerable
+    /// </summary>
     internal class GenericEnumerableColumnsProvider : IGenericDataItemColumnsProvider<IEnumerable<object>>
     {
         private readonly IGenericDataItemColumnsProvider<Type> _typeColumnsProvider;

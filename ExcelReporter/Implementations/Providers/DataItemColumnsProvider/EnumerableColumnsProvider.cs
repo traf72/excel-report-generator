@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace ExcelReporter.Implementations.Providers.DataItemColumnsProvider
 {
+    /// <summary>
+    /// Provides columns info from not generic enumerable
+    /// </summary>
     internal class EnumerableColumnsProvider : IGenericDataItemColumnsProvider<IEnumerable>
     {
         private readonly IGenericDataItemColumnsProvider<Type> _typeColumnsProvider;
@@ -17,18 +20,13 @@ namespace ExcelReporter.Implementations.Providers.DataItemColumnsProvider
 
         public IList<ExcelDynamicColumn> GetColumnsList(IEnumerable data)
         {
-            if (data == null)
+            object firstElement = data?.Cast<object>().FirstOrDefault();
+            if (firstElement == null)
             {
                 return new List<ExcelDynamicColumn>();
             }
 
-            object firstElem = data.Cast<object>().FirstOrDefault();
-            if (firstElem == null)
-            {
-                return new List<ExcelDynamicColumn>();
-            }
-
-            return _typeColumnsProvider.GetColumnsList(firstElem.GetType());
+            return _typeColumnsProvider.GetColumnsList(firstElement.GetType());
         }
 
         IList<ExcelDynamicColumn> IDataItemColumnsProvider.GetColumnsList(object data)

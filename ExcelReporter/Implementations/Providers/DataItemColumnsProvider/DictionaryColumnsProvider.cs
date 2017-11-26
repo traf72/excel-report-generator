@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace ExcelReporter.Implementations.Providers.DataItemColumnsProvider
 {
+    /// <summary>
+    /// Provides columns info from collection of IDictionary
+    /// </summary>
     internal class DictionaryColumnsProvider : IGenericDataItemColumnsProvider<IEnumerable<IDictionary<string, object>>>
     {
         public IList<ExcelDynamicColumn> GetColumnsList(IEnumerable<IDictionary<string, object>> data)

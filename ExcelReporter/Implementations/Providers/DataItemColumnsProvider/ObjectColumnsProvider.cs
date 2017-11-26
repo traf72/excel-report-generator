@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace ExcelReporter.Implementations.Providers.DataItemColumnsProvider
 {
+    /// <summary>
+    /// Provides columns info from any object
+    /// </summary>
     internal class ObjectColumnsProvider : IDataItemColumnsProvider
     {
         private readonly IGenericDataItemColumnsProvider<Type> _typeColumnsProvider;

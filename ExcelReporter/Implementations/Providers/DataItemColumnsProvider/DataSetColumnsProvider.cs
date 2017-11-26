@@ -5,6 +5,9 @@ using System.Data;
 
 namespace ExcelReporter.Implementations.Providers.DataItemColumnsProvider
 {
+    /// <summary>
+    /// Provides columns info from DataSet
+    /// </summary>
     internal class DataSetColumnsProvider : IGenericDataItemColumnsProvider<DataSet>
     {
         private readonly IGenericDataItemColumnsProvider<DataTable> _dataTableColumnsProvider;

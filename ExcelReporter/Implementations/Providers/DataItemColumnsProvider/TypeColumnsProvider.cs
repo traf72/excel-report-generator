@@ -6,6 +6,9 @@ using System.Reflection;
 
 namespace ExcelReporter.Implementations.Providers.DataItemColumnsProvider
 {
+    /// <summary>
+    /// Provides columns info from from Type
+    /// </summary>
     internal class TypeColumnsProvider : IGenericDataItemColumnsProvider<Type>
     {
         public IList<ExcelDynamicColumn> GetColumnsList(Type type)
