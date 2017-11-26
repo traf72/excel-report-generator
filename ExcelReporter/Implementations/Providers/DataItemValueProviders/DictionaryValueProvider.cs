@@ -1,5 +1,5 @@
-﻿using System;
-using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
+﻿using ExcelReporter.Interfaces.Providers.DataItemValueProviders;
+using System;
 using System.Collections.Generic;
 
 namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
@@ -7,16 +7,16 @@ namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
     /// <summary>
     /// Provides values from dictionary
     /// </summary>
-    public class DictionaryValueProvider : IGenericDataItemValueProvider<IDictionary<string, object>>
+    public class DictionaryValueProvider<TValue> : IGenericDataItemValueProvider<IDictionary<string, TValue>>
     {
-        public object GetValue(string key, IDictionary<string, object> dataItem)
+        public object GetValue(string key, IDictionary<string, TValue> dataItem)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
                 throw new ArgumentException(Constants.EmptyStringParamMessage, nameof(key));
             }
 
-            if (dataItem.TryGetValue(key, out object value))
+            if (dataItem.TryGetValue(key, out TValue value))
             {
                 return value;
             }
@@ -25,7 +25,7 @@ namespace ExcelReporter.Implementations.Providers.DataItemValueProviders
 
         public object GetValue(string key, object dataItem)
         {
-            return GetValue(key, (IDictionary<string, object>)dataItem);
+            return GetValue(key, (IDictionary<string, TValue>)dataItem);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ExcelReporter.Implementations.Providers
     /// </summary>
     public class DictionaryParameterProvider : IParameterProvider
     {
-        private readonly IDataItemValueProvider _valueProvider = new DictionaryValueProvider();
+        private readonly IDataItemValueProvider _valueProvider = new DictionaryValueProvider<object>();
         private readonly IDictionary<string, object> _parameters;
 
         public DictionaryParameterProvider(IDictionary<string, object> parameters)

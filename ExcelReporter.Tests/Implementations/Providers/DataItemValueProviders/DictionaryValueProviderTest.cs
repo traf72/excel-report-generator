@@ -20,7 +20,7 @@ namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
                 ["GuidParam"] = Guid.NewGuid(),
             };
 
-            var provider = new DictionaryValueProvider();
+            var provider = new DictionaryValueProvider<object>();
 
             Assert.AreEqual(dict["StrParam"], provider.GetValue("StrParam", dict));
             Assert.AreEqual(dict["IntParam"], provider.GetValue("IntParam", dict));
@@ -31,6 +31,21 @@ namespace ExcelReporter.Tests.Implementations.Providers.DataItemValueProviders
             ExceptionAssert.Throws<KeyNotFoundException>(() => provider.GetValue(" StrParam ", dict), "Key \" StrParam \" was not found in dictionary");
             ExceptionAssert.Throws<KeyNotFoundException>(() => provider.GetValue("strParam", dict), "Key \"strParam\" was not found in dictionary");
             ExceptionAssert.Throws<KeyNotFoundException>(() => provider.GetValue("BadParam", dict), "Key \"BadParam\" was not found in dictionary");
+        }
+
+        [TestMethod]
+        public void TestGetValueIfDictionaryHasDecimalValues()
+        {
+            var dict = new Dictionary<string, decimal>
+            {
+                ["Key1"] = 27.67m,
+                ["Key2"] = 64m,
+            };
+
+            var provider = new DictionaryValueProvider<decimal>();
+
+            Assert.AreEqual(dict["Key1"], provider.GetValue("Key1", dict));
+            Assert.AreEqual(dict["Key2"], provider.GetValue("Key2", dict));
         }
     }
 }

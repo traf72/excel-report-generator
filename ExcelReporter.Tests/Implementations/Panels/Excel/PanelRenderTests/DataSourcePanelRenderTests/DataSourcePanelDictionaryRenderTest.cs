@@ -51,15 +51,30 @@ namespace ExcelReporter.Tests.Implementations.Panels.Excel.PanelRenderTests.Data
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 2, 4);
-            range.AddToNamed("TestRange", XLScope.Worksheet);
+            IXLRange range1 = ws.Range(2, 2, 2, 4);
+            range1.AddToNamed("TestRange1", XLScope.Worksheet);
 
             ws.Cell(2, 2).Value = "{di:Name}";
             ws.Cell(2, 3).Value = "{di:Value}";
             ws.Cell(2, 4).Value = "{di:IsVip}";
 
-            var panel = new ExcelDataSourcePanel("m:TestDataProvider:GetDictionaryEnumerable()", ws.NamedRange("TestRange"), report);
-            panel.Render();
+            var panel1 = new ExcelDataSourcePanel("m:TestDataProvider:GetDictionaryEnumerable()", ws.NamedRange("TestRange1"), report);
+            panel1.Render();
+
+            var dictWihtDecimalValues = new List<IDictionary<string, decimal>>
+            {
+                new Dictionary<string, decimal> { ["Value"] = 25.7m },
+                new Dictionary<string, decimal> { ["Value"] = 250.7m },
+                new Dictionary<string, decimal> { ["Value"] = 2500.7m },
+            };
+
+            IXLRange range2 = ws.Range(2, 6, 2, 6);
+            range2.AddToNamed("TestRange2", XLScope.Worksheet);
+
+            ws.Cell(2, 6).Value = "{di:Value}";
+
+            var panel2 = new ExcelDataSourcePanel(dictWihtDecimalValues, ws.NamedRange("TestRange2"), report);
+            panel2.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelDictionaryRenderTest),
                 nameof(TestRenderDictionaryEnumerable)), ws.Workbook);
