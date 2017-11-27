@@ -12,9 +12,9 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         [TestMethod]
         public void TestGetColumnsList()
         {
-            IGenericDataItemColumnsProvider<Type> typeColumsProvider = Substitute.For<IGenericDataItemColumnsProvider<Type>>();
+            IGenericColumnsProvider<Type> typeColumsProvider = Substitute.For<IGenericColumnsProvider<Type>>();
 
-            IDataItemColumnsProvider columnsProvider = new ObjectColumnsProvider(typeColumsProvider);
+            IColumnsProvider columnsProvider = new ObjectColumnsProvider(typeColumsProvider);
             var testObject = new TypeColumnsProviderTest.TestType();
             columnsProvider.GetColumnsList(testObject);
             typeColumsProvider.Received(1).GetColumnsList(testObject.GetType());
@@ -29,7 +29,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         [TestMethod]
         public void TestGetColumnsListIfObjectIsNull()
         {
-            IDataItemColumnsProvider columnsProvider = new ObjectColumnsProvider(new TypeColumnsProvider());
+            IColumnsProvider columnsProvider = new ObjectColumnsProvider(new TypeColumnsProvider());
             Assert.AreEqual(0, columnsProvider.GetColumnsList(null).Count);
         }
 

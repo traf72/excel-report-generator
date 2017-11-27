@@ -7,9 +7,9 @@ using ExcelReporter.Helpers;
 
 namespace ExcelReporter.Rendering.Providers.ColumnsProviders
 {
-    internal class ColumnsProviderFactory : IDataItemColumnsProviderFactory
+    internal class ColumnsProviderFactory : IColumnsProviderFactory
     {
-        public virtual IDataItemColumnsProvider Create(object data)
+        public virtual IColumnsProvider Create(object data)
         {
             switch (data)
             {

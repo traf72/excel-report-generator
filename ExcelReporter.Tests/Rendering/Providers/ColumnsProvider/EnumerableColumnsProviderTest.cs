@@ -13,8 +13,8 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         [TestMethod]
         public void TestGetColumnsList()
         {
-            IGenericDataItemColumnsProvider<Type> typeColumsProvider = Substitute.For<IGenericDataItemColumnsProvider<Type>>();
-            IDataItemColumnsProvider columnsProvider = new EnumerableColumnsProvider(typeColumsProvider);
+            IGenericColumnsProvider<Type> typeColumsProvider = Substitute.For<IGenericColumnsProvider<Type>>();
+            IColumnsProvider columnsProvider = new EnumerableColumnsProvider(typeColumsProvider);
 
             columnsProvider.GetColumnsList(columnsProvider.GetColumnsList(new ArrayList { new TypeColumnsProviderTest.TestType(), "str" }));
             typeColumsProvider.Received(1).GetColumnsList(typeof(TypeColumnsProviderTest.TestType));
@@ -28,7 +28,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         [TestMethod]
         public void TestGetColumnsListIfEnumerableIsNullOrEmpty()
         {
-            IDataItemColumnsProvider columnsProvider = new EnumerableColumnsProvider(new TypeColumnsProvider());
+            IColumnsProvider columnsProvider = new EnumerableColumnsProvider(new TypeColumnsProvider());
             Assert.AreEqual(0, columnsProvider.GetColumnsList(null).Count);
             Assert.AreEqual(0, columnsProvider.GetColumnsList(new ArrayList()).Count);
         }

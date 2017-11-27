@@ -7,7 +7,7 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
     /// <summary>
     /// Provides columns info from DataTable
     /// </summary>
-    internal class DataTableColumnsProvider : IGenericDataItemColumnsProvider<DataTable>
+    internal class DataTableColumnsProvider : IGenericColumnsProvider<DataTable>
     {
         public IList<ExcelDynamicColumn> GetColumnsList(DataTable dataTable)
         {
@@ -23,7 +23,7 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
                 .ToList();
         }
 
-        IList<ExcelDynamicColumn> IDataItemColumnsProvider.GetColumnsList(object dataTable)
+        IList<ExcelDynamicColumn> IColumnsProvider.GetColumnsList(object dataTable)
         {
             return GetColumnsList((DataTable)dataTable);
         }

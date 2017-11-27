@@ -13,7 +13,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         [TestMethod]
         public void TestCreate()
         {
-            IDataItemColumnsProviderFactory factory = new ColumnsProviderFactory();
+            IColumnsProviderFactory factory = new ColumnsProviderFactory();
 
             Assert.IsNull(factory.Create(null));
             Assert.AreEqual(typeof(DataReaderColumnsProvider), factory.Create(Substitute.For<IDataReader>()).GetType());

@@ -7,11 +7,11 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
     /// <summary>
     /// Provides columns info from any object
     /// </summary>
-    internal class ObjectColumnsProvider : IDataItemColumnsProvider
+    internal class ObjectColumnsProvider : IColumnsProvider
     {
-        private readonly IGenericDataItemColumnsProvider<Type> _typeColumnsProvider;
+        private readonly IGenericColumnsProvider<Type> _typeColumnsProvider;
 
-        public ObjectColumnsProvider(IGenericDataItemColumnsProvider<Type> typeColumnsProvider)
+        public ObjectColumnsProvider(IGenericColumnsProvider<Type> typeColumnsProvider)
         {
             _typeColumnsProvider = typeColumnsProvider ?? throw new ArgumentNullException(nameof(typeColumnsProvider), ArgumentHelper.NullParamMessage);
         }

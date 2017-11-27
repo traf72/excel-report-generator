@@ -8,12 +8,12 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
     /// <summary>
     /// Provides columns info from DataSet
     /// </summary>
-    internal class DataSetColumnsProvider : IGenericDataItemColumnsProvider<DataSet>
+    internal class DataSetColumnsProvider : IGenericColumnsProvider<DataSet>
     {
-        private readonly IGenericDataItemColumnsProvider<DataTable> _dataTableColumnsProvider;
+        private readonly IGenericColumnsProvider<DataTable> _dataTableColumnsProvider;
         private readonly string _tableName;
 
-        public DataSetColumnsProvider(IGenericDataItemColumnsProvider<DataTable> dataTableColumnsProvider, string tableName = null)
+        public DataSetColumnsProvider(IGenericColumnsProvider<DataTable> dataTableColumnsProvider, string tableName = null)
         {
             _dataTableColumnsProvider = dataTableColumnsProvider ?? throw new ArgumentNullException(nameof(dataTableColumnsProvider), ArgumentHelper.NullParamMessage);
             _tableName = tableName;
@@ -35,7 +35,7 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
             return table == null ? new List<ExcelDynamicColumn>() : _dataTableColumnsProvider.GetColumnsList(table);
         }
 
-        IList<ExcelDynamicColumn> IDataItemColumnsProvider.GetColumnsList(object dataSet)
+        IList<ExcelDynamicColumn> IColumnsProvider.GetColumnsList(object dataSet)
         {
             return GetColumnsList((DataSet)dataSet);
         }

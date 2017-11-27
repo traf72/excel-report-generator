@@ -5,7 +5,7 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
     /// <summary>
     /// Provides columns info from KeyValuePair
     /// </summary>
-    internal class KeyValuePairColumnsProvider : IDataItemColumnsProvider
+    internal class KeyValuePairColumnsProvider : IColumnsProvider
     {
         public IList<ExcelDynamicColumn> GetColumnsList(object data)
         {

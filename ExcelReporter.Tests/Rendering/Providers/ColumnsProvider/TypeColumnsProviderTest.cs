@@ -12,7 +12,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         [TestMethod]
         public void TestGetColumnsList()
         {
-            IDataItemColumnsProvider columnsProvider = new TypeColumnsProvider();
+            IColumnsProvider columnsProvider = new TypeColumnsProvider();
             IList<ExcelDynamicColumn> columns = columnsProvider.GetColumnsList(typeof(TestType));
 
             Assert.AreEqual(4, columns.Count);
@@ -37,7 +37,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         [TestMethod]
         public void TestGetColumnsListIfTypeIsNull()
         {
-            IDataItemColumnsProvider columnsProvider = new TypeColumnsProvider();
+            IColumnsProvider columnsProvider = new TypeColumnsProvider();
             Assert.AreEqual(0, columnsProvider.GetColumnsList(null).Count);
         }
 

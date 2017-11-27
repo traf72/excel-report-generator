@@ -9,11 +9,11 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
     /// <summary>
     /// Provides columns info from not generic enumerable
     /// </summary>
-    internal class EnumerableColumnsProvider : IGenericDataItemColumnsProvider<IEnumerable>
+    internal class EnumerableColumnsProvider : IGenericColumnsProvider<IEnumerable>
     {
-        private readonly IGenericDataItemColumnsProvider<Type> _typeColumnsProvider;
+        private readonly IGenericColumnsProvider<Type> _typeColumnsProvider;
 
-        public EnumerableColumnsProvider(IGenericDataItemColumnsProvider<Type> typeColumnsProvider)
+        public EnumerableColumnsProvider(IGenericColumnsProvider<Type> typeColumnsProvider)
         {
             _typeColumnsProvider = typeColumnsProvider ?? throw new ArgumentNullException(nameof(typeColumnsProvider), ArgumentHelper.NullParamMessage);
         }
@@ -29,7 +29,7 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
             return _typeColumnsProvider.GetColumnsList(firstElement.GetType());
         }
 
-        IList<ExcelDynamicColumn> IDataItemColumnsProvider.GetColumnsList(object data)
+        IList<ExcelDynamicColumn> IColumnsProvider.GetColumnsList(object data)
         {
             return GetColumnsList((IEnumerable)data);
         }

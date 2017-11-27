@@ -12,7 +12,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         [TestMethod]
         public void TestGetColumnsList()
         {
-            IDataItemColumnsProvider columnsProvider = new KeyValuePairColumnsProvider();
+            IColumnsProvider columnsProvider = new KeyValuePairColumnsProvider();
             IList<ExcelDynamicColumn> columns = columnsProvider.GetColumnsList(new KeyValuePair<int, string>());
 
             Assert.AreEqual(2, columns.Count);

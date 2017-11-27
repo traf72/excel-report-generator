@@ -2,7 +2,7 @@
 
 namespace ExcelReporter.Rendering.Providers.ColumnsProviders
 {
-    internal interface IDataItemColumnsProvider
+    internal interface IColumnsProvider
     {
         /// <summary>
         /// Provides columns info based on data

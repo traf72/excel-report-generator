@@ -11,7 +11,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         [TestMethod]
         public void TestGetColumnsList()
         {
-            IDataItemColumnsProvider columnsProvider = new DictionaryColumnsProvider();
+            IColumnsProvider columnsProvider = new DictionaryColumnsProvider();
 
             var dictArray = new[]
             {
@@ -57,7 +57,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         [TestMethod]
         public void TestGetColumnsListIfDictionaryIsNullOrEmpty()
         {
-            IDataItemColumnsProvider columnsProvider = new DictionaryColumnsProvider();
+            IColumnsProvider columnsProvider = new DictionaryColumnsProvider();
             Assert.AreEqual(0, columnsProvider.GetColumnsList(null).Count);
             Assert.AreEqual(0, columnsProvider.GetColumnsList(new Dictionary<string, object>[0]).Count);
             Assert.AreEqual(0, columnsProvider.GetColumnsList(new[] { new Dictionary<string, object>() }).Count);

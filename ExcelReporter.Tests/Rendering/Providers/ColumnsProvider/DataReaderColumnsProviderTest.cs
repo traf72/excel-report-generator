@@ -22,7 +22,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         public void TestGetColumnsList()
         {
             IDataReader dataReader = GetTestData();
-            IDataItemColumnsProvider columnsProvider = new DataReaderColumnsProvider();
+            IColumnsProvider columnsProvider = new DataReaderColumnsProvider();
             IList<ExcelDynamicColumn> columns = columnsProvider.GetColumnsList(dataReader);
 
             Assert.AreEqual(4, columns.Count);
@@ -50,7 +50,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         public void TestGetColumnsListIfDataReaderIsEmpty()
         {
             IDataReader dataReader = GetEmptyDataReader();
-            IDataItemColumnsProvider columnsProvider = new DataReaderColumnsProvider();
+            IColumnsProvider columnsProvider = new DataReaderColumnsProvider();
             IList<ExcelDynamicColumn> columns = columnsProvider.GetColumnsList(dataReader);
 
             Assert.AreEqual(4, columns.Count);
@@ -77,7 +77,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         [TestMethod]
         public void TestGetColumnsListIfDataReaderIsNull()
         {
-            IDataItemColumnsProvider columnsProvider = new DataReaderColumnsProvider();
+            IColumnsProvider columnsProvider = new DataReaderColumnsProvider();
             Assert.AreEqual(0, columnsProvider.GetColumnsList(null).Count);
         }
 

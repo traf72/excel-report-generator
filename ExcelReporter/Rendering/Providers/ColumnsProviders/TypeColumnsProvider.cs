@@ -9,7 +9,7 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
     /// <summary>
     /// Provides columns info from from Type
     /// </summary>
-    internal class TypeColumnsProvider : IGenericDataItemColumnsProvider<Type>
+    internal class TypeColumnsProvider : IGenericColumnsProvider<Type>
     {
         public IList<ExcelDynamicColumn> GetColumnsList(Type type)
         {
@@ -35,7 +35,7 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
             return result;
         }
 
-        IList<ExcelDynamicColumn> IDataItemColumnsProvider.GetColumnsList(object type)
+        IList<ExcelDynamicColumn> IColumnsProvider.GetColumnsList(object type)
         {
             return GetColumnsList((Type)type);
         }

@@ -1,10 +1,10 @@
 ﻿namespace ExcelReporter.Rendering.Providers.ColumnsProviders
 {
-    internal interface IDataItemColumnsProviderFactory
+    internal interface IColumnsProviderFactory
     {
         /// <summary>
         /// Create appropriate column provider based on data 
         /// </summary>
-        IDataItemColumnsProvider Create(object data);
+        IColumnsProvider Create(object data);
     }
 }

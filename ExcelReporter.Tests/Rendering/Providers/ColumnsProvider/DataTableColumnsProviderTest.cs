@@ -17,7 +17,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             dataTable.Rows.Add(2, "Two", false);
             dataTable.Rows.Add(3, "Three", true);
 
-            IDataItemColumnsProvider columnsProvider = new DataTableColumnsProvider();
+            IColumnsProvider columnsProvider = new DataTableColumnsProvider();
             IList<ExcelDynamicColumn> columns = columnsProvider.GetColumnsList(dataTable);
 
             Assert.AreEqual(3, columns.Count);
@@ -40,7 +40,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         {
             DataTable dataTable = GetDataTable();
 
-            IDataItemColumnsProvider columnsProvider = new DataTableColumnsProvider();
+            IColumnsProvider columnsProvider = new DataTableColumnsProvider();
             IList<ExcelDynamicColumn> columns = columnsProvider.GetColumnsList(dataTable);
 
             Assert.AreEqual(3, columns.Count);
@@ -61,7 +61,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         [TestMethod]
         public void TestGetColumnsListIfDataTableIsNull()
         {
-            IDataItemColumnsProvider columnsProvider = new DataTableColumnsProvider();
+            IColumnsProvider columnsProvider = new DataTableColumnsProvider();
             Assert.AreEqual(0, columnsProvider.GetColumnsList(null).Count);
         }
 

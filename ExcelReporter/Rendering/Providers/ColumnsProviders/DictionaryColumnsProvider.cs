@@ -6,7 +6,7 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
     /// <summary>
     /// Provides columns info from collection of IDictionary
     /// </summary>
-    internal class DictionaryColumnsProvider : IGenericDataItemColumnsProvider<IEnumerable<IDictionary<string, object>>>
+    internal class DictionaryColumnsProvider : IGenericColumnsProvider<IEnumerable<IDictionary<string, object>>>
     {
         public IList<ExcelDynamicColumn> GetColumnsList(IEnumerable<IDictionary<string, object>> data)
         {
@@ -25,7 +25,7 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
             return result;
         }
 
-        IList<ExcelDynamicColumn> IDataItemColumnsProvider.GetColumnsList(object data)
+        IList<ExcelDynamicColumn> IColumnsProvider.GetColumnsList(object data)
         {
             return GetColumnsList((IEnumerable<IDictionary<string, object>>)data);
         }

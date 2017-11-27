@@ -7,7 +7,7 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
     /// <summary>
     /// Provides columns info from IDataReader
     /// </summary>
-    internal class DataReaderColumnsProvider : IGenericDataItemColumnsProvider<IDataReader>
+    internal class DataReaderColumnsProvider : IGenericColumnsProvider<IDataReader>
     {
         public IList<ExcelDynamicColumn> GetColumnsList(IDataReader reader)
         {
@@ -23,7 +23,7 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
                 .ToList();
         }
 
-        IList<ExcelDynamicColumn> IDataItemColumnsProvider.GetColumnsList(object reader)
+        IList<ExcelDynamicColumn> IColumnsProvider.GetColumnsList(object reader)
         {
             return GetColumnsList((IDataReader)reader);
         }
