@@ -1,19 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using ExcelReporter.Rendering.Providers.DataItemColumnsProviders;
+using ExcelReporter.Rendering.Providers.ColumnsProviders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 
-namespace ExcelReporter.Tests.Rendering.Providers.DataItemColumnsProvider
+namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
 {
     [TestClass]
-    public class DefaultColumnsProviderFactoryTest
+    public class ColumnsProviderFactoryTest
     {
         [TestMethod]
         public void TestCreate()
         {
-            IDataItemColumnsProviderFactory factory = new DefaultColumnsProviderFactory();
+            IDataItemColumnsProviderFactory factory = new ColumnsProviderFactory();
 
             Assert.IsNull(factory.Create(null));
             Assert.AreEqual(typeof(DataReaderColumnsProvider), factory.Create(Substitute.For<IDataReader>()).GetType());

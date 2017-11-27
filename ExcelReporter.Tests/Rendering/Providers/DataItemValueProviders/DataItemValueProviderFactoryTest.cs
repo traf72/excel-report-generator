@@ -12,7 +12,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.DataItemValueProviders
         [TestMethod]
         public void TestCreate()
         {
-            var factory = new DefaultDataItemValueProviderFactory();
+            var factory = new DataItemValueProviderFactory();
             Assert.IsInstanceOfType(factory.Create(null), typeof(ObjectPropertyValueProvider));
             Assert.IsInstanceOfType(factory.Create(new Dictionary<string, object>()), typeof(DictionaryValueProvider<object>));
             Assert.IsInstanceOfType(factory.Create(new Dictionary<string, int>()), typeof(DictionaryValueProvider<int>));

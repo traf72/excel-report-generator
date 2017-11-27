@@ -5,9 +5,9 @@ using System.Data;
 using System.Linq;
 using ExcelReporter.Helpers;
 
-namespace ExcelReporter.Rendering.Providers.DataItemColumnsProviders
+namespace ExcelReporter.Rendering.Providers.ColumnsProviders
 {
-    internal class DefaultColumnsProviderFactory : IDataItemColumnsProviderFactory
+    internal class ColumnsProviderFactory : IDataItemColumnsProviderFactory
     {
         public virtual IDataItemColumnsProvider Create(object data)
         {

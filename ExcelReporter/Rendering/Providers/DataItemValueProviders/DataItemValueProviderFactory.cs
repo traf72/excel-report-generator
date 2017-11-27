@@ -6,7 +6,7 @@ using ExcelReporter.Helpers;
 
 namespace ExcelReporter.Rendering.Providers.DataItemValueProviders
 {
-    internal class DefaultDataItemValueProviderFactory : IDataItemValueProviderFactory
+    internal class DataItemValueProviderFactory : IDataItemValueProviderFactory
     {
         public virtual IDataItemValueProvider Create(object data)
         {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using ExcelReporter.Attributes;
 
-namespace ExcelReporter.Rendering.Providers.DataItemColumnsProviders
+namespace ExcelReporter.Rendering.Providers.ColumnsProviders
 {
     /// <summary>
     /// Provides columns info from from Type

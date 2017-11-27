@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace ExcelReporter.Rendering.Providers.DataItemColumnsProviders
+namespace ExcelReporter.Rendering.Providers.ColumnsProviders
 {
     /// <summary>
     /// Provides columns info from collection of IDictionary

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ExcelReporter.Helpers;
 
-namespace ExcelReporter.Rendering.Providers.DataItemColumnsProviders
+namespace ExcelReporter.Rendering.Providers.ColumnsProviders
 {
     /// <summary>
     /// Provides columns info from not generic enumerable

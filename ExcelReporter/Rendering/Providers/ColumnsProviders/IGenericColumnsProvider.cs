@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ExcelReporter.Rendering.Providers.DataItemColumnsProviders
+namespace ExcelReporter.Rendering.Providers.ColumnsProviders
 {
     internal interface IGenericDataItemColumnsProvider<in T> : IDataItemColumnsProvider
     {

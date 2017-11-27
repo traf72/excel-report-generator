@@ -1,4 +1,4 @@
-﻿namespace ExcelReporter.Rendering.Providers.DataItemColumnsProviders
+﻿namespace ExcelReporter.Rendering.Providers.ColumnsProviders
 {
     internal interface IDataItemColumnsProviderFactory
     {

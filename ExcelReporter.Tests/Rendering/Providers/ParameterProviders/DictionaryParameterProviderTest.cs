@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using ExcelReporter.Exceptions;
-using ExcelReporter.Rendering.Providers;
 using ExcelReporter.Rendering.Providers.ParameterProviders;
 using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ExcelReporter.Tests.Rendering.Providers
+namespace ExcelReporter.Tests.Rendering.Providers.ParameterProviders
 {
     [TestClass]
     public class DictionaryParameterProviderTest

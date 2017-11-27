@@ -104,7 +104,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 
             TemplateProcessor = new DefaultTemplateProcessor(new ReflectionParameterProvider(this),
                 new DefaultMethodCallValueProvider(new DefaultTypeProvider(Assembly.GetExecutingAssembly()), this),
-                new HierarchicalDataItemValueProvider(new DefaultDataItemValueProviderFactory()));
+                new HierarchicalDataItemValueProvider(new DataItemValueProviderFactory()));
         }
 
         [Parameter]

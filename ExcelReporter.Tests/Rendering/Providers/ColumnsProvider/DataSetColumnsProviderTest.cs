@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Data;
-using ExcelReporter.Rendering.Providers.DataItemColumnsProviders;
+using ExcelReporter.Rendering.Providers.ColumnsProviders;
 using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 
-namespace ExcelReporter.Tests.Rendering.Providers.DataItemColumnsProvider
+namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
 {
     [TestClass]
     public class DataSetColumnsProviderTest

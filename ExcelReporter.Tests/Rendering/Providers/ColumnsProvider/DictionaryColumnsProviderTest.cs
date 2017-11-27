@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using ExcelReporter.Rendering;
-using ExcelReporter.Rendering.Providers.DataItemColumnsProviders;
+using ExcelReporter.Rendering.Providers.ColumnsProviders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ExcelReporter.Tests.Rendering.Providers.DataItemColumnsProvider
+namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
 {
     [TestClass]
     public class DictionaryColumnsProviderTest
