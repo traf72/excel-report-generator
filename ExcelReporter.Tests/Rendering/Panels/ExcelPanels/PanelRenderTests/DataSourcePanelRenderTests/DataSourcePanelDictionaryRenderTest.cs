@@ -31,11 +31,11 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(2, 5).Value = "{di:Key}";
             ws.Cell(2, 6).Value = "{di:Value}";
 
-            IDictionary<string, object> data1 = new DataSourcePanelDataProvider.TestDataProvider().GetDictionaryEnumerable().First();
+            IDictionary<string, object> data1 = new PanelsDataProvider().GetDictionaryEnumerable().First();
             var panel1 = new ExcelDataSourcePanel(data1, ws.NamedRange("TestRange"), report);
             panel1.Render();
 
-            IEnumerable<KeyValuePair<string, object>> data2 = new DataSourcePanelDataProvider.TestDataProvider().GetDictionaryEnumerable().First()
+            IEnumerable<KeyValuePair<string, object>> data2 = new PanelsDataProvider().GetDictionaryEnumerable().First()
                 .Select(x => new KeyValuePair<string, object>(x.Key, x.Value));
             var panel2 = new ExcelDataSourcePanel(data2, ws.NamedRange("TestRange2"), report);
             panel2.Render();
@@ -58,7 +58,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(2, 3).Value = "{di:Value}";
             ws.Cell(2, 4).Value = "{di:IsVip}";
 
-            var panel1 = new ExcelDataSourcePanel("m:TestDataProvider:GetDictionaryEnumerable()", ws.NamedRange("TestRange1"), report);
+            var panel1 = new ExcelDataSourcePanel("m:PanelsDataProvider:GetDictionaryEnumerable()", ws.NamedRange("TestRange1"), report);
             panel1.Render();
 
             var dictWihtDecimalValues = new List<IDictionary<string, decimal>>

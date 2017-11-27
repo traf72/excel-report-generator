@@ -179,7 +179,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelNamedPanelTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelPanelTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataProvider.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataReaderRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataSetRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataTableRenderTest.cs" />
@@ -196,6 +195,7 @@
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DynamicPanelRenderTests\DynamicPanelDataReaderRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\PanelRenderTest.cs" />
+    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\PanelsDataProvider.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\TestReport.cs" />
     <Compile Include="Rendering\Providers\ColumnsProvider\ColumnsProviderFactoryTest.cs" />
     <Compile Include="Rendering\Providers\ColumnsProvider\DataReaderColumnsProviderTest.cs" />

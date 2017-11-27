@@ -28,7 +28,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(2, 5).Value = "{di:Description}";
             ws.Cell(2, 6).Value = "{di:Type}";
 
-            var panel = new ExcelDataSourcePanel("m:TestDataProvider:GetAllCustomersDataTable()", ws.NamedRange("TestRange"), report);
+            var panel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetAllCustomersDataTable()", ws.NamedRange("TestRange"), report);
             panel.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelDataTableRenderTest),
@@ -51,7 +51,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(2, 5).Value = "{di:Description}";
             ws.Cell(2, 6).Value = "{di:Type}";
 
-            var panel = new ExcelDataSourcePanel("m:TestDataProvider:GetEmptyDataTable()", ws.NamedRange("TestRange"), report);
+            var panel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetEmptyDataTable()", ws.NamedRange("TestRange"), report);
             panel.Render();
 
             Assert.AreEqual(0, ws.CellsUsed().Count());
