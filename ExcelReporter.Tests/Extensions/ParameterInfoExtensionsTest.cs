@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ExcelReporter.Tests.Extensions
 {
     [TestClass]
-    public class ParameterInfoExtensionTest
+    public class ParameterInfoExtensionsTest
     {
         [TestMethod]
         public void TestIsParams()
