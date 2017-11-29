@@ -48,7 +48,7 @@ namespace ExcelReporter.Rendering.TemplateProcessors
                 throw new ArgumentNullException(nameof(template), ArgumentHelper.EmptyStringParamMessage);
             }
 
-            string templ = this.GetTemplateWithoutBorders(template).Trim();
+            string templ = this.UnwrapTemplate(template).Trim();
             int separatorIndex = templ.IndexOf(TypeValueSeparator, StringComparison.InvariantCulture);
             if (separatorIndex == -1)
             {

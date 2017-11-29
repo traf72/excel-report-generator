@@ -4,7 +4,10 @@ namespace ExcelReporter.Extensions
 {
     internal static class TemplateProcessorExtensions
     {
-        public static string GetTemplateWithoutBorders(this ITemplateProcessor processor, string template)
+        /// <summary>
+        /// Remove template borders
+        /// </summary>
+        public static string UnwrapTemplate(this ITemplateProcessor processor, string template)
         {
             template = template.Trim();
             if (processor.LeftTemplateBorder != null && template.StartsWith(processor.LeftTemplateBorder))
@@ -16,6 +19,14 @@ namespace ExcelReporter.Extensions
                 template = template.Substring(0, template.Length - processor.RightTemplateBorder.Length);
             }
             return template;
+        }
+
+        /// <summary>
+        /// Wrap template with borders
+        /// </summary>
+        public static string WrapTemplate(this ITemplateProcessor processor, string template)
+        {
+            return $"{processor.LeftTemplateBorder}{template}{processor.RightTemplateBorder}";
         }
     }
 }

@@ -9,11 +9,6 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
     [TestClass]
     public class DataSourcePanelDataReaderRenderTest
     {
-        public DataSourcePanelDataReaderRenderTest()
-        {
-            TestHelper.InitDataDirectory();
-        }
-
         [TestMethod]
         public void TestRenderDataReader()
         {
@@ -28,7 +23,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(2, 5).Value = "{di:Description}";
             ws.Cell(2, 6).Value = "{di:Type}";
 
-            var panel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetAllCustomersDataReader()", ws.NamedRange("TestRange"), report);
+            var panel = new ExcelDataSourcePanel("m:DataProvider:GetAllCustomersDataReader()", ws.NamedRange("TestRange"), report);
             panel.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelDataReaderRenderTest),
@@ -51,7 +46,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(2, 5).Value = "{di:Description}";
             ws.Cell(2, 6).Value = "{di:Type}";
 
-            var panel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetEmptyDataReader()", ws.NamedRange("TestRange"), report);
+            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyDataReader()", ws.NamedRange("TestRange"), report);
             panel.Render();
 
             Assert.AreEqual(0, ws.CellsUsed().Count());

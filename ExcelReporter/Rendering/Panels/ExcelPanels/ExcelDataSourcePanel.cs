@@ -27,7 +27,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
 
         public ExcelDataSourcePanel(object data, IXLNamedRange namedRange, IExcelReport report) : base(namedRange, report)
         {
-            _data = data;
+            _data = data ?? throw new ArgumentNullException(nameof(data), ArgumentHelper.NullParamMessage);
         }
 
         public override void Render()
@@ -142,6 +142,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             panel.Delete();
         }
 
+        //TODO Проверить корректное копирование, если передан не шаблон, а сами данные
         protected override IExcelPanel CopyPanel(IXLCell cell)
         {
             var panel = new ExcelDataSourcePanel(_dataSourceTemplate, CopyNamedRange(cell), Report);

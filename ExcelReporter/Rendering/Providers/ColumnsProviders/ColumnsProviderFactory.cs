@@ -1,9 +1,9 @@
-﻿using System;
+﻿using ExcelReporter.Helpers;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using ExcelReporter.Helpers;
 
 namespace ExcelReporter.Rendering.Providers.ColumnsProviders
 {
@@ -32,7 +32,7 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
                 return new KeyValuePairColumnsProvider();
             }
 
-            Type genericEnumerable = dataType.GetInterfaces().SingleOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+            Type genericEnumerable = TypeHelper.TryGetGenericEnumerableInterface(dataType);
             if (genericEnumerable != null)
             {
                 Type genericType = genericEnumerable.GetGenericArguments()[0];
@@ -42,7 +42,11 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
                 }
                 if (TypeHelper.IsDictionaryStringObject(genericType))
                 {
-                    return new DictionaryColumnsProvider();
+                    // If data type is dictionary and type of key is String and type of value is not Object
+                    Type dictionaryValueProviderRawType = typeof(DictionaryColumnsProvider<>);
+                    Type dictionary = TypeHelper.TryGetGenericDictionaryInterface(genericType);
+                    Type dictionaryValueProviderGenericType = dictionaryValueProviderRawType.MakeGenericType(dictionary.GetGenericArguments()[1]);
+                    return (IColumnsProvider)Activator.CreateInstance(dictionaryValueProviderGenericType);
                 }
                 return new GenericEnumerableColumnsProvider(new TypeColumnsProvider());
             }

@@ -5,55 +5,63 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
-namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
+namespace ExcelReporter.Tests.Rendering
 {
-    public class PanelsDataProvider
+    public class DataProvider
     {
+        private static readonly string _conStr;
+
         private readonly IEnumerable<TestItem> _testData = new[]
         {
-                new TestItem("Test1", new DateTime(2017, 11, 1), 55.76m, new Contacts("15", "345"))
+            new TestItem("Test1", new DateTime(2017, 11, 1), 55.76m, new Contacts("15", "345"))
+            {
+                Children = new List<ChildItem>
                 {
-                    Children = new List<ChildItem>
+                    new ChildItem("Test1_Child1_F1", "Test1_Child1_F2")
                     {
-                        new ChildItem("Test1_Child1_F1", "Test1_Child1_F2")
+                        Children = new []
                         {
-                            Children = new []
-                            {
-                                new ChildOfChildItem("Test1_Child1_ChildOfChild1_F1", "Test1_Child1_ChildOfChild1_F2"),
-                                new ChildOfChildItem("Test1_Child1_ChildOfChild2_F1", "Test1_Child1_ChildOfChild2_F2"),
-                            }
-                        },
-                        new ChildItem("Test1_Child2_F1", "Test1_Child2_F2"),
-                        new ChildItem("Test1_Child3_F1", "Test1_Child3_F2")
-                        {
-                            Children = new []
-                            {
-                                new ChildOfChildItem("Test1_Child3_ChildOfChild1_F1", "Test1_Child3_ChildOfChild1_F2"),
-                            }
+                            new ChildOfChildItem("Test1_Child1_ChildOfChild1_F1", "Test1_Child1_ChildOfChild1_F2"),
+                            new ChildOfChildItem("Test1_Child1_ChildOfChild2_F1", "Test1_Child1_ChildOfChild2_F2"),
                         }
                     },
-                    ChildrenPrimitive = new[] {1},
-                },
-                new TestItem("Test2", new DateTime(2017, 11, 2), 110m, new Contacts("76", "753465"))
-                {
-                    ChildrenPrimitive = new[] {2, 3, 4},
-                },
-                new TestItem("Test3", new DateTime(2017, 11, 3), 5500.80m, new Contacts("1533", "5456"))
-                {
-                    Children = new List<ChildItem>
+                    new ChildItem("Test1_Child2_F1", "Test1_Child2_F2"),
+                    new ChildItem("Test1_Child3_F1", "Test1_Child3_F2")
                     {
-                        new ChildItem("Test3_Child1_F1", "Test3_Child1_F2")
+                        Children = new []
                         {
-                            Children = new []
-                            {
-                                new ChildOfChildItem("Test3_Child1_ChildOfChild1_F1", "Test3_Child1_ChildOfChild1_F2"),
-                            }
-                        },
-                        new ChildItem("Test3_Child2_F1", "Test3_Child2_F2"),
-                    },
-                    ChildrenPrimitive = new[] {5, 6},
+                            new ChildOfChildItem("Test1_Child3_ChildOfChild1_F1", "Test1_Child3_ChildOfChild1_F2"),
+                        }
+                    }
                 },
-            };
+                ChildrenPrimitive = new[] {1},
+            },
+            new TestItem("Test2", new DateTime(2017, 11, 2), 110m, new Contacts("76", "753465"))
+            {
+                ChildrenPrimitive = new[] {2, 3, 4},
+            },
+            new TestItem("Test3", new DateTime(2017, 11, 3), 5500.80m, new Contacts("1533", "5456"))
+            {
+                Children = new List<ChildItem>
+                {
+                    new ChildItem("Test3_Child1_F1", "Test3_Child1_F2")
+                    {
+                        Children = new []
+                        {
+                            new ChildOfChildItem("Test3_Child1_ChildOfChild1_F1", "Test3_Child1_ChildOfChild1_F2"),
+                        }
+                    },
+                    new ChildItem("Test3_Child2_F1", "Test3_Child2_F2"),
+                },
+                ChildrenPrimitive = new[] {5, 6},
+            },
+        };
+
+        static DataProvider()
+        {
+            TestHelper.InitDataDirectory();
+            _conStr = ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString;
+        }
 
         public TestItem GetSingleItem()
         {
@@ -82,18 +90,18 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 
         public IDataReader GetAllCustomersDataReader()
         {
-            IDbConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString);
+            IDbConnection connection = new SqlConnection(_conStr);
             IDbCommand command = connection.CreateCommand();
-            command.CommandText = "SELECT * FROM Customers";
+            command.CommandText = GetAllCustomersQuery();
             connection.Open();
             return command.ExecuteReader(CommandBehavior.CloseConnection);
         }
 
         public IDataReader GetEmptyDataReader()
         {
-            IDbConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString);
+            IDbConnection connection = new SqlConnection(_conStr);
             IDbCommand command = connection.CreateCommand();
-            command.CommandText = "SELECT * FROM Customers WHERE 1 <> 1";
+            command.CommandText = GetNoCustomersQuery();
             connection.Open();
             return command.ExecuteReader(CommandBehavior.CloseConnection);
         }
@@ -118,10 +126,10 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 
         public DataSet GetAllCustomersDataSet()
         {
-            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString))
+            using (var conn = new SqlConnection(_conStr))
             {
                 conn.Open();
-                var command = new SqlCommand("SELECT * FROM Customers", conn);
+                var command = new SqlCommand(GetAllCustomersQuery(), conn);
                 var adapter = new SqlDataAdapter(command);
                 var ds = new DataSet();
                 adapter.Fill(ds);
@@ -131,10 +139,10 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 
         public DataSet GetEmptyDataSet()
         {
-            using (var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString))
+            using (var conn = new SqlConnection(_conStr))
             {
                 conn.Open();
-                var command = new SqlCommand("SELECT * FROM Customers WHERE 1 <> 1", conn);
+                var command = new SqlCommand(GetNoCustomersQuery(), conn);
                 var adapter = new SqlDataAdapter(command);
                 var ds = new DataSet();
                 adapter.Fill(ds);
@@ -150,6 +158,16 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
                     new Dictionary<string, object> { ["Name"] = "Name_2", ["Value"] = 250.7, ["IsVip"] = false },
                     new Dictionary<string, object> { ["Name"] = "Name_3", ["Value"] = 2500.7, ["IsVip"] = true },
                 };
+        }
+
+        private string GetAllCustomersQuery()
+        {
+            return "SELECT Id, Name, IsVip, Type, Description FROM Customers ORDER BY Id";
+        }
+
+        private string GetNoCustomersQuery()
+        {
+            return "SELECT Id, Name, IsVip, Type, Description FROM Customers WHERE 1 <> 1";
         }
     }
 

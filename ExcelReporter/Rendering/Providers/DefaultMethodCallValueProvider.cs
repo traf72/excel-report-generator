@@ -185,7 +185,7 @@ namespace ExcelReporter.Rendering.Providers
         protected virtual IList<InputParameter> GetInputParametersValues(string inputParamsAsString, ITemplateProcessor templateProcessor, object dataItem)
         {
             IList<InputParameter> inputParameters = new List<InputParameter>();
-            string pattern = templateProcessor.GetTemplateWithoutBorders(templateProcessor.TemplatePattern);
+            string pattern = templateProcessor.UnwrapTemplate(templateProcessor.TemplatePattern);
             foreach (string p in ParseInputParams(inputParamsAsString))
             {
                 if (p.StartsWith("\"") && p.EndsWith("\""))

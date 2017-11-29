@@ -19,18 +19,22 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
 
             Assert.AreEqual("Column1", columns[0].Name);
             Assert.AreEqual("Column1", columns[0].Caption);
+            Assert.AreEqual(typeof(string), columns[0].DataType);
             Assert.IsNull(columns[0].Width);
 
             Assert.AreEqual("Column2", columns[1].Name);
             Assert.AreEqual("Column Two", columns[1].Caption);
+            Assert.AreEqual(typeof(int), columns[1].DataType);
             Assert.IsNull(columns[1].Width);
 
             Assert.AreEqual("Column3", columns[2].Name);
             Assert.AreEqual("Column Three", columns[2].Caption);
+            Assert.AreEqual(typeof(decimal?), columns[2].DataType);
             Assert.AreEqual(100.5, columns[2].Width);
 
             Assert.AreEqual("ColumnWithBadWidth", columns[3].Name);
             Assert.AreEqual("ColumnWithBadWidth", columns[3].Caption);
+            Assert.AreEqual(typeof(short), columns[3].DataType);
             Assert.IsNull(columns[3].Width);
         }
 
@@ -47,10 +51,10 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             public string Column1 { get; set; }
 
             [ExcelColumn(Caption = "Column Two")]
-            public string Column2 { get; set; }
+            public int Column2 { get; set; }
 
             [ExcelColumn(Caption = "Column Three", Width = 100.5)]
-            public string Column3 { get; set; }
+            public decimal? Column3 { get; set; }
 
             public override string OverriddenColumn { get; set; }
 
@@ -63,7 +67,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         internal class TestTypeBase
         {
             [ExcelColumn(Width = -10)]
-            public string ColumnWithBadWidth { get; set; }
+            public short ColumnWithBadWidth { get; set; }
 
             [ExcelColumn]
             public virtual string OverriddenColumn { get; set; }

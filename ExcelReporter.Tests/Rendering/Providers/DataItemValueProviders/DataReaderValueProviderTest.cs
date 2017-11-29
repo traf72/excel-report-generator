@@ -1,26 +1,17 @@
-﻿using System;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
-using ExcelReporter.Exceptions;
+﻿using ExcelReporter.Exceptions;
 using ExcelReporter.Rendering.Providers.DataItemValueProviders;
 using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using System;
+using System.Data;
 
 namespace ExcelReporter.Tests.Rendering.Providers.DataItemValueProviders
 {
     [TestClass]
     public class DataReaderValueProviderTest
     {
-        private readonly string _conStr = ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString;
-
-        public DataReaderValueProviderTest()
-        {
-            TestHelper.InitDataDirectory();
-        }
-
         [TestMethod]
         public void TestGetValue()
         {
@@ -56,7 +47,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.DataItemValueProviders
         public void TestGetValueWithRealSqlReader()
         {
             IGenericDataItemValueProvider<IDataReader> provider = new DataReaderValueProvider();
-            IDataReader reader = GetTestData();
+            IDataReader reader = new DataProvider().GetAllCustomersDataReader();
 
             reader.Read();
             Assert.AreEqual(1, provider.GetValue("Id", reader));
@@ -78,15 +69,6 @@ namespace ExcelReporter.Tests.Rendering.Providers.DataItemValueProviders
             Assert.IsNull(provider.GetValue("Type", reader));
 
             reader.Close();
-        }
-
-        private IDataReader GetTestData()
-        {
-            IDbConnection connection = new SqlConnection(_conStr);
-            IDbCommand command = connection.CreateCommand();
-            command.CommandText = "SELECT Id, Name, IsVip, Type FROM Customers ORDER BY Id";
-            connection.Open();
-            return command.ExecuteReader(CommandBehavior.CloseConnection);
         }
     }
 }

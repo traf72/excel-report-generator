@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ExcelReporter.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ExcelReporter.Attributes;
 
 namespace ExcelReporter.Rendering.Providers.ColumnsProviders
 {
@@ -19,17 +19,17 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
             }
 
             BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
-            MemberInfo[] excelColumns = type.GetProperties(flags)
+            PropertyInfo[] excelColumns = type.GetProperties(flags)
                 // Пока исключил поля, так как шаблоны пока парсятся только из свойств
                 //.AsEnumerable<MemberInfo>()
                 //.Concat(dataItemType.GetFields(flags))
                 .Where(m => m.IsDefined(typeof(ExcelColumnAttribute), true)).ToArray();
 
             IList<ExcelDynamicColumn> result = new List<ExcelDynamicColumn>();
-            foreach (MemberInfo columnMember in excelColumns)
+            foreach (PropertyInfo columnMember in excelColumns)
             {
                 var columnAttr = (ExcelColumnAttribute)columnMember.GetCustomAttribute(typeof(ExcelColumnAttribute), true);
-                result.Add(new ExcelDynamicColumn(columnMember.Name, columnAttr.Caption) { Width = columnAttr.Width > 0 ? columnAttr.Width : (double?)null });
+                result.Add(new ExcelDynamicColumn(columnMember.Name, columnMember.PropertyType, columnAttr.Caption) { Width = columnAttr.Width > 0 ? columnAttr.Width : (double?)null });
             }
 
             return result;

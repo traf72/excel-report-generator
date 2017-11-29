@@ -1,8 +1,7 @@
-﻿using System;
+﻿using ExcelReporter.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using ExcelReporter.Helpers;
 
 namespace ExcelReporter.Rendering.Providers.DataItemValueProviders
 {
@@ -30,7 +29,7 @@ namespace ExcelReporter.Rendering.Providers.DataItemValueProviders
             {
                 // If data type is dictionary and type of key is String and type of value is not Object
                 Type dictionaryValueProviderRawType = typeof(DictionaryValueProvider<>);
-                Type dictionary = dataType.GetInterfaces().SingleOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>));
+                Type dictionary = TypeHelper.TryGetGenericDictionaryInterface(dataType);
                 Type dictionaryValueProviderGenericType = dictionaryValueProviderRawType.MakeGenericType(dictionary.GetGenericArguments()[1]);
                 return (IDataItemValueProvider)Activator.CreateInstance(dictionaryValueProviderGenericType);
             }

@@ -1,4 +1,4 @@
-﻿using ClosedXML.Excel;
+﻿using System;
 
 namespace ExcelReporter.Rendering
 {
@@ -9,12 +9,12 @@ namespace ExcelReporter.Rendering
     {
         private string _caption;
 
-        public ExcelDynamicColumn(string name, string caption = null)
+        public ExcelDynamicColumn(string name, Type dataType = null, string caption = null)
         {
             Name = name;
+            DataType = dataType;
             _caption = caption;
             Width = null;
-            DataType = XLCellValues.Text;
         }
 
         /// <summary>
@@ -36,10 +36,9 @@ namespace ExcelReporter.Rendering
         /// </summary>
         public double? Width { get; set; }
 
-        // TODO эта колонка под большим вопросом
         /// <summary>
         /// Column data type
         /// </summary>
-        XLCellValues DataType { get; set; }
+        public Type DataType { get; set; }
     }
 }

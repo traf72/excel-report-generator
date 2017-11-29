@@ -18,8 +18,7 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
 
             return dataTable.Columns
                 .Cast<DataColumn>()
-                // TODO Определять DataType из column.DataType, а может и не нужно
-                .Select(column => new ExcelDynamicColumn(column.ColumnName, column.Caption))
+                .Select(column => new ExcelDynamicColumn(column.ColumnName, column.DataType, column.Caption))
                 .ToList();
         }
 

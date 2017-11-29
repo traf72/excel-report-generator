@@ -26,9 +26,9 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual(typeof(KeyValuePairColumnsProvider), factory.Create(new List<KeyValuePair<decimal, string>> { new KeyValuePair<decimal, string>() }).GetType());
             Assert.AreEqual(typeof(KeyValuePairColumnsProvider), factory.Create(new Dictionary<string, TypeColumnsProviderTest.TestType>()).GetType());
 
-            Assert.AreEqual(typeof(DictionaryColumnsProvider), factory.Create(new[] { new Dictionary<string, int>() }).GetType());
-            Assert.AreEqual(typeof(DictionaryColumnsProvider), factory.Create(new List<IDictionary<string, string>> { new Dictionary<string, string>() }).GetType());
-            Assert.AreEqual(typeof(DictionaryColumnsProvider), factory.Create(new List<IDictionary<string, decimal>> { new Dictionary<string, decimal>() }).GetType());
+            Assert.AreEqual(typeof(DictionaryColumnsProvider<int>), factory.Create(new[] { new Dictionary<string, int>() }).GetType());
+            Assert.AreEqual(typeof(DictionaryColumnsProvider<string>), factory.Create(new List<IDictionary<string, string>> { new Dictionary<string, string>() }).GetType());
+            Assert.AreEqual(typeof(DictionaryColumnsProvider<decimal>), factory.Create(new List<IDictionary<string, decimal>> { new Dictionary<string, decimal>() }).GetType());
 
             Assert.AreEqual(typeof(GenericEnumerableColumnsProvider), factory.Create(new List<IDictionary<object, decimal>> { new Dictionary<object, decimal>() }).GetType());
             Assert.AreEqual(typeof(GenericEnumerableColumnsProvider), factory.Create(new List<IDictionary<int, decimal>> { new Dictionary<int, decimal>() }).GetType());

@@ -42,8 +42,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(4, 4).Value = "{di:Name}";
 
-            var parentPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report);
-            var childPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
+            var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report);
+            var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
             {
                 Parent = parentPanel,
             };
@@ -89,11 +89,11 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(4, 4).Value = "{di:Name}";
 
-            var parentPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
+            var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
             {
                 ShiftType = ShiftType.Row
             };
-            var childPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
+            var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
             {
                 Parent = parentPanel,
             };
@@ -139,11 +139,11 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(4, 4).Value = "{di:Name}";
 
-            var parentPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
+            var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
             {
                 ShiftType = ShiftType.Row
             };
-            var childPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
+            var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
             {
                 Parent = parentPanel,
                 ShiftType = ShiftType.Row
@@ -190,11 +190,11 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(4, 4).Value = "{di:Name}";
 
-            var parentPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
+            var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
             {
                 ShiftType = ShiftType.NoShift
             };
-            var childPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
+            var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
             {
                 Parent = parentPanel,
             };
@@ -240,8 +240,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(5, 4).Value = "{di:Name}";
 
-            var parentPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report);
-            var childPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetChildIEnumerable(di:Name)", ws.Workbook.NamedRange("ChildRange"), report)
+            var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report);
+            var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.Workbook.NamedRange("ChildRange"), report)
             {
                 Parent = parentPanel,
             };
@@ -287,11 +287,11 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(5, 4).Value = "{di:Name}";
 
-            var parentPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
+            var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
             {
                 ShiftType = ShiftType.Row,
             };
-            var childPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetChildIEnumerable(di:Name)", ws.Workbook.NamedRange("ChildRange"), report)
+            var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.Workbook.NamedRange("ChildRange"), report)
             {
                 Parent = parentPanel,
             };
@@ -337,11 +337,11 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(5, 4).Value = "{di:Name}";
 
-            var parentPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
+            var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
             {
                 ShiftType = ShiftType.Row,
             };
-            var childPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetChildIEnumerable(di:Name)", ws.Workbook.NamedRange("ChildRange"), report)
+            var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.Workbook.NamedRange("ChildRange"), report)
             {
                 Parent = parentPanel,
                 ShiftType = ShiftType.Row,
@@ -388,11 +388,11 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(5, 4).Value = "{di:Name}";
 
-            var parentPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
+            var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
             {
                 ShiftType = ShiftType.NoShift,
             };
-            var childPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetChildIEnumerable(di:Name)", ws.Workbook.NamedRange("ChildRange"), report)
+            var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.Workbook.NamedRange("ChildRange"), report)
             {
                 Parent = parentPanel,
                 ShiftType = ShiftType.Row,
@@ -439,11 +439,11 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(5, 4).Value = "{di:Name}";
 
-            var parentPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
+            var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
             {
                 AfterRenderMethodName = "AfterRenderParentDataSourcePanelChildBottom",
             };
-            var childPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
+            var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
             {
                 Parent = parentPanel,
             };

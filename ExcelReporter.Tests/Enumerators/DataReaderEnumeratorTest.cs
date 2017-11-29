@@ -1,24 +1,16 @@
 ﻿using ExcelReporter.Enumerators;
+using ExcelReporter.Tests.CustomAsserts;
+using ExcelReporter.Tests.Rendering;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
-using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
-using ExcelReporter.Tests.CustomAsserts;
 
 namespace ExcelReporter.Tests.Enumerators
 {
     [TestClass]
     public class DataReaderEnumeratorTest
     {
-        private readonly string _conStr = ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString;
-
-        public DataReaderEnumeratorTest()
-        {
-            TestHelper.InitDataDirectory();
-        }
-
         [TestMethod]
         public void TestEnumerator()
         {
@@ -60,7 +52,7 @@ namespace ExcelReporter.Tests.Enumerators
         [TestMethod]
         public void TestEnumeratorWithRealSqlReader()
         {
-            IDataReader reader = GetTestData();
+            IDataReader reader = new DataProvider().GetAllCustomersDataReader();
             var enumerator = new DataReaderEnumerator(reader);
 
             Assert.IsTrue(enumerator.MoveNext());
@@ -100,7 +92,7 @@ namespace ExcelReporter.Tests.Enumerators
         [TestMethod]
         public void TestEmptyEnumeratorWithRealSqlReader()
         {
-            IDataReader reader = GetEmptyDataReader();
+            IDataReader reader = new DataProvider().GetEmptyDataReader();
             var enumerator = new DataReaderEnumerator(reader);
 
             Assert.IsFalse(enumerator.MoveNext());
@@ -108,24 +100,6 @@ namespace ExcelReporter.Tests.Enumerators
             ExceptionAssert.Throws<InvalidOperationException>(() => enumerator.MoveNext(), "Enumerator has been finished");
 
             enumerator.Dispose();
-        }
-
-        private IDataReader GetTestData()
-        {
-            IDbConnection connection = new SqlConnection(_conStr);
-            IDbCommand command = connection.CreateCommand();
-            command.CommandText = "SELECT Id, Name, IsVip, Type FROM Customers ORDER BY Id";
-            connection.Open();
-            return command.ExecuteReader(CommandBehavior.CloseConnection);
-        }
-
-        private IDataReader GetEmptyDataReader()
-        {
-            IDbConnection connection = new SqlConnection(_conStr);
-            IDbCommand command = connection.CreateCommand();
-            command.CommandText = "SELECT Id, Name, IsVip, Type FROM Customers WHERE 1 <> 1";
-            connection.Open();
-            return command.ExecuteReader(CommandBehavior.CloseConnection);
         }
     }
 }

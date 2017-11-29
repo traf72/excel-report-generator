@@ -68,7 +68,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(6, 6).Value = "{di:parent:Field2}";
             ws.Cell(6, 7).Value = "{di:parent:parent:Contacts.Fax}";
 
-            var parentPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
+            var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
             {
                 BeforeRenderMethodName = "BeforeRenderParentDataSourcePanel",
                 AfterRenderMethodName = "AfterRenderParentDataSourcePanelChildBottom",
@@ -77,7 +77,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             {
                 Parent = parentPanel,
             };
-            var childPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
+            var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
             {
                 Parent = parentPanel,
                 AfterRenderMethodName = "AfterRenderChildDataSourcePanel",
@@ -158,7 +158,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(6, 6).Value = "{di:parent:Field2}";
             ws.Cell(7, 6).Value = "{di:parent:parent:Contacts.Fax}";
 
-            var parentPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
+            var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
             {
                 Type = PanelType.Horizontal,
             };
@@ -166,7 +166,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             {
                 Parent = parentPanel,
             };
-            var childPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
+            var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
             {
                 Parent = parentPanel,
                 Type = PanelType.Horizontal,
@@ -208,8 +208,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(3, 3).Value = "{di:Field1}";
             ws.Cell(4, 3).Value = "{di:Field2}";
 
-            var parentPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report);
-            var childPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
+            var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report);
+            var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
             {
                 Parent = parentPanel,
                 Type = PanelType.Horizontal,
@@ -239,11 +239,11 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(3, 3).Value = "{di:Field1}";
             ws.Cell(3, 4).Value = "{di:Field2}";
 
-            var parentPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
+            var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
             {
                 Type = PanelType.Horizontal,
             };
-            var childPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
+            var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
             {
                 Parent = parentPanel,
             };

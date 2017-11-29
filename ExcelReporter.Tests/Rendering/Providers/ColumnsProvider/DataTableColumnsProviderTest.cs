@@ -24,14 +24,17 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
 
             Assert.AreEqual("Column1", columns[0].Name);
             Assert.AreEqual("Column1", columns[0].Caption);
+            Assert.AreEqual(typeof(string), columns[0].DataType);
             Assert.IsNull(columns[0].Width);
 
             Assert.AreEqual("Column2", columns[1].Name);
             Assert.AreEqual("Caption2", columns[1].Caption);
+            Assert.AreEqual(typeof(string), columns[1].DataType);
             Assert.IsNull(columns[1].Width);
 
             Assert.AreEqual("Column3", columns[2].Name);
             Assert.AreEqual("Caption3", columns[2].Caption);
+            Assert.AreEqual(typeof(bool), columns[2].DataType);
             Assert.IsNull(columns[2].Width);
         }
 
@@ -47,14 +50,17 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
 
             Assert.AreEqual("Column1", columns[0].Name);
             Assert.AreEqual("Column1", columns[0].Caption);
+            Assert.AreEqual(typeof(string), columns[0].DataType);
             Assert.IsNull(columns[0].Width);
 
             Assert.AreEqual("Column2", columns[1].Name);
             Assert.AreEqual("Caption2", columns[1].Caption);
+            Assert.AreEqual(typeof(string), columns[1].DataType);
             Assert.IsNull(columns[1].Width);
 
             Assert.AreEqual("Column3", columns[2].Name);
             Assert.AreEqual("Caption3", columns[2].Caption);
+            Assert.AreEqual(typeof(bool), columns[2].DataType);
             Assert.IsNull(columns[2].Width);
         }
 
@@ -69,8 +75,8 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         {
             var dataTable = new DataTable();
             dataTable.Columns.Add("Column1");
-            dataTable.Columns.Add(new DataColumn("Column2") { Caption = "Caption2" });
-            dataTable.Columns.Add(new DataColumn("Column3") { Caption = "Caption3" });
+            dataTable.Columns.Add(new DataColumn("Column2", typeof(string)) { Caption = "Caption2" });
+            dataTable.Columns.Add(new DataColumn("Column3", typeof(bool)) { Caption = "Caption3" });
             return dataTable;
         }
     }

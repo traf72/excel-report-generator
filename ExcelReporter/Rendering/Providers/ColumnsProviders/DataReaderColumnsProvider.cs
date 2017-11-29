@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -19,7 +20,7 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
 
             return schemaTable.Rows
                 .Cast<DataRow>()
-                .Select(r => new ExcelDynamicColumn((string)r["ColumnName"]))
+                .Select(r => new ExcelDynamicColumn((string)r["ColumnName"], (Type)r["DataType"]))
                 .ToList();
         }
 

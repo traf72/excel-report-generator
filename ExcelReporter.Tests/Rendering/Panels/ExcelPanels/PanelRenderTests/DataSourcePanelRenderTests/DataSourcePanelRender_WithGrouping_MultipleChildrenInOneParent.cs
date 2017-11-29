@@ -35,8 +35,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(5, 5).Style.Font.Bold = true;
             ws.Cell(6, 5).Value = "{di:di}";
 
-            var parentPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report);
-            var childPanel1 = new ExcelDataSourcePanel("m:PanelsDataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange1"), report)
+            var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report);
+            var childPanel1 = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange1"), report)
             {
                 Parent = parentPanel,
             };
@@ -79,8 +79,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(5, 5).Style.Font.Bold = true;
             ws.Cell(5, 6).Value = "{di:di}";
 
-            var parentPanel = new ExcelDataSourcePanel("m:PanelsDataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report);
-            var childPanel1 = new ExcelDataSourcePanel("m:PanelsDataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange1"), report)
+            var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report);
+            var childPanel1 = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange1"), report)
             {
                 Parent = parentPanel,
                 Type = PanelType.Horizontal,
