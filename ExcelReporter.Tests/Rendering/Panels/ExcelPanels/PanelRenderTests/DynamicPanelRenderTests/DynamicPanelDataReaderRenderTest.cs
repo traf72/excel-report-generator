@@ -8,51 +8,28 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Dyna
     [TestClass]
     public class DynamicPanelDataReaderRenderTest
     {
-        public DynamicPanelDataReaderRenderTest()
-        {
-            TestHelper.InitDataDirectory();
-        }
-
         [TestMethod]
         public void TestRenderDataReader()
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 2, 2);
+            IXLRange range = ws.Range(2, 2, 3, 2);
             range.AddToNamed("TestRange", XLScope.Worksheet);
 
-            var panel = new ExcelDynamicPanel("m:TestDataProvider:GetAllCustomersDataReader()", ws.NamedRange("TestRange"), report);
+            ws.Cell(2, 2).Value = "{Headers}";
+            ws.Cell(2, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+            ws.Cell(2, 2).Style.Border.OutsideBorderColor = XLColor.Red;
+            ws.Cell(2, 2).Style.Font.Bold = true;
+
+            ws.Cell(3, 2).Value = "{Data}";
+            ws.Cell(3, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            ws.Cell(3, 2).Style.Border.OutsideBorderColor = XLColor.Black;
+
+            var panel = new ExcelDynamicPanel("m:DataProvider:GetAllCustomersDataReader()", ws.NamedRange("TestRange"), report);
             panel.Render();
 
-            //ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelDataReaderRenderTest),
+            //ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DynamicPanelDataReaderRenderTest),
             //    nameof(TestRenderDataReader)), ws.Workbook);
-
-            report.Workbook.SaveAs("test.xlsx");
-        }
-
-        [TestMethod]
-        public void TestRenderEmptyDataReader()
-        {
-            var report = new TestReport();
-            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 2, 6);
-            range.AddToNamed("TestRange", XLScope.Worksheet);
-
-            ws.Cell(2, 2).Value = "{di:Id}";
-            ws.Cell(2, 3).Value = "{di:Name}";
-            ws.Cell(2, 4).Value = "{di:IsVip}";
-            ws.Cell(2, 5).Value = "{di:Description}";
-            ws.Cell(2, 6).Value = "{di:Type}";
-
-            var panel = new ExcelDataSourcePanel("m:TestDataProvider:GetEmptyDataReader()", ws.NamedRange("TestRange"), report);
-            panel.Render();
-
-            Assert.AreEqual(0, ws.CellsUsed().Count());
-
-            Assert.AreEqual(0, ws.NamedRanges.Count());
-            Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
-
-            Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
