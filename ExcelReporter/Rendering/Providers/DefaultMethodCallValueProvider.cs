@@ -49,9 +49,8 @@ namespace ExcelReporter.Rendering.Providers
         /// </summary>
         /// <param name="templateProcessor">Template processor that will be used for parameters specified as templates</param>
         /// <param name="dataItem">Data item that will be used for parameters specified as data item templates</param>
-        /// <param name="isStatic">Is called method static</param>
         /// <returns>Method result</returns>
-        public virtual object CallMethod(string methodCallTemplate, ITemplateProcessor templateProcessor, object dataItem, bool isStatic = false)
+        public virtual object CallMethod(string methodCallTemplate, ITemplateProcessor templateProcessor, object dataItem)
         {
             if (string.IsNullOrWhiteSpace(methodCallTemplate))
             {
@@ -63,9 +62,9 @@ namespace ExcelReporter.Rendering.Providers
             {
                 MethodCallTemplateParts templateParts = ParseTemplate(MethodCallTemplate);
                 Type type = GetType(templateParts.TypeName);
-                object instance = GetInstance(type, isStatic);
                 IList<InputParameter> inputParams = GetInputParametersValues(templateParts.MethodParams, templateProcessor, dataItem);
-                MethodInfo method = GetMethod(type, templateParts.MethodName, inputParams, isStatic);
+                MethodInfo method = GetMethod(type, templateParts.MethodName, inputParams);
+                object instance = GetInstance(type, method.IsStatic);
                 return CallMethod(instance, method, inputParams);
             }
             finally
@@ -278,12 +277,12 @@ namespace ExcelReporter.Rendering.Providers
         /// </summary>
         /// <param name="type">Type where method will be searched</param>
         /// <param name="inputParameters">List of input method parameters</param>
-        /// <param name="isStatic">Is method static</param>
-        protected virtual MethodInfo GetMethod(Type type, string methodName, IList<InputParameter> inputParameters, bool isStatic)
+        protected virtual MethodInfo GetMethod(Type type, string methodName, IList<InputParameter> inputParameters)
         {
-            string methodNotFoundMessageTemplate = $"Could not find public {(isStatic ? "static " : string.Empty)}method \"{methodName}\" in type \"{type.Name}\" and all its parents";
-            BindingFlags methodTypeBindingFlag = isStatic ? BindingFlags.Static : BindingFlags.Instance;
-            IList<MethodInfo> methods = type.GetMethods(BindingFlags.Public | methodTypeBindingFlag | BindingFlags.FlattenHierarchy).Where(m => m.Name == methodName).ToList();
+            string methodNotFoundMessageTemplate = $"Could not find public method \"{methodName}\" in type \"{type.Name}\" and all its parents";
+            IList<MethodInfo> methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+                .Where(m => m.Name == methodName).ToList();
+
             if (!methods.Any())
             {
                 throw new MethodNotFoundException($"{methodNotFoundMessageTemplate}. MethodCallTemplate: {MethodCallTemplate}");

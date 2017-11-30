@@ -48,21 +48,21 @@ namespace ExcelReporter.Rendering.TemplateProcessors
                 throw new ArgumentNullException(nameof(template), ArgumentHelper.EmptyStringParamMessage);
             }
 
-            string templ = this.UnwrapTemplate(template).Trim();
-            int separatorIndex = templ.IndexOf(TypeValueSeparator, StringComparison.InvariantCulture);
+            string unwrappedTemplate = this.UnwrapTemplate(template).Trim();
+            int separatorIndex = unwrappedTemplate.IndexOf(TypeValueSeparator, StringComparison.InvariantCulture);
             if (separatorIndex == -1)
             {
                 throw new IncorrectTemplateException($"Incorrect template \"{template}\". Cannot find separator \"{TypeValueSeparator}\" between member type and member template");
             }
 
-            string memberType = templ.Substring(0, separatorIndex).ToLower().Trim();
-            string memberTemplate = templ.Substring(separatorIndex + 1).Trim();
-            if (templ.StartsWith("p"))
+            string memberType = unwrappedTemplate.Substring(0, separatorIndex).ToLower().Trim();
+            string memberTemplate = unwrappedTemplate.Substring(separatorIndex + 1).Trim();
+            if (unwrappedTemplate.StartsWith("p"))
             {
                 // Parameter value
                 return _parameterProvider.GetParameterValue(memberTemplate);
             }
-            if (templ.StartsWith("di"))
+            if (unwrappedTemplate.StartsWith("di"))
             {
                 // Data item value
                 if (dataItem == null)
@@ -75,14 +75,14 @@ namespace ExcelReporter.Rendering.TemplateProcessors
                 }
                 return _dataItemValueProvider.GetValue(memberTemplate, dataItem);
             }
-            if (memberType == "m" || memberType == "ms")
+            if (memberType == "m")
             {
                 // Method invocation
                 if (_methodCallValueProvider == null)
                 {
                     throw new InvalidOperationException($"Template \"{template}\" contains method call but methodCallValueProvider is null");
                 }
-                return _methodCallValueProvider.CallMethod(memberTemplate, this, dataItem, memberType == "ms");
+                return _methodCallValueProvider.CallMethod(memberTemplate, this, dataItem);
             }
 
             throw new IncorrectTemplateException($"Incorrect template \"{template}\". Unknown member type \"{memberType}\"");

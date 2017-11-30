@@ -60,13 +60,13 @@ namespace ExcelReporter.Tests.Rendering.TemplateProcessors
             dataItemValueProvider.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>(), null);
 
             methodCallValueProvider.ClearReceivedCalls();
-            templateProcessor.GetValue("{ms:Method()}", dataItem);
+            templateProcessor.GetValue("{m:Method()}", dataItem);
             parameterProvider.DidNotReceiveWithAnyArgs().GetParameterValue(Arg.Any<string>());
-            methodCallValueProvider.Received(1).CallMethod("Method()", templateProcessor, dataItem, true);
+            methodCallValueProvider.Received(1).CallMethod("Method()", templateProcessor, dataItem);
             dataItemValueProvider.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>(), null);
 
             methodCallValueProvider.ClearReceivedCalls();
-            ExceptionAssert.Throws<InvalidOperationException>(() => new DefaultTemplateProcessor(parameterProvider).GetValue("{ms:Method()}", null), "Template \"{ms:Method()}\" contains method call but methodCallValueProvider is null");
+            ExceptionAssert.Throws<InvalidOperationException>(() => new DefaultTemplateProcessor(parameterProvider).GetValue("{m:Method()}"), "Template \"{m:Method()}\" contains method call but methodCallValueProvider is null");
 
             templateProcessor.GetValue("{di:Field}", dataItem);
             parameterProvider.DidNotReceiveWithAnyArgs().GetParameterValue(Arg.Any<string>());
