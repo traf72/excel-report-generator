@@ -87,7 +87,7 @@ namespace ExcelReporter.Rendering.Providers
             throw new MemberNotFoundException($"Cannot find property or field \"{propOrFieldName}\" in class \"{type.Name}\" and all its parents. BindingFlags = {flags}");
         }
 
-        private MemberTemplateParts ParseTemplate(string template)
+        protected virtual MemberTemplateParts ParseTemplate(string template)
         {
             int typeSeparatorIndex = template.LastIndexOf(':');
             return typeSeparatorIndex == -1

@@ -1,6 +1,6 @@
-﻿using System;
-using ExcelReporter.Exceptions;
+﻿using ExcelReporter.Exceptions;
 using ExcelReporter.Helpers;
+using System;
 
 namespace ExcelReporter.Rendering.Providers.DataItemValueProviders
 {
@@ -20,8 +20,6 @@ namespace ExcelReporter.Rendering.Providers.DataItemValueProviders
             _factory = dataItemValueProviderFactory;
         }
 
-        protected HierarchicalDataItem HierarchicalDataItem { get; private set; }
-
         /// <summary>
         /// Returns value from hierarchical data item based on template
         /// </summary>
@@ -31,25 +29,28 @@ namespace ExcelReporter.Rendering.Providers.DataItemValueProviders
             {
                 throw new ArgumentException(ArgumentHelper.EmptyStringParamMessage, nameof(template));
             }
-            HierarchicalDataItem = hierarchicalDataItem ?? throw new ArgumentNullException(nameof(hierarchicalDataItem), ArgumentHelper.NullParamMessage);
+            if (hierarchicalDataItem == null)
+            {
+                throw new ArgumentNullException(nameof(hierarchicalDataItem), ArgumentHelper.NullParamMessage);
+            }
 
-            var (dataItem, dataItemTemplate) = GetDataItemGivenHierarchy(template);
+            var (dataItem, dataItemTemplate) = GetDataItemGivenHierarchy(template, hierarchicalDataItem);
             return _factory.Create(dataItem)?.GetValue(dataItemTemplate, dataItem);
         }
 
         /// <summary>
         /// Returns real data item object given hierarchy and template for this data item based on input template
         /// </summary>
-        private (object dataItem, string dataItemTemplate) GetDataItemGivenHierarchy(string template)
+        private (object dataItem, string dataItemTemplate) GetDataItemGivenHierarchy(string template, HierarchicalDataItem hierarchicalDataItem)
         {
             int lastColonIndex = template.LastIndexOf(":", StringComparison.Ordinal);
             if (lastColonIndex == -1)
             {
-                return (HierarchicalDataItem.Value, template);
+                return (hierarchicalDataItem.Value, template);
             }
 
             string[] parentTemplateParts = template.Substring(0, lastColonIndex).Split(':');
-            HierarchicalDataItem dataItem = HierarchicalDataItem;
+            HierarchicalDataItem dataItem = hierarchicalDataItem;
             foreach (string part in parentTemplateParts)
             {
                 if (!part.Trim().Equals("parent", StringComparison.OrdinalIgnoreCase))
