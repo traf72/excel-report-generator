@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using ExcelReporter.Attributes;
+﻿using ExcelReporter.Attributes;
 using ExcelReporter.Rendering;
 using ExcelReporter.Rendering.Providers.ColumnsProviders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
 {
@@ -22,20 +22,20 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual(typeof(string), columns[0].DataType);
             Assert.IsNull(columns[0].Width);
 
-            Assert.AreEqual("Column2", columns[1].Name);
-            Assert.AreEqual("Column Two", columns[1].Caption);
-            Assert.AreEqual(typeof(int), columns[1].DataType);
+            Assert.AreEqual("ColumnWithBadWidth", columns[1].Name);
+            Assert.AreEqual("ColumnWithBadWidth", columns[1].Caption);
+            Assert.AreEqual(typeof(short), columns[1].DataType);
             Assert.IsNull(columns[1].Width);
 
-            Assert.AreEqual("Column3", columns[2].Name);
-            Assert.AreEqual("Column Three", columns[2].Caption);
-            Assert.AreEqual(typeof(decimal?), columns[2].DataType);
-            Assert.AreEqual(100.5, columns[2].Width);
+            Assert.AreEqual("Column2", columns[2].Name);
+            Assert.AreEqual("Column Two", columns[2].Caption);
+            Assert.AreEqual(typeof(int), columns[2].DataType);
+            Assert.IsNull(columns[2].Width);
 
-            Assert.AreEqual("ColumnWithBadWidth", columns[3].Name);
-            Assert.AreEqual("ColumnWithBadWidth", columns[3].Caption);
-            Assert.AreEqual(typeof(short), columns[3].DataType);
-            Assert.IsNull(columns[3].Width);
+            Assert.AreEqual("Column3", columns[3].Name);
+            Assert.AreEqual("Column Three", columns[3].Caption);
+            Assert.AreEqual(typeof(decimal?), columns[3].DataType);
+            Assert.AreEqual(100.5, columns[3].Width);
         }
 
         [TestMethod]
@@ -48,7 +48,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         internal class TestType : TestTypeBase
         {
             [ExcelColumn]
-            public string Column1 { get; set; }
+            public string Column1;
 
             [ExcelColumn(Caption = "Column Two")]
             public int Column2 { get; set; }
@@ -67,7 +67,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         internal class TestTypeBase
         {
             [ExcelColumn(Width = -10)]
-            public short ColumnWithBadWidth { get; set; }
+            public short ColumnWithBadWidth;
 
             [ExcelColumn]
             public virtual string OverriddenColumn { get; set; }

@@ -2,9 +2,7 @@
 
 namespace ExcelReporter.Attributes
 {
-    // Пока оставил возможность применения только к свойствам
-    //[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class ExcelColumnAttribute : Attribute
     {
         /// <summary>
