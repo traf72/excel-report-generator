@@ -15,11 +15,13 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 
         public string StrParam { get; } = "String parameter";
 
-        public int IntParam { get; } = 10;
+        public int IntParam = 10;
 
         public DateTime DateParam { get; } = new DateTime(2017, 10, 25);
 
         public TimeSpan TimeSpanParam { get; set; } = new TimeSpan(36500, 22, 30, 40);
+
+        public ComplexType ComplexTypeParam { get; set; } = new ComplexType();
 
         public string Format(DateTime date, string format = "yyyyMMdd")
         {
@@ -118,5 +120,12 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
         {
             throw new NotImplementedException();
         }
+    }
+
+    public class ComplexType
+    {
+        public string StrParam { get; set; } = "Complex type string parameter";
+
+        public int IntParam = 11;
     }
 }
