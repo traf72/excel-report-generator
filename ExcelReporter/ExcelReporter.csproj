@@ -62,7 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\ExcelColumnAttribute.cs" />
-    <Compile Include="Attributes\ParameterAttribute.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Enumerators\EnumeratorFactory.cs" />
     <Compile Include="Enums\Direction.cs" />
     <Compile Include="Enums\PanelType.cs" />
@@ -73,12 +73,13 @@
     <Compile Include="Exceptions\MethodNotFoundException.cs" />
     <Compile Include="Exceptions\ColumnNotFoundException.cs" />
     <Compile Include="Exceptions\TypeNotFoundException.cs" />
-    <Compile Include="Exceptions\ParameterNotFoundException.cs" />
     <Compile Include="Exceptions\MemberNotFoundException.cs" />
     <Compile Include="Extensions\DataReaderExtensions.cs" />
     <Compile Include="Extensions\ParameterInfoExtensions.cs" />
     <Compile Include="Helpers\ArgumentHelper.cs" />
     <Compile Include="Extensions\TemplateProcessorExtensions.cs" />
+    <Compile Include="Helpers\IReflectionHelper.cs" />
+    <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Helpers\TypeHelper.cs" />
     <Compile Include="Enumerators\DataReaderEnumerator.cs" />
     <Compile Include="Enumerators\DataSetEnumerator.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Excel\RangeCoords.cs" />
     <Compile Include="Rendering\ExcelDynamicColumn.cs" />
     <Compile Include="Rendering\HierarchicalDataItem.cs" />
+    <Compile Include="Rendering\TemplateParts\MethodCallTemplateParts.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataItemPanel.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataSourcePanel.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelDynamicPanel.cs" />
@@ -120,13 +122,15 @@
     <Compile Include="Rendering\Providers\DataItemValueProviders\IDataItemValueProviderFactory.cs" />
     <Compile Include="Rendering\Providers\DataItemValueProviders\IGenericDataItemValueProvider.cs" />
     <Compile Include="Rendering\Providers\DataItemValueProviders\ObjectPropertyValueProvider.cs" />
+    <Compile Include="Rendering\Providers\DefaultInstanceProvider.cs" />
     <Compile Include="Rendering\Providers\DefaultMethodCallValueProvider.cs" />
+    <Compile Include="Rendering\Providers\DefaultPropertyValueProvider.cs" />
     <Compile Include="Rendering\Providers\DefaultTypeProvider.cs" />
+    <Compile Include="Rendering\Providers\IInstanceProvider.cs" />
     <Compile Include="Rendering\Providers\IMethodCallValueProvider.cs" />
+    <Compile Include="Rendering\Providers\IPropertyValueProvider.cs" />
     <Compile Include="Rendering\Providers\ITypeProvider.cs" />
-    <Compile Include="Rendering\Providers\ParameterProviders\DictionaryParameterProvider.cs" />
-    <Compile Include="Rendering\Providers\ParameterProviders\IParameterProvider.cs" />
-    <Compile Include="Rendering\Providers\ParameterProviders\ReflectionParameterProvider.cs" />
+    <Compile Include="Rendering\TemplateParts\MemberTemplateParts.cs" />
     <Compile Include="Rendering\TemplateProcessors\DefaultTemplateProcessor.cs" />
     <Compile Include="Rendering\TemplateProcessors\IGenericTemplateProcessor.cs" />
     <Compile Include="Rendering\TemplateProcessors\ITemplateProcessor.cs" />

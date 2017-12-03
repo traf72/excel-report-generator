@@ -40,7 +40,7 @@ namespace ExcelReporter.Rendering.Providers.DataItemValueProviders
         /// <summary>
         /// Returns real data item object given hierarchy and template for this data item based on input template
         /// </summary>
-        protected virtual (object dataItem, string dataItemTemplate) GetDataItemGivenHierarchy(string template)
+        private (object dataItem, string dataItemTemplate) GetDataItemGivenHierarchy(string template)
         {
             int lastColonIndex = template.LastIndexOf(":", StringComparison.Ordinal);
             if (lastColonIndex == -1)

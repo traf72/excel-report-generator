@@ -1,4 +1,5 @@
-﻿using ExcelReporter.Exceptions;
+﻿using ExcelReporter.Excel;
+using ExcelReporter.Exceptions;
 using ExcelReporter.Rendering.Providers;
 using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -8,30 +9,50 @@ using System.Reflection;
 namespace ExcelReporter.Tests.Rendering.Providers
 {
     [TestClass]
-    public class TypeProviderTest
+    public class DefaulTypeProviderTest
     {
         [TestMethod]
         public void TestGetType()
         {
-            ITypeProvider typeProvider = new DefaultTypeProvider(Assembly.GetExecutingAssembly());
+            ITypeProvider typeProvider = new DefaultTypeProvider();
 
-            ExceptionAssert.Throws<ArgumentException>(() => typeProvider.GetType(null));
-            ExceptionAssert.Throws<ArgumentException>(() => typeProvider.GetType(string.Empty));
-            ExceptionAssert.Throws<ArgumentException>(() => typeProvider.GetType(" "));
+            Assert.AreSame(typeof(ExcelHelper), typeProvider.GetType("ExcelHelper"));
+            ExceptionAssert.Throws<TypeNotFoundException>(() => typeProvider.GetType("TestType_1"), "Cannot find type by template \"TestType_1\"");
+            ExceptionAssert.Throws<TypeNotFoundException>(() => typeProvider.GetType("DateTime"), "Cannot find type by template \"DateTime\"");
+
+            ExceptionAssert.Throws<InvalidOperationException>(() => typeProvider.GetType(null), "Template is not specified but defaultType is null");
+            ExceptionAssert.Throws<InvalidOperationException>(() => typeProvider.GetType(string.Empty), "Template is not specified but defaultType is null");
+            ExceptionAssert.Throws<InvalidOperationException>(() => typeProvider.GetType(" "), "Template is not specified but defaultType is null");
+
+            typeProvider = new DefaultTypeProvider(new Assembly[0]);
+
+            Assert.AreSame(typeof(ExcelHelper), typeProvider.GetType("ExcelHelper"));
+            ExceptionAssert.Throws<TypeNotFoundException>(() => typeProvider.GetType("TestType_1"), "Cannot find type by template \"TestType_1\"");
+            ExceptionAssert.Throws<TypeNotFoundException>(() => typeProvider.GetType("DateTime"), "Cannot find type by template \"DateTime\"");
+
+            typeProvider = new DefaultTypeProvider(new[] { Assembly.GetExecutingAssembly() }, typeof(TestType_1));
 
             Assert.AreSame(typeof(TestType_1), typeProvider.GetType("TestType_1"));
+            Assert.AreSame(typeof(TestType_1), typeProvider.GetType(null));
+            Assert.AreSame(typeProvider.GetType("TestType_1"), typeProvider.GetType(null));
             Assert.AreSame(typeof(TestType_1), typeProvider.GetType("ExcelReporter.Tests.Rendering.Providers:TestType_1"));
             Assert.AreSame(typeof(TestType_1.TestType_2), typeProvider.GetType("TestType_2"));
             Assert.AreSame(typeof(TestType_1.TestType_2), typeProvider.GetType("ExcelReporter.Tests.Rendering.Providers:TestType_2"));
             Assert.AreSame(typeof(TestType_1.TestType_2), typeProvider.GetType(" ExcelReporter.Tests.Rendering.Providers : TestType_2 "));
+            ExceptionAssert.Throws<TypeNotFoundException>(() => typeProvider.GetType("ExcelHelper"), "Cannot find type by template \"ExcelHelper\"");
 
             Assert.AreSame(typeof(TestType_3), typeProvider.GetType("ExcelReporter.Tests.Rendering.Providers:TestType_3"));
             Assert.AreSame(typeof(InnerNamespace.TestType_3), typeProvider.GetType("ExcelReporter.Tests.Rendering.Providers.InnerNamespace:TestType_3"));
             ExceptionAssert.Throws<IncorrectTemplateException>(() => typeProvider.GetType("TestType_3"), "More than one type found by template \"TestType_3\"");
+            ExceptionAssert.Throws<TypeNotFoundException>(() => typeProvider.GetType("DateTime"), "Cannot find type by template \"DateTime\"");
+
+            typeProvider = new DefaultTypeProvider(new[] { Assembly.GetExecutingAssembly(), Assembly.GetAssembly(typeof(DateTime)) });
 
             Assert.AreSame(typeof(InnerNamespace.TestType_5), typeProvider.GetType("ExcelReporter.Tests.Rendering.Providers.InnerNamespace:TestType_5"));
             Assert.AreSame(typeof(TestType_5), typeProvider.GetType(":TestType_5"));
             Assert.AreSame(typeof(TestType_5), typeProvider.GetType(":TestType_5"));
+            Assert.AreSame(typeof(DateTime), typeProvider.GetType("DateTime"));
+            Assert.AreSame(typeof(DateTime), typeProvider.GetType("System:DateTime"));
             ExceptionAssert.Throws<IncorrectTemplateException>(() => typeProvider.GetType("TestType_5"), "More than one type found by template \"TestType_5\"");
 
             Assert.AreSame(typeof(InnerNamespace.TestType_4), typeProvider.GetType("ExcelReporter.Tests.Rendering.Providers.InnerNamespace:TestType_4"));

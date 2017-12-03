@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using ExcelReporter.Exceptions;
+﻿using ExcelReporter.Helpers;
 using ExcelReporter.Rendering.Providers.DataItemValueProviders;
 using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
+using System;
+using System.Collections.Generic;
 
 namespace ExcelReporter.Tests.Rendering.Providers.DataItemValueProviders
 {
@@ -13,53 +14,29 @@ namespace ExcelReporter.Tests.Rendering.Providers.DataItemValueProviders
         [TestMethod]
         public void TestGetValue()
         {
-            IDataItemValueProvider dataItemValueProvider = new ObjectPropertyValueProvider();
-            var dataItem = new TestClass
-            {
-                IntProp = 5,
-                StrProp = "Str",
-                ObjProp = new TestClass2
-                {
-                    StrProp = "Str2",
-                    ObjProp = new TestClass3
-                    {
-                        GuidProp = Guid.NewGuid()
-                    }
-                },
-                ParentProp = "Parent",
-            };
+            var reflectionHelper = Substitute.For<IReflectionHelper>();
+            IDataItemValueProvider dataItemValueProvider = new ObjectPropertyValueProvider(reflectionHelper);
+            var date = DateTime.Now;
 
-            Assert.AreEqual(dataItem, dataItemValueProvider.GetValue("di", dataItem));
+            Assert.AreEqual(date, dataItemValueProvider.GetValue("di", date));
             Assert.IsNull(dataItemValueProvider.GetValue(" di ", null));
-            Assert.AreEqual(dataItem.StrProp, dataItemValueProvider.GetValue("StrProp", dataItem));
-            Assert.AreEqual(dataItem.StrProp, dataItemValueProvider.GetValue(" StrProp ", dataItem));
-            Assert.AreEqual(dataItem.IntProp, dataItemValueProvider.GetValue("IntProp", dataItem));
-            Assert.AreEqual(dataItem.ObjProp, dataItemValueProvider.GetValue("ObjProp", dataItem));
-            Assert.AreEqual(dataItem.ObjProp.StrProp, dataItemValueProvider.GetValue("ObjProp.StrProp", dataItem));
-            Assert.AreEqual(dataItem.ObjProp.ObjProp.GuidProp, dataItemValueProvider.GetValue("ObjProp.ObjProp.GuidProp", dataItem));
-            Assert.AreEqual(dataItem.ParentProp, dataItemValueProvider.GetValue("ParentProp", dataItem));
+            reflectionHelper.DidNotReceiveWithAnyArgs().GetValueOfPropertiesChain(Arg.Any<string>(), Arg.Any<object>());
 
-            ExceptionAssert.Throws<MemberNotFoundException>(() => dataItemValueProvider.GetValue("strProp", dataItem),
-                "Cannot find public instance property \"strProp\" in class \"TestClass\" and all its parents");
-            ExceptionAssert.Throws<MemberNotFoundException>(() => dataItemValueProvider.GetValue("DoubleProp", dataItem),
-                "Cannot find public instance property \"DoubleProp\" in class \"TestClass\" and all its parents");
-            ExceptionAssert.Throws<MemberNotFoundException>(() => dataItemValueProvider.GetValue("ObjProp.GuidProp", dataItem),
-                "Cannot find public instance property \"GuidProp\" in class \"TestClass2\" and all its parents");
+            dataItemValueProvider.GetValue("StrProp", date);
+            reflectionHelper.Received(1).GetValueOfPropertiesChain("StrProp", date);
 
-            dataItem.StrProp = null;
-            dataItem.ObjProp = null;
+            dataItemValueProvider.GetValue(" StrProp ", date);
+            reflectionHelper.Received(2).GetValueOfPropertiesChain("StrProp", date);
 
-            Assert.IsNull(dataItemValueProvider.GetValue("StrProp", dataItem));
+            dataItemValueProvider.GetValue("ObjProp.StrProp", date);
+            reflectionHelper.Received(1).GetValueOfPropertiesChain("ObjProp.StrProp", date);
 
-            ExceptionAssert.Throws<InvalidOperationException>(() => dataItemValueProvider.GetValue("ObjProp.StrProp", dataItem),
-                "Cannot get property \"StrProp\" because object is null");
+            dataItemValueProvider.GetValue("ObjProp.ObjProp.GuidProp", date);
+            reflectionHelper.Received(1).GetValueOfPropertiesChain("ObjProp.ObjProp.GuidProp", date);
 
-            ExceptionAssert.Throws<InvalidOperationException>(() => dataItemValueProvider.GetValue("IntProp", null),
-                "Cannot get property \"IntProp\" because object is null");
-
-            ExceptionAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(null, dataItem));
-            ExceptionAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(string.Empty, dataItem));
-            ExceptionAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(" ", dataItem));
+            ExceptionAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(null, date));
+            ExceptionAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(string.Empty, date));
+            ExceptionAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(" ", date));
         }
 
         [TestMethod]
@@ -70,32 +47,6 @@ namespace ExcelReporter.Tests.Rendering.Providers.DataItemValueProviders
             Assert.AreEqual(dataItem, dataItemValueProvider.GetValue("di", dataItem));
             Assert.AreEqual(dataItem.Key, dataItemValueProvider.GetValue("Key", dataItem));
             Assert.AreEqual(dataItem.Value, dataItemValueProvider.GetValue(" Value ", dataItem));
-        }
-
-        private class TestClass : Parent
-        {
-            public string StrProp { get; set; }
-
-            public int IntProp { get; set; }
-
-            public TestClass2 ObjProp { get; set; }
-        }
-
-        private class TestClass2
-        {
-            public string StrProp { get; set; }
-
-            public TestClass3 ObjProp { get; set; }
-        }
-
-        private class TestClass3
-        {
-            public Guid GuidProp { get; set; }
-        }
-
-        private class Parent
-        {
-            public string ParentProp { get; set; }
         }
     }
 }

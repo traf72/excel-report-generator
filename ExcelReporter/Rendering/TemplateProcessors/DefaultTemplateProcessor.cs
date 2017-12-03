@@ -4,7 +4,6 @@ using ExcelReporter.Helpers;
 using ExcelReporter.Rendering.Providers;
 using ExcelReporter.Rendering.Providers.DataItemValueProviders;
 using System;
-using ExcelReporter.Rendering.Providers.ParameterProviders;
 
 namespace ExcelReporter.Rendering.TemplateProcessors
 {
@@ -14,26 +13,26 @@ namespace ExcelReporter.Rendering.TemplateProcessors
     public class DefaultTemplateProcessor : IGenericTemplateProcessor<HierarchicalDataItem>
     {
         private const string TypeValueSeparator = ":";
-        private const string LeftBorder = "{";
-        private const string RightBorder = "}";
 
-        private readonly IParameterProvider _parameterProvider;
-        private readonly IGenericDataItemValueProvider<HierarchicalDataItem> _dataItemValueProvider;
-        private readonly IMethodCallValueProvider _methodCallValueProvider;
-
-        public DefaultTemplateProcessor(IParameterProvider parameterProvider, IMethodCallValueProvider methodCallValueProvider = null,
+        public DefaultTemplateProcessor(IPropertyValueProvider propertyValueProvider, IMethodCallValueProvider methodCallValueProvider = null,
             IGenericDataItemValueProvider<HierarchicalDataItem> dataItemValueProvider = null)
         {
-            _parameterProvider = parameterProvider ?? throw new ArgumentNullException(nameof(parameterProvider), ArgumentHelper.NullParamMessage);
-            _methodCallValueProvider = methodCallValueProvider;
-            _dataItemValueProvider = dataItemValueProvider;
+            PropertyValueProvider = propertyValueProvider ?? throw new ArgumentNullException(nameof(propertyValueProvider), ArgumentHelper.NullParamMessage);
+            MethodCallValueProvider = methodCallValueProvider;
+            DataItemValueProvider = dataItemValueProvider;
         }
 
-        // TODO Обязательно протестировать переопределение границ (в том числе на границы с более, чем одним символом)
-        public virtual string LeftTemplateBorder => LeftBorder;
+        protected IPropertyValueProvider PropertyValueProvider { get; }
+
+        protected IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider { get; }
+
+        protected IMethodCallValueProvider MethodCallValueProvider { get; }
 
         // TODO Обязательно протестировать переопределение границ (в том числе на границы с более, чем одним символом)
-        public virtual string RightTemplateBorder => RightBorder;
+        public virtual string LeftTemplateBorder => "{";
+
+        // TODO Обязательно протестировать переопределение границ (в том числе на границы с более, чем одним символом)
+        public virtual string RightTemplateBorder => "}";
 
         public string TemplatePattern => $@"{LeftTemplateBorder}.+?{TypeValueSeparator}.+?{RightTemplateBorder}";
 
@@ -59,8 +58,8 @@ namespace ExcelReporter.Rendering.TemplateProcessors
             string memberTemplate = unwrappedTemplate.Substring(separatorIndex + 1).Trim();
             if (unwrappedTemplate.StartsWith("p"))
             {
-                // Parameter value
-                return _parameterProvider.GetParameterValue(memberTemplate);
+                // Property of field value
+                return PropertyValueProvider.GetValue(memberTemplate);
             }
             if (unwrappedTemplate.StartsWith("di"))
             {
@@ -69,20 +68,20 @@ namespace ExcelReporter.Rendering.TemplateProcessors
                 {
                     throw new InvalidOperationException($"Template \"{template}\" contains data reference but dataItem is null");
                 }
-                if (_dataItemValueProvider == null)
+                if (DataItemValueProvider == null)
                 {
                     throw new InvalidOperationException($"Template \"{template}\" contains data reference but dataItemValueProvider is null");
                 }
-                return _dataItemValueProvider.GetValue(memberTemplate, dataItem);
+                return DataItemValueProvider.GetValue(memberTemplate, dataItem);
             }
             if (memberType == "m")
             {
                 // Method invocation
-                if (_methodCallValueProvider == null)
+                if (MethodCallValueProvider == null)
                 {
                     throw new InvalidOperationException($"Template \"{template}\" contains method call but methodCallValueProvider is null");
                 }
-                return _methodCallValueProvider.CallMethod(memberTemplate, this, dataItem);
+                return MethodCallValueProvider.CallMethod(memberTemplate, this, dataItem);
             }
 
             throw new IncorrectTemplateException($"Incorrect template \"{template}\". Unknown member type \"{memberType}\"");

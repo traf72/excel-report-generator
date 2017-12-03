@@ -298,5 +298,24 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
 
             //report.Workbook.SaveAs("test.xlsx");
         }
+
+        [TestMethod]
+        public void TestRenderIEnumerableOfString()
+        {
+            var report = new TestReport();
+            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
+            IXLRange range = ws.Range(2, 2, 2, 2);
+            range.AddToNamed("TestRange", XLScope.Worksheet);
+
+            ws.Cell(2, 2).Value = "{di:di}";
+
+            var panel = new ExcelDataSourcePanel(new[] { "One", "Two", "Three", "Four" }, ws.NamedRange("TestRange"), report);
+            panel.Render();
+
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelIEnumerableRenderTest),
+                nameof(TestRenderIEnumerableOfString)), ws.Workbook);
+
+            //report.Workbook.SaveAs("test.xlsx");
+        }
     }
 }

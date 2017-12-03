@@ -171,6 +171,7 @@
     <Compile Include="Extensions\DataReaderExtensionsTest.cs" />
     <Compile Include="Extensions\ITemplateProcessorExtensionsTest.cs" />
     <Compile Include="Extensions\ParameterInfoExtensionsTest.cs" />
+    <Compile Include="Helpers\ReflectionHelperTest.cs" />
     <Compile Include="Helpers\TypeHelperTest.cs" />
     <Compile Include="Excel\ExcelHelperTest.cs" />
     <Compile Include="Enumerators\DataReaderEnumeratorTest.cs" />
@@ -213,10 +214,10 @@
     <Compile Include="Rendering\Providers\DataItemValueProviders\DictionaryValueProviderTest.cs" />
     <Compile Include="Rendering\Providers\DataItemValueProviders\HierarchicalDataItemValueProviderTest.cs" />
     <Compile Include="Rendering\Providers\DataItemValueProviders\ObjectPropertyValueProviderTest.cs" />
-    <Compile Include="Rendering\Providers\MethodCallValueProviderTest.cs" />
-    <Compile Include="Rendering\Providers\ParameterProviders\DictionaryParameterProviderTest.cs" />
-    <Compile Include="Rendering\Providers\ParameterProviders\ReflectionParameterProviderTest.cs" />
-    <Compile Include="Rendering\Providers\TypeProviderTest.cs" />
+    <Compile Include="Rendering\Providers\DefaultMethodCallValueProviderTest.cs" />
+    <Compile Include="Rendering\Providers\DefaultPropertyValueProviderTest.cs" />
+    <Compile Include="Rendering\Providers\DefaultInstanceProviderTest.cs" />
+    <Compile Include="Rendering\Providers\DefaultTypeProviderTest.cs" />
     <Compile Include="Rendering\TemplateProcessors\DefaultTemplateProcessorTest.cs" />
     <Compile Include="TestHelper.cs" />
   </ItemGroup>
@@ -244,6 +245,7 @@
     <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalNoShift.xlsx" />
     <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalRowsShift.xlsx" />
     <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableOfInt.xlsx" />
+    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableOfString.xlsx" />
     <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalCellsShift.xlsx" />
     <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalNoShift.xlsx" />
     <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalRowsShift.xlsx" />

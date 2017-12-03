@@ -11,18 +11,19 @@ using NSubstitute;
 namespace ExcelReporter.Tests.Rendering.Providers
 {
     [TestClass]
-    public class MethodCallValueProviderTest
+    public class DefaultMethodCallValueProviderTest
     {
         [TestMethod]
         public void TestParseTemplate()
         {
             var typeProvider = Substitute.For<ITypeProvider>();
-            var methodCallValueProvider = new DefaultMethodCallValueProvider(typeProvider, null);
+            var instanceProvider = Substitute.For<IInstanceProvider>();
+            var methodCallValueProvider = new DefaultMethodCallValueProvider(typeProvider, instanceProvider);
             MethodInfo method = methodCallValueProvider.GetType().GetMethod("ParseTemplate", BindingFlags.Instance | BindingFlags.NonPublic);
 
             object result = method.Invoke(methodCallValueProvider, new[] { "m()" });
             Type resultType = result.GetType();
-            PropertyInfo methodNameProp = resultType.GetProperty("MethodName");
+            PropertyInfo methodNameProp = resultType.GetProperty("MemberName");
             PropertyInfo typeNameProp = resultType.GetProperty("TypeName");
             PropertyInfo methodParamsProp = resultType.GetProperty("MethodParams");
 
@@ -154,7 +155,8 @@ namespace ExcelReporter.Tests.Rendering.Providers
         public void TestParseParams()
         {
             var typeProvider = Substitute.For<ITypeProvider>();
-            var methodCallValueProvider = new DefaultMethodCallValueProvider(typeProvider, null);
+            var instanceProvider = Substitute.For<IInstanceProvider>();
+            var methodCallValueProvider = new DefaultMethodCallValueProvider(typeProvider, instanceProvider);
             MethodInfo method = methodCallValueProvider.GetType().GetMethod("ParseInputParams", BindingFlags.Instance | BindingFlags.NonPublic);
 
             var result = (string[])method.Invoke(methodCallValueProvider, new[] { string.Empty });
@@ -240,10 +242,14 @@ namespace ExcelReporter.Tests.Rendering.Providers
         [TestMethod]
         public void TestCallMethod()
         {
-            ExceptionAssert.Throws<ArgumentNullException>(() => new DefaultMethodCallValueProvider(null, new object()));
+            ExceptionAssert.Throws<ArgumentNullException>(() => new DefaultMethodCallValueProvider(null, Substitute.For<IInstanceProvider>()));
+            ExceptionAssert.Throws<ArgumentNullException>(() => new DefaultMethodCallValueProvider(Substitute.For<ITypeProvider>(), null));
 
             var typeProvider = Substitute.For<ITypeProvider>();
+            var instanceProvider = Substitute.For<IInstanceProvider>();
             typeProvider.GetType(Arg.Any<string>()).Returns(typeof(TestClass));
+            var testInstance = new TestClass();
+            instanceProvider.GetInstance(typeof(TestClass)).Returns(testInstance);
 
             var templateProcessor = Substitute.For<ITemplateProcessor>();
             var dataItem = new HierarchicalDataItem();
@@ -253,73 +259,96 @@ namespace ExcelReporter.Tests.Rendering.Providers
             templateProcessor.GetValue("p:Name").Returns("TestName");
             templateProcessor.GetValue("p:Value", dataItem).Returns(7);
 
-            var methodCallValueProvider = new DefaultMethodCallValueProvider(typeProvider, new TestClass());
+            var methodCallValueProvider = new DefaultMethodCallValueProvider(typeProvider, instanceProvider);
 
             ExceptionAssert.Throws<ArgumentException>(() => methodCallValueProvider.CallMethod(null, templateProcessor, new HierarchicalDataItem()));
             ExceptionAssert.Throws<ArgumentException>(() => methodCallValueProvider.CallMethod(string.Empty, templateProcessor, new HierarchicalDataItem()));
             ExceptionAssert.Throws<ArgumentException>(() => methodCallValueProvider.CallMethod(" ", templateProcessor, new HierarchicalDataItem()));
 
             Assert.AreEqual("Str_1", methodCallValueProvider.CallMethod("Method1()", templateProcessor, null));
-            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            typeProvider.Received(1).GetType(null);
+            instanceProvider.Received(1).GetInstance(typeof(TestClass));
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
             typeProvider.ClearReceivedCalls();
+            instanceProvider.ClearReceivedCalls();
             Assert.AreEqual("Str_2", methodCallValueProvider.CallMethod("TestClass:Method1()", templateProcessor, null));
             typeProvider.Received(1).GetType("TestClass");
+            instanceProvider.Received(1).GetInstance(typeof(TestClass));
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
             typeProvider.ClearReceivedCalls();
+            instanceProvider.ClearReceivedCalls();
             Assert.AreEqual("Str_3", methodCallValueProvider.CallMethod(" ExcelReporter.Tests.Implementations.Providers : TestClass : Method1() ", templateProcessor, null));
             typeProvider.Received(1).GetType("ExcelReporter.Tests.Implementations.Providers : TestClass");
+            instanceProvider.Received(1).GetInstance(typeof(TestClass));
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
             typeProvider.ClearReceivedCalls();
+            instanceProvider.ClearReceivedCalls();
             Assert.AreEqual("Str_4", methodCallValueProvider.CallMethod(":TestClass:Method1()", templateProcessor, null));
             typeProvider.Received(1).GetType(":TestClass");
+            instanceProvider.Received(1).GetInstance(typeof(TestClass));
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
             typeProvider.ClearReceivedCalls();
+            instanceProvider.ClearReceivedCalls();
             Assert.AreEqual(25, methodCallValueProvider.CallMethod("Method2(p:Value, 18)", templateProcessor, dataItem));
-            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            typeProvider.Received(1).GetType(null);
+            instanceProvider.DidNotReceiveWithAnyArgs().GetInstance(Arg.Any<Type>());
             templateProcessor.Received(1).GetValue("p:Value", dataItem);
 
             typeProvider.ClearReceivedCalls();
             templateProcessor.ClearReceivedCalls();
             Assert.AreEqual(25, methodCallValueProvider.CallMethod(" : TestClass : Method2(p:Value, 18) ", templateProcessor, dataItem));
             typeProvider.Received(1).GetType(": TestClass");
+            instanceProvider.DidNotReceiveWithAnyArgs().GetInstance(Arg.Any<Type>());
             templateProcessor.Received(1).GetValue("p:Value", dataItem);
 
             typeProvider.ClearReceivedCalls();
             templateProcessor.ClearReceivedCalls();
             Assert.IsNull(methodCallValueProvider.CallMethod("Method3()", templateProcessor, null));
-            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            typeProvider.Received(1).GetType(null);
+            instanceProvider.Received(1).GetInstance(typeof(TestClass));
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
             templateProcessor.GetValue("m:TestClass:Method5(p:Desc,  m:ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, di.Field) )").Returns(10);
             templateProcessor.GetValue("m:Method7()").Returns('c');
             templateProcessor.GetValue("m::TestClass2:Method1()").Returns(long.MaxValue);
 
+            typeProvider.ClearReceivedCalls();
+            instanceProvider.ClearReceivedCalls();
             object result = methodCallValueProvider.CallMethod(
                 "Method4(5, p:Name, hi,  m:TestClass:Method5(p:Desc,  m:ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, di.Field) ) , m:Method7(), m::TestClass2:Method1())",
                 templateProcessor, null);
             Assert.AreEqual($"5_TestName_hi_10_c_{long.MaxValue}", result);
-            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            typeProvider.Received(1).GetType(null);
+            instanceProvider.Received(1).GetInstance(typeof(TestClass));
             templateProcessor.Received(1).GetValue("p:Name");
             templateProcessor.Received(1).GetValue("m:TestClass:Method5(p:Desc,  m:ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, di.Field) )");
             templateProcessor.Received(1).GetValue("m:Method7()");
             templateProcessor.Received(1).GetValue("m::TestClass2:Method1()");
 
+            typeProvider.ClearReceivedCalls();
+            instanceProvider.ClearReceivedCalls();
             templateProcessor.ClearReceivedCalls();
             Assert.AreEqual("_ ", methodCallValueProvider.CallMethod("Method5(\"\", \" \")", templateProcessor, null));
-            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            typeProvider.Received(1).GetType(null);
+            instanceProvider.Received(1).GetInstance(typeof(TestClass));
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
+            typeProvider.ClearReceivedCalls();
+            instanceProvider.ClearReceivedCalls();
             Assert.AreEqual("p:Name_m:Method6()", methodCallValueProvider.CallMethod("Method5(\"p:Name\", \"m:Method6()\")", templateProcessor, null));
-            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            typeProvider.Received(1).GetType(null);
+            instanceProvider.Received(1).GetInstance(typeof(TestClass));
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
+            typeProvider.ClearReceivedCalls();
+            instanceProvider.ClearReceivedCalls();
             Assert.AreEqual("\"p:Name\"_\"\"", methodCallValueProvider.CallMethod("Method5(\"\"p:Name\"\", \"\"\"\")", templateProcessor, null));
-            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            typeProvider.Received(1).GetType(null);
+            instanceProvider.Received(1).GetInstance(typeof(TestClass));
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
             ExceptionAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("TestClass:BadMethod()", templateProcessor, null),
@@ -329,30 +358,29 @@ namespace ExcelReporter.Tests.Rendering.Providers
                 "Could not find public method \"BadMethod\" in type \"TestClass\" and all its parents. MethodCallTemplate: TestClass:BadMethod()");
 
             typeProvider.ClearReceivedCalls();
+            instanceProvider.ClearReceivedCalls();
             templateProcessor.ClearReceivedCalls();
             Assert.AreEqual("Str_Parent", methodCallValueProvider.CallMethod("MethodParent()", templateProcessor, null));
-            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            typeProvider.Received(1).GetType(null);
+            instanceProvider.Received(1).GetInstance(typeof(TestClass));
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
+            typeProvider.ClearReceivedCalls();
+            instanceProvider.ClearReceivedCalls();
             Assert.AreEqual("Str_Static_Parent", methodCallValueProvider.CallMethod("MethodStaticParent()", templateProcessor, null));
-            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            typeProvider.Received(1).GetType(null);
+            instanceProvider.DidNotReceiveWithAnyArgs().GetInstance(Arg.Any<Type>());
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
-
-            methodCallValueProvider = new DefaultMethodCallValueProvider(typeProvider, null);
-
-            Assert.AreEqual("Str_1", methodCallValueProvider.CallMethod(":TestClass:Method1()", templateProcessor, null));
-            typeProvider.Received(1).GetType(":TestClass");
-            templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
-
-            ExceptionAssert.Throws<InvalidOperationException>(() => methodCallValueProvider.CallMethod("Method2(p:Value, 18)", templateProcessor, null),
-                "Type name is not specified in template \"Method2(p:Value, 18)\" but defaultInstance is null");
         }
 
         [TestMethod]
         public void TestCallMethodWithOverloading()
         {
             var typeProvider = Substitute.For<ITypeProvider>();
+            var instanceProvider = Substitute.For<IInstanceProvider>();
             typeProvider.GetType(Arg.Any<string>()).Returns(typeof(TestOverloading));
+            var testInstance = new TestOverloading();
+            instanceProvider.GetInstance(typeof(TestOverloading)).Returns(testInstance);
 
             var templateProcessor = Substitute.For<ITemplateProcessor>();
             templateProcessor.TemplatePattern.Returns(@"{.+?:.+?}");
@@ -363,7 +391,7 @@ namespace ExcelReporter.Tests.Rendering.Providers
             templateProcessor.GetValue("p:Value2").Returns((short)77);
             templateProcessor.GetValue("p:Value3").Returns(null);
 
-            var methodCallValueProvider = new DefaultMethodCallValueProvider(typeProvider, new TestOverloading());
+            var methodCallValueProvider = new DefaultMethodCallValueProvider(typeProvider, instanceProvider);
 
             Assert.AreEqual("Method1()", methodCallValueProvider.CallMethod("Method1()", templateProcessor, null));
 

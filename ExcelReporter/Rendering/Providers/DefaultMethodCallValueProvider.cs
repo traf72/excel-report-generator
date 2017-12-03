@@ -1,13 +1,14 @@
-﻿using System;
+﻿using ExcelReporter.Exceptions;
+using ExcelReporter.Extensions;
+using ExcelReporter.Helpers;
+using ExcelReporter.Rendering.TemplateProcessors;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using ExcelReporter.Exceptions;
-using ExcelReporter.Extensions;
-using ExcelReporter.Helpers;
-using ExcelReporter.Rendering.TemplateProcessors;
+using ExcelReporter.Rendering.TemplateParts;
 
 namespace ExcelReporter.Rendering.Providers
 {
@@ -18,29 +19,17 @@ namespace ExcelReporter.Rendering.Providers
     {
         private static readonly Stack<string> TemplateStack = new Stack<string>();
 
-        private readonly IDictionary<Type, object> _instanceCache = new Dictionary<Type, object>();
-
         /// <param name="typeProvider">Type provider which will be used for type search</param>
-        /// <param name="defaultInstance">Instance on which method will be called if template does not specify the type explicitly</param>
-        public DefaultMethodCallValueProvider(ITypeProvider typeProvider, object defaultInstance)
+        /// <param name="instanceProvider">Instance provider which will be used to get instance of specified type</param>
+        public DefaultMethodCallValueProvider(ITypeProvider typeProvider, IInstanceProvider instanceProvider)
         {
             TypeProvider = typeProvider ?? throw new ArgumentNullException(nameof(typeProvider), ArgumentHelper.NullParamMessage);
-            DefaultInstance = defaultInstance;
-            if (DefaultInstance != null)
-            {
-                _instanceCache[DefaultInstance.GetType()] = DefaultInstance;
-            }
+            InstanceProvider = instanceProvider ?? throw new ArgumentNullException(nameof(instanceProvider), ArgumentHelper.NullParamMessage);
         }
 
-        /// <summary>
-        /// Type provider used for type search
-        /// </summary>
         protected ITypeProvider TypeProvider { get; }
 
-        /// <summary>
-        /// Instance on which method are called if template does not specify the type explicitly
-        /// </summary>
-        protected object DefaultInstance { get; }
+        protected IInstanceProvider InstanceProvider { get; }
 
         private string MethodCallTemplate => TemplateStack.Peek();
 
@@ -61,9 +50,9 @@ namespace ExcelReporter.Rendering.Providers
             try
             {
                 MethodCallTemplateParts templateParts = ParseTemplate(MethodCallTemplate);
-                Type type = GetType(templateParts.TypeName);
+                Type type = TypeProvider.GetType(templateParts.TypeName);
                 IList<InputParameter> inputParams = GetInputParametersValues(templateParts.MethodParams, templateProcessor, dataItem);
-                MethodInfo method = GetMethod(type, templateParts.MethodName, inputParams);
+                MethodInfo method = GetMethod(type, templateParts.MemberName, inputParams);
                 object instance = GetInstance(type, method.IsStatic);
                 return CallMethod(instance, method, inputParams);
             }
@@ -108,7 +97,7 @@ namespace ExcelReporter.Rendering.Providers
 
         protected virtual MethodCallTemplateParts ParseTemplate(string template)
         {
-            string incorrectTemplateMessage = $"Template \"{template}\" is incorrect";
+            string incorrectTemplateMessage = string.Format(Constants.IncorrectTemplateMessage, template);
             int firstParenthesisIndex = template.IndexOf('(');
             if (firstParenthesisIndex == -1)
             {
@@ -139,41 +128,13 @@ namespace ExcelReporter.Rendering.Providers
             return new MethodCallTemplateParts(typeName?.Trim(), methodName.Trim(), methodParams.Trim());
         }
 
-        private Type GetType(string typeName)
-        {
-            return string.IsNullOrWhiteSpace(typeName) ? GetDefaultType() : TypeProvider.GetType(typeName);
-        }
-
-        /// <summary>
-        /// Provides the default type where methods are searched if template does not specify the type explicitly
-        /// </summary>
-        protected virtual Type GetDefaultType()
-        {
-            if (DefaultInstance == null)
-            {
-                throw new InvalidOperationException($"Type name is not specified in template \"{MethodCallTemplate}\" but defaultInstance is null");
-            }
-            return DefaultInstance.GetType();
-        }
-
         /// <summary>
         /// Provides instance on which method will be called
         /// </summary>
         /// <param name="type">Instance type</param>
-        protected virtual object GetInstance(Type type, bool isMethodStatic)
+        private object GetInstance(Type type, bool isMethodStatic)
         {
-            if (isMethodStatic)
-            {
-                return null;
-            }
-
-            if (_instanceCache.TryGetValue(type, out object instance))
-            {
-                return instance;
-            }
-            instance = Activator.CreateInstance(type);
-            _instanceCache[type] = instance;
-            return instance;
+            return isMethodStatic ? null : InstanceProvider.GetInstance(type);
         }
 
         /// <summary>
@@ -398,25 +359,6 @@ namespace ExcelReporter.Rendering.Providers
 
             result.Add(param.ToString());
             return result.Select(p => p.Trim()).ToArray();
-        }
-
-        /// <summary>
-        /// Represent parts from which template consist of
-        /// </summary>
-        protected class MethodCallTemplateParts
-        {
-            public MethodCallTemplateParts(string typeName, string methodName, string methodParams)
-            {
-                TypeName = typeName;
-                MethodName = methodName;
-                MethodParams = methodParams;
-            }
-
-            public string TypeName { get; }
-
-            public string MethodName { get; }
-
-            public string MethodParams { get; }
         }
 
         /// <summary>

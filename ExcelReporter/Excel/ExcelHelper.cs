@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using ExcelReporter.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ClosedXML.Excel;
-using ExcelReporter.Enums;
 
 namespace ExcelReporter.Excel
 {
@@ -44,8 +44,8 @@ namespace ExcelReporter.Excel
             }
 
             int cellsCountInMinRange = parents.Min(p => p.Cells().Count());
-            IEnumerable<IXLRange> nearestParents = parents.Where(p => p.Cells().Count() == cellsCountInMinRange).ToList();
-            if (nearestParents.Count() > 1)
+            IList<IXLRange> nearestParents = parents.Where(p => p.Cells().Count() == cellsCountInMinRange).ToList();
+            if (nearestParents.Count > 1)
             {
                 throw new InvalidOperationException("Found more than one nearest parent ranges");
             }

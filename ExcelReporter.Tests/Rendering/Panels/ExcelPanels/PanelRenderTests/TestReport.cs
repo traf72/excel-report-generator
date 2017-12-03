@@ -1,5 +1,4 @@
 ﻿using ClosedXML.Excel;
-using ExcelReporter.Attributes;
 using ExcelReporter.Rendering.Panels.ExcelPanels;
 using ExcelReporter.Rendering.Providers;
 using ExcelReporter.Rendering.Providers.DataItemValueProviders;
@@ -7,7 +6,6 @@ using ExcelReporter.Rendering.TemplateProcessors;
 using ExcelReporter.Reports;
 using System;
 using System.Reflection;
-using ExcelReporter.Rendering.Providers.ParameterProviders;
 
 namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 {
@@ -15,16 +13,12 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
     {
         private int _counter;
 
-        [Parameter]
         public string StrParam { get; } = "String parameter";
 
-        [Parameter]
         public int IntParam { get; } = 10;
 
-        [Parameter]
         public DateTime DateParam { get; } = new DateTime(2017, 10, 25);
 
-        [Parameter]
         public TimeSpan TimeSpanParam { get; set; } = new TimeSpan(36500, 22, 30, 40);
 
         public string Format(DateTime date, string format = "yyyyMMdd")
@@ -101,13 +95,14 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
         protected BaseReport()
         {
             Workbook = new XLWorkbook();
+            var typeProvider = new DefaultTypeProvider(new[] { Assembly.GetExecutingAssembly(), Assembly.GetAssembly(typeof(DateTime)), }, GetType());
+            var instanceProvider = new DefaultInstanceProvider(this);
 
-            TemplateProcessor = new DefaultTemplateProcessor(new ReflectionParameterProvider(this),
-                new DefaultMethodCallValueProvider(new DefaultTypeProvider(Assembly.GetExecutingAssembly()), this),
+            TemplateProcessor = new DefaultTemplateProcessor(new DefaultPropertyValueProvider(typeProvider, instanceProvider),
+                new DefaultMethodCallValueProvider(typeProvider, instanceProvider),
                 new HierarchicalDataItemValueProvider(new DataItemValueProviderFactory()));
         }
 
-        [Parameter]
         public bool BoolParam { get; set; } = true;
 
         public ITemplateProcessor TemplateProcessor { get; set; }

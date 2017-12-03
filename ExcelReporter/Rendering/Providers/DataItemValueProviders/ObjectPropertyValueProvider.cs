@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using ExcelReporter.Exceptions;
-using ExcelReporter.Helpers;
+﻿using ExcelReporter.Helpers;
+using System;
 
 namespace ExcelReporter.Rendering.Providers.DataItemValueProviders
 {
@@ -11,8 +8,16 @@ namespace ExcelReporter.Rendering.Providers.DataItemValueProviders
     /// </summary>
     internal class ObjectPropertyValueProvider : IDataItemValueProvider
     {
-        private string _propTemplate;
-        private object _dataItem;
+        private readonly IReflectionHelper _reflectionHelper;
+
+        public ObjectPropertyValueProvider() : this(new ReflectionHelper())
+        {
+        }
+
+        internal ObjectPropertyValueProvider(IReflectionHelper reflectionHelper)
+        {
+            _reflectionHelper = reflectionHelper;
+        }
 
         protected virtual string SelfObjectTemplate => "di";
 
@@ -26,53 +31,13 @@ namespace ExcelReporter.Rendering.Providers.DataItemValueProviders
                 throw new ArgumentException(ArgumentHelper.EmptyStringParamMessage, nameof(propTemplate));
             }
 
-            _propTemplate = propTemplate.Trim();
-            _dataItem = dataItem;
-
-            if (_propTemplate == SelfObjectTemplate)
+            propTemplate = propTemplate.Trim();
+            if (propTemplate == SelfObjectTemplate)
             {
-                return _dataItem;
+                return dataItem;
             }
 
-            return GetValue();
-        }
-
-        private object GetValue()
-        {
-            Queue<string> queue = new Queue<string>(_propTemplate.Split('.'));
-            object obj = _dataItem;
-            while (queue.Count > 0)
-            {
-                string propName = queue.Dequeue();
-                if (obj == null)
-                {
-                    throw new InvalidOperationException($"Cannot get property \"{propName}\" because object is null");
-                }
-
-                // TODO Возможно добавить также поиск публичного поля (в таком случае добавить также публичные поля при извлечении колонок)
-                PropertyInfo prop = GetProperty(obj.GetType(), propName);
-                obj = GetPropertyValue(prop, obj);
-            }
-
-            return obj;
-        }
-
-        /// <summary>
-        /// Returns property based on type and name
-        /// </summary>
-        protected virtual PropertyInfo GetProperty(Type type, string name)
-        {
-            PropertyInfo prop = type.GetProperty(name, BindingFlags.Instance | BindingFlags.Public);
-            if (prop == null)
-            {
-                throw new MemberNotFoundException($"Cannot find public instance property \"{name}\" in class \"{type.Name}\" and all its parents");
-            }
-            return prop;
-        }
-
-        protected virtual object GetPropertyValue(PropertyInfo prop, object obj)
-        {
-            return prop.GetValue(obj);
+            return _reflectionHelper.GetValueOfPropertiesChain(propTemplate, dataItem);
         }
     }
 }

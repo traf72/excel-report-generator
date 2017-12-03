@@ -1,9 +1,8 @@
-﻿using System;
+﻿using ExcelReporter.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ExcelReporter.Exceptions;
-using ExcelReporter.Helpers;
 
 namespace ExcelReporter.Rendering.Providers
 {
@@ -11,15 +10,27 @@ namespace ExcelReporter.Rendering.Providers
     {
         private const char NamespaceSeparator = ':';
 
-        private readonly Assembly _assembly;
-
         private readonly IDictionary<string, Type> _typesCache = new Dictionary<string, Type>();
 
-        /// <param name="assembly">Assembly where type will be searched (default = current executing assembly)</param>
-        public DefaultTypeProvider(Assembly assembly = null)
+        /// <param name="assemblies">Collection of assemblies where types will be searched. If null or empty than current execution assembly will be used</param>
+        /// <param name="defaultType">Type which will be returned if the template is not specified explicitly</param>
+        public DefaultTypeProvider(ICollection<Assembly> assemblies = null, Type defaultType = null)
         {
-            _assembly = assembly ?? Assembly.GetExecutingAssembly();
+            if (assemblies == null || !assemblies.Any())
+            {
+                Assemblies = new[] { Assembly.GetExecutingAssembly() };
+            }
+            else
+            {
+                Assemblies = assemblies;
+            }
+
+            DefaultType = defaultType;
         }
+
+        protected ICollection<Assembly> Assemblies { get; }
+
+        protected Type DefaultType { get; }
 
         /// <summary>
         /// Provides type based on template
@@ -28,12 +39,12 @@ namespace ExcelReporter.Rendering.Providers
         {
             if (string.IsNullOrWhiteSpace(typeTemplate))
             {
-                throw new ArgumentException(ArgumentHelper.EmptyStringParamMessage, nameof(typeTemplate));
+                return DefaultType ?? throw new InvalidOperationException("Template is not specified but defaultType is null");
             }
 
-            if (_typesCache.ContainsKey(typeTemplate))
+            if (_typesCache.TryGetValue(typeTemplate, out Type type))
             {
-                return _typesCache[typeTemplate];
+                return type;
             }
 
             string[] typeNameParts = typeTemplate.Split(NamespaceSeparator);
@@ -57,17 +68,18 @@ namespace ExcelReporter.Rendering.Providers
             }
 
             name = name.Trim();
-            IList<Type> types = (isNamespaceSpecified
-                    ? _assembly.GetTypes().Where(t => t.Namespace == @namespace && t.Name == name)
-                    : _assembly.GetTypes().Where(t => t.Name == name))
+            IEnumerable<Type> allAssembliesTypes = Assemblies.SelectMany(a => a.GetTypes());
+            IList<Type> foundTypes = (isNamespaceSpecified
+                    ? allAssembliesTypes.Where(t => t.Namespace == @namespace && t.Name == name)
+                    : allAssembliesTypes.Where(t => t.Name == name))
                 .ToList();
 
-            if (types.Count == 1)
+            if (foundTypes.Count == 1)
             {
-                _typesCache[typeTemplate] = types.First();
+                _typesCache[typeTemplate] = foundTypes.First();
                 return _typesCache[typeTemplate];
             }
-            if (!types.Any())
+            if (!foundTypes.Any())
             {
                 throw new TypeNotFoundException($"Cannot find type by template \"{typeTemplate}\"");
             }
