@@ -48,7 +48,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         internal class TestType : TestTypeBase
         {
             [ExcelColumn]
-            public string Column1;
+            public string Column1 = null;
 
             [ExcelColumn(Caption = "Column Two")]
             public int Column2 { get; set; }
@@ -67,7 +67,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
         internal class TestTypeBase
         {
             [ExcelColumn(Width = -10)]
-            public short ColumnWithBadWidth;
+            public short ColumnWithBadWidth = 0;
 
             [ExcelColumn]
             public virtual string OverriddenColumn { get; set; }

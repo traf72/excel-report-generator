@@ -16,9 +16,9 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
     // данной панели невозможно при кастомной реализации интерфейса ITemplateProcessor - в будущем нужно устранить
     internal class ExcelDynamicPanel : ExcelNamedPanel
     {
+        private readonly IColumnsProviderFactory _columnsFactory = new ColumnsProviderFactory();
         private readonly string _dataSourceTemplate;
         private object _data;
-        private readonly IColumnsProviderFactory _factory;
 
         public ExcelDynamicPanel(string dataSourceTemplate, IXLNamedRange namedRange, IExcelReport report)
             : base(namedRange, report)
@@ -28,20 +28,18 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
                 throw new ArgumentException(ArgumentHelper.EmptyStringParamMessage, nameof(dataSourceTemplate));
             }
             _dataSourceTemplate = dataSourceTemplate;
-            _factory = new ColumnsProviderFactory();
         }
 
         public ExcelDynamicPanel(object data, IXLNamedRange namedRange, IExcelReport report) : base(namedRange, report)
         {
             _data = data ?? throw new ArgumentNullException(nameof(data), ArgumentHelper.NullParamMessage);
-            _factory = new ColumnsProviderFactory();
         }
 
         public override void Render()
         {
             // Parent context does not affect on this panel type therefore don't care about it
             _data = _data ?? Report.TemplateProcessor.GetValue(_dataSourceTemplate);
-            IColumnsProvider columnsProvider = _factory.Create(_data);
+            IColumnsProvider columnsProvider = _columnsFactory.Create(_data);
             if (columnsProvider == null)
             {
                 //TODO Обработать

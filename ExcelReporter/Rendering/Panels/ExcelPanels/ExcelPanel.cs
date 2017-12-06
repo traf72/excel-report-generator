@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
 using ExcelReporter.Enums;
 using ExcelReporter.Excel;
 using ExcelReporter.Exceptions;
 using ExcelReporter.Helpers;
 using ExcelReporter.Reports;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace ExcelReporter.Rendering.Panels.ExcelPanels
 {
@@ -213,27 +213,38 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             return null;
         }
 
-        private void CallBeforeRenderMethod()
+        protected void CallBeforeRenderMethod()
         {
-            CallLifeCycleMethod(BeforeRenderMethodName);
-        }
-
-        private void CallAfterRenderMethod()
-        {
-            CallLifeCycleMethod(AfterRenderMethodName);
-        }
-
-        private void CallLifeCycleMethod(string methodName)
-        {
-            if (!string.IsNullOrWhiteSpace(methodName))
+            if (!string.IsNullOrWhiteSpace(BeforeRenderMethodName))
             {
-                MethodInfo method = Report.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                if (method == null)
-                {
-                    throw new MethodNotFoundException($"Cannot find public instance method \"{methodName}\" in type \"{Report.GetType().Name}\"");
-                }
-                method.Invoke(Report, new object[] { this });
+                //TODO Параметры должны быть другие
+                CallReportMethod(BeforeRenderMethodName, new object[] { this });
             }
+        }
+
+        protected void CallAfterRenderMethod()
+        {
+            if (!string.IsNullOrWhiteSpace(AfterRenderMethodName))
+            {
+                //TODO Параметры должны быть другие
+                CallReportMethod(AfterRenderMethodName, new object[] { this });
+            }
+        }
+
+        // TODO Написать юнит-тесты
+        protected object CallReportMethod(string methodName, object[] parameters = null)
+        {
+            if (string.IsNullOrWhiteSpace(methodName))
+            {
+                throw new ArgumentException(ArgumentHelper.EmptyStringParamMessage, nameof(methodName));
+            }
+
+            MethodInfo method = Report.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public);
+            if (method == null)
+            {
+                throw new MethodNotFoundException($"Cannot find public instance method \"{methodName}\" in type \"{Report.GetType().Name}\"");
+            }
+            return method.Invoke(Report, parameters);
         }
     }
 }

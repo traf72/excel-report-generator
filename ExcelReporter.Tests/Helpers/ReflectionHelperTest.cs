@@ -5,6 +5,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Reflection;
 
+#pragma warning disable 169
+#pragma warning disable 108,114
+
 namespace ExcelReporter.Tests.Helpers
 {
     [TestClass]
@@ -58,10 +61,10 @@ namespace ExcelReporter.Tests.Helpers
             IReflectionHelper reflectionHelper = new ReflectionHelper();
             Assert.AreEqual("IntField", reflectionHelper.GetField(typeof(TestClass), "IntField").Name);
             Assert.AreEqual("ParentField", reflectionHelper.GetField(typeof(TestClass), "ParentField").Name);
-            ExceptionAssert.Throws<MemberNotFoundException>(() => reflectionHelper.GetField(typeof(TestClass), "PrivateField"), "Cannot find field \"PrivateField\" in class \"TestClass\" and all its parents. BindingFlags = Instance, Public");
+            ExceptionAssert.Throws<MemberNotFoundException>(() => reflectionHelper.GetField(typeof(TestClass), "_privateField"), "Cannot find field \"_privateField\" in class \"TestClass\" and all its parents. BindingFlags = Instance, Public");
             ExceptionAssert.Throws<MemberNotFoundException>(() => reflectionHelper.GetField(typeof(TestClass), "StaticField"), "Cannot find field \"StaticField\" in class \"TestClass\" and all its parents. BindingFlags = Instance, Public");
             Assert.AreEqual("StaticField", reflectionHelper.GetField(typeof(TestClass), "StaticField", BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy).Name);
-            Assert.AreEqual("PrivateField", reflectionHelper.GetField(typeof(TestClass), "PrivateField", BindingFlags.NonPublic | BindingFlags.Instance).Name);
+            Assert.AreEqual("_privateField", reflectionHelper.GetField(typeof(TestClass), "_privateField", BindingFlags.NonPublic | BindingFlags.Instance).Name);
 
             FieldInfo prop = reflectionHelper.GetField(typeof(TestClass), "SameNameField");
             Assert.AreEqual("SameNameField", prop.Name);
@@ -78,10 +81,10 @@ namespace ExcelReporter.Tests.Helpers
             IReflectionHelper reflectionHelper = new ReflectionHelper();
             Assert.AreEqual("IntField", reflectionHelper.TryGetField(typeof(TestClass), "IntField").Name);
             Assert.AreEqual("ParentField", reflectionHelper.TryGetField(typeof(TestClass), "ParentField").Name);
-            Assert.IsNull(reflectionHelper.TryGetField(typeof(TestClass), "PrivateField"));
+            Assert.IsNull(reflectionHelper.TryGetField(typeof(TestClass), "_privateField"));
             Assert.IsNull(reflectionHelper.TryGetField(typeof(TestClass), "StaticField"));
             Assert.AreEqual("StaticField", reflectionHelper.TryGetField(typeof(TestClass), "StaticField", BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy).Name);
-            Assert.AreEqual("PrivateField", reflectionHelper.TryGetField(typeof(TestClass), "PrivateField", BindingFlags.NonPublic | BindingFlags.Instance).Name);
+            Assert.AreEqual("_privateField", reflectionHelper.TryGetField(typeof(TestClass), "_privateField", BindingFlags.NonPublic | BindingFlags.Instance).Name);
 
             FieldInfo prop = reflectionHelper.GetField(typeof(TestClass), "SameNameField");
             Assert.AreEqual("SameNameField", prop.Name);
@@ -112,8 +115,8 @@ namespace ExcelReporter.Tests.Helpers
                 "Cannot find property or field \"strProp\" in class \"TestClass\" and all its parents. BindingFlags = Instance, Public");
             ExceptionAssert.Throws<MemberNotFoundException>(() => reflectionHelper.GetValueOfPropertiesChain("StaticProp", instance),
                 "Cannot find property or field \"StaticProp\" in class \"TestClass\" and all its parents. BindingFlags = Instance, Public");
-            ExceptionAssert.Throws<MemberNotFoundException>(() => reflectionHelper.GetValueOfPropertiesChain("PrivateField", instance),
-                "Cannot find property or field \"PrivateField\" in class \"TestClass\" and all its parents. BindingFlags = Instance, Public");
+            ExceptionAssert.Throws<MemberNotFoundException>(() => reflectionHelper.GetValueOfPropertiesChain("_privateField", instance),
+                "Cannot find property or field \"_privateField\" in class \"TestClass\" and all its parents. BindingFlags = Instance, Public");
             ExceptionAssert.Throws<MemberNotFoundException>(() => reflectionHelper.GetValueOfPropertiesChain("DoubleProp", instance),
                 "Cannot find property or field \"DoubleProp\" in class \"TestClass\" and all its parents. BindingFlags = Instance, Public");
             ExceptionAssert.Throws<MemberNotFoundException>(() => reflectionHelper.GetValueOfPropertiesChain("ObjProp.GuidProp", instance),
@@ -150,9 +153,9 @@ namespace ExcelReporter.Tests.Helpers
 
             private string PrivateProp { get; set; } = "PrivateProp";
 
-            private string PrivateField = "PrivateField";
+            private string _privateField;
 
-            public string SameNameProp { get; set; } = "ChildSameNameProp";
+            public string SameNameProp { get; } = "ChildSameNameProp";
 
             public static string SameNameStaticProp { get; set; } = "ChildSameNameStaticProp";
 
@@ -163,19 +166,19 @@ namespace ExcelReporter.Tests.Helpers
 
         private class TestClass2
         {
-            public string StrProp { get; set; } = "TestClass2:StrProp";
+            public string StrProp { get; } = "TestClass2:StrProp";
 
-            public TestClass3 ObjField = new TestClass3();
+            public readonly TestClass3 ObjField = new TestClass3();
         }
 
         private class TestClass3
         {
-            public Guid GuidProp { get; set; } = new Guid("5be1d032-6d93-466e-bce0-31dfcefdda22");
+            public Guid GuidProp { get; } = new Guid("5be1d032-6d93-466e-bce0-31dfcefdda22");
         }
 
         private class Parent
         {
-            public string ParentProp { get; set; } = "ParentProp";
+            public string ParentProp { get; } = "ParentProp";
 
             public string ParentField = "ParentField";
 

@@ -172,6 +172,7 @@
     <Compile Include="Extensions\ITemplateProcessorExtensionsTest.cs" />
     <Compile Include="Extensions\ParameterInfoExtensionsTest.cs" />
     <Compile Include="Helpers\ReflectionHelperTest.cs" />
+    <Compile Include="Helpers\EnumHelperTest.cs" />
     <Compile Include="Helpers\TypeHelperTest.cs" />
     <Compile Include="Excel\ExcelHelperTest.cs" />
     <Compile Include="Enumerators\DataReaderEnumeratorTest.cs" />
@@ -180,6 +181,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\DataProvider.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelNamedPanelTest.cs" />
+    <Compile Include="Rendering\Panels\ExcelPanels\ExcelTotalsPanelTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelPanelTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataReaderRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataSetRenderTest.cs" />
