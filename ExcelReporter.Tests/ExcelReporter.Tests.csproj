@@ -169,10 +169,11 @@
     <Compile Include="CustomAsserts\ExcelAssert.cs" />
     <Compile Include="Enumerators\EnumeratorFactoryTest.cs" />
     <Compile Include="Extensions\DataReaderExtensionsTest.cs" />
-    <Compile Include="Extensions\ITemplateProcessorExtensionsTest.cs" />
+    <Compile Include="Extensions\TemplateProcessorExtensionsTest.cs" />
     <Compile Include="Extensions\ParameterInfoExtensionsTest.cs" />
     <Compile Include="Helpers\ReflectionHelperTest.cs" />
     <Compile Include="Helpers\EnumHelperTest.cs" />
+    <Compile Include="Helpers\RegexHelperTest.cs" />
     <Compile Include="Helpers\TypeHelperTest.cs" />
     <Compile Include="Excel\ExcelHelperTest.cs" />
     <Compile Include="Enumerators\DataReaderEnumeratorTest.cs" />

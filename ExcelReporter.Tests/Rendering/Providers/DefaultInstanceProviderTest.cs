@@ -17,7 +17,10 @@ namespace ExcelReporter.Tests.Rendering.Providers
 
             var instance1 = (TestType_3)instanceProvider.GetInstance(typeof(TestType_3));
             var instance2 = (TestType_3)instanceProvider.GetInstance(typeof(TestType_3));
+            var instance3 = instanceProvider.GetInstance<TestType_3>();
             Assert.AreSame(instance1, instance2);
+            Assert.AreSame(instance1, instance3);
+            Assert.AreSame(instance2, instance3);
 
             Assert.IsInstanceOfType(instanceProvider.GetInstance(typeof(TestType_5)), typeof(TestType_5));
             Assert.IsInstanceOfType(instanceProvider.GetInstance(typeof(DateTime)), typeof(DateTime));
@@ -28,9 +31,9 @@ namespace ExcelReporter.Tests.Rendering.Providers
             var testInstance = new TestType_3();
             instanceProvider = new DefaultInstanceProvider(testInstance);
 
-            var instance3 = (TestType_3)instanceProvider.GetInstance(null);
+            instance3 = (TestType_3)instanceProvider.GetInstance(null);
             instance1 = (TestType_3)instanceProvider.GetInstance(typeof(TestType_3));
-            instance2 = (TestType_3)instanceProvider.GetInstance(typeof(TestType_3));
+            instance2 = instanceProvider.GetInstance<TestType_3>();
             Assert.AreSame(instance1, instance2);
             Assert.AreSame(instance1, instance3);
             Assert.AreSame(instance2, instance3);

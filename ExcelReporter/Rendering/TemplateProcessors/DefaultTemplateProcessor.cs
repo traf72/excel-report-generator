@@ -12,8 +12,6 @@ namespace ExcelReporter.Rendering.TemplateProcessors
     /// </summary>
     public class DefaultTemplateProcessor : IGenericTemplateProcessor<HierarchicalDataItem>
     {
-        private const string TypeValueSeparator = ":";
-
         public DefaultTemplateProcessor(IPropertyValueProvider propertyValueProvider, IMethodCallValueProvider methodCallValueProvider = null,
             IGenericDataItemValueProvider<HierarchicalDataItem> dataItemValueProvider = null)
         {
@@ -28,13 +26,17 @@ namespace ExcelReporter.Rendering.TemplateProcessors
 
         protected IMethodCallValueProvider MethodCallValueProvider { get; }
 
-        // TODO Обязательно протестировать переопределение границ (в том числе на границы с более, чем одним символом)
         public virtual string LeftTemplateBorder => "{";
 
-        // TODO Обязательно протестировать переопределение границ (в том числе на границы с более, чем одним символом)
         public virtual string RightTemplateBorder => "}";
 
-        public string TemplatePattern => $@"{LeftTemplateBorder}.+?{TypeValueSeparator}.+?{RightTemplateBorder}";
+        public virtual string MemberLabelSeparator => ":";
+
+        public virtual string PropertyMemberLabel => "p";
+
+        public virtual string MethodCallMemberLabel => "m";
+
+        public virtual string DataItemMemberLabel => "di";
 
         /// <summary>
         /// Get value based on template
@@ -48,22 +50,20 @@ namespace ExcelReporter.Rendering.TemplateProcessors
             }
 
             string unwrappedTemplate = this.UnwrapTemplate(template).Trim();
-            int separatorIndex = unwrappedTemplate.IndexOf(TypeValueSeparator, StringComparison.InvariantCulture);
+            int separatorIndex = unwrappedTemplate.IndexOf(MemberLabelSeparator, StringComparison.CurrentCultureIgnoreCase);
             if (separatorIndex == -1)
             {
-                throw new IncorrectTemplateException($"Incorrect template \"{template}\". Cannot find separator \"{TypeValueSeparator}\" between member type and member template");
+                throw new IncorrectTemplateException($"Incorrect template \"{template}\". Cannot find separator \"{MemberLabelSeparator}\" between member label and member template");
             }
 
-            string memberType = unwrappedTemplate.Substring(0, separatorIndex).ToLower().Trim();
-            string memberTemplate = unwrappedTemplate.Substring(separatorIndex + 1).Trim();
-            if (unwrappedTemplate.StartsWith("p"))
+            string memberLabel = unwrappedTemplate.Substring(0, separatorIndex).ToLower().Trim();
+            string memberTemplate = unwrappedTemplate.Substring(separatorIndex + MemberLabelSeparator.Length).Trim();
+            if (memberLabel == PropertyMemberLabel)
             {
-                // Property of field value
                 return PropertyValueProvider.GetValue(memberTemplate);
             }
-            if (unwrappedTemplate.StartsWith("di"))
+            if (memberLabel == DataItemMemberLabel)
             {
-                // Data item value
                 if (dataItem == null)
                 {
                     throw new InvalidOperationException($"Template \"{template}\" contains data reference but dataItem is null");
@@ -74,9 +74,8 @@ namespace ExcelReporter.Rendering.TemplateProcessors
                 }
                 return DataItemValueProvider.GetValue(memberTemplate, dataItem);
             }
-            if (memberType == "m")
+            if (memberLabel == MethodCallMemberLabel)
             {
-                // Method invocation
                 if (MethodCallValueProvider == null)
                 {
                     throw new InvalidOperationException($"Template \"{template}\" contains method call but methodCallValueProvider is null");
@@ -84,7 +83,7 @@ namespace ExcelReporter.Rendering.TemplateProcessors
                 return MethodCallValueProvider.CallMethod(memberTemplate, this, dataItem);
             }
 
-            throw new IncorrectTemplateException($"Incorrect template \"{template}\". Unknown member type \"{memberType}\"");
+            throw new IncorrectTemplateException($"Incorrect template \"{template}\". Unknown member label \"{memberLabel}\"");
         }
 
         object ITemplateProcessor.GetValue(string template, object dataItem)

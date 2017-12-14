@@ -82,6 +82,7 @@
     <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Helpers\IReflectionHelper.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
+    <Compile Include="Helpers\RegexHelper.cs" />
     <Compile Include="Helpers\TypeHelper.cs" />
     <Compile Include="Enumerators\DataReaderEnumerator.cs" />
     <Compile Include="Enumerators\DataSetEnumerator.cs" />

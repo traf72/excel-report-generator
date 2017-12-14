@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using ExcelReporter.Extensions;
 
 namespace ExcelReporter.Rendering.Panels.ExcelPanels
 {
@@ -60,15 +61,16 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             CallBeforeRenderMethod();
 
             IList<IXLCell> childrenCells = Children.SelectMany(c => c.Range.CellsUsed()).ToList();
+            string templatePattern = Report.TemplateProcessor.GetFullRegexPattern();
             foreach (IXLCell cell in Range.CellsUsed().Where(c => !childrenCells.Contains(c)))
             {
                 string cellValue = cell.Value.ToString();
-                MatchCollection matches = Regex.Matches(cellValue, Report.TemplateProcessor.TemplatePattern);
+                MatchCollection matches = Regex.Matches(cellValue, templatePattern);
                 if (matches.Count == 0)
                 {
                     continue;
                 }
-                if (matches.Count == 1 && Regex.IsMatch(cellValue, $@"^{Report.TemplateProcessor.TemplatePattern}$"))
+                if (matches.Count == 1 && Regex.IsMatch(cellValue, $@"^{templatePattern}$"))
                 {
                     cell.Value = Report.TemplateProcessor.GetValue(cellValue, GetDataContext());
                     continue;

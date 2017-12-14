@@ -41,5 +41,13 @@ namespace ExcelReporter.Rendering.Providers
             _instanceCache[type] = instance;
             return instance;
         }
+
+        /// <summary>
+        /// Provides instance of specified type as singleton. Type must have a default constructor.
+        /// </summary>
+        public virtual T GetInstance<T>()
+        {
+            return (T)GetInstance(typeof(T));
+        }
     }
 }

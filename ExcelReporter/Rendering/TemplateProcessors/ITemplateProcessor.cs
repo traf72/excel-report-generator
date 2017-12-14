@@ -5,11 +5,41 @@
     /// </summary>
     public interface ITemplateProcessor
     {
-        string TemplatePattern { get; }
-
+        /// <summary>
+        /// Left template border
+        /// Cannot be null, empty or whitespace
+        /// </summary>
         string LeftTemplateBorder { get; }
 
+        /// <summary>
+        /// Right template border
+        /// Cannot be null, empty or whitespace
+        /// </summary>
         string RightTemplateBorder { get; }
+
+        /// <summary>
+        /// Separator between member label (Property, MethodCall, DataItem) and member template
+        /// Cannot be null or empty
+        /// </summary>
+        string MemberLabelSeparator { get; }
+
+        /// <summary>
+        /// Property label
+        /// Cannot be null, empty or whitespace
+        /// </summary>
+        string PropertyMemberLabel { get; }
+
+        /// <summary>
+        /// Method call label
+        /// Cannot be null, empty or whitespace
+        /// </summary>
+        string MethodCallMemberLabel { get; }
+
+        /// <summary>
+        /// Data item label
+        /// Cannot be null, empty or whitespace
+        /// </summary>
+        string DataItemMemberLabel { get; }
 
         /// <summary>
         /// Get value based on template

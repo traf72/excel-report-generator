@@ -253,11 +253,14 @@ namespace ExcelReporter.Tests.Rendering.Providers
 
             var templateProcessor = Substitute.For<ITemplateProcessor>();
             var dataItem = new HierarchicalDataItem();
-            templateProcessor.TemplatePattern.Returns(@"{.+?:.+?}");
-            templateProcessor.LeftTemplateBorder.Returns("{");
-            templateProcessor.RightTemplateBorder.Returns("}");
-            templateProcessor.GetValue("p:Name").Returns("TestName");
-            templateProcessor.GetValue("p:Value", dataItem).Returns(7);
+            templateProcessor.LeftTemplateBorder.Returns("<<");
+            templateProcessor.RightTemplateBorder.Returns(">>");
+            templateProcessor.MemberLabelSeparator.Returns("**");
+            templateProcessor.PropertyMemberLabel.Returns("prop");
+            templateProcessor.DataItemMemberLabel.Returns("data");
+            templateProcessor.MethodCallMemberLabel.Returns("meth");
+            templateProcessor.GetValue("prop**Name").Returns("TestName");
+            templateProcessor.GetValue("prop**Value", dataItem).Returns(7);
 
             var methodCallValueProvider = new DefaultMethodCallValueProvider(typeProvider, instanceProvider);
 
@@ -293,17 +296,17 @@ namespace ExcelReporter.Tests.Rendering.Providers
 
             typeProvider.ClearReceivedCalls();
             instanceProvider.ClearReceivedCalls();
-            Assert.AreEqual(25, methodCallValueProvider.CallMethod("Method2(p:Value, 18)", templateProcessor, dataItem));
+            Assert.AreEqual(25, methodCallValueProvider.CallMethod("Method2(prop**Value, 18)", templateProcessor, dataItem));
             typeProvider.Received(1).GetType(null);
             instanceProvider.DidNotReceiveWithAnyArgs().GetInstance(Arg.Any<Type>());
-            templateProcessor.Received(1).GetValue("p:Value", dataItem);
+            templateProcessor.Received(1).GetValue("prop**Value", dataItem);
 
             typeProvider.ClearReceivedCalls();
             templateProcessor.ClearReceivedCalls();
-            Assert.AreEqual(25, methodCallValueProvider.CallMethod(" : TestClass : Method2(p:Value, 18) ", templateProcessor, dataItem));
+            Assert.AreEqual(25, methodCallValueProvider.CallMethod(" : TestClass : Method2(prop**Value, 18) ", templateProcessor, dataItem));
             typeProvider.Received(1).GetType(": TestClass");
             instanceProvider.DidNotReceiveWithAnyArgs().GetInstance(Arg.Any<Type>());
-            templateProcessor.Received(1).GetValue("p:Value", dataItem);
+            templateProcessor.Received(1).GetValue("prop**Value", dataItem);
 
             typeProvider.ClearReceivedCalls();
             templateProcessor.ClearReceivedCalls();
@@ -312,22 +315,22 @@ namespace ExcelReporter.Tests.Rendering.Providers
             instanceProvider.Received(1).GetInstance(typeof(TestClass));
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
-            templateProcessor.GetValue("m:TestClass:Method5(p:Desc,  m:ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, di.Field) )").Returns(10);
-            templateProcessor.GetValue("m:Method7()").Returns('c');
-            templateProcessor.GetValue("m::TestClass2:Method1()").Returns(long.MaxValue);
+            templateProcessor.GetValue("meth**TestClass:Method5(prop**Desc,  meth**ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, data**Field) )").Returns(10);
+            templateProcessor.GetValue("meth**Method7()").Returns('c');
+            templateProcessor.GetValue("meth**:TestClass2:Method1()").Returns(long.MaxValue);
 
             typeProvider.ClearReceivedCalls();
             instanceProvider.ClearReceivedCalls();
             object result = methodCallValueProvider.CallMethod(
-                "Method4(5, p:Name, hi,  m:TestClass:Method5(p:Desc,  m:ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, di.Field) ) , m:Method7(), m::TestClass2:Method1())",
+                "Method4(5, prop**Name, hi,  meth**TestClass:Method5(prop**Desc,  meth**ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, data**Field) ) , meth**Method7(), meth**:TestClass2:Method1())",
                 templateProcessor, null);
             Assert.AreEqual($"5_TestName_hi_10_c_{long.MaxValue}", result);
             typeProvider.Received(1).GetType(null);
             instanceProvider.Received(1).GetInstance(typeof(TestClass));
-            templateProcessor.Received(1).GetValue("p:Name");
-            templateProcessor.Received(1).GetValue("m:TestClass:Method5(p:Desc,  m:ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, di.Field) )");
-            templateProcessor.Received(1).GetValue("m:Method7()");
-            templateProcessor.Received(1).GetValue("m::TestClass2:Method1()");
+            templateProcessor.Received(1).GetValue("prop**Name");
+            templateProcessor.Received(1).GetValue("meth**TestClass:Method5(prop**Desc,  meth**ExcelReporter.Tests.Implementations.Providers:TestClass:Method6(str, data**Field) )");
+            templateProcessor.Received(1).GetValue("meth**Method7()");
+            templateProcessor.Received(1).GetValue("meth**:TestClass2:Method1()");
 
             typeProvider.ClearReceivedCalls();
             instanceProvider.ClearReceivedCalls();
@@ -339,14 +342,14 @@ namespace ExcelReporter.Tests.Rendering.Providers
 
             typeProvider.ClearReceivedCalls();
             instanceProvider.ClearReceivedCalls();
-            Assert.AreEqual("p:Name_m:Method6()", methodCallValueProvider.CallMethod("Method5(\"p:Name\", \"m:Method6()\")", templateProcessor, null));
+            Assert.AreEqual("prop**Name_meth**Method6()", methodCallValueProvider.CallMethod("Method5(\"prop**Name\", \"meth**Method6()\")", templateProcessor, null));
             typeProvider.Received(1).GetType(null);
             instanceProvider.Received(1).GetInstance(typeof(TestClass));
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
 
             typeProvider.ClearReceivedCalls();
             instanceProvider.ClearReceivedCalls();
-            Assert.AreEqual("\"p:Name\"_\"\"", methodCallValueProvider.CallMethod("Method5(\"\"p:Name\"\", \"\"\"\")", templateProcessor, null));
+            Assert.AreEqual("\"prop**Name\"_\"\"", methodCallValueProvider.CallMethod("Method5(\"\"prop**Name\"\", \"\"\"\")", templateProcessor, null));
             typeProvider.Received(1).GetType(null);
             instanceProvider.Received(1).GetInstance(typeof(TestClass));
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
@@ -383,9 +386,12 @@ namespace ExcelReporter.Tests.Rendering.Providers
             instanceProvider.GetInstance(typeof(TestOverloading)).Returns(testInstance);
 
             var templateProcessor = Substitute.For<ITemplateProcessor>();
-            templateProcessor.TemplatePattern.Returns(@"{.+?:.+?}");
             templateProcessor.LeftTemplateBorder.Returns("{");
             templateProcessor.RightTemplateBorder.Returns("}");
+            templateProcessor.MemberLabelSeparator.Returns(":");
+            templateProcessor.PropertyMemberLabel.Returns("p");
+            templateProcessor.DataItemMemberLabel.Returns("di");
+            templateProcessor.MethodCallMemberLabel.Returns("m");
             templateProcessor.GetValue("p:Name").Returns("TestName");
             templateProcessor.GetValue("p:Value").Returns(7);
             templateProcessor.GetValue("p:Value2").Returns((short)77);

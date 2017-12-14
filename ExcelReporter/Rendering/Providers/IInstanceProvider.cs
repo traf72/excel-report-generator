@@ -8,5 +8,7 @@ namespace ExcelReporter.Rendering.Providers
     public interface IInstanceProvider
     {
         object GetInstance(Type type);
+
+        T GetInstance<T>();
     }
 }
