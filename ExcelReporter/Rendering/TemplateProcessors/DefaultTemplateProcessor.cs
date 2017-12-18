@@ -49,7 +49,7 @@ namespace ExcelReporter.Rendering.TemplateProcessors
                 throw new ArgumentNullException(nameof(template), ArgumentHelper.EmptyStringParamMessage);
             }
 
-            string unwrappedTemplate = this.UnwrapTemplate(template).Trim();
+            string unwrappedTemplate = this.UnwrapTemplate(template.Trim()).Trim();
             int separatorIndex = unwrappedTemplate.IndexOf(MemberLabelSeparator, StringComparison.CurrentCultureIgnoreCase);
             if (separatorIndex == -1)
             {

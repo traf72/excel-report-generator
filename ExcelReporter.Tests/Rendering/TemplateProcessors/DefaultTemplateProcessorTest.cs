@@ -28,8 +28,8 @@ namespace ExcelReporter.Tests.Rendering.TemplateProcessors
             var templateProcessor = new DefaultTemplateProcessor(propertyValueProvider, methodCallValueProvider, dataItemValueProvider);
 
             ExceptionAssert.Throws<ArgumentNullException>(() => templateProcessor.GetValue(null, dataItem));
-            ExceptionAssert.Throws<IncorrectTemplateException>(() => templateProcessor.GetValue("{p-Name}"), "Incorrect template \"{p-Name}\". Cannot find separator \":\" between member type and member template");
-            ExceptionAssert.Throws<IncorrectTemplateException>(() => templateProcessor.GetValue("{bad:Name}"), "Incorrect template \"{bad:Name}\". Unknown member type \"bad\"");
+            ExceptionAssert.Throws<IncorrectTemplateException>(() => templateProcessor.GetValue("{p-Name}"), "Incorrect template \"{p-Name}\". Cannot find separator \":\" between member label and member template");
+            ExceptionAssert.Throws<IncorrectTemplateException>(() => templateProcessor.GetValue("{bad:Name}"), "Incorrect template \"{bad:Name}\". Unknown member label \"bad\"");
 
             templateProcessor.GetValue("{p:Name}");
 
@@ -45,7 +45,7 @@ namespace ExcelReporter.Tests.Rendering.TemplateProcessors
             dataItemValueProvider.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>(), null);
 
             propertyValueProvider.ClearReceivedCalls();
-            templateProcessor.GetValue(" p : Name ");
+            templateProcessor.GetValue(" p:Name ");
 
             propertyValueProvider.Received(1).GetValue("Name");
             methodCallValueProvider.DidNotReceiveWithAnyArgs().CallMethod(null, null, null);
