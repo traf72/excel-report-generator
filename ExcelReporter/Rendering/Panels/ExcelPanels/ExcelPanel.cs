@@ -2,6 +2,7 @@
 using ExcelReporter.Enums;
 using ExcelReporter.Excel;
 using ExcelReporter.Exceptions;
+using ExcelReporter.Extensions;
 using ExcelReporter.Helpers;
 using ExcelReporter.Reports;
 using System;
@@ -9,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using ExcelReporter.Extensions;
+using ExcelReporter.Rendering.EventArgs;
 
 namespace ExcelReporter.Rendering.Panels.ExcelPanels
 {
@@ -58,7 +59,11 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
 
         public virtual void Render()
         {
-            CallBeforeRenderMethod();
+            bool isCanceled = CallBeforeRenderMethod();
+            if (isCanceled)
+            {
+                return;
+            }
 
             IList<IXLCell> childrenCells = Children.SelectMany(c => c.Range.CellsUsed()).ToList();
             string templatePattern = Report.TemplateProcessor.GetFullRegexPattern();
@@ -185,6 +190,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
         {
             panel.Type = Type;
             panel.ShiftType = ShiftType;
+            panel.RenderPriority = RenderPriority;
             panel.BeforeRenderMethodName = BeforeRenderMethodName;
             panel.AfterRenderMethodName = AfterRenderMethodName;
         }
@@ -215,25 +221,35 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             return null;
         }
 
-        protected void CallBeforeRenderMethod()
+        protected bool CallBeforeRenderMethod()
         {
             if (!string.IsNullOrWhiteSpace(BeforeRenderMethodName))
             {
-                //TODO Параметры должны быть другие
-                CallReportMethod(BeforeRenderMethodName, new object[] { this });
+                PanelBeforeRenderEventArgs eventArgs = GetBeforePanelRenderEventArgs();
+                CallReportMethod(BeforeRenderMethodName, new object[] { eventArgs });
+                return eventArgs.IsCanceled;
             }
+            return false;
+        }
+
+        protected virtual PanelBeforeRenderEventArgs GetBeforePanelRenderEventArgs()
+        {
+            return new PanelBeforeRenderEventArgs { Range = Range };
         }
 
         protected void CallAfterRenderMethod()
         {
             if (!string.IsNullOrWhiteSpace(AfterRenderMethodName))
             {
-                //TODO Параметры должны быть другие
-                CallReportMethod(AfterRenderMethodName, new object[] { this });
+                CallReportMethod(AfterRenderMethodName, new object[] { GetAfterPanelRenderEventArgs() });
             }
         }
 
-        // TODO Написать юнит-тесты
+        protected virtual PanelEventArgs GetAfterPanelRenderEventArgs()
+        {
+            return new PanelEventArgs { Range = Range };
+        }
+
         protected object CallReportMethod(string methodName, object[] parameters = null)
         {
             if (string.IsNullOrWhiteSpace(methodName))

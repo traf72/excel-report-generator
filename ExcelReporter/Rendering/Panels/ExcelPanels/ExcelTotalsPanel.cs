@@ -161,7 +161,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
 
                 if (!string.IsNullOrWhiteSpace(totalCell.PostProcessFunction))
                 {
-                    totalCell.Result = CallReportMethod(totalCell.PostProcessFunction, new[] { totalCell.Result, dataItemsCount });
+                    totalCell.Result = CallReportMethod(totalCell.PostProcessFunction, new object[] { totalCell.Result, dataItemsCount });
                 }
             }
         }

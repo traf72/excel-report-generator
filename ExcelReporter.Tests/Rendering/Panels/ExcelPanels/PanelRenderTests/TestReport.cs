@@ -5,7 +5,10 @@ using ExcelReporter.Rendering.Providers.DataItemValueProviders;
 using ExcelReporter.Rendering.TemplateProcessors;
 using ExcelReporter.Reports;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using ExcelReporter.Rendering.EventArgs;
 
 namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 {
@@ -43,52 +46,96 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             return ++_counter;
         }
 
-        internal void BeforeRenderParentDataSourcePanel(IExcelPanel panel)
+        public void BeforeRenderParentDataSourcePanel(PanelBeforeRenderEventArgs args)
         {
-            panel.Range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            args.Range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
         }
 
-        internal void AfterRenderParentDataSourcePanelChildBottom(IExcelPanel panel)
+        public void AfterRenderParentDataSourcePanelChildBottom(PanelEventArgs args)
         {
-            panel.Range.LastRow().Delete(XLShiftDeletedCells.ShiftCellsUp);
-            panel.Range.LastRow().Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-            panel.Range.LastRow().Style.Border.BottomBorderColor = XLColor.Black;
+            args.Range.LastRow().Delete(XLShiftDeletedCells.ShiftCellsUp);
+            args.Range.LastRow().Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+            args.Range.LastRow().Style.Border.BottomBorderColor = XLColor.Black;
         }
 
-        internal void AfterRenderParentDataSourcePanelChildTop(IExcelPanel panel)
+        public void AfterRenderParentDataSourcePanelChildTop(PanelEventArgs args)
         {
-            panel.Range.FirstRow().Delete(XLShiftDeletedCells.ShiftCellsUp);
-            panel.Range.FirstRow().Style.Border.TopBorder = XLBorderStyleValues.Thin;
-            panel.Range.FirstRow().Style.Border.TopBorderColor = XLColor.Black;
+            args.Range.FirstRow().Delete(XLShiftDeletedCells.ShiftCellsUp);
+            args.Range.FirstRow().Style.Border.TopBorder = XLBorderStyleValues.Thin;
+            args.Range.FirstRow().Style.Border.TopBorderColor = XLColor.Black;
         }
 
-        internal void AfterRenderParentDataSourcePanelChildRight(IExcelPanel panel)
+        public void AfterRenderParentDataSourcePanelChildRight(PanelEventArgs args)
         {
-            panel.Range.LastColumn().Delete(XLShiftDeletedCells.ShiftCellsLeft);
-            panel.Range.LastColumn().Style.Border.RightBorder = XLBorderStyleValues.Thin;
-            panel.Range.LastColumn().Style.Border.RightBorderColor = XLColor.Black;
+            args.Range.LastColumn().Delete(XLShiftDeletedCells.ShiftCellsLeft);
+            args.Range.LastColumn().Style.Border.RightBorder = XLBorderStyleValues.Thin;
+            args.Range.LastColumn().Style.Border.RightBorderColor = XLColor.Black;
         }
 
-        internal void AfterRenderParentDataSourcePanelChildLeft(IExcelPanel panel)
+        public void AfterRenderParentDataSourcePanelChildLeft(PanelEventArgs args)
         {
             //// Стандартный способ не работает, Range почему-то становится Invalid (возможно баг ClosedXml)
-            //panel.Range.FirstColumn().Delete(XLShiftDeletedCells.ShiftCellsLeft);
-            //panel.Range.FirstColumn().Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-            //panel.Range.FirstColumn().Style.Border.LeftBorderColor = XLColor.Black;
+            //args.Range.FirstColumn().Delete(XLShiftDeletedCells.ShiftCellsLeft);
+            //args.Range.FirstColumn().Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+            //args.Range.FirstColumn().Style.Border.LeftBorderColor = XLColor.Black;
 
-            IXLWorksheet worksheet = panel.Range.Worksheet;
-            IXLAddress firstColumnFirstCellAddress = panel.Range.FirstColumn().FirstCell().Address;
-            IXLAddress firstColumnLastCellAddress = panel.Range.FirstColumn().LastCell().Address;
+            IXLWorksheet worksheet = args.Range.Worksheet;
+            IXLAddress firstColumnFirstCellAddress = args.Range.FirstColumn().FirstCell().Address;
+            IXLAddress firstColumnLastCellAddress = args.Range.FirstColumn().LastCell().Address;
 
-            panel.Range.FirstColumn().Delete(XLShiftDeletedCells.ShiftCellsLeft);
+            args.Range.FirstColumn().Delete(XLShiftDeletedCells.ShiftCellsLeft);
             IXLRange range = worksheet.Range(firstColumnFirstCellAddress, firstColumnLastCellAddress);
             range.Style.Border.LeftBorder = XLBorderStyleValues.Thin;
             range.Style.Border.LeftBorderColor = XLColor.Black;
         }
 
-        internal void AfterRenderChildDataSourcePanel(IExcelPanel panel)
+        public void AfterRenderChildDataSourcePanel(PanelEventArgs args)
         {
-            panel.Range.LastRow().Delete(XLShiftDeletedCells.ShiftCellsUp);
+            args.Range.LastRow().Delete(XLShiftDeletedCells.ShiftCellsUp);
+        }
+
+        public void CancelPanelRender(PanelBeforeRenderEventArgs args)
+        {
+            args.IsCanceled = true;
+        }
+
+        public void TestExcelPanelBeforeRender(PanelBeforeRenderEventArgs args)
+        {
+            args.Range.Cell(1, 1).Value = "{p:BoolParam}";
+        }
+
+        public void TestExcelPanelAfterRender(PanelEventArgs args)
+        {
+            args.Range.Cell(1, 2).Value = Convert.ToInt32(args.Range.Cell(1, 2).Value) + 1;
+        }
+
+        public void TestExcelDataSourcePanelBeforeRender(DataSourcePanelBeforeRenderEventArgs args)
+        {
+            IList<TestItem> data = ((IEnumerable<TestItem>) args.Data).ToList();
+            data[2].Name = "ChangedName";
+        }
+
+        public void TestExcelDataSourcePanelAfterRender(DataSourcePanelEventArgs args)
+        {
+            args.Range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+        }
+
+        public void TestExcelDataItemPanelBeforeRender(DataItemPanelBeforeRenderEventArgs args)
+        {
+            var dataItem = (TestItem) args.DataItem.Value;
+            if (dataItem.Name == "Test1")
+            {
+                dataItem.Name = "Test1_Changed_Before";
+            }
+        }
+
+        public void TestExcelDataItemPanelAfterRender(DataItemPanelEventArgs args)
+        {
+            var dataItem = (TestItem)args.DataItem.Value;
+            if (dataItem.Name == "Test2")
+            {
+                args.Range.FirstCell().Value = "Test2_Changed_After";
+            }
         }
     }
 

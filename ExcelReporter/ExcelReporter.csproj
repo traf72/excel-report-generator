@@ -90,9 +90,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Excel\CellCoords.cs" />
     <Compile Include="Excel\RangeCoords.cs" />
+    <Compile Include="Rendering\EventArgs\DataSourcePanelBeforeRenderEventArgs.cs" />
+    <Compile Include="Rendering\EventArgs\DataItemPanelBeforeRenderEventArgs.cs" />
+    <Compile Include="Rendering\EventArgs\DataSourcePanelEventArgs.cs" />
+    <Compile Include="Rendering\EventArgs\DataItemPanelEventArgs.cs" />
+    <Compile Include="Rendering\EventArgs\PanelBeforeRenderEventArgs.cs" />
     <Compile Include="Rendering\ExcelDynamicColumn.cs" />
     <Compile Include="Rendering\HierarchicalDataItem.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelTotalsPanel.cs" />
+    <Compile Include="Rendering\EventArgs\PanelEventArgs.cs" />
     <Compile Include="Rendering\TemplateParts\MethodCallTemplateParts.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataItemPanel.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataSourcePanel.cs" />

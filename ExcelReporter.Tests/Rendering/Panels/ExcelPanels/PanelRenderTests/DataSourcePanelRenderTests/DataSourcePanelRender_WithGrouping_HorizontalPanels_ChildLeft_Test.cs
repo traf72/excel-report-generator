@@ -462,7 +462,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
             {
                 Type = PanelType.Horizontal,
-                AfterRenderMethodName = "AfterRenderParentDataSourcePanelChildLeft",
+                AfterDataItemRenderMethodName = "AfterRenderParentDataSourcePanelChildLeft",
             };
             var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
             {

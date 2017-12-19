@@ -77,6 +77,50 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
         }
 
         [TestMethod]
+        public void TestCancelPanelRender()
+        {
+            var report = new TestReport();
+            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
+            IXLRange range = ws.Range(1, 1, 1, 2);
+
+            ws.Cell(1, 1).Value = "{p:StrParam}";
+            ws.Cell(1, 2).Value = "{p:IntParam}";
+
+            var panel = new ExcelPanel(range, report) { BeforeRenderMethodName = "CancelPanelRender" };
+            panel.Render();
+
+            Assert.AreEqual(2, ws.CellsUsed().Count());
+            Assert.AreEqual("{p:StrParam}", ws.Cell(1, 1).Value);
+            Assert.AreEqual("{p:IntParam}", ws.Cell(1, 2).Value);
+
+            //report.Workbook.SaveAs("test.xlsx");
+        }
+
+        [TestMethod]
+        public void TestPanelRenderEvents()
+        {
+            var report = new TestReport();
+            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
+            IXLRange range = ws.Range(1, 1, 1, 2);
+
+            ws.Cell(1, 1).Value = "{p:StrParam}";
+            ws.Cell(1, 2).Value = "{p:IntParam}";
+
+            var panel = new ExcelPanel(range, report)
+            {
+                BeforeRenderMethodName = "TestExcelPanelBeforeRender",
+                AfterRenderMethodName = "TestExcelPanelAfterRender",
+            };
+            panel.Render();
+
+            Assert.AreEqual(2, ws.CellsUsed().Count());
+            Assert.IsTrue((bool)ws.Cell(1, 1).Value);
+            Assert.AreEqual(11d, ws.Cell(1, 2).Value);
+
+            //report.Workbook.SaveAs("test.xlsx");
+        }
+
+        [TestMethod]
         public void TestNamedPanelRender()
         {
             var report = new TestReport();

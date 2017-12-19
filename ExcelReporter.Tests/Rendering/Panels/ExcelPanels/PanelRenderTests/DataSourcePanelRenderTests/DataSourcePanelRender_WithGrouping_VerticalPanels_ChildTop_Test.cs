@@ -338,7 +338,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
 
             var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
             {
-                AfterRenderMethodName = "AfterRenderParentDataSourcePanelChildTop",
+                AfterDataItemRenderMethodName = "AfterRenderParentDataSourcePanelChildTop",
                 ShiftType = ShiftType.NoShift,
             };
             var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)

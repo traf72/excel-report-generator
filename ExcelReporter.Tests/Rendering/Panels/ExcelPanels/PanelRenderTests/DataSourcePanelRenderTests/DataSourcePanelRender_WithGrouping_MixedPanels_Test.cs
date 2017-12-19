@@ -70,8 +70,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
 
             var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report)
             {
-                BeforeRenderMethodName = "BeforeRenderParentDataSourcePanel",
-                AfterRenderMethodName = "AfterRenderParentDataSourcePanelChildBottom",
+                BeforeDataItemRenderMethodName = "BeforeRenderParentDataSourcePanel",
+                AfterDataItemRenderMethodName = "AfterRenderParentDataSourcePanelChildBottom",
             };
             var simplePanel1 = new ExcelNamedPanel(ws.Workbook.NamedRange("simpleRange1"), report)
             {
@@ -80,7 +80,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange"), report)
             {
                 Parent = parentPanel,
-                AfterRenderMethodName = "AfterRenderChildDataSourcePanel",
+                AfterDataItemRenderMethodName = "AfterRenderChildDataSourcePanel",
             };
             var childOfChildPanel = new ExcelDataSourcePanel("di:Children", ws.Workbook.NamedRange("ChildOfChildRange"), report)
             {

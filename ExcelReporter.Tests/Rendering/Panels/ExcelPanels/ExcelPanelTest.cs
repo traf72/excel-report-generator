@@ -1,12 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
 using ExcelReporter.Enums;
+using ExcelReporter.Exceptions;
+using ExcelReporter.Rendering.EventArgs;
 using ExcelReporter.Rendering.Panels;
 using ExcelReporter.Rendering.Panels.ExcelPanels;
+using ExcelReporter.Rendering.TemplateProcessors;
 using ExcelReporter.Reports;
+using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
 {
@@ -26,32 +32,68 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
 
             var panel = new ExcelPanel(range, excelReport)
             {
+                BeforeRenderMethodName = "BeforeMethod",
+                AfterRenderMethodName = "AfterRender",
+                Type = PanelType.Horizontal,
+                ShiftType = ShiftType.Row,
+                RenderPriority = 1,
                 Children = new List<IExcelPanel>
                 {
                     new ExcelPanel(childRange, excelReport)
                     {
+                        BeforeRenderMethodName = "BeforeMethod_child",
+                        AfterRenderMethodName = "AfterRender_child",
+                        Type = PanelType.Vertical,
+                        ShiftType = ShiftType.NoShift,
+                        RenderPriority = 2,
                         Children = new List<IExcelPanel>
                         {
                             new ExcelPanel(childOfChildRange, excelReport)
+                            {
+                                BeforeRenderMethodName = "BeforeMethod_child_child",
+                                AfterRenderMethodName = "AfterRender_child_child",
+                                Type = PanelType.Horizontal,
+                                ShiftType = ShiftType.Row,
+                                RenderPriority = 3,
+                            }
                         }
                     }
                 }
             };
 
             IExcelPanel copiedPanel = panel.Copy(ws.Cell(5, 5));
+
+            Assert.AreSame(excelReport, copiedPanel.Report);
             Assert.AreEqual(ws.Cell(5, 5), copiedPanel.Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Range.LastCell());
             Assert.IsNull(copiedPanel.Parent);
+            Assert.AreEqual(panel.BeforeRenderMethodName, copiedPanel.BeforeRenderMethodName);
+            Assert.AreEqual(panel.AfterRenderMethodName, copiedPanel.AfterRenderMethodName);
+            Assert.AreEqual(panel.Type, copiedPanel.Type);
+            Assert.AreEqual(panel.ShiftType, copiedPanel.ShiftType);
+            Assert.AreEqual(panel.RenderPriority, copiedPanel.RenderPriority);
 
             Assert.AreEqual(1, copiedPanel.Children.Count());
+            Assert.AreSame(excelReport, copiedPanel.Children.First().Report);
             Assert.AreEqual(ws.Cell(6, 5), copiedPanel.Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Children.First().Range.LastCell());
             Assert.AreSame(copiedPanel, copiedPanel.Children.First().Parent);
+            Assert.AreEqual(panel.Children.First().BeforeRenderMethodName, copiedPanel.Children.First().BeforeRenderMethodName);
+            Assert.AreEqual(panel.Children.First().AfterRenderMethodName, copiedPanel.Children.First().AfterRenderMethodName);
+            Assert.AreEqual(panel.Children.First().Type, copiedPanel.Children.First().Type);
+            Assert.AreEqual(panel.Children.First().ShiftType, copiedPanel.Children.First().ShiftType);
+            Assert.AreEqual(panel.Children.First().RenderPriority, copiedPanel.Children.First().RenderPriority);
 
             Assert.AreEqual(1, copiedPanel.Children.First().Children.Count());
+            Assert.AreSame(excelReport, copiedPanel.Children.First().Children.First().Report);
             Assert.AreEqual(ws.Cell(7, 5), copiedPanel.Children.First().Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Children.First().Children.First().Range.LastCell());
             Assert.AreSame(copiedPanel.Children.First(), copiedPanel.Children.First().Children.First().Parent);
+            Assert.AreEqual(panel.Children.First().Children.First().BeforeRenderMethodName, copiedPanel.Children.First().Children.First().BeforeRenderMethodName);
+            Assert.AreEqual(panel.Children.First().Children.First().AfterRenderMethodName, copiedPanel.Children.First().Children.First().AfterRenderMethodName);
+            Assert.AreEqual(panel.Children.First().Children.First().Type, copiedPanel.Children.First().Children.First().Type);
+            Assert.AreEqual(panel.Children.First().Children.First().ShiftType, copiedPanel.Children.First().Children.First().ShiftType);
+            Assert.AreEqual(panel.Children.First().Children.First().RenderPriority, copiedPanel.Children.First().Children.First().RenderPriority);
 
             IExcelPanel globalParent = new ExcelPanel(ws.Range(1, 1, 20, 20), excelReport);
             range = ws.Range(1, 1, 3, 4);
@@ -67,7 +109,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
                     new ExcelPanel(childRange1, excelReport),
                     new ExcelPanel(childRange2, excelReport)
                     {
-                         Children = new List<IExcelPanel>
+                        Children = new List<IExcelPanel>
                         {
                             new ExcelPanel(childOfChildRange, excelReport)
                         }
@@ -405,6 +447,33 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             //wb.SaveAs("test.xlsx");
         }
 
+        [TestMethod]
+        public void TestCallReportMethod()
+        {
+            var report = new TestRep();
+            var panel = new ExcelPanel(Substitute.For<IXLRange>(), report);
+            MethodInfo method = panel.GetType().GetMethod("CallReportMethod", BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.AreEqual($"Call {nameof(TestRep.Method1)}", method.Invoke(panel, new object[] { nameof(TestRep.Method1), null }));
+            Assert.AreEqual($"Call {nameof(TestRep.Method1)}", method.Invoke(panel, new object[] { nameof(TestRep.Method1), new object[] { } }));
+            ExceptionAssert.ThrowsBaseException<TargetParameterCountException>(() => method.Invoke(panel, new object[] { nameof(TestRep.Method1), new object[] { "Bad param" } }));
+            Assert.AreEqual($"Call {nameof(TestRep.Method2)}; params: str; 10", method.Invoke(panel, new object[] { nameof(TestRep.Method2), new object[] { "str", 10 } }));
+            Assert.AreEqual($"Call {nameof(TestRep.Method3)}; params: str; 10; str2", method.Invoke(panel, new object[] { nameof(TestRep.Method3), new object[] { "str", 10, "str2" } }));
+            ExceptionAssert.ThrowsBaseException<TargetParameterCountException>(() => method.Invoke(panel, new object[] { nameof(TestRep.Method3), new object[] { "str", 10 } }));
+
+            var eventArgs = new PanelBeforeRenderEventArgs();
+            Assert.IsFalse(eventArgs.IsCanceled);
+            Assert.IsNull(method.Invoke(panel, new object[] { nameof(TestRep.Method4), new object[] { eventArgs } }));
+            Assert.IsTrue(eventArgs.IsCanceled);
+
+            ExceptionAssert.ThrowsBaseException<AmbiguousMatchException>(() => method.Invoke(panel, new object[] { nameof(TestRep.Method5), new object[] { eventArgs } }));
+            ExceptionAssert.ThrowsBaseException<MethodNotFoundException>(() => method.Invoke(panel, new object[] { "Method6", null }), $"Cannot find public instance method \"Method6\" in type \"{report.GetType().Name}\"");
+            ExceptionAssert.ThrowsBaseException<MethodNotFoundException>(() => method.Invoke(panel, new object[] { "BadMethod", null }), $"Cannot find public instance method \"BadMethod\" in type \"{report.GetType().Name}\"");
+
+            ExceptionAssert.ThrowsBaseException<ArgumentException>(() => method.Invoke(panel, new object[] { null, null }));
+            ExceptionAssert.ThrowsBaseException<ArgumentException>(() => method.Invoke(panel, new object[] { string.Empty, null }));
+            ExceptionAssert.ThrowsBaseException<ArgumentException>(() => method.Invoke(panel, new object[] { " ", null }));
+        }
+
         private XLWorkbook InitWorkBookForDeleteRangeTest()
         {
             XLWorkbook wb = new XLWorkbook();
@@ -427,6 +496,52 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             ws.Cell(10, 4).Value = "LeftCell_2";
 
             return wb;
+        }
+
+        private class TestRep : TestRepBase
+        {
+            public string Method1()
+            {
+                return $"Call {nameof(Method1)}";
+            }
+
+            public string Method3(string arg1, int arg2, string arg3 = null)
+            {
+                return $"Call {nameof(Method3)}; params: {arg1}; {arg2}; {arg3}";
+            }
+
+            public void Method4(PanelBeforeRenderEventArgs e)
+            {
+                e.IsCanceled = true;
+            }
+
+            public void Method5(PanelBeforeRenderEventArgs e)
+            {
+            }
+
+            public void Method5()
+            {
+            }
+
+            private void Method6()
+            {
+            }
+        }
+
+        private class TestRepBase : IExcelReport
+        {
+            public ITemplateProcessor TemplateProcessor { get; set; }
+            public XLWorkbook Workbook { get; set; }
+
+            public string Method2(string arg1, int arg2)
+            {
+                return $"Call {nameof(Method2)}; params: {arg1}; {arg2}";
+            }
+
+            public void Run()
+            {
+                throw new System.NotImplementedException();
+            }
         }
     }
 }

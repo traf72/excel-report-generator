@@ -244,6 +244,7 @@
     <None Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalCellsShift.xlsx" />
     <None Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalNoShift.xlsx" />
     <None Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalRowsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestPanelRenderEvents.xlsx" />
     <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalCellsShift.xlsx" />
     <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalNoShift.xlsx" />
     <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalRowsShift.xlsx" />

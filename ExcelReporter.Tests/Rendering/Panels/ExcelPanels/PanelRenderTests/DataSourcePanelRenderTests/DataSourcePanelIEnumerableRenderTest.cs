@@ -1,4 +1,5 @@
-﻿using ClosedXML.Excel;
+﻿using System.Linq;
+using ClosedXML.Excel;
 using ExcelReporter.Enums;
 using ExcelReporter.Rendering.Panels.ExcelPanels;
 using ExcelReporter.Tests.CustomAsserts;
@@ -314,6 +315,53 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelIEnumerableRenderTest),
                 nameof(TestRenderIEnumerableOfString)), ws.Workbook);
+
+            //report.Workbook.SaveAs("test.xlsx");
+        }
+
+        [TestMethod]
+        public void TestCancelPanelRender()
+        {
+            var report = new TestReport();
+            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
+            IXLRange range = ws.Range(2, 2, 2, 2);
+            range.AddToNamed("TestRange", XLScope.Worksheet);
+
+            ws.Cell(2, 2).Value = "{di:di}";
+
+            var panel = new ExcelDataSourcePanel(new[] { 1, 2, 3, 4 }, ws.NamedRange("TestRange"), report)
+            {
+                BeforeRenderMethodName = "CancelPanelRender",
+            };
+            panel.Render();
+
+            Assert.AreEqual(1, ws.CellsUsed().Count());
+            Assert.AreEqual("{di:di}", ws.Cell(2, 2).Value);
+
+            //report.Workbook.SaveAs("test.xlsx");
+        }
+
+        [TestMethod]
+        public void TestPanelRenderEvents()
+        {
+            var report = new TestReport();
+            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
+            IXLRange range = ws.Range(2, 2, 2, 2);
+            range.AddToNamed("TestRange", XLScope.Worksheet);
+
+            ws.Cell(2, 2).Value = "{di:Name}";
+
+            var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report)
+            {
+                BeforeRenderMethodName = "TestExcelDataSourcePanelBeforeRender",
+                AfterRenderMethodName = "TestExcelDataSourcePanelAfterRender",
+                BeforeDataItemRenderMethodName = "TestExcelDataItemPanelBeforeRender",
+                AfterDataItemRenderMethodName = "TestExcelDataItemPanelAfterRender",
+            };
+            panel.Render();
+
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelIEnumerableRenderTest),
+                nameof(TestPanelRenderEvents)), ws.Workbook);
 
             //report.Workbook.SaveAs("test.xlsx");
         }

@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
 using ExcelReporter.Enumerators;
 using ExcelReporter.Enums;
 using ExcelReporter.Excel;
 using ExcelReporter.Helpers;
+using ExcelReporter.Rendering.EventArgs;
 using ExcelReporter.Reports;
+using System;
+using System.Collections;
+using System.Linq;
 
 namespace ExcelReporter.Rendering.Panels.ExcelPanels
 {
@@ -30,12 +31,23 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             _data = data ?? throw new ArgumentNullException(nameof(data), ArgumentHelper.NullParamMessage);
         }
 
+        public string BeforeDataItemRenderMethodName { get; set; }
+
+        public string AfterDataItemRenderMethodName { get; set; }
+
         public override void Render()
         {
             // Получаем контекст родительского элемента данных, если он есть
             HierarchicalDataItem parentDataItem = GetDataContext();
 
             _data = _data ?? Report.TemplateProcessor.GetValue(_dataSourceTemplate, parentDataItem);
+
+            bool isCanceled = CallBeforeRenderMethod();
+            if (isCanceled)
+            {
+                return;
+            }
+
             IEnumerator enumerator = null;
             try
             {
@@ -90,6 +102,8 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             {
                 (enumerator as IDisposable)?.Dispose();
             }
+
+            CallAfterRenderMethod();
         }
 
         private ExcelDataItemPanel CreateTemplatePanel()
@@ -101,8 +115,8 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
                 RenderPriority = RenderPriority,
                 ShiftType = ShiftType,
                 Type = Type,
-                BeforeRenderMethodName = BeforeRenderMethodName,
-                AfterRenderMethodName = AfterRenderMethodName,
+                BeforeRenderMethodName = BeforeDataItemRenderMethodName,
+                AfterRenderMethodName = AfterDataItemRenderMethodName,
             };
 
             foreach (IExcelPanel child in templatePanel.Children)
@@ -142,10 +156,24 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             panel.Delete();
         }
 
+        protected override PanelBeforeRenderEventArgs GetBeforePanelRenderEventArgs()
+        {
+            return new DataSourcePanelBeforeRenderEventArgs { Range = Range, Data = _data };
+        }
+
+        protected override PanelEventArgs GetAfterPanelRenderEventArgs()
+        {
+            return new DataSourcePanelEventArgs { Range = Range, Data = _data };
+        }
+
         //TODO Проверить корректное копирование, если передан не шаблон, а сами данные
         protected override IExcelPanel CopyPanel(IXLCell cell)
         {
-            var panel = new ExcelDataSourcePanel(_dataSourceTemplate, CopyNamedRange(cell), Report);
+            var panel = new ExcelDataSourcePanel(_dataSourceTemplate, CopyNamedRange(cell), Report)
+            {
+                BeforeDataItemRenderMethodName = BeforeDataItemRenderMethodName,
+                AfterDataItemRenderMethodName = AfterDataItemRenderMethodName,
+            };
             FillCopyProperties(panel);
             return panel;
         }
