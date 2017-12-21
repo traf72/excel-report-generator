@@ -4,4 +4,4 @@
 bin
 obj
 *.suo
-/.vs/ExcelReporter/v15/sqlite3/*.ide
+/.vs

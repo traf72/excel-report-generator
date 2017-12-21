@@ -70,12 +70,12 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             foreach (IXLCell cell in Range.CellsUsed().Where(c => !childrenCells.Contains(c)))
             {
                 string cellValue = cell.Value.ToString();
-                MatchCollection matches = Regex.Matches(cellValue, templatePattern);
+                MatchCollection matches = Regex.Matches(cellValue, templatePattern, RegexOptions.IgnoreCase);
                 if (matches.Count == 0)
                 {
                     continue;
                 }
-                if (matches.Count == 1 && Regex.IsMatch(cellValue, $@"^{templatePattern}$"))
+                if (matches.Count == 1 && Regex.IsMatch(cellValue, $@"^{templatePattern}$", RegexOptions.IgnoreCase))
                 {
                     cell.Value = Report.TemplateProcessor.GetValue(cellValue, GetDataContext());
                     continue;

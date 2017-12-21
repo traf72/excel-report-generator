@@ -15,6 +15,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using ExcelReporter.Exceptions;
+using ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests;
 using DataTable = System.Data.DataTable;
 
 namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
@@ -37,23 +38,23 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
 
             var totalPanel = new ExcelTotalsPanel(dataTable, Substitute.For<IXLNamedRange>(), Substitute.For<IExcelReport>());
             IEnumerator enumerator = EnumeratorFactory.Create(dataTable);
-            IList<ExcelTotalsPanel.TotalCellInfo> totalCells = new List<ExcelTotalsPanel.TotalCellInfo>
+            IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
             {
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Sum, "TestColumn1"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Sum, "TestColumn2"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Sum, "TestColumn3"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Count, "TestColumn1"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Count, "TestColumn3"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Avg, "TestColumn1"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Avg, "TestColumn2"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Min, "TestColumn1"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Max, "TestColumn1"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Min, "TestColumn2"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Max, "TestColumn2"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Min, "TestColumn3"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Max, "TestColumn3"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Min, "TestColumn4"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Max, "TestColumn4"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Sum, "TestColumn1"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Sum, "TestColumn2"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Sum, "TestColumn3"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Count, "TestColumn1"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Count, "TestColumn3"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Avg, "TestColumn1"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Avg, "TestColumn2"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Min, "TestColumn1"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Max, "TestColumn1"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Min, "TestColumn2"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Max, "TestColumn2"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Min, "TestColumn3"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Max, "TestColumn3"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Min, "TestColumn4"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Max, "TestColumn4"),
             };
 
             MethodInfo method = totalPanel.GetType().GetMethod("DoAggregation", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -76,7 +77,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(true, totalCells[14].Result);
 
             // Reset all results before next test
-            foreach (ExcelTotalsPanel.TotalCellInfo totalCell in totalCells)
+            foreach (ExcelTotalsPanel.ParsedAggregationFunc totalCell in totalCells)
             {
                 totalCell.Result = null;
             }
@@ -109,13 +110,13 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             var data = new List<Test>();
             var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), Substitute.For<IExcelReport>());
             IEnumerator enumerator = EnumeratorFactory.Create(data);
-            IList<ExcelTotalsPanel.TotalCellInfo> totalCells = new List<ExcelTotalsPanel.TotalCellInfo>
+            IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
             {
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Sum, "TestColumn1"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Count, "TestColumn1"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Avg, "TestColumn1"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Min, "TestColumn1"),
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Max, "TestColumn1"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Sum, "TestColumn1"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Count, "TestColumn1"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Avg, "TestColumn1"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Min, "TestColumn1"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Max, "TestColumn1"),
             };
 
             MethodInfo method = totalPanel.GetType().GetMethod("DoAggregation", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -135,26 +136,26 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
 
             var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), Substitute.For<IExcelReport>());
             IEnumerator enumerator = EnumeratorFactory.Create(data);
-            IList<ExcelTotalsPanel.TotalCellInfo> totalCells = new List<ExcelTotalsPanel.TotalCellInfo>
+            IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
             {
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Sum, "TestColumn4"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Sum, "TestColumn4"),
             };
 
             MethodInfo method = totalPanel.GetType().GetMethod("DoAggregation", BindingFlags.Instance | BindingFlags.NonPublic);
             ExceptionAssert.ThrowsBaseException<RuntimeBinderException>(() => method.Invoke(totalPanel, new object[] { enumerator, totalCells }));
 
             enumerator.Reset();
-            totalCells = new List<ExcelTotalsPanel.TotalCellInfo>
+            totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
             {
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Min, "BadColumn"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Min, "BadColumn"),
             };
             ExceptionAssert.ThrowsBaseException<InvalidOperationException>(() => method.Invoke(totalPanel, new object[] { enumerator, totalCells }),
                 "For Min and Max aggregation functions data items must implement IComparable interface");
 
             enumerator.Reset();
-            totalCells = new List<ExcelTotalsPanel.TotalCellInfo>
+            totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
             {
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), (AggregateFunction)6, "TestColumn1"),
+                new ExcelTotalsPanel.ParsedAggregationFunc((AggregateFunction)6, "TestColumn1"),
             };
             ExceptionAssert.ThrowsBaseException<NotSupportedException>(() => method.Invoke(totalPanel, new object[] { enumerator, totalCells }),
                 "Unsupportable aggregation function");
@@ -167,9 +168,9 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
 
             var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), new TestReportForAggregation());
             IEnumerator enumerator = EnumeratorFactory.Create(data);
-            IList<ExcelTotalsPanel.TotalCellInfo> totalCells = new List<ExcelTotalsPanel.TotalCellInfo>
+            IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
             {
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Custom, "TestColumn2")
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Custom, "TestColumn2")
                 {
                     CustomFunc = "CustomAggregation",
                 },
@@ -201,17 +202,17 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
         }
 
         [TestMethod]
-        public void TestPostOperation()
+        public void TestAggregationPostOperation()
         {
             IList<Test> data = GetTestData();
 
             var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), new TestReportForAggregation());
             IEnumerator enumerator = EnumeratorFactory.Create(data);
-            IList<ExcelTotalsPanel.TotalCellInfo> totalCells = new List<ExcelTotalsPanel.TotalCellInfo>
+            IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
             {
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Sum, "TestColumn2") { PostProcessFunction = "PostSumOperation" },
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Min, "TestColumn3") { PostProcessFunction = "PostMinOperation" },
-                new ExcelTotalsPanel.TotalCellInfo(Substitute.For<IXLCell>(), AggregateFunction.Custom, "TestColumn2")
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Sum, "TestColumn2") { PostProcessFunction = "PostSumOperation" },
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Min, "TestColumn3") { PostProcessFunction = "PostMinOperation" },
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Custom, "TestColumn2")
                 {
                     CustomFunc = "CustomAggregation",
                     PostProcessFunction = "PostCustomAggregation",
@@ -223,6 +224,122 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(22.033.ToString("F3"), totalCells[0].Result);
             Assert.AreEqual("ABC", totalCells[1].Result);
             Assert.AreEqual(24, totalCells[2].Result);
+        }
+
+        [TestMethod]
+        public void TestParseTotalCells()
+        {
+            XLWorkbook wb = new XLWorkbook();
+            IXLWorksheet ws = wb.AddWorksheet("Test");
+
+            IXLRange range = ws.Range(1, 1, 1, 6);
+            range.AddToNamed("Test", XLScope.Worksheet);
+
+            ws.Cell(1, 1).Value = "Plain text";
+            ws.Cell(1, 2).Value = "{Sum(di:Amount)}";
+            ws.Cell(1, 3).Value = "{ Custom(DI:Amount, CustomFunc)  }";
+            ws.Cell(1, 4).Value = "{Min(di:Value, CustomFunc, PostFunc)}";
+            ws.Cell(1, 5).Value = "Text {count(Number)} {Text} {AVG( di:Value, ,  PostFunc )} Text {Max(Val)}";
+            ws.Cell(1, 6).Value = "{Mix(di:Amount)}";
+            ws.Cell(1, 7).Value = "{Sum(di:Amount)}";
+
+            var templateProcessor = Substitute.For<ITemplateProcessor>();
+            templateProcessor.LeftTemplateBorder.Returns("{");
+            templateProcessor.RightTemplateBorder.Returns("}");
+            templateProcessor.MemberLabelSeparator.Returns(":");
+            templateProcessor.DataItemMemberLabel.Returns("di");
+
+            var report = new TestReport
+            {
+                TemplateProcessor = templateProcessor,
+                Workbook = wb
+            };
+
+            var panel = new ExcelTotalsPanel("Stub", ws.NamedRange("Test"), report);
+            MethodInfo method = panel.GetType().GetMethod("ParseTotalCells", BindingFlags.Instance | BindingFlags.NonPublic);
+            var result = (IDictionary<IXLCell, IList<ExcelTotalsPanel.ParsedAggregationFunc>>) method.Invoke(panel, null);
+
+            Assert.AreEqual(4, result.Count);
+            Assert.AreEqual("Plain text", ws.Cell(1, 1).Value);
+            Assert.AreEqual("{Mix(di:Amount)}", ws.Cell(1, 6).Value);
+            Assert.AreEqual("{Sum(di:Amount)}", ws.Cell(1, 7).Value);
+
+            Assert.AreEqual("{0}", ws.Cell(1, 2).Value);
+            Assert.AreEqual(1, result[ws.Cell(1, 2)].Count);
+            Assert.AreEqual(AggregateFunction.Sum, result[ws.Cell(1, 2)].First().AggregateFunction);
+            Assert.AreEqual("Amount", result[ws.Cell(1, 2)].First().ColumnName);
+            Assert.IsNull(result[ws.Cell(1, 2)].First().CustomFunc);
+            Assert.IsNull(result[ws.Cell(1, 2)].First().PostProcessFunction);
+            Assert.IsNull(result[ws.Cell(1, 2)].First().Result);
+
+            Assert.AreEqual("{0}", ws.Cell(1, 3).Value);
+            Assert.AreEqual(1, result[ws.Cell(1, 3)].Count);
+            Assert.AreEqual(AggregateFunction.Custom, result[ws.Cell(1, 3)].First().AggregateFunction);
+            Assert.AreEqual("Amount", result[ws.Cell(1, 3)].First().ColumnName);
+            Assert.AreEqual("CustomFunc", result[ws.Cell(1, 3)].First().CustomFunc);
+            Assert.IsNull(result[ws.Cell(1, 3)].First().PostProcessFunction);
+            Assert.IsNull(result[ws.Cell(1, 3)].First().Result);
+
+            Assert.AreEqual("{0}", ws.Cell(1, 4).Value);
+            Assert.AreEqual(1, result[ws.Cell(1, 4)].Count);
+            Assert.AreEqual(AggregateFunction.Min, result[ws.Cell(1, 4)].First().AggregateFunction);
+            Assert.AreEqual("Value", result[ws.Cell(1, 4)].First().ColumnName);
+            Assert.AreEqual("CustomFunc", result[ws.Cell(1, 4)].First().CustomFunc);
+            Assert.AreEqual("PostFunc", result[ws.Cell(1, 4)].First().PostProcessFunction);
+            Assert.IsNull(result[ws.Cell(1, 4)].First().Result);
+
+            Assert.AreEqual("Text {0} {Text} {1} Text {2}", ws.Cell(1, 5).Value);
+            Assert.AreEqual(3, result[ws.Cell(1, 5)].Count);
+            Assert.AreEqual(AggregateFunction.Count, result[ws.Cell(1, 5)][0].AggregateFunction);
+            Assert.AreEqual("Number", result[ws.Cell(1, 5)][0].ColumnName);
+            Assert.IsNull(result[ws.Cell(1, 5)][0].CustomFunc);
+            Assert.IsNull(result[ws.Cell(1, 5)][0].PostProcessFunction);
+            Assert.IsNull(result[ws.Cell(1, 5)][0].Result);
+            Assert.AreEqual(AggregateFunction.Avg, result[ws.Cell(1, 5)][1].AggregateFunction);
+            Assert.AreEqual("Value", result[ws.Cell(1, 5)][1].ColumnName);
+            Assert.IsNull(result[ws.Cell(1, 5)][1].CustomFunc);
+            Assert.AreEqual("PostFunc", result[ws.Cell(1, 5)][1].PostProcessFunction);
+            Assert.IsNull(result[ws.Cell(1, 5)][1].Result);
+            Assert.AreEqual(AggregateFunction.Max, result[ws.Cell(1, 5)][2].AggregateFunction);
+            Assert.AreEqual("Val", result[ws.Cell(1, 5)][2].ColumnName);
+            Assert.IsNull(result[ws.Cell(1, 5)][2].CustomFunc);
+            Assert.IsNull(result[ws.Cell(1, 5)][2].PostProcessFunction);
+            Assert.IsNull(result[ws.Cell(1, 5)][2].Result);
+        }
+
+        [TestMethod]
+        public void TestParseTotalCellsErrors()
+        {
+            XLWorkbook wb = new XLWorkbook();
+            IXLWorksheet ws = wb.AddWorksheet("Test");
+
+            IXLRange range = ws.Range(1, 1, 1, 1);
+            range.AddToNamed("Test", XLScope.Worksheet);
+
+            ws.Cell(1, 1).Value = "<Sum( )>";
+
+            var templateProcessor = Substitute.For<ITemplateProcessor>();
+            templateProcessor.LeftTemplateBorder.Returns("<");
+            templateProcessor.RightTemplateBorder.Returns(">");
+            templateProcessor.MemberLabelSeparator.Returns("-");
+            templateProcessor.DataItemMemberLabel.Returns("d");
+
+            var report = new TestReport
+            {
+                TemplateProcessor = templateProcessor,
+                Workbook = wb
+            };
+
+            var panel = new ExcelTotalsPanel("Stub", ws.NamedRange("Test"), report);
+            MethodInfo method = panel.GetType().GetMethod("ParseTotalCells", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            ExceptionAssert.ThrowsBaseException<InvalidOperationException>(() => method.Invoke(panel, null), "\"ColumnName\" parameter in aggregation function cannot be empty");
+
+            ws.Cell(1, 1).Value = "<Sum(di-Val, fn1, fn2, fn3)>";
+            ExceptionAssert.ThrowsBaseException<InvalidOperationException>(() => method.Invoke(panel, null), "Aggregation function must have at least one but no more than 3 parameters");
+
+            ws.Cell(1, 1).Value = "<Sum( , fn1, fn2)>";
+            ExceptionAssert.ThrowsBaseException<InvalidOperationException>(() => method.Invoke(panel, null), "\"ColumnName\" parameter in aggregation function cannot be empty");
         }
 
         private IList<Test> GetTestData()

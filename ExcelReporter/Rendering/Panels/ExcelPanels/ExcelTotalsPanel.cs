@@ -1,12 +1,15 @@
 ﻿using ClosedXML.Excel;
 using ExcelReporter.Enumerators;
 using ExcelReporter.Enums;
+using ExcelReporter.Extensions;
 using ExcelReporter.Helpers;
+using ExcelReporter.Rendering.EventArgs;
 using ExcelReporter.Rendering.Providers.DataItemValueProviders;
 using ExcelReporter.Reports;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace ExcelReporter.Rendering.Panels.ExcelPanels
@@ -35,45 +38,87 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
         {
             // Parent context does not affect on this panel type therefore don't care about it
             _data = _data ?? Report.TemplateProcessor.GetValue(_dataSourceTemplate);
+
+            bool isCanceled = CallBeforeRenderMethod();
+            if (isCanceled)
+            {
+                return;
+            }
+
             IEnumerator enumerator = null;
             try
             {
-                enumerator = EnumeratorFactory.Create(_data);
-                // Если данных нет, то просто удаляем сам шаблон, а может быть нужно скинуть всё в 0?
-                if (enumerator == null)
+                enumerator = EnumeratorFactory.Create(_data) ?? Enumerable.Empty<object>().GetEnumerator();
+                IDictionary<IXLCell, IList<ParsedAggregationFunc>> totalCells = ParseTotalCells();
+                DoAggregation(enumerator, totalCells.SelectMany(t => t.Value).ToArray());
+                foreach (KeyValuePair<IXLCell, IList<ParsedAggregationFunc>> totalCell in totalCells)
                 {
-                    Delete();
-                    return;
+                    IXLCell cell = totalCell.Key;
+                    IList<ParsedAggregationFunc> aggFuncs = totalCell.Value;
+                    cell.Value = cell.Value.ToString() == "{0}"
+                        ? aggFuncs.First().Result
+                        : string.Format(cell.Value.ToString(), aggFuncs.Select(f => f.Result).ToArray());
                 }
-
-                IList<TotalCellInfo> totalCells = ParseTotalCells();
-                DoAggregation(enumerator, totalCells);
             }
             finally
             {
                 (enumerator as IDisposable)?.Dispose();
             }
+
+            CallAfterRenderMethod();
         }
 
-        private IList<TotalCellInfo> ParseTotalCells()
+        private IDictionary<IXLCell, IList<ParsedAggregationFunc>> ParseTotalCells()
         {
-            IList<TotalCellInfo> result = new List<TotalCellInfo>();
+            var result = new Dictionary<IXLCell, IList<ParsedAggregationFunc>>();
+            const int aggFuncMaxParamsCount = 3;
+            string leftBorder = Regex.Escape(Report.TemplateProcessor.LeftTemplateBorder);
+            string rightBorder = Regex.Escape(Report.TemplateProcessor.RightTemplateBorder);
+            string[] allAggFuncs = Enum.GetNames(typeof(AggregateFunction));
+            string template = $@"{leftBorder}\s*({string.Join("|", allAggFuncs)})\((.+?)\)\s*{rightBorder}";
             foreach (IXLCell cell in Range.CellsUsed())
             {
-                string[] aggFuncs = Enum.GetNames(typeof(AggregateFunction));
-                Match match = Regex.Match(cell.Value.ToString(), $@"^({string.Join("|", aggFuncs)}):(.+)$", RegexOptions.IgnoreCase);
-                if (match.Success)
+                string cellValue = cell.Value.ToString();
+                MatchCollection matches = Regex.Matches(cellValue, template, RegexOptions.IgnoreCase);
+                if (matches.Count == 0)
                 {
-                    // TODO доработать парсинг для случая CustomAggregationFunc, а также для PostProcessFunc
-                    AggregateFunction aggFunc = EnumHelper.Parse<AggregateFunction>(match.Groups[1].Value);
-                    string columnName = match.Groups[2].Value;
-                    result.Add(new TotalCellInfo(cell, aggFunc, columnName));
+                    continue;
                 }
+
+                IList<ParsedAggregationFunc> aggFuncs = new List<ParsedAggregationFunc>();
+                for (int i = 0; i < matches.Count; i++)
+                {
+                    Match match = matches[i];
+                    cellValue = cellValue.ReplaceFirst(match.Value, $"{{{i}}}");
+                    AggregateFunction aggFunc = EnumHelper.Parse<AggregateFunction>(match.Groups[1].Value);
+                    string[] allFuncParams = new string[aggFuncMaxParamsCount];
+                    string[] realFuncParams = match.Groups[2].Value.Trim().Split(',').Select(m => m.Trim()).ToArray();
+                    if (!realFuncParams.Any() || realFuncParams.Length > aggFuncMaxParamsCount)
+                    {
+                        throw new InvalidOperationException($"Aggregation function must have at least one but no more than {aggFuncMaxParamsCount} parameters");
+                    }
+
+                    for (int j = 0; j < realFuncParams.Length; j++)
+                    {
+                        allFuncParams[j] = string.IsNullOrWhiteSpace(realFuncParams[j]) ? null : realFuncParams[j];
+                    }
+
+                    string columnName = allFuncParams[0];
+                    if (columnName == null)
+                    {
+                        throw new InvalidOperationException("\"ColumnName\" parameter in aggregation function cannot be empty");
+                    }
+
+                    columnName = Report.TemplateProcessor.TrimDataItemLabel(columnName);
+                    aggFuncs.Add(new ParsedAggregationFunc(aggFunc, columnName) { CustomFunc = allFuncParams[1], PostProcessFunction = allFuncParams[2] });
+                }
+                cell.Value = cellValue;
+                result[cell] = aggFuncs;
             }
             return result;
         }
 
-        private void DoAggregation(IEnumerator enumerator, IList<TotalCellInfo> totalCells)
+        private void DoAggregation(IEnumerator enumerator, IList<ParsedAggregationFunc> aggFuncs)
         {
             int dataItemsCount = 0;
             IDataItemValueProvider valueProvider = null;
@@ -81,23 +126,23 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             {
                 dataItemsCount++;
                 object item = enumerator.Current;
-                foreach (TotalCellInfo totalCell in totalCells)
+                foreach (ParsedAggregationFunc aggFunc in aggFuncs)
                 {
-                    if (totalCell.AggregateFunction == AggregateFunction.Count)
+                    if (aggFunc.AggregateFunction == AggregateFunction.Count)
                     {
-                        totalCell.Result = dataItemsCount;
+                        aggFunc.Result = dataItemsCount;
                         continue;
                     }
 
                     valueProvider = valueProvider ?? _dataItemValueProviderFactory.Create(item);
-                    dynamic value = valueProvider.GetValue(totalCell.ColumnName, item);
-                    if (totalCell.AggregateFunction == AggregateFunction.Custom)
+                    dynamic value = valueProvider.GetValue(aggFunc.ColumnName, item);
+                    if (aggFunc.AggregateFunction == AggregateFunction.Custom)
                     {
-                        if (string.IsNullOrWhiteSpace(totalCell.CustomFunc))
+                        if (string.IsNullOrWhiteSpace(aggFunc.CustomFunc))
                         {
                             throw new InvalidOperationException("The custom type of aggregation is specified in the template but custom function is missing");
                         }
-                        totalCell.Result = CallReportMethod(totalCell.CustomFunc, new object[] { totalCell.Result, value, dataItemsCount });
+                        aggFunc.Result = CallReportMethod(aggFunc.CustomFunc, new object[] { aggFunc.Result, value, dataItemsCount });
                         continue;
                     }
 
@@ -105,37 +150,37 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
                     {
                         continue;
                     }
-                    if (totalCell.Result == null)
+                    if (aggFunc.Result == null)
                     {
-                        totalCell.Result = value;
+                        aggFunc.Result = value;
                         continue;
                     }
 
-                    switch (totalCell.AggregateFunction)
+                    switch (aggFunc.AggregateFunction)
                     {
                         case AggregateFunction.Sum:
                         case AggregateFunction.Avg:
-                            totalCell.Result += value;
+                            aggFunc.Result += value;
                             break;
 
                         case AggregateFunction.Min:
                         case AggregateFunction.Max:
-                            var comparable = totalCell.Result as IComparable;
-                            if (comparable != null && totalCell.Result.GetType() == value.GetType())
+                            var comparable = aggFunc.Result as IComparable;
+                            if (comparable != null && aggFunc.Result.GetType() == value.GetType())
                             {
                                 int compareResult = comparable.CompareTo(value);
-                                if (totalCell.AggregateFunction == AggregateFunction.Min)
+                                if (aggFunc.AggregateFunction == AggregateFunction.Min)
                                 {
-                                    totalCell.Result = compareResult < 0 ? totalCell.Result : value;
+                                    aggFunc.Result = compareResult < 0 ? aggFunc.Result : value;
                                 }
                                 else
                                 {
-                                    totalCell.Result = compareResult < 0 ? value : totalCell.Result;
+                                    aggFunc.Result = compareResult < 0 ? value : aggFunc.Result;
                                 }
                             }
                             else
                             {
-                                throw new InvalidOperationException("For Min and Max aggregation functions data items must implement IComparable interface");
+                                throw new InvalidOperationException($"For {nameof(AggregateFunction.Min)} and {nameof(AggregateFunction.Max)} aggregation functions data items must implement IComparable interface");
                             }
                             break;
 
@@ -145,25 +190,35 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
                 }
             }
 
-            foreach (TotalCellInfo totalCell in totalCells)
+            foreach (ParsedAggregationFunc aggFunc in aggFuncs)
             {
-                if (totalCell.Result == null && (totalCell.AggregateFunction == AggregateFunction.Sum
-                    || totalCell.AggregateFunction == AggregateFunction.Avg
-                    || totalCell.AggregateFunction == AggregateFunction.Count))
+                if (aggFunc.Result == null && (aggFunc.AggregateFunction == AggregateFunction.Sum
+                    || aggFunc.AggregateFunction == AggregateFunction.Avg
+                    || aggFunc.AggregateFunction == AggregateFunction.Count))
                 {
-                    totalCell.Result = 0;
+                    aggFunc.Result = 0;
                 }
 
-                if (dataItemsCount != 0 && totalCell.AggregateFunction == AggregateFunction.Avg)
+                if (dataItemsCount != 0 && aggFunc.AggregateFunction == AggregateFunction.Avg)
                 {
-                    totalCell.Result = (double)totalCell.Result / dataItemsCount;
+                    aggFunc.Result = (double)aggFunc.Result / dataItemsCount;
                 }
 
-                if (!string.IsNullOrWhiteSpace(totalCell.PostProcessFunction))
+                if (!string.IsNullOrWhiteSpace(aggFunc.PostProcessFunction))
                 {
-                    totalCell.Result = CallReportMethod(totalCell.PostProcessFunction, new object[] { totalCell.Result, dataItemsCount });
+                    aggFunc.Result = CallReportMethod(aggFunc.PostProcessFunction, new object[] { aggFunc.Result, dataItemsCount });
                 }
             }
+        }
+
+        protected override PanelBeforeRenderEventArgs GetBeforePanelRenderEventArgs()
+        {
+            return new DataSourcePanelBeforeRenderEventArgs { Range = Range, Data = _data };
+        }
+
+        protected override PanelEventArgs GetAfterPanelRenderEventArgs()
+        {
+            return new DataSourcePanelEventArgs { Range = Range, Data = _data };
         }
 
         //TODO Проверить корректное копирование, если передан не шаблон, а сами данные
@@ -174,23 +229,20 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             return panel;
         }
 
-        internal class TotalCellInfo
+        internal class ParsedAggregationFunc
         {
-            public TotalCellInfo(IXLCell cell, AggregateFunction aggregateFunction, string columnName)
+            public ParsedAggregationFunc(AggregateFunction aggregateFunction, string columnName)
             {
-                Cell = cell;
                 AggregateFunction = aggregateFunction;
                 ColumnName = columnName;
             }
-
-            public IXLCell Cell { get; }
 
             public AggregateFunction AggregateFunction { get; }
 
             public string ColumnName { get; }
 
             /// <summary>
-            /// Call if AggregateFunction == AggregateFunction.Custom
+            /// Call if AggregateFunction = AggregateFunction.Custom
             /// </summary>
             public string CustomFunc { get; set; }
 

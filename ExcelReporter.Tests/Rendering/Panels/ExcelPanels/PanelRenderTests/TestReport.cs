@@ -137,6 +137,32 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
                 args.Range.FirstCell().Value = "Test2_Changed_After";
             }
         }
+
+        public void TestExcelTotalsPanelBeforeRender(DataSourcePanelBeforeRenderEventArgs args)
+        {
+            IList<TestItem> data = ((IEnumerable<TestItem>)args.Data).ToList();
+            data[0].Sum = 55.78m;
+        }
+
+        public void TestExcelTotalsPanelAfterRender(DataSourcePanelEventArgs args)
+        {
+            args.Range.FirstCell().Value = "Changed plain text";
+        }
+
+        public decimal CustomAggregation(decimal result, decimal currentValue, int itemNumber)
+        {
+            return (result + currentValue) / 2 + itemNumber;
+        }
+
+        public string PostAggregation(decimal result, int itemsCount)
+        {
+            return ((result + itemsCount) / 3).ToString("F3");
+        }
+
+        public double PostAggregationRound(double result, int itemsCount)
+        {
+            return Math.Round(result, 2);
+        }
     }
 
     public class BaseReport : IExcelReport

@@ -19,14 +19,14 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             ws.Cell(1, 1).Value = "{p:StrParam}";
             ws.Cell(1, 2).Value = "{p:IntParam}";
             ws.Cell(1, 3).Value = "{p:DateParam}";
-            ws.Cell(1, 4).Value = "{p:BoolParam}";
+            ws.Cell(1, 4).Value = "{P:BoolParam}";
             ws.Cell(1, 5).Value = "{p:TimeSpanParam}";
-            ws.Cell(2, 1).Value = "{ p:StrParam }";
+            ws.Cell(2, 1).Value = " { p:StrParam } ";
             ws.Cell(2, 2).Value = "Plain text";
             ws.Cell(2, 3).Value = "{Plain text}";
             ws.Cell(2, 4).Value = " { m:Format ( p:DateParam ) } ";
             ws.Cell(2, 5).Value = "''{m:Format(p:DateParam)}";
-            ws.Cell(3, 1).Value = "Int: { p:IntParam }. Str: {p:ComplexTypeParam.StrParam}. FormattedDate: {m:Format(p:DateParam)}";
+            ws.Cell(3, 1).Value = "Int: { p:IntParam }. Str: {p:ComplexTypeParam.StrParam}. FormattedDate: {M:Format(p:DateParam)}";
             ws.Cell(3, 2).Value = "''{m:Format(m:DateTime:AddDays(p:ComplexTypeParam.IntParam), \"yyyy-MM-dd\")}";
             ws.Cell(3, 3).Value = "''{m:Format(m:AddDays(p:DateParam, 5), ddMMyyyy)}";
             ws.Cell(3, 4).Value = "''{m:Format(m:AddDays(p:DateParam, -2), dd.MM.yyyy)}";
@@ -47,7 +47,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             Assert.AreEqual(new DateTime(2017, 10, 25), ws.Cell(1, 3).Value);
             Assert.AreEqual(true, ws.Cell(1, 4).Value);
             Assert.AreEqual(new TimeSpan(36500, 22, 30, 40), ws.Cell(1, 5).Value);
-            Assert.AreEqual("String parameter", ws.Cell(2, 1).Value);
+            Assert.AreEqual(" String parameter ", ws.Cell(2, 1).Value);
             Assert.AreEqual("Plain text", ws.Cell(2, 2).Value);
             Assert.AreEqual("{Plain text}", ws.Cell(2, 3).Value);
             Assert.AreEqual(20171025d, ws.Cell(2, 4).Value);
