@@ -13,8 +13,8 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
 {
     internal class ExcelDataSourcePanel : ExcelNamedPanel
     {
-        private readonly string _dataSourceTemplate;
-        private object _data;
+        protected readonly string _dataSourceTemplate;
+        protected object _data;
 
         public ExcelDataSourcePanel(string dataSourceTemplate, IXLNamedRange namedRange, IExcelReport report)
             : base(namedRange, report)

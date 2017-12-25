@@ -172,6 +172,7 @@
     <Compile Include="Extensions\StringExtensionsTest.cs" />
     <Compile Include="Extensions\TemplateProcessorExtensionsTest.cs" />
     <Compile Include="Extensions\ParameterInfoExtensionsTest.cs" />
+    <Compile Include="Extensions\TypeExtensionsTest.cs" />
     <Compile Include="Helpers\ReflectionHelperTest.cs" />
     <Compile Include="Helpers\EnumHelperTest.cs" />
     <Compile Include="Helpers\RegexHelperTest.cs" />
@@ -199,7 +200,7 @@
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DynamicPanelRenderTests\DynamicPanelDataReaderRenderTest.cs" />
+    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDataReaderRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\TotalsPanelRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\PanelRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\TestReport.cs" />

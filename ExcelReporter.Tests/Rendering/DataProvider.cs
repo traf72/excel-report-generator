@@ -162,12 +162,12 @@ namespace ExcelReporter.Tests.Rendering
 
         private string GetAllCustomersQuery()
         {
-            return "SELECT Id, Name, IsVip, Type, Description FROM Customers ORDER BY Id";
+            return "SELECT Id, Name, IsVip, Type, Description, Revenue FROM Customers ORDER BY Id";
         }
 
         private string GetNoCustomersQuery()
         {
-            return "SELECT Id, Name, IsVip, Type, Description FROM Customers WHERE 1 <> 1";
+            return "SELECT Id, Name, IsVip, Type, Description, Revenue FROM Customers WHERE 1 <> 1";
         }
     }
 

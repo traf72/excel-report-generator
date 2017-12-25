@@ -16,7 +16,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             IColumnsProvider columnsProvider = new DataReaderColumnsProvider();
             IList<ExcelDynamicColumn> columns = columnsProvider.GetColumnsList(dataReader);
 
-            Assert.AreEqual(5, columns.Count);
+            Assert.AreEqual(6, columns.Count);
 
             Assert.AreEqual("Id", columns[0].Name);
             Assert.AreEqual("Id", columns[0].Caption);
@@ -42,6 +42,11 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual("Description", columns[4].Caption);
             Assert.AreEqual(typeof(string), columns[4].DataType);
             Assert.IsNull(columns[4].Width);
+
+            Assert.AreEqual("Revenue", columns[5].Name);
+            Assert.AreEqual("Revenue", columns[5].Caption);
+            Assert.AreEqual(typeof(decimal), columns[5].DataType);
+            Assert.IsNull(columns[5].Width);
 
             dataReader.Close();
         }
@@ -53,7 +58,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             IColumnsProvider columnsProvider = new DataReaderColumnsProvider();
             IList<ExcelDynamicColumn> columns = columnsProvider.GetColumnsList(dataReader);
 
-            Assert.AreEqual(5, columns.Count);
+            Assert.AreEqual(6, columns.Count);
 
             Assert.AreEqual("Id", columns[0].Name);
             Assert.AreEqual("Id", columns[0].Caption);
@@ -79,6 +84,11 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual("Description", columns[4].Caption);
             Assert.AreEqual(typeof(string), columns[4].DataType);
             Assert.IsNull(columns[4].Width);
+
+            Assert.AreEqual("Revenue", columns[5].Name);
+            Assert.AreEqual("Revenue", columns[5].Caption);
+            Assert.AreEqual(typeof(decimal), columns[5].DataType);
+            Assert.IsNull(columns[5].Width);
 
             dataReader.Close();
         }

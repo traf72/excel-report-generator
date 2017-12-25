@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExcelReporter.Enums;
+using System;
 
 namespace ExcelReporter.Rendering
 {
@@ -15,6 +16,10 @@ namespace ExcelReporter.Rendering
             DataType = dataType;
             _caption = caption;
             Width = null;
+            AggregateFunction = dataType == typeof(decimal) || dataType == typeof(decimal?)
+                ? AggregateFunction.Sum
+                : AggregateFunction.NoAggregation;
+            Order = 0;
         }
 
         /// <summary>
@@ -40,5 +45,15 @@ namespace ExcelReporter.Rendering
         /// Column data type
         /// </summary>
         public Type DataType { get; set; }
+
+        /// <summary>
+        /// Aggregate function applied to this column
+        /// </summary>
+        public AggregateFunction AggregateFunction { get; set; }
+
+        /// <summary>
+        /// Order in which the column appears in Excel
+        /// </summary>
+        public int Order { get; set; }
     }
 }

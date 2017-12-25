@@ -1,7 +1,9 @@
 ﻿using ExcelReporter.Helpers;
 using ExcelReporter.Rendering.TemplateProcessors;
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
+using ExcelReporter.Enums;
 
 namespace ExcelReporter.Extensions
 {
@@ -9,6 +11,8 @@ namespace ExcelReporter.Extensions
     // TODO Вместо этого лучше проверять это каким-то образом вначале выполнения отчёта один раз
     internal static class TemplateProcessorExtensions
     {
+        private static readonly string[] AllAggregationFuncs = Enum.GetNames(typeof(AggregateFunction)).Where(n => n != AggregateFunction.NoAggregation.ToString()).ToArray();
+
         /// <summary>
         /// Remove template borders
         /// </summary>
@@ -146,6 +150,16 @@ namespace ExcelReporter.Extensions
             //CheckForNullOrWhiteSpace(processor.RightTemplateBorder, nameof(processor.RightTemplateBorder));
             //CheckForNullOrEmpty(processor.MemberLabelSeparator, nameof(processor.MemberLabelSeparator));
             return $@"{Regex.Escape(processor.LeftTemplateBorder)}\s*{escapedMemberLabel}{Regex.Escape(processor.MemberLabelSeparator)}.+?\s*{Regex.Escape(processor.RightTemplateBorder)}";
+        }
+
+        public static string GetFullAggregationRegexPattern(this ITemplateProcessor processor)
+        {
+            return $@"{Regex.Escape(processor.LeftTemplateBorder)}\s*({string.Join("|", AllAggregationFuncs)})\((.+?)\)\s*{Regex.Escape(processor.RightTemplateBorder)}";
+        }
+
+        public static string BuildAggregationFuncTemplate(this ITemplateProcessor processor, AggregateFunction aggFunc, string columnName)
+        {
+            return $"{processor.LeftTemplateBorder}{aggFunc.ToString()}({processor.DataItemMemberLabel}{processor.MemberLabelSeparator}{columnName}){processor.RightTemplateBorder}";
         }
 
         //private static void CheckForNullOrWhiteSpace(string value, string propName)

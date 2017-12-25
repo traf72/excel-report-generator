@@ -1,9 +1,11 @@
-﻿using ExcelReporter.Extensions;
+﻿using ExcelReporter.Enums;
+using ExcelReporter.Extensions;
 using ExcelReporter.Rendering.TemplateProcessors;
 using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace ExcelReporter.Tests.Extensions
@@ -129,7 +131,7 @@ namespace ExcelReporter.Tests.Extensions
             Assert.AreEqual("{p: }", processor.BuildPropertyTemplate(" "));
             Assert.AreEqual("{p:}", processor.BuildPropertyTemplate(null));
 
-            processor.LeftTemplateBorder.Returns((string) null);
+            processor.LeftTemplateBorder.Returns((string)null);
             processor.RightTemplateBorder.Returns((string)null);
             processor.MemberLabelSeparator.Returns((string)null);
             processor.PropertyMemberLabel.Returns((string)null);
@@ -332,7 +334,7 @@ namespace ExcelReporter.Tests.Extensions
             matches = Regex.Matches("{{p:Name}}", pattern);
             Assert.AreEqual(1, matches.Count);
 
-            // Override props case 1
+            // Overriden props case 1
             processor.LeftTemplateBorder.Returns("[");
             processor.RightTemplateBorder.Returns("]");
             processor.MemberLabelSeparator.Returns("*");
@@ -376,7 +378,7 @@ namespace ExcelReporter.Tests.Extensions
             matches = Regex.Matches("[[prop*Name]]", pattern);
             Assert.AreEqual(1, matches.Count);
 
-            // Override props case 2
+            // Overriden props case 2
             processor.LeftTemplateBorder.Returns("<<");
             processor.RightTemplateBorder.Returns("@@");
             processor.MemberLabelSeparator.Returns("&&");
@@ -504,7 +506,6 @@ namespace ExcelReporter.Tests.Extensions
             matches = Regex.Matches("{pp:Name}", pattern);
             Assert.AreEqual(0, matches.Count);
 
-
             processor.PropertyMemberLabel.Returns("*");
             pattern = processor.GetPropertyRegexPattern();
             Assert.AreEqual("\\{\\s*\\*:.+?\\s*}", pattern);
@@ -520,7 +521,7 @@ namespace ExcelReporter.Tests.Extensions
             matches = Regex.Matches("{**:Name}", pattern);
             Assert.AreEqual(0, matches.Count);
 
-            processor.PropertyMemberLabel.Returns((string) null);
+            processor.PropertyMemberLabel.Returns((string)null);
             ExceptionAssert.Throws<Exception>(() => processor.GetPropertyRegexPattern());
             processor.PropertyMemberLabel.Returns(string.Empty);
             Assert.AreEqual("\\{\\s*:.+?\\s*}", processor.GetPropertyRegexPattern());
@@ -550,7 +551,6 @@ namespace ExcelReporter.Tests.Extensions
 
             matches = Regex.Matches("{d:Name}", pattern);
             Assert.AreEqual(0, matches.Count);
-
 
             processor.DataItemMemberLabel.Returns("*");
             pattern = processor.GetDataItemRegexPattern();
@@ -598,7 +598,6 @@ namespace ExcelReporter.Tests.Extensions
             matches = Regex.Matches("{ms:Meth()}", pattern);
             Assert.AreEqual(0, matches.Count);
 
-
             processor.MethodCallMemberLabel.Returns("*");
             pattern = processor.GetMethodCallRegexPattern();
             Assert.AreEqual("\\{\\s*\\*:.+?\\s*}", pattern);
@@ -620,6 +619,77 @@ namespace ExcelReporter.Tests.Extensions
             Assert.AreEqual("\\{\\s*:.+?\\s*}", processor.GetMethodCallRegexPattern());
             processor.MethodCallMemberLabel.Returns(" ");
             Assert.AreEqual("\\{\\s*\\ :.+?\\s*}", processor.GetMethodCallRegexPattern());
+        }
+
+        [TestMethod]
+        public void TestGetFullAggregationRegexPattern()
+        {
+            ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
+
+            // Standard case
+            processor.LeftTemplateBorder.Returns("{");
+            processor.RightTemplateBorder.Returns("}");
+
+            string pattern = processor.GetFullAggregationRegexPattern();
+            string[] allAggFuncs = Enum.GetNames(typeof(AggregateFunction)).Where(n => n != AggregateFunction.NoAggregation.ToString()).ToArray();
+
+            Assert.AreEqual(6, allAggFuncs.Length);
+            Assert.AreEqual($"\\{{\\s*({string.Join("|", allAggFuncs)})\\((.+?)\\)\\s*}}", pattern);
+
+            MatchCollection matches = Regex.Matches("{Sum(di:Amount)}", pattern);
+            Assert.AreEqual(1, matches.Count);
+            Assert.AreEqual("{Sum(di:Amount)}", matches[0].Value);
+
+            matches = Regex.Matches("{ Count(di:Amount) }", pattern);
+            Assert.AreEqual(1, matches.Count);
+            Assert.AreEqual("{ Count(di:Amount) }", matches[0].Value);
+
+            matches = Regex.Matches("{  Max(Amount)  }", pattern);
+            Assert.AreEqual(1, matches.Count);
+            Assert.AreEqual("{  Max(Amount)  }", matches[0].Value);
+
+            matches = Regex.Matches("{ Min(Result.Amount) }", pattern);
+            Assert.AreEqual(1, matches.Count);
+            Assert.AreEqual("{ Min(Result.Amount) }", matches[0].Value);
+
+            matches = Regex.Matches("{Avg(di:Amount)}", pattern);
+            Assert.AreEqual(1, matches.Count);
+            Assert.AreEqual("{Avg(di:Amount)}", matches[0].Value);
+
+            matches = Regex.Matches("{Custom(di:Amount)}", pattern);
+            Assert.AreEqual(1, matches.Count);
+            Assert.AreEqual("{Custom(di:Amount)}", matches[0].Value);
+
+            matches = Regex.Matches("Text {Sum(di:Amount))} {Text} {Avg(Value)}", pattern);
+            Assert.AreEqual(2, matches.Count);
+            Assert.AreEqual("{Sum(di:Amount))}", matches[0].Value);
+            Assert.AreEqual("{Avg(Value)}", matches[1].Value);
+
+            matches = Regex.Matches("{Mix(di:Amount)}", pattern);
+            Assert.AreEqual(0, matches.Count);
+
+            // Overriden borders
+            processor.LeftTemplateBorder.Returns("<");
+            processor.RightTemplateBorder.Returns(">");
+
+            pattern = processor.GetFullAggregationRegexPattern();
+            Assert.AreEqual($"<\\s*({string.Join("|", allAggFuncs)})\\((.+?)\\)\\s*>", pattern);
+        }
+
+        [TestMethod]
+        public void TestBuildAggregationFuncTemplate()
+        {
+            ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
+            processor.LeftTemplateBorder.Returns("{");
+            processor.RightTemplateBorder.Returns("}");
+            processor.MemberLabelSeparator.Returns(":");
+            processor.DataItemMemberLabel.Returns("di");
+
+            Assert.AreEqual("{Sum(di:Amount)}", processor.BuildAggregationFuncTemplate(AggregateFunction.Sum, "Amount"));
+            Assert.AreEqual("{Count(di:Value)}", processor.BuildAggregationFuncTemplate(AggregateFunction.Count, "Value"));
+            Assert.AreEqual("{Avg(di:Result.Sum)}", processor.BuildAggregationFuncTemplate(AggregateFunction.Avg, "Result.Sum"));
+            Assert.AreEqual("{Min(di:)}", processor.BuildAggregationFuncTemplate(AggregateFunction.Min, null));
+            Assert.AreEqual("{Max(di:)}", processor.BuildAggregationFuncTemplate(AggregateFunction.Max, string.Empty));
         }
     }
 }

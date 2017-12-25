@@ -2,7 +2,6 @@
 using ExcelReporter.Enums;
 using ExcelReporter.Excel;
 using ExcelReporter.Extensions;
-using ExcelReporter.Helpers;
 using ExcelReporter.Rendering.Providers.ColumnsProviders;
 using ExcelReporter.Reports;
 using System;
@@ -12,33 +11,19 @@ using System.Text.RegularExpressions;
 
 namespace ExcelReporter.Rendering.Panels.ExcelPanels
 {
-    // Данная панель имеет жёсткую заточку на DefaultTemplateProcessor и ObjectPropertyValueProvider, то есть использование
-    // данной панели невозможно при кастомной реализации интерфейса ITemplateProcessor - в будущем нужно устранить
-    internal class ExcelDynamicPanel : ExcelNamedPanel
+    internal class ExcelDataSourceDynamicPanel : ExcelDataSourcePanel
     {
         private readonly IColumnsProviderFactory _columnsFactory = new ColumnsProviderFactory();
-        private readonly string _dataSourceTemplate;
-        private object _data;
 
-        public ExcelDynamicPanel(string dataSourceTemplate, IXLNamedRange namedRange, IExcelReport report)
-            : base(namedRange, report)
+        public ExcelDataSourceDynamicPanel(string dataSourceTemplate, IXLNamedRange namedRange, IExcelReport report)
+            : base(dataSourceTemplate, namedRange, report)
         {
-            if (string.IsNullOrWhiteSpace(dataSourceTemplate))
-            {
-                throw new ArgumentException(ArgumentHelper.EmptyStringParamMessage, nameof(dataSourceTemplate));
-            }
-            _dataSourceTemplate = dataSourceTemplate;
-        }
-
-        public ExcelDynamicPanel(object data, IXLNamedRange namedRange, IExcelReport report) : base(namedRange, report)
-        {
-            _data = data ?? throw new ArgumentNullException(nameof(data), ArgumentHelper.NullParamMessage);
         }
 
         public override void Render()
         {
             // Parent context does not affect on this panel type therefore don't care about it
-            _data = _data ?? Report.TemplateProcessor.GetValue(_dataSourceTemplate);
+            _data = Report.TemplateProcessor.GetValue(_dataSourceTemplate);
             IColumnsProvider columnsProvider = _columnsFactory.Create(_data);
             if (columnsProvider == null)
             {
@@ -56,20 +41,21 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             RenderHeaders(columns);
             IXLRange dataRange = RenderDataTemplates(columns);
             RenderData(dataRange);
-            RenderTotals(columns);
+            IXLRange totalsRange = RenderTotalsTemplates(columns);
+            RenderTotals(totalsRange);
         }
 
         private void RenderHeaders(IList<ExcelDynamicColumn> columns)
         {
             string template = Report.TemplateProcessor.WrapTemplate("Headers");
-            IXLCell cell = Range.Cells().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase));
+            IXLCell cell = Range.CellsUsed().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase));
             if (cell == null)
             {
                 return;
             }
 
             IXLWorksheet ws = Range.Worksheet;
-            cell.Value = Report.TemplateProcessor.WrapTemplate($"di:{nameof(ExcelDynamicColumn.Caption)}");
+            cell.Value = Report.TemplateProcessor.BuildDataItemTemplate(nameof(ExcelDynamicColumn.Caption));
             IXLRange range = ws.Range(cell, cell);
             string rangeName = $"Headers_{Guid.NewGuid():N}";
             range.AddToNamed(rangeName, XLScope.Worksheet);
@@ -86,28 +72,27 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
         private IXLRange RenderDataTemplates(IList<ExcelDynamicColumn> columns)
         {
             string dataTemplate = Report.TemplateProcessor.WrapTemplate("Data");
-            IXLCell dataCell = Range.Cells().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{dataTemplate}$", RegexOptions.IgnoreCase));
+            IXLCell dataCell = Range.CellsUsed().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{dataTemplate}$", RegexOptions.IgnoreCase));
             if (dataCell == null)
             {
                 return null;
             }
 
             IXLWorksheet ws = Range.Worksheet;
-            dataCell.Value = Report.TemplateProcessor.WrapTemplate("di:di");
+            dataCell.Value = Report.TemplateProcessor.BuildDataItemTemplate("Template");
             IXLRange dataTemplatesRange = ws.Range(dataCell, dataCell);
             string rangeName = $"DataTemplates_{Guid.NewGuid():N}";
             dataTemplatesRange.AddToNamed(rangeName, XLScope.Worksheet);
 
-            var dataTemplatesPanel = new ExcelDataSourcePanel(columns.Select(c => Report.TemplateProcessor.WrapTemplate($"di:{c.Name}")).ToList(), ws.NamedRange(rangeName), Report)
+            var dataTemplatesPanel = new ExcelDataSourcePanel(columns.Select(c => new { Template = Report.TemplateProcessor.BuildDataItemTemplate(c.Name) }).ToList(),
+                ws.NamedRange(rangeName), Report)
             {
                 ShiftType = ShiftType.Cells,
                 Type = Type == PanelType.Vertical ? PanelType.Horizontal : PanelType.Vertical,
             };
 
             dataTemplatesPanel.Render();
-
-            IXLRange dataRange = ws.Range(dataCell, ExcelHelper.ShiftCell(dataCell, new AddressShift(0, columns.Count)));
-            return dataRange;
+            return ws.Range(dataCell, ExcelHelper.ShiftCell(dataCell, new AddressShift(0, columns.Count)));
         }
 
         public void RenderData(IXLRange dataRange)
@@ -123,21 +108,57 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             dataPanel.Render();
         }
 
-        private void RenderTotals(IList<ExcelDynamicColumn> columns)
+        private IXLRange RenderTotalsTemplates(IList<ExcelDynamicColumn> columns)
         {
             string template = Report.TemplateProcessor.WrapTemplate("Totals");
-            IXLCell cell = Range.Cells().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase));
+            IXLCell cell = Range.CellsUsed().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase));
             if (cell == null)
             {
-                return;
+                return null;
             }
-            throw new NotImplementedException();
+
+            IXLWorksheet ws = Range.Worksheet;
+            cell.Value = Report.TemplateProcessor.BuildDataItemTemplate("Totals");
+            IXLRange range = ws.Range(cell, cell);
+            string rangeName = $"Totals_{Guid.NewGuid():N}";
+            range.AddToNamed(rangeName, XLScope.Worksheet);
+
+            IList<string> totalsTemplates = new List<string>();
+            foreach (ExcelDynamicColumn column in columns)
+            {
+                totalsTemplates.Add(column.AggregateFunction != AggregateFunction.NoAggregation
+                    ? Report.TemplateProcessor.BuildAggregationFuncTemplate(column.AggregateFunction, column.Name)
+                    : null);
+            }
+
+            var panel = new ExcelDataSourcePanel(totalsTemplates.Select(t => new { Totals = t }), ws.NamedRange(rangeName), Report)
+            {
+                ShiftType = ShiftType.Cells,
+                Type = Type == PanelType.Vertical ? PanelType.Horizontal : PanelType.Vertical,
+            };
+
+            panel.Render();
+            return ws.Range(cell, ExcelHelper.ShiftCell(cell, new AddressShift(0, columns.Count)));
+        }
+
+        public void RenderTotals(IXLRange totalsRange)
+        {
+            string rangeName = $"DynamicPanelTotals_{Guid.NewGuid():N}";
+            totalsRange.AddToNamed(rangeName, XLScope.Worksheet);
+            _data = Report.TemplateProcessor.GetValue(_dataSourceTemplate);
+            var totalsPanel = new ExcelTotalsPanel(_data, Range.Worksheet.NamedRange(rangeName), Report)
+            {
+                ShiftType = ShiftType,
+                Type = Type,
+            };
+
+            totalsPanel.Render();
         }
 
         //TODO Проверить корректное копирование, если передан не шаблон, а сами данные
         protected override IExcelPanel CopyPanel(IXLCell cell)
         {
-            var panel = new ExcelDynamicPanel(_dataSourceTemplate, CopyNamedRange(cell), Report);
+            var panel = new ExcelDataSourceDynamicPanel(_dataSourceTemplate, CopyNamedRange(cell), Report);
             FillCopyProperties(panel);
             return panel;
         }

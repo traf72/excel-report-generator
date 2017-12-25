@@ -61,6 +61,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\NoExcelColumnAttribute.cs" />
     <Compile Include="Attributes\ExcelColumnAttribute.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Enumerators\EnumeratorFactory.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Extensions\DataReaderExtensions.cs" />
     <Compile Include="Extensions\ParameterInfoExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Helpers\ArgumentHelper.cs" />
     <Compile Include="Extensions\TemplateProcessorExtensions.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
@@ -98,12 +100,12 @@
     <Compile Include="Rendering\EventArgs\PanelBeforeRenderEventArgs.cs" />
     <Compile Include="Rendering\ExcelDynamicColumn.cs" />
     <Compile Include="Rendering\HierarchicalDataItem.cs" />
+    <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataSourceDynamicPanel.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelTotalsPanel.cs" />
     <Compile Include="Rendering\EventArgs\PanelEventArgs.cs" />
     <Compile Include="Rendering\TemplateParts\MethodCallTemplateParts.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataItemPanel.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataSourcePanel.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\ExcelDynamicPanel.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelNamedPanel.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelPanel.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\IExcelNamedPanel.cs" />

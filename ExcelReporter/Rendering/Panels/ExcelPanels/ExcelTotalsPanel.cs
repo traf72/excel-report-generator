@@ -72,14 +72,11 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
         {
             var result = new Dictionary<IXLCell, IList<ParsedAggregationFunc>>();
             const int aggFuncMaxParamsCount = 3;
-            string leftBorder = Regex.Escape(Report.TemplateProcessor.LeftTemplateBorder);
-            string rightBorder = Regex.Escape(Report.TemplateProcessor.RightTemplateBorder);
-            string[] allAggFuncs = Enum.GetNames(typeof(AggregateFunction));
-            string template = $@"{leftBorder}\s*({string.Join("|", allAggFuncs)})\((.+?)\)\s*{rightBorder}";
+            string aggregationRegexPattern = Report.TemplateProcessor.GetFullAggregationRegexPattern();
             foreach (IXLCell cell in Range.CellsUsed())
             {
                 string cellValue = cell.Value.ToString();
-                MatchCollection matches = Regex.Matches(cellValue, template, RegexOptions.IgnoreCase);
+                MatchCollection matches = Regex.Matches(cellValue, aggregationRegexPattern, RegexOptions.IgnoreCase);
                 if (matches.Count == 0)
                 {
                     continue;

@@ -1,13 +1,15 @@
 ﻿using ExcelReporter.Attributes;
+using ExcelReporter.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ExcelReporter.Enums;
 
 namespace ExcelReporter.Rendering.Providers.ColumnsProviders
 {
     /// <summary>
-    /// Provides columns info from from Type
+    /// Provides columns info from Type
     /// </summary>
     internal class TypeColumnsProvider : IGenericColumnsProvider<Type>
     {
@@ -19,20 +21,36 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
             }
 
             BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
-            MemberInfo[] excelColumns = type.GetFields(flags)
+            MemberInfo[] probableExcelColumns = type.GetFields(flags)
                 .AsEnumerable<MemberInfo>()
                 .Concat(type.GetProperties(flags))
-                .Where(m => m.IsDefined(typeof(ExcelColumnAttribute), true)).ToArray();
+                .Where(m => !m.IsDefined(typeof(NoExcelColumnAttribute), true)).ToArray();
 
             IList<ExcelDynamicColumn> result = new List<ExcelDynamicColumn>();
-            foreach (MemberInfo columnMember in excelColumns)
+            foreach (MemberInfo probableColumnMember in probableExcelColumns)
             {
-                var columnAttr = (ExcelColumnAttribute)columnMember.GetCustomAttribute(typeof(ExcelColumnAttribute), true);
-                Type columnType = columnMember is PropertyInfo p ? p.PropertyType : ((FieldInfo) columnMember).FieldType;
-                result.Add(new ExcelDynamicColumn(columnMember.Name, columnType, columnAttr.Caption) { Width = columnAttr.Width > 0 ? columnAttr.Width : (double?)null });
+                Type memberType = probableColumnMember is PropertyInfo p ? p.PropertyType : ((FieldInfo)probableColumnMember).FieldType;
+                var columnAttr = (ExcelColumnAttribute)probableColumnMember.GetCustomAttribute(typeof(ExcelColumnAttribute));
+                if (columnAttr != null)
+                {
+                    var excelColumn =
+                        new ExcelDynamicColumn(probableColumnMember.Name, memberType, columnAttr.Caption)
+                        {
+                            Width = columnAttr.Width > 0 ? columnAttr.Width : (double?)null,
+                            AggregateFunction = columnAttr.NoAggregate
+                                ? AggregateFunction.NoAggregation
+                                : columnAttr.AggregateFunction,
+                            Order = columnAttr.Order,
+                        };
+                    result.Add(excelColumn);
+                }
+                else if (memberType.IsExtendedPrimitive())
+                {
+                    result.Add(new ExcelDynamicColumn(probableColumnMember.Name, memberType));
+                }
             }
 
-            return result;
+            return result.OrderBy(c => c.Order).ToList();
         }
 
         IList<ExcelDynamicColumn> IColumnsProvider.GetColumnsList(object type)

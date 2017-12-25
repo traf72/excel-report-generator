@@ -85,6 +85,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             IList<Test> data = GetTestData();
 
             enumerator = EnumeratorFactory.Create(data);
+            totalCells.Add(new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Sum, "Result.Amount"));
+
             method.Invoke(totalPanel, new object[] { enumerator, totalCells });
 
             Assert.AreEqual(6, totalCells[0].Result);
@@ -102,6 +104,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual("jkl", totalCells[12].Result);
             Assert.AreEqual(false, totalCells[13].Result);
             Assert.AreEqual(true, totalCells[14].Result);
+            Assert.AreEqual(410.59m, totalCells[15].Result);
         }
 
         [TestMethod]
@@ -159,6 +162,22 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             };
             ExceptionAssert.ThrowsBaseException<NotSupportedException>(() => method.Invoke(totalPanel, new object[] { enumerator, totalCells }),
                 "Unsupportable aggregation function");
+        }
+
+        [TestMethod]
+        public void TestDoAggregationWithComplexType()
+        {
+            var data = new List<Test>();
+            var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), Substitute.For<IExcelReport>());
+            IEnumerator enumerator = EnumeratorFactory.Create(data);
+            IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
+            {
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Sum, "TestColumn1"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Count, "TestColumn1"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Avg, "TestColumn1"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Min, "TestColumn1"),
+                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Max, "TestColumn1"),
+            };
         }
 
         [TestMethod]
@@ -346,10 +365,10 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
         {
             return new List<Test>
             {
-                new Test(3, 20.7m, "abc", false),
-                new Test(1, 10.5m, "jkl", true),
-                new Test(null, null, null, null),
-                new Test(2, 30.9m, "def", false),
+                new Test(3, 20.7m, "abc", false) { Result = new ComplexType { Amount = 155.05m }},
+                new Test(1, 10.5m, "jkl", true) { Result = new ComplexType() },
+                new Test(null, null, null, null) { Result = new ComplexType() },
+                new Test(2, 30.9m, "def", false) { Result = new ComplexType { Amount = 255.54m }},
             };
         }
 
@@ -373,6 +392,12 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             public string TestColumn3 { get; }
             public bool? TestColumn4 { get; }
             public Test BadColumn { get; }
+            public ComplexType Result { get; set; }
+        }
+
+        private class ComplexType
+        {
+            public decimal Amount { get; set; }
         }
 
         private class TestReportForAggregation : IExcelReport

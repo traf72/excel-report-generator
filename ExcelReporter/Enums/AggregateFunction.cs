@@ -1,6 +1,6 @@
 ﻿namespace ExcelReporter.Enums
 {
-    internal enum AggregateFunction
+    public enum AggregateFunction
     {
         Sum,
         Count,
@@ -8,5 +8,6 @@
         Max,
         Min,
         Custom,
+        NoAggregation,
     }
 }
