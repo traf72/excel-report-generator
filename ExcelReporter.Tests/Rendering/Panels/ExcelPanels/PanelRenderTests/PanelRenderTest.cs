@@ -181,11 +181,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             Assert.AreEqual("Plain text outside range", ws.Cell(6, 1).Value);
 
             Assert.AreEqual(0, ws.NamedRanges.Count());
-            Assert.AreEqual(1, ws.Workbook.NamedRanges.Count());
-
-            Assert.AreEqual(1, ws.Workbook.NamedRange("NamedPanel").Ranges.Count);
-            Assert.AreEqual(range, ws.Workbook.NamedRange("NamedPanel").Ranges.ElementAt(0));
-
+            Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
             Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
 
             IXLRange range2 = ws.Range(8, 1, 11, 5);
@@ -243,15 +239,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             Assert.AreEqual("{m:Counter()}", ws.Cell(12, 2).Value);
             Assert.AreEqual("Plain text outside range", ws.Cell(13, 1).Value);
 
-            Assert.AreEqual(1, ws.NamedRanges.Count());
-            Assert.AreEqual(1, ws.Workbook.NamedRanges.Count());
-
-            Assert.AreEqual(1, ws.Workbook.NamedRange("NamedPanel").Ranges.Count);
-            Assert.AreEqual(range, ws.Workbook.NamedRange("NamedPanel").Ranges.ElementAt(0));
-
-            Assert.AreEqual(1, ws.NamedRange("NamedPanel2").Ranges.Count);
-            Assert.AreEqual(range2, ws.NamedRange("NamedPanel2").Ranges.ElementAt(0));
-
+            Assert.AreEqual(0, ws.NamedRanges.Count());
+            Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
             Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -345,27 +334,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             Assert.AreEqual("Panel12: 10", ws.Cell(9, 8).Value);
             Assert.AreEqual("Outside panel: {p:IntParam}", ws.Cell(11, 8).Value);
 
-            Assert.AreEqual(3, ws.Workbook.NamedRanges.Count());
-            Assert.AreEqual(3, ws.NamedRanges.Count());
-
-            Assert.AreEqual(1, ws.Workbook.NamedRange("NamedPanel1").Ranges.Count);
-            Assert.AreEqual(range3, ws.Workbook.NamedRange("NamedPanel1").Ranges.ElementAt(0));
-
-            Assert.AreEqual(1, ws.NamedRange("NamedPanel2").Ranges.Count);
-            Assert.AreEqual(range4, ws.NamedRange("NamedPanel2").Ranges.ElementAt(0));
-
-            Assert.AreEqual(1, ws.Workbook.NamedRange("NamedPanel3").Ranges.Count);
-            Assert.AreEqual(range6, ws.Workbook.NamedRange("NamedPanel3").Ranges.ElementAt(0));
-
-            Assert.AreEqual(1, ws.NamedRange("NamedPanel4").Ranges.Count);
-            Assert.AreEqual(range8, ws.NamedRange("NamedPanel4").Ranges.ElementAt(0));
-
-            Assert.AreEqual(1, ws.NamedRange("NamedPanel5").Ranges.Count);
-            Assert.AreEqual(range9, ws.NamedRange("NamedPanel5").Ranges.ElementAt(0));
-
-            Assert.AreEqual(1, ws.Workbook.NamedRange("NamedPanel6").Ranges.Count);
-            Assert.AreEqual(range12, ws.Workbook.NamedRange("NamedPanel6").Ranges.ElementAt(0));
-
+            Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
+            Assert.AreEqual(0, ws.NamedRanges.Count());
             Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
             //report.Workbook.SaveAs("test.xlsx");
         }

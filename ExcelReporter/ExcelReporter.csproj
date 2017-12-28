@@ -93,6 +93,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Excel\CellCoords.cs" />
     <Compile Include="Excel\RangeCoords.cs" />
+    <Compile Include="Rendering\EventArgs\DataSourceDynamicPanelEventArgs.cs" />
+    <Compile Include="Rendering\EventArgs\DataSourceDynamicPanelBeforeRenderEventArgs.cs" />
     <Compile Include="Rendering\EventArgs\DataSourcePanelBeforeRenderEventArgs.cs" />
     <Compile Include="Rendering\EventArgs\DataItemPanelBeforeRenderEventArgs.cs" />
     <Compile Include="Rendering\EventArgs\DataSourcePanelEventArgs.cs" />

@@ -6,8 +6,11 @@ using ExcelReporter.Rendering.TemplateProcessors;
 using ExcelReporter.Reports;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection;
+using ExcelReporter.Enums;
+using ExcelReporter.Rendering;
 using ExcelReporter.Rendering.EventArgs;
 
 namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
@@ -162,6 +165,47 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
         public double PostAggregationRound(double result, int itemsCount)
         {
             return Math.Round(result, 2);
+        }
+
+        public void TestExcelDynamicPanelBeforeHeadersRender(DataSourceDynamicPanelBeforeRenderEventArgs args)
+        {
+            args.Columns[0].Width = 30;
+            args.Columns[0].AggregateFunction = AggregateFunction.Avg;
+            args.Columns.Add(new ExcelDynamicColumn("DynamicAdded", typeof(decimal?), "Dynamic added"){ Width = 20 });
+        }
+
+        public void TestExcelDynamicPanelAfterHeadersRender(DataSourceDynamicPanelEventArgs args)
+        {
+            args.Range.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+            args.Range.Style.Border.OutsideBorderColor = XLColor.Red;
+            args.Range.Style.Font.Bold = true;
+        }
+
+        public void TestExcelDynamicPanelAfterDataTemplatesRender(DataSourceDynamicPanelEventArgs args)
+        {
+            args.Range.Cell(1, 6).Style.NumberFormat.Format = "#,##0.00";
+            args.Range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            args.Range.Style.Border.OutsideBorderColor = XLColor.Black;
+        }
+
+        public void TestExcelDynamicPanelBeforeDataRender(DataSourcePanelBeforeRenderEventArgs args)
+        {
+            var dataSet = (DataSet) args.Data;
+            DataTable dataTable = dataSet.Tables[0];
+            dataTable.Columns.Add(new DataColumn("DynamicAdded", typeof(decimal)));
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                dataTable.Rows[i]["DynamicAdded"] = (i + 1) * 2.6;
+            }
+        }
+
+        public void TestExcelDynamicPanelAfterDataItemRender(DataItemPanelEventArgs args)
+        {
+            IXLCell boolCell = args.Range.Cell(1, 3);
+            if (boolCell.Value is bool val)
+            {
+                boolCell.Value = val ?  "Yes" : "No";
+            }
         }
     }
 

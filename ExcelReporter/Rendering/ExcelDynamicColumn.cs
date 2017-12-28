@@ -6,7 +6,7 @@ namespace ExcelReporter.Rendering
     /// <summary>
     /// Describes excel dynamic column
     /// </summary>
-    internal struct ExcelDynamicColumn
+    public class ExcelDynamicColumn
     {
         private string _caption;
 
@@ -14,12 +14,10 @@ namespace ExcelReporter.Rendering
         {
             Name = name;
             DataType = dataType;
-            _caption = caption;
-            Width = null;
+            Caption = caption;
             AggregateFunction = dataType == typeof(decimal) || dataType == typeof(decimal?)
                 ? AggregateFunction.Sum
                 : AggregateFunction.NoAggregation;
-            Order = 0;
         }
 
         /// <summary>

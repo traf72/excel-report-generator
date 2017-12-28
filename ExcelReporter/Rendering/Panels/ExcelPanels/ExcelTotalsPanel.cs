@@ -64,7 +64,8 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             {
                 (enumerator as IDisposable)?.Dispose();
             }
-
+            
+            RemoveName();
             CallAfterRenderMethod();
         }
 

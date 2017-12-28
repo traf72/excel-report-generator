@@ -22,6 +22,12 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
 
         public override IXLRange Range => _namedRange.Ranges.ElementAt(0);
 
+        public override void Render()
+        {
+            base.Render();
+            RemoveName();
+        }
+
         public override IExcelPanel Copy(IXLCell cell, bool recursive = true)
         {
             string name = $"{Name}_{Guid.NewGuid():N}";
