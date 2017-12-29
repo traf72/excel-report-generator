@@ -239,6 +239,9 @@
     <None Include="packages.config" />
     <None Include="TestData\DataSourceDynamicPanelDataReaderRenderTest\TestRenderDataReader.xlsx" />
     <None Include="TestData\DataSourceDynamicPanelDataReaderRenderTest\TestRenderEmptyDataReader.xlsx" />
+    <None Include="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderDataSetWithEvents.xlsx" />
+    <None Include="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderDataSetWithEvents_HorizontalPanel.xlsx" />
+    <None Include="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderEmptyDataSet.xlsx" />
     <None Include="TestData\DataSourcePanelDataReaderRenderTest\TestRenderDataReader.xlsx" />
     <None Include="TestData\DataSourcePanelDataSetRenderTest\TestRenderDataSet.xlsx" />
     <None Include="TestData\DataSourcePanelDataTableRenderTest\TestRenderDataTable.xlsx" />

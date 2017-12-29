@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using ExcelReporter.Enums;
 using ExcelReporter.Rendering.Panels.ExcelPanels;
 using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,7 +10,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
     public class DataSourceDynamicPanelDataSetRenderTest
     {
         [TestMethod]
-        public void TestRenderDataSet()
+        public void TestRenderDataSetWithEvents()
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
@@ -17,34 +18,66 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             range.AddToNamed("TestRange", XLScope.Worksheet);
 
             ws.Cell(2, 2).Value = "{Headers}";
-            //ws.Cell(2, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
-            //ws.Cell(2, 2).Style.Border.OutsideBorderColor = XLColor.Red;
-            //ws.Cell(2, 2).Style.Font.Bold = true;
-
             ws.Cell(3, 2).Value = "{Data}";
-            //ws.Cell(3, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            //ws.Cell(3, 2).Style.Border.OutsideBorderColor = XLColor.Black;
-
             ws.Cell(4, 2).Value = "{Totals}";
-            //ws.Cell(4, 2).Style.NumberFormat.Format = "$ #,##0.00";
-            //ws.Cell(4, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Dotted;
-            //ws.Cell(4, 2).Style.Border.OutsideBorderColor = XLColor.Green;
 
             var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataSet()", ws.NamedRange("TestRange"), report)
             {
                 BeforeHeadersRenderMethodName = "TestExcelDynamicPanelBeforeHeadersRender",
                 AfterHeadersRenderMethodName = "TestExcelDynamicPanelAfterHeadersRender",
+                BeforeDataTemplatesRenderMethodName = "TestExcelDynamicPanelBeforeDataTemplatesRender",
                 AfterDataTemplatesRenderMethodName = "TestExcelDynamicPanelAfterDataTemplatesRender",
                 BeforeDataRenderMethodName = "TestExcelDynamicPanelBeforeDataRender",
+                AfterDataRenderMethodName = "TestExcelDynamicPanelAfterDataRender",
+                BeforeDataItemRenderMethodName = "TestExcelDynamicPanelBeforeDataItemRender",
                 AfterDataItemRenderMethodName = "TestExcelDynamicPanelAfterDataItemRender",
+                BeforeTotalsTemplatesRenderMethodName = "TestExcelDynamicPanelBeforeTotalsTemplatesRender",
+                AfterTotalsTemplatesRenderMethodName = "TestExcelDynamicPanelAfterTotalsTemplatesRender",
                 BeforeTotalsRenderMethodName = "TestExcelDynamicPanelBeforeDataRender",
+                AfterTotalsRenderMethodName = "TestExcelDynamicPaneAfterTotalsRender",
             };
             panel.Render();
 
-            //ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataReaderRenderTest),
-            //    nameof(TestRenderDataSet)), ws.Workbook);
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataSetRenderTest),
+                nameof(TestRenderDataSetWithEvents)), ws.Workbook);
 
-            report.Workbook.SaveAs("test.xlsx");
+            //report.Workbook.SaveAs("test.xlsx");
+        }
+
+        [TestMethod]
+        public void TestRenderDataSetWithEvents_HorizontalPanel()
+        {
+            var report = new TestReport();
+            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
+            IXLRange range = ws.Range(2, 2, 2, 4);
+            range.AddToNamed("TestRange", XLScope.Worksheet);
+
+            ws.Cell(2, 2).Value = "{Headers}";
+            ws.Cell(2, 3).Value = "{Data}";
+            ws.Cell(2, 4).Value = "{Totals}";
+
+            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataSet()", ws.NamedRange("TestRange"), report)
+            {
+                BeforeHeadersRenderMethodName = "TestExcelDynamicPanelBeforeHeadersRender",
+                AfterHeadersRenderMethodName = "TestExcelDynamicPanelAfterHeadersRender",
+                BeforeDataTemplatesRenderMethodName = "TestExcelDynamicPanelBeforeDataTemplatesRender",
+                AfterDataTemplatesRenderMethodName = "TestExcelDynamicPanelAfterDataTemplatesRender",
+                BeforeDataRenderMethodName = "TestExcelDynamicPanelBeforeDataRender",
+                AfterDataRenderMethodName = "TestExcelDynamicPanelAfterDataRender",
+                BeforeDataItemRenderMethodName = "TestExcelDynamicPanelBeforeDataItemRender",
+                AfterDataItemRenderMethodName = "TestExcelDynamicPanelAfterDataItemRender",
+                BeforeTotalsTemplatesRenderMethodName = "TestExcelDynamicPanelBeforeTotalsTemplatesRender",
+                AfterTotalsTemplatesRenderMethodName = "TestExcelDynamicPanelAfterTotalsTemplatesRender",
+                BeforeTotalsRenderMethodName = "TestExcelDynamicPanelBeforeDataRender",
+                AfterTotalsRenderMethodName = "TestExcelDynamicPaneAfterTotalsRender",
+                Type = PanelType.Horizontal,
+            };
+            panel.Render();
+
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataSetRenderTest),
+                nameof(TestRenderDataSetWithEvents_HorizontalPanel)), ws.Workbook);
+
+            //report.Workbook.SaveAs("test.xlsx");
         }
 
         [TestMethod]
@@ -52,23 +85,18 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 3, 2);
+            IXLRange range = ws.Range(2, 2, 4, 2);
             range.AddToNamed("TestRange", XLScope.Worksheet);
 
             ws.Cell(2, 2).Value = "{Headers}";
-            ws.Cell(2, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
-            ws.Cell(2, 2).Style.Border.OutsideBorderColor = XLColor.Red;
-            ws.Cell(2, 2).Style.Font.Bold = true;
-
             ws.Cell(3, 2).Value = "{Data}";
-            ws.Cell(3, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            ws.Cell(3, 2).Style.Border.OutsideBorderColor = XLColor.Black;
+            ws.Cell(4, 2).Value = "{Totals}";
 
             var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataSet()", ws.NamedRange("TestRange"), report);
             panel.Render();
 
-            //ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataReaderRenderTest),
-            //    nameof(TestRenderEmptyDataSet)), ws.Workbook);
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataSetRenderTest),
+                nameof(TestRenderEmptyDataSet)), ws.Workbook);
 
             //report.Workbook.SaveAs("test.xlsx");
         }

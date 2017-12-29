@@ -1,5 +1,7 @@
 ﻿using ClosedXML.Excel;
-using ExcelReporter.Rendering.Panels.ExcelPanels;
+using ExcelReporter.Enums;
+using ExcelReporter.Rendering;
+using ExcelReporter.Rendering.EventArgs;
 using ExcelReporter.Rendering.Providers;
 using ExcelReporter.Rendering.Providers.DataItemValueProviders;
 using ExcelReporter.Rendering.TemplateProcessors;
@@ -9,9 +11,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
-using ExcelReporter.Enums;
-using ExcelReporter.Rendering;
-using ExcelReporter.Rendering.EventArgs;
+using ExcelReporter.Excel;
+using ExcelReporter.Tests.Excel;
 
 namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 {
@@ -114,7 +115,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 
         public void TestExcelDataSourcePanelBeforeRender(DataSourcePanelBeforeRenderEventArgs args)
         {
-            IList<TestItem> data = ((IEnumerable<TestItem>) args.Data).ToList();
+            IList<TestItem> data = ((IEnumerable<TestItem>)args.Data).ToList();
             data[2].Name = "ChangedName";
         }
 
@@ -125,7 +126,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 
         public void TestExcelDataItemPanelBeforeRender(DataItemPanelBeforeRenderEventArgs args)
         {
-            var dataItem = (TestItem) args.DataItem.Value;
+            var dataItem = (TestItem)args.DataItem.Value;
             if (dataItem.Name == "Test1")
             {
                 dataItem.Name = "Test1_Changed_Before";
@@ -171,7 +172,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
         {
             args.Columns[0].Width = 30;
             args.Columns[0].AggregateFunction = AggregateFunction.Avg;
-            args.Columns.Add(new ExcelDynamicColumn("DynamicAdded", typeof(decimal?), "Dynamic added"){ Width = 20 });
+            args.Columns.Add(new ExcelDynamicColumn("DynamicAdded", typeof(decimal?), "Dynamic added") { Width = 20 });
         }
 
         public void TestExcelDynamicPanelAfterHeadersRender(DataSourceDynamicPanelEventArgs args)
@@ -181,16 +182,27 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             args.Range.Style.Font.Bold = true;
         }
 
+        public void TestExcelDynamicPanelBeforeDataTemplatesRender(DataSourcePanelBeforeRenderEventArgs args)
+        {
+            args.Range.Style.Font.Underline = XLFontUnderlineValues.Single;
+        }
+
         public void TestExcelDynamicPanelAfterDataTemplatesRender(DataSourceDynamicPanelEventArgs args)
         {
-            args.Range.Cell(1, 6).Style.NumberFormat.Format = "#,##0.00";
+            IXLCell targetCell = args.Range.Cell(1, 6);
+            if (!ExcelHelper.IsCellInsideRange(targetCell, args.Range))
+            {
+                targetCell = args.Range.Cell(6, 1);
+            }
+
+            targetCell.Style.NumberFormat.Format = "#,##0.00";
             args.Range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
             args.Range.Style.Border.OutsideBorderColor = XLColor.Black;
         }
 
         public void TestExcelDynamicPanelBeforeDataRender(DataSourcePanelBeforeRenderEventArgs args)
         {
-            var dataSet = (DataSet) args.Data;
+            var dataSet = (DataSet)args.Data;
             DataTable dataTable = dataSet.Tables[0];
             dataTable.Columns.Add(new DataColumn("DynamicAdded", typeof(decimal)));
             for (int i = 0; i < dataTable.Rows.Count; i++)
@@ -199,13 +211,49 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             }
         }
 
+        public void TestExcelDynamicPanelAfterDataRender(DataSourcePanelEventArgs args)
+        {
+            args.Range.FirstCell().Style.Font.FontColor = XLColor.ChromeYellow;
+        }
+
+        public void TestExcelDynamicPanelBeforeDataItemRender(DataItemPanelBeforeRenderEventArgs args)
+        {
+            args.Range.LastCell().Style.Fill.BackgroundColor = XLColor.BlueGreen;
+        }
+
         public void TestExcelDynamicPanelAfterDataItemRender(DataItemPanelEventArgs args)
         {
-            IXLCell boolCell = args.Range.Cell(1, 3);
-            if (boolCell.Value is bool val)
+            IXLCell targetCell = args.Range.Cell(1, 3);
+            if (!ExcelHelper.IsCellInsideRange(targetCell, args.Range))
             {
-                boolCell.Value = val ?  "Yes" : "No";
+                targetCell = args.Range.Cell(3, 1);
             }
+
+            if (targetCell.Value is bool val)
+            {
+                targetCell.Value = val ? "Yes" : "No";
+            }
+        }
+
+        public void TestExcelDynamicPanelBeforeTotalsTemplatesRender(DataSourcePanelBeforeRenderEventArgs args)
+        {
+            args.Range.Style.Font.Italic = true;
+        }
+
+        public void TestExcelDynamicPanelAfterTotalsTemplatesRender(DataSourcePanelEventArgs args)
+        {
+            args.Range.Style.Border.OutsideBorder = XLBorderStyleValues.Dashed;
+            args.Range.Style.Border.OutsideBorderColor = XLColor.Green;
+        }
+
+        public void TestExcelDynamicPaneAfterTotalsRender(DataSourcePanelEventArgs args)
+        {
+            IXLCell targetCell = args.Range.Cell(1, 6);
+            if (!ExcelHelper.IsCellInsideRange(targetCell, args.Range))
+            {
+                targetCell = args.Range.Cell(6, 1);
+            }
+            targetCell.Style.NumberFormat.Format = "$ #,##0.00";
         }
     }
 
