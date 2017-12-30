@@ -157,6 +157,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
 
             IXLRange resultRange = GetColumnsRange(ws, cell, columns.Count);
             SetColumnsWidth(resultRange, columns);
+            SetCellsDisplayFormat(resultRange, columns);
 
             CallAfterRenderMethod(AfterDataTemplatesRenderMethodName, resultRange, columns);
 
@@ -220,6 +221,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
 
             IXLRange resultRange = GetColumnsRange(ws, cell, columns.Count);
             SetColumnsWidth(resultRange, columns);
+            SetCellsDisplayFormat(resultRange, columns);
 
             CallAfterRenderMethod(AfterTotalsTemplatesRenderMethodName, resultRange, columns);
 
@@ -272,7 +274,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
                 Data = _data
             };
 
-            CallReportMethod(methodName, new[] {args});
+            CallReportMethod(methodName, new[] { args });
             return args.IsCanceled;
         }
 
@@ -311,6 +313,27 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
                 {
                     var row = range.Cell(i + 1, 1).WorksheetRow();
                     row.Height = columns[i].Width.Value;
+                }
+            }
+        }
+
+        private void SetCellsDisplayFormat(IXLRange range, IList<ExcelDynamicColumn> columns)
+        {
+            for (int i = 0; i < columns.Count; i++)
+            {
+                ExcelDynamicColumn column = columns[i];
+                if (string.IsNullOrWhiteSpace(column.DisplayFormat) || column.DataType == null)
+                {
+                    continue;
+                }
+
+                if (column.DataType.IsNumeric())
+                {
+                    range.Cells().ElementAt(i).Style.NumberFormat.Format = column.DisplayFormat;
+                }
+                else if (column.DataType == typeof(DateTime) || column.DataType == typeof(DateTime?))
+                {
+                    range.Cells().ElementAt(i).Style.DateFormat.Format = column.DisplayFormat;
                 }
             }
         }

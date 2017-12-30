@@ -3,7 +3,6 @@ using ExcelReporter.Enumerators;
 using ExcelReporter.Enums;
 using ExcelReporter.Extensions;
 using ExcelReporter.Helpers;
-using ExcelReporter.Rendering.EventArgs;
 using ExcelReporter.Rendering.Providers.DataItemValueProviders;
 using ExcelReporter.Reports;
 using System;

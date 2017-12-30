@@ -189,7 +189,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 
         public void TestExcelDynamicPanelAfterDataTemplatesRender(DataSourceDynamicPanelEventArgs args)
         {
-            args.Range.Cells().ElementAt(5).Style.NumberFormat.Format = "#,##0.00";
+            args.Range.Cells().ElementAt(5).Style.NumberFormat.Format = "#,0.0";
             args.Range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
             args.Range.Style.Border.OutsideBorderColor = XLColor.Black;
         }
@@ -242,7 +242,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 
         public void TestExcelDynamicPaneAfterTotalsRender(DataSourcePanelEventArgs args)
         {
-            args.Range.Cells().ElementAt(5).Style.NumberFormat.Format = "$ #,##0.00";
+            args.Range.Cells().ElementAt(5).Style.NumberFormat.Format = "$ #,0.00";
         }
     }
 

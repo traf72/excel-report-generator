@@ -27,7 +27,6 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(3, 2).Style.Border.OutsideBorderColor = XLColor.Black;
 
             ws.Cell(4, 2).Value = "{Totals}";
-            ws.Cell(4, 2).Style.NumberFormat.Format = "$ #,##0.00";
             ws.Cell(4, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Dotted;
             ws.Cell(4, 2).Style.Border.OutsideBorderColor = XLColor.Green;
 
@@ -58,7 +57,6 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(2, 3).Style.Border.OutsideBorderColor = XLColor.Black;
 
             ws.Cell(2, 4).Value = "{Totals}";
-            ws.Cell(2, 4).Style.NumberFormat.Format = "$ #,##0.00";
             ws.Cell(2, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Dotted;
             ws.Cell(2, 4).Style.Border.OutsideBorderColor = XLColor.Green;
 
@@ -92,7 +90,6 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(3, 2).Style.Border.OutsideBorderColor = XLColor.Black;
 
             ws.Cell(4, 2).Value = "{Totals}";
-            ws.Cell(4, 2).Style.NumberFormat.Format = "$ #,##0.00";
             ws.Cell(4, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Dotted;
             ws.Cell(4, 2).Style.Border.OutsideBorderColor = XLColor.Green;
 

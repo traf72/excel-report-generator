@@ -37,9 +37,8 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
                         new ExcelDynamicColumn(probableColumnMember.Name, memberType, columnAttr.Caption)
                         {
                             Width = columnAttr.Width > 0 ? columnAttr.Width : (double?)null,
-                            AggregateFunction = columnAttr.NoAggregate
-                                ? AggregateFunction.NoAggregation
-                                : columnAttr.AggregateFunction,
+                            AggregateFunction = columnAttr.NoAggregate ? AggregateFunction.NoAggregation : columnAttr.AggregateFunction,
+                            DisplayFormat = columnAttr.IgnoreDisplayFormat ? null : columnAttr.DisplayFormat,
                             Order = columnAttr.Order,
                         };
                     result.Add(excelColumn);

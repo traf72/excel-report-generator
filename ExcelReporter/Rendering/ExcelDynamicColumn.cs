@@ -15,9 +15,12 @@ namespace ExcelReporter.Rendering
             Name = name;
             DataType = dataType;
             Caption = caption;
-            AggregateFunction = dataType == typeof(decimal) || dataType == typeof(decimal?)
-                ? AggregateFunction.Sum
-                : AggregateFunction.NoAggregation;
+            AggregateFunction = AggregateFunction.NoAggregation;
+            if (dataType == typeof(decimal) || dataType == typeof(decimal?))
+            {
+                AggregateFunction = AggregateFunction.Sum;
+                DisplayFormat = "#,0.00";
+            }
         }
 
         /// <summary>
@@ -35,7 +38,7 @@ namespace ExcelReporter.Rendering
         }
 
         /// <summary>
-        /// Column width
+        /// Column width if panel is vertical or row height if panel is horizontal
         /// </summary>
         public double? Width { get; set; }
 
@@ -48,6 +51,11 @@ namespace ExcelReporter.Rendering
         /// Aggregate function applied to this column
         /// </summary>
         public AggregateFunction AggregateFunction { get; set; }
+
+        /// <summary>
+        /// Display format for number and date columns
+        /// </summary>
+        public string DisplayFormat { get; set; }
 
         /// <summary>
         /// Order in which the column appears in Excel
