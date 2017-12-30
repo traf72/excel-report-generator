@@ -299,20 +299,35 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
         {
             for (int i = 0; i < columns.Count; i++)
             {
-                if (columns[i].Width == null)
+                ExcelDynamicColumn column = columns[i];
+                if (column.Width == null && !column.AdjustToContent)
                 {
                     continue;
                 }
 
                 if (Type == PanelType.Vertical)
                 {
-                    IXLColumn column = range.Cell(1, i + 1).WorksheetColumn();
-                    column.Width = columns[i].Width.Value;
+                    IXLColumn excelColumn = range.Cell(1, i + 1).WorksheetColumn();
+                    if (column.Width != null)
+                    {
+                        excelColumn.Width = column.Width.Value;
+                    }
+                    if (column.AdjustToContent)
+                    {
+                        excelColumn.AdjustToContents();
+                    }
                 }
                 else
                 {
-                    var row = range.Cell(i + 1, 1).WorksheetRow();
-                    row.Height = columns[i].Width.Value;
+                    IXLRow excelRow = range.Cell(i + 1, 1).WorksheetRow();
+                    if (column.Width != null)
+                    {
+                        excelRow.Height = column.Width.Value;
+                    }
+                    if (column.AdjustToContent)
+                    {
+                        excelRow.AdjustToContents();
+                    }
                 }
             }
         }

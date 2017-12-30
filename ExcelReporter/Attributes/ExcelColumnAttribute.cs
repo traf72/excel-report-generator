@@ -42,7 +42,12 @@ namespace ExcelReporter.Attributes
         public bool IgnoreDisplayFormat { get; set; }
 
         /// <summary>
-        /// Order in which the column appears in Excel 
+        /// Adjust to content column width if panel is vertical or row height if panel is horizontal
+        /// </summary>
+        public bool AdjustToContent { get; set; }
+
+        /// <summary>
+        /// Order in which the column appears in Excel
         /// </summary>
         public int Order { get; set; }
     }

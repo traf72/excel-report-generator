@@ -39,6 +39,7 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
                             Width = columnAttr.Width > 0 ? columnAttr.Width : (double?)null,
                             AggregateFunction = columnAttr.NoAggregate ? AggregateFunction.NoAggregation : columnAttr.AggregateFunction,
                             DisplayFormat = columnAttr.IgnoreDisplayFormat ? null : columnAttr.DisplayFormat,
+                            AdjustToContent = columnAttr.AdjustToContent,
                             Order = columnAttr.Order,
                         };
                     result.Add(excelColumn);

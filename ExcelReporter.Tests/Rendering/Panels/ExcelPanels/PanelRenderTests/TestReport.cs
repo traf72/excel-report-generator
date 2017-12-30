@@ -172,6 +172,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
         {
             args.Columns[0].Width = 30;
             args.Columns[0].AggregateFunction = AggregateFunction.Avg;
+            args.Columns[1].AdjustToContent = true;
             args.Columns.Add(new ExcelDynamicColumn("DynamicAdded", typeof(decimal?), "Dynamic added") { Width = 20 });
         }
 

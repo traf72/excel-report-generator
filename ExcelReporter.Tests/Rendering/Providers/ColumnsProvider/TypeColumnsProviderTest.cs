@@ -24,6 +24,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual(AggregateFunction.Sum, columns[0].AggregateFunction);
             Assert.IsNull(columns[0].Width);
             Assert.AreEqual("#,0.00", columns[0].DisplayFormat);
+            Assert.IsFalse(columns[0].AdjustToContent);
             Assert.AreEqual(0, columns[0].Order);
 
             Assert.AreEqual("Column5", columns[1].Name);
@@ -32,6 +33,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual(AggregateFunction.Sum, columns[1].AggregateFunction);
             Assert.IsNull(columns[1].Width);
             Assert.AreEqual("#,0.00", columns[1].DisplayFormat);
+            Assert.IsFalse(columns[1].AdjustToContent);
             Assert.AreEqual(0, columns[1].Order);
 
             Assert.AreEqual("OverriddenColumn2", columns[2].Name);
@@ -40,6 +42,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual(AggregateFunction.NoAggregation, columns[2].AggregateFunction);
             Assert.IsNull(columns[2].Width);
             Assert.IsNull(columns[2].DisplayFormat);
+            Assert.IsFalse(columns[2].AdjustToContent);
             Assert.AreEqual(0, columns[2].Order);
 
             Assert.AreEqual("Column2", columns[3].Name);
@@ -48,6 +51,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual(AggregateFunction.Count, columns[3].AggregateFunction);
             Assert.IsNull(columns[3].Width);
             Assert.AreEqual("0", columns[3].DisplayFormat);
+            Assert.IsFalse(columns[3].AdjustToContent);
             Assert.AreEqual(1, columns[3].Order);
 
             Assert.AreEqual("Column1", columns[4].Name);
@@ -56,6 +60,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual(AggregateFunction.NoAggregation, columns[4].AggregateFunction);
             Assert.IsNull(columns[4].Width);
             Assert.IsNull(columns[4].DisplayFormat);
+            Assert.IsFalse(columns[4].AdjustToContent);
             Assert.AreEqual(2, columns[4].Order);
 
             Assert.AreEqual("Column3", columns[5].Name);
@@ -64,6 +69,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual(AggregateFunction.NoAggregation, columns[5].AggregateFunction);
             Assert.AreEqual(100.5, columns[5].Width);
             Assert.IsNull(columns[5].DisplayFormat);
+            Assert.IsTrue(columns[5].AdjustToContent);
             Assert.AreEqual(3, columns[5].Order);
 
             Assert.AreEqual("OverriddenColumn3", columns[6].Name);
@@ -72,6 +78,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual(AggregateFunction.Max, columns[6].AggregateFunction);
             Assert.IsNull(columns[6].Width);
             Assert.IsNull(columns[6].DisplayFormat);
+            Assert.IsFalse(columns[6].AdjustToContent);
             Assert.AreEqual(4, columns[6].Order);
 
             Assert.AreEqual("ColumnWithBadWidth", columns[7].Name);
@@ -80,6 +87,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual(AggregateFunction.NoAggregation, columns[7].AggregateFunction);
             Assert.IsNull(columns[7].Width);
             Assert.IsNull(columns[7].DisplayFormat);
+            Assert.IsFalse(columns[7].AdjustToContent);
             Assert.AreEqual(6, columns[7].Order);
 
             Assert.AreEqual("OverriddenColumn", columns[8].Name);
@@ -88,6 +96,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual(AggregateFunction.NoAggregation, columns[8].AggregateFunction);
             Assert.IsNull(columns[8].Width);
             Assert.IsNull(columns[8].DisplayFormat);
+            Assert.IsFalse(columns[8].AdjustToContent);
             Assert.AreEqual(7, columns[8].Order);
 
             Assert.AreEqual("Column6", columns[9].Name);
@@ -96,6 +105,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual(AggregateFunction.Avg, columns[9].AggregateFunction);
             Assert.IsNull(columns[9].Width);
             Assert.AreEqual("#,##", columns[9].DisplayFormat);
+            Assert.IsFalse(columns[9].AdjustToContent);
             Assert.AreEqual(9, columns[9].Order);
 
             Assert.AreEqual("OverriddenColumn1", columns[10].Name);
@@ -104,6 +114,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual(AggregateFunction.NoAggregation, columns[10].AggregateFunction);
             Assert.IsNull(columns[10].Width);
             Assert.IsNull(columns[10].DisplayFormat);
+            Assert.IsFalse(columns[10].AdjustToContent);
             Assert.AreEqual(100, columns[10].Order);
         }
 
@@ -122,7 +133,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
             [ExcelColumn(Order = 1, Caption = "Column Two", AggregateFunction = AggregateFunction.Count, DisplayFormat = "0")]
             public int Column2 { get; set; }
 
-            [ExcelColumn(Order = 3, Caption = "Column Three", Width = 100.5, NoAggregate = true, IgnoreDisplayFormat = true)]
+            [ExcelColumn(Order = 3, Caption = "Column Three", Width = 100.5, AdjustToContent = true, NoAggregate = true, IgnoreDisplayFormat = true)]
             public decimal? Column3 { get; set; }
 
             public decimal Column4 = 0;

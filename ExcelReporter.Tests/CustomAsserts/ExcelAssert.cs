@@ -69,7 +69,7 @@ namespace ExcelReporter.Tests.CustomAsserts
             message = message ?? string.Empty;
             Assert.AreEqual(expected.IsHidden, actual.IsHidden, string.Format(message, "IsHidden"));
             Assert.AreEqual(expected.OutlineLevel, actual.OutlineLevel, string.Format(message, "OutlineLevel"));
-            Assert.AreEqual(expected.Width, actual.Width, string.Format(message, "Width"));
+            Assert.AreEqual(expected.Width, actual.Width, 1e-6, string.Format(message, "Width"));
         }
 
         public static void AreCellsStyleEquals(IXLStyle expected, IXLStyle actual, string message = null)

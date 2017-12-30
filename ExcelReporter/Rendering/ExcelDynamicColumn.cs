@@ -58,6 +58,11 @@ namespace ExcelReporter.Rendering
         public string DisplayFormat { get; set; }
 
         /// <summary>
+        /// Adjust to content column width if panel is vertical or row height if panel is horizontal
+        /// </summary>
+        public bool AdjustToContent { get; set; }
+
+        /// <summary>
         /// Order in which the column appears in Excel
         /// </summary>
         public int Order { get; set; }
