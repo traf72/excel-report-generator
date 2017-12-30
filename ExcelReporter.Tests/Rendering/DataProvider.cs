@@ -4,6 +4,8 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using ExcelReporter.Attributes;
+using ExcelReporter.Enums;
 
 namespace ExcelReporter.Tests.Rendering
 {
@@ -183,6 +185,7 @@ namespace ExcelReporter.Tests.Rendering
 
         public string Name { get; set; }
 
+        [ExcelColumn(Order = 1, AggregateFunction = AggregateFunction.Max, DisplayFormat = "yyyy-MM-dd")]
         public DateTime Date { get; set; }
 
         public decimal Sum { get; set; }

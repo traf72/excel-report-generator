@@ -30,6 +30,7 @@ namespace ExcelReporter.Tests.CustomAsserts
                 Assert.AreEqual(expectedCell.DataType, actualCell.DataType, $"Cell {expectedCell.Address} DataType failed.");
                 Assert.AreEqual(expectedCell.Active, actualCell.Active, $"Cell {expectedCell.Address} Active failed.");
                 AreColumnsEquals(expectedCell.WorksheetColumn(), actualCell.WorksheetColumn(), $"Column {actualCell.WorksheetColumn().RangeAddress} {{0}} failed.");
+                AreRowEquals(expectedCell.WorksheetRow(), actualCell.WorksheetRow(), $"Row {actualCell.WorksheetRow().RangeAddress} {{0}} failed.");
                 AreCellsStyleEquals(expectedCell.Style, actualCell.Style, $"Cell {expectedCell.Address} Style {{0}} failed.");
                 AreCellsCommentEquals(expectedCell.Comment, actualCell.Comment, $"Cell {expectedCell.Address} Comment {{0}} failed.");
             }
@@ -70,6 +71,19 @@ namespace ExcelReporter.Tests.CustomAsserts
             Assert.AreEqual(expected.IsHidden, actual.IsHidden, string.Format(message, "IsHidden"));
             Assert.AreEqual(expected.OutlineLevel, actual.OutlineLevel, string.Format(message, "OutlineLevel"));
             Assert.AreEqual(expected.Width, actual.Width, 1e-6, string.Format(message, "Width"));
+        }
+
+        public static void AreRowEquals(IXLRow expected, IXLRow actual, string message = null)
+        {
+            if (expected.Equals(actual))
+            {
+                return;
+            }
+
+            message = message ?? string.Empty;
+            Assert.AreEqual(expected.IsHidden, actual.IsHidden, string.Format(message, "IsHidden"));
+            Assert.AreEqual(expected.OutlineLevel, actual.OutlineLevel, string.Format(message, "OutlineLevel"));
+            Assert.AreEqual(expected.Height, actual.Height, 1e-6, string.Format(message, "Height"));
         }
 
         public static void AreCellsStyleEquals(IXLStyle expected, IXLStyle actual, string message = null)

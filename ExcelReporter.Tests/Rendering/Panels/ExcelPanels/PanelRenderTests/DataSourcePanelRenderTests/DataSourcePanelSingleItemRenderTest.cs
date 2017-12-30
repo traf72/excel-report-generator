@@ -7,10 +7,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourcePanelRenderTests
 {
     [TestClass]
-    public class DataSourcePanelOneItemRenderTest
+    public class DataSourcePanelSingleItemRenderTest
     {
         [TestMethod]
-        public void TestRenderOneItemVerticalCellsShift()
+        public void TestRenderSingleItemVerticalCellsShift()
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
@@ -37,14 +37,14 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             var panel = new ExcelDataSourcePanel("m:DataProvider:GetSingleItem()", ws.NamedRange("TestRange"), report);
             panel.Render();
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelOneItemRenderTest),
-                nameof(TestRenderOneItemVerticalCellsShift)), ws.Workbook);
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelSingleItemRenderTest),
+                nameof(TestRenderSingleItemVerticalCellsShift)), ws.Workbook);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
 
         [TestMethod]
-        public void TestRenderOneItemVerticalRowShift()
+        public void TestRenderSingleItemVerticalRowShift()
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
@@ -74,14 +74,14 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             };
             panel.Render();
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelOneItemRenderTest),
-                nameof(TestRenderOneItemVerticalRowShift)), ws.Workbook);
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelSingleItemRenderTest),
+                nameof(TestRenderSingleItemVerticalRowShift)), ws.Workbook);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
 
         [TestMethod]
-        public void TestRenderOneItemVerticalNoShift()
+        public void TestRenderSingleItemVerticalNoShift()
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
@@ -111,14 +111,14 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             };
             panel.Render();
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelOneItemRenderTest),
-                nameof(TestRenderOneItemVerticalNoShift)), ws.Workbook);
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelSingleItemRenderTest),
+                nameof(TestRenderSingleItemVerticalNoShift)), ws.Workbook);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
 
         [TestMethod]
-        public void TestRenderOneItemHorizontalCellsShift()
+        public void TestRenderSingleItemHorizontalCellsShift()
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
@@ -148,14 +148,14 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             };
             panel.Render();
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelOneItemRenderTest),
-                nameof(TestRenderOneItemHorizontalCellsShift)), ws.Workbook);
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelSingleItemRenderTest),
+                nameof(TestRenderSingleItemHorizontalCellsShift)), ws.Workbook);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
 
         [TestMethod]
-        public void TestRenderOneItemHorizontalRowShift()
+        public void TestRenderSingleItemHorizontalRowShift()
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
@@ -186,14 +186,14 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             };
             panel.Render();
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelOneItemRenderTest),
-                nameof(TestRenderOneItemHorizontalRowShift)), ws.Workbook);
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelSingleItemRenderTest),
+                nameof(TestRenderSingleItemHorizontalRowShift)), ws.Workbook);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
 
         [TestMethod]
-        public void TestRenderOneItemHorizontalNoShift()
+        public void TestRenderSingleItemHorizontalNoShift()
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
@@ -224,8 +224,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             };
             panel.Render();
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelOneItemRenderTest),
-                nameof(TestRenderOneItemHorizontalNoShift)), ws.Workbook);
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelSingleItemRenderTest),
+                nameof(TestRenderSingleItemHorizontalNoShift)), ws.Workbook);
 
             //report.Workbook.SaveAs("test.xlsx");
         }

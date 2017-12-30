@@ -1,6 +1,6 @@
-﻿using System;
+﻿using ExcelReporter.Helpers;
+using System;
 using System.Collections.Generic;
-using ExcelReporter.Helpers;
 
 namespace ExcelReporter.Rendering.Providers.ColumnsProviders
 {
@@ -18,9 +18,13 @@ namespace ExcelReporter.Rendering.Providers.ColumnsProviders
 
         public IList<ExcelDynamicColumn> GetColumnsList(IEnumerable<object> data)
         {
-            return data == null
-                ? new List<ExcelDynamicColumn>()
-                : _typeColumnsProvider.GetColumnsList(data.GetType().GetGenericArguments()[0]);
+            if (data == null)
+            {
+                return new List<ExcelDynamicColumn>();
+            }
+
+            Type genericEnumerable = TypeHelper.TryGetGenericEnumerableInterface(data.GetType());
+            return _typeColumnsProvider.GetColumnsList(genericEnumerable.GetGenericArguments()[0]);
         }
 
         IList<ExcelDynamicColumn> IColumnsProvider.GetColumnsList(object data)

@@ -188,6 +188,8 @@
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelPanelTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDataSetRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDataTableRenderTest.cs" />
+    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelSingleItemRenderTest.cs" />
+    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelEnumerableRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDictionaryRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataReaderRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataSetRenderTest.cs" />
@@ -196,7 +198,6 @@
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelEmptyIEnumerableRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelIEnumerableRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelNullItemRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelOneItemRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_MixedPanels_Test.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDataReaderRenderTest.cs" />
+    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelSingleItemRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\TotalsPanelRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\PanelRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\TestReport.cs" />

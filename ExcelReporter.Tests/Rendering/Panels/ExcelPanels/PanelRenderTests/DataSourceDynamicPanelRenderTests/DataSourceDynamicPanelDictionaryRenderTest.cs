@@ -72,10 +72,10 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             panel2.Render();
 
             Assert.AreEqual(4, ws.CellsUsed().Count());
-            Assert.AreEqual(ws.Cell(2, 2).Value, "Key");
-            Assert.AreEqual(ws.Cell(2, 3).Value, "Value");
-            Assert.AreEqual(ws.Cell(6, 2).Value, "Key");
-            Assert.AreEqual(ws.Cell(6, 3).Value, "Value");
+            Assert.AreEqual("Key", ws.Cell(2, 2).Value);
+            Assert.AreEqual("Value", ws.Cell(2, 3).Value);
+            Assert.AreEqual("Key", ws.Cell(6, 2).Value);
+            Assert.AreEqual("Value", ws.Cell(6, 3).Value);
 
             //report.Workbook.SaveAs("test.xlsx");
         }

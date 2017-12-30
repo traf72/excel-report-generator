@@ -22,7 +22,7 @@ namespace ExcelReporter.Tests.Rendering.Providers.ColumnsProvider
 
             typeColumsProvider.ClearReceivedCalls();
 
-            columnsProvider.GetColumnsList(new List<string>());
+            columnsProvider.GetColumnsList(new string[0]);
             typeColumsProvider.Received(1).GetColumnsList(typeof(string));
         }
 
