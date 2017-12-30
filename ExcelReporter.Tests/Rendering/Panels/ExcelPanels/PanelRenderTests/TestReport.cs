@@ -11,8 +11,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
-using ExcelReporter.Excel;
-using ExcelReporter.Tests.Excel;
 
 namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 {
@@ -244,6 +242,19 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
         public void TestExcelDynamicPaneAfterTotalsRender(DataSourcePanelEventArgs args)
         {
             args.Range.Cells().ElementAt(5).Style.NumberFormat.Format = "$ #,0.00";
+        }
+
+        public void TestExcelDynamicPaneBeforeRender(DataSourcePanelBeforeRenderEventArgs args)
+        {
+            args.Range.Cells().ElementAt(0).Value = "CanceledHeaders";
+            args.Range.Cells().ElementAt(1).Value = "CanceledData";
+            args.Range.Cells().ElementAt(2).Value = "CanceledTotals";
+            args.IsCanceled = true;
+        }
+
+        public void TestExcelDynamicPaneAfterRender(DataSourcePanelEventArgs args)
+        {
+            args.Range.Style.Fill.BackgroundColor = XLColor.TractorRed;
         }
     }
 

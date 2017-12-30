@@ -243,6 +243,7 @@
     <None Include="packages.config" />
     <None Include="TestData\DataSourceDynamicPanelDataReaderRenderTest\TestRenderDataReader.xlsx" />
     <None Include="TestData\DataSourceDynamicPanelDataReaderRenderTest\TestRenderEmptyDataReader.xlsx" />
+    <None Include="TestData\DataSourceDynamicPanelDataSetRenderTest\TestDynamicPanelAfterRenderEvent.xlsx" />
     <None Include="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderDataSetWithEvents.xlsx" />
     <None Include="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderDataSetWithEvents_HorizontalPanel.xlsx" />
     <None Include="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderEmptyDataSet.xlsx" />
@@ -322,6 +323,12 @@
     <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\Test_VerticalPanelsGrouping_ChildTop_ParentNoShiftChildRowShift.xlsx" />
     <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\Test_VerticalPanelsGrouping_ChildTop_ParentRowShiftChildCellsShift.xlsx" />
     <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\Test_VerticalPanelsGrouping_ChildTop_ParentRowShiftChildRowShift.xlsx" />
+    <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemHorizontalCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemHorizontalNoShift.xlsx" />
+    <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemHorizontalRowShift.xlsx" />
+    <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalCellsShift.xlsx" />
+    <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalNoShift.xlsx" />
+    <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalRowShift.xlsx" />
     <None Include="TestData\TotalsPanelRenderTest\TestPanelRender.xlsx" />
     <None Include="TestData\TotalsPanelRenderTest\TestPanelWithNoData.xlsx" />
     <None Include="TestData\TotalsPanelRenderTest\TestPanelWithNullData.xlsx" />
