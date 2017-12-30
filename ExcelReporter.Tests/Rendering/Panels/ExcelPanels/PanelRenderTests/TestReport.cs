@@ -189,13 +189,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 
         public void TestExcelDynamicPanelAfterDataTemplatesRender(DataSourceDynamicPanelEventArgs args)
         {
-            IXLCell targetCell = args.Range.Cell(1, 6);
-            if (!ExcelHelper.IsCellInsideRange(targetCell, args.Range))
-            {
-                targetCell = args.Range.Cell(6, 1);
-            }
-
-            targetCell.Style.NumberFormat.Format = "#,##0.00";
+            args.Range.Cells().ElementAt(5).Style.NumberFormat.Format = "#,##0.00";
             args.Range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
             args.Range.Style.Border.OutsideBorderColor = XLColor.Black;
         }
@@ -223,12 +217,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 
         public void TestExcelDynamicPanelAfterDataItemRender(DataItemPanelEventArgs args)
         {
-            IXLCell targetCell = args.Range.Cell(1, 3);
-            if (!ExcelHelper.IsCellInsideRange(targetCell, args.Range))
-            {
-                targetCell = args.Range.Cell(3, 1);
-            }
-
+            IXLCell targetCell = args.Range.Cells().ElementAt(2);
             if (targetCell.Value is bool val)
             {
                 targetCell.Value = val ? "Yes" : "No";
@@ -246,14 +235,14 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             args.Range.Style.Border.OutsideBorderColor = XLColor.Green;
         }
 
+        public void TestExcelDynamicPanelBeforeTotalsRender(DataSourcePanelBeforeRenderEventArgs args)
+        {
+            args.Range.Cells().ElementAt(1).Value = "{Count(Name)}";
+        }
+
         public void TestExcelDynamicPaneAfterTotalsRender(DataSourcePanelEventArgs args)
         {
-            IXLCell targetCell = args.Range.Cell(1, 6);
-            if (!ExcelHelper.IsCellInsideRange(targetCell, args.Range))
-            {
-                targetCell = args.Range.Cell(6, 1);
-            }
-            targetCell.Style.NumberFormat.Format = "$ #,##0.00";
+            args.Range.Cells().ElementAt(5).Style.NumberFormat.Format = "$ #,##0.00";
         }
     }
 

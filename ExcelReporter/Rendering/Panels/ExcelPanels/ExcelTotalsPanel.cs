@@ -14,24 +14,16 @@ using System.Text.RegularExpressions;
 
 namespace ExcelReporter.Rendering.Panels.ExcelPanels
 {
-    internal class ExcelTotalsPanel : ExcelNamedPanel
+    internal class ExcelTotalsPanel : ExcelDataSourcePanel
     {
         private readonly IDataItemValueProviderFactory _dataItemValueProviderFactory = new DataItemValueProviderFactory();
-        private readonly string _dataSourceTemplate;
-        private object _data;
 
-        public ExcelTotalsPanel(string dataSourceTemplate, IXLNamedRange namedRange, IExcelReport report) : base(namedRange, report)
+        public ExcelTotalsPanel(string dataSourceTemplate, IXLNamedRange namedRange, IExcelReport report) : base(dataSourceTemplate, namedRange, report)
         {
-            if (string.IsNullOrWhiteSpace(dataSourceTemplate))
-            {
-                throw new ArgumentException(ArgumentHelper.EmptyStringParamMessage, nameof(dataSourceTemplate));
-            }
-            _dataSourceTemplate = dataSourceTemplate;
         }
 
-        internal ExcelTotalsPanel(object data, IXLNamedRange namedRange, IExcelReport report) : base(namedRange, report)
+        public ExcelTotalsPanel(object data, IXLNamedRange namedRange, IExcelReport report) : base(data, namedRange, report)
         {
-            _data = data ?? throw new ArgumentNullException(nameof(data), ArgumentHelper.NullParamMessage);
         }
 
         public override void Render()
@@ -64,7 +56,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             {
                 (enumerator as IDisposable)?.Dispose();
             }
-            
+
             RemoveName();
             CallAfterRenderMethod();
         }
@@ -207,16 +199,6 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
                     aggFunc.Result = CallReportMethod(aggFunc.PostProcessFunction, new object[] { aggFunc.Result, dataItemsCount });
                 }
             }
-        }
-
-        protected override PanelBeforeRenderEventArgs GetBeforePanelRenderEventArgs()
-        {
-            return new DataSourcePanelBeforeRenderEventArgs { Range = Range, Data = _data };
-        }
-
-        protected override PanelEventArgs GetAfterPanelRenderEventArgs()
-        {
-            return new DataSourcePanelEventArgs { Range = Range, Data = _data };
         }
 
         //TODO Проверить корректное копирование, если передан не шаблон, а сами данные

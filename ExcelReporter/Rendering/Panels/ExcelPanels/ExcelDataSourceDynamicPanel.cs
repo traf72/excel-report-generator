@@ -7,6 +7,7 @@ using ExcelReporter.Rendering.Providers.ColumnsProviders;
 using ExcelReporter.Reports;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -18,6 +19,10 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
 
         public ExcelDataSourceDynamicPanel(string dataSourceTemplate, IXLNamedRange namedRange, IExcelReport report)
             : base(dataSourceTemplate, namedRange, report)
+        {
+        }
+
+        public ExcelDataSourceDynamicPanel(object data, IXLNamedRange namedRange, IExcelReport report) : base(data, namedRange, report)
         {
         }
 
@@ -226,9 +231,15 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             string rangeName = $"DynamicPanelTotals_{Guid.NewGuid():N}";
             totalsRange.AddToNamed(rangeName, XLScope.Worksheet);
 
-            // TODO Not optimal. If the second iteration over data is possible - dont't query data again
-            // Query data again because if a DataReader were as the source it may be already closed
-            _data = Report.TemplateProcessor.GetValue(_dataSourceTemplate);
+            if (_data is IDataReader dr && dr.IsClosed)
+            {
+                if (_isDataReceivedDirectly)
+                {
+                    throw new InvalidOperationException("Cannot enumerate IDataReader twice. Cache data and try again.");
+                }
+                _data = Report.TemplateProcessor.GetValue(_dataSourceTemplate);
+            }
+
             var totalsPanel = new ExcelTotalsPanel(_data, Range.Worksheet.NamedRange(rangeName), Report)
             {
                 ShiftType = ShiftType,

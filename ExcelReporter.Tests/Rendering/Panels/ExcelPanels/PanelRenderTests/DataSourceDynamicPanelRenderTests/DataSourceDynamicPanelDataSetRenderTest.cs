@@ -33,7 +33,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
                 AfterDataItemRenderMethodName = "TestExcelDynamicPanelAfterDataItemRender",
                 BeforeTotalsTemplatesRenderMethodName = "TestExcelDynamicPanelBeforeTotalsTemplatesRender",
                 AfterTotalsTemplatesRenderMethodName = "TestExcelDynamicPanelAfterTotalsTemplatesRender",
-                BeforeTotalsRenderMethodName = "TestExcelDynamicPanelBeforeDataRender",
+                BeforeTotalsRenderMethodName = "TestExcelDynamicPanelBeforeTotalsRender",
                 AfterTotalsRenderMethodName = "TestExcelDynamicPaneAfterTotalsRender",
             };
             panel.Render();
@@ -68,7 +68,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
                 AfterDataItemRenderMethodName = "TestExcelDynamicPanelAfterDataItemRender",
                 BeforeTotalsTemplatesRenderMethodName = "TestExcelDynamicPanelBeforeTotalsTemplatesRender",
                 AfterTotalsTemplatesRenderMethodName = "TestExcelDynamicPanelAfterTotalsTemplatesRender",
-                BeforeTotalsRenderMethodName = "TestExcelDynamicPanelBeforeDataRender",
+                BeforeTotalsRenderMethodName = "TestExcelDynamicPanelBeforeTotalsRender",
                 AfterTotalsRenderMethodName = "TestExcelDynamicPaneAfterTotalsRender",
                 Type = PanelType.Horizontal,
             };

@@ -14,6 +14,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
     internal class ExcelDataSourcePanel : ExcelNamedPanel
     {
         protected readonly string _dataSourceTemplate;
+        protected readonly bool _isDataReceivedDirectly;
         protected object _data;
 
         public ExcelDataSourcePanel(string dataSourceTemplate, IXLNamedRange namedRange, IExcelReport report)
@@ -29,6 +30,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
         public ExcelDataSourcePanel(object data, IXLNamedRange namedRange, IExcelReport report) : base(namedRange, report)
         {
             _data = data ?? throw new ArgumentNullException(nameof(data), ArgumentHelper.NullParamMessage);
+            _isDataReceivedDirectly = true;
         }
 
         public string BeforeDataItemRenderMethodName { get; set; }
