@@ -28,7 +28,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
         public override void Render()
         {
             // Parent context does not affect on this panel type therefore don't care about it
-            _data = _data ?? Report.TemplateProcessor.GetValue(_dataSourceTemplate);
+            _data = _isDataReceivedDirectly ? _data : Report.TemplateProcessor.GetValue(_dataSourceTemplate);
 
             bool isCanceled = CallBeforeRenderMethod();
             if (isCanceled)

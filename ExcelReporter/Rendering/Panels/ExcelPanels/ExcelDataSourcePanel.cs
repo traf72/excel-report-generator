@@ -42,7 +42,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             // Получаем контекст родительского элемента данных, если он есть
             HierarchicalDataItem parentDataItem = GetDataContext();
 
-            _data = _data ?? Report.TemplateProcessor.GetValue(_dataSourceTemplate, parentDataItem);
+            _data = _isDataReceivedDirectly ? _data : Report.TemplateProcessor.GetValue(_dataSourceTemplate, parentDataItem);
 
             bool isCanceled = CallBeforeRenderMethod();
             if (isCanceled)

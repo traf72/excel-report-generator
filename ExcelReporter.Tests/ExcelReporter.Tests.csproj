@@ -187,6 +187,8 @@
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelTotalsPanelTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelPanelTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDataSetRenderTest.cs" />
+    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDataTableRenderTest.cs" />
+    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDictionaryRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataReaderRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataSetRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataTableRenderTest.cs" />
@@ -242,6 +244,10 @@
     <None Include="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderDataSetWithEvents.xlsx" />
     <None Include="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderDataSetWithEvents_HorizontalPanel.xlsx" />
     <None Include="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderEmptyDataSet.xlsx" />
+    <None Include="TestData\DataSourceDynamicPanelDataTableRenderTest\TestRenderDataTable.xlsx" />
+    <None Include="TestData\DataSourceDynamicPanelDataTableRenderTest\TestRenderEmptyDataTable.xlsx" />
+    <None Include="TestData\DataSourceDynamicPanelDictionaryRenderTest\TestRenderDictionary.xlsx" />
+    <None Include="TestData\DataSourceDynamicPanelDictionaryRenderTest\TestRenderDictionaryEnumerable.xlsx" />
     <None Include="TestData\DataSourcePanelDataReaderRenderTest\TestRenderDataReader.xlsx" />
     <None Include="TestData\DataSourcePanelDataSetRenderTest\TestRenderDataSet.xlsx" />
     <None Include="TestData\DataSourcePanelDataTableRenderTest\TestRenderDataTable.xlsx" />

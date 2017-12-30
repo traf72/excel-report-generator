@@ -154,9 +154,9 @@ namespace ExcelReporter.Tests.Rendering
         {
             return new List<IDictionary<string, object>>
                 {
-                    new Dictionary<string, object> { ["Name"] = "Name_1", ["Value"] = 25.7, ["IsVip"] = true },
-                    new Dictionary<string, object> { ["Name"] = "Name_2", ["Value"] = 250.7, ["IsVip"] = false },
-                    new Dictionary<string, object> { ["Name"] = "Name_3", ["Value"] = 2500.7, ["IsVip"] = true },
+                    new Dictionary<string, object> { ["Name"] = "Name_1", ["Value"] = 25.7m, ["IsVip"] = true },
+                    new Dictionary<string, object> { ["Name"] = "Name_2", ["Value"] = 250.7m, ["IsVip"] = false },
+                    new Dictionary<string, object> { ["Name"] = "Name_3", ["Value"] = 2500.7m, ["IsVip"] = true },
                 };
         }
 
