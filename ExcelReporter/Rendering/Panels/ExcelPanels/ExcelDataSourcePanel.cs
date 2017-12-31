@@ -4,7 +4,7 @@ using ExcelReporter.Enums;
 using ExcelReporter.Excel;
 using ExcelReporter.Helpers;
 using ExcelReporter.Rendering.EventArgs;
-using ExcelReporter.Reports;
+using ExcelReporter.Rendering.TemplateProcessors;
 using System;
 using System.Collections;
 using System.Linq;
@@ -17,8 +17,8 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
         protected readonly bool _isDataReceivedDirectly;
         protected object _data;
 
-        public ExcelDataSourcePanel(string dataSourceTemplate, IXLNamedRange namedRange, IExcelReport report)
-            : base(namedRange, report)
+        public ExcelDataSourcePanel(string dataSourceTemplate, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor)
+            : base(namedRange, report, templateProcessor)
         {
             if (string.IsNullOrWhiteSpace(dataSourceTemplate))
             {
@@ -27,7 +27,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             _dataSourceTemplate = dataSourceTemplate;
         }
 
-        public ExcelDataSourcePanel(object data, IXLNamedRange namedRange, IExcelReport report) : base(namedRange, report)
+        public ExcelDataSourcePanel(object data, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor) : base(namedRange, report, templateProcessor)
         {
             _data = data ?? throw new ArgumentNullException(nameof(data), ArgumentHelper.NullParamMessage);
             _isDataReceivedDirectly = true;
@@ -42,7 +42,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             // Получаем контекст родительского элемента данных, если он есть
             HierarchicalDataItem parentDataItem = GetDataContext();
 
-            _data = _isDataReceivedDirectly ? _data : Report.TemplateProcessor.GetValue(_dataSourceTemplate, parentDataItem);
+            _data = _isDataReceivedDirectly ? _data : _templateProcessor.GetValue(_dataSourceTemplate, parentDataItem);
 
             bool isCanceled = CallBeforeRenderMethod();
             if (isCanceled)
@@ -110,7 +110,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
 
         private ExcelDataItemPanel CreateTemplatePanel()
         {
-            var templatePanel = new ExcelDataItemPanel(Range, Report)
+            var templatePanel = new ExcelDataItemPanel(Range, _report, _templateProcessor)
             {
                 Parent = Parent,
                 Children = Children.Select(c => c.Copy(c.Range.FirstCell())).ToList(),
@@ -171,7 +171,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
         //TODO Проверить корректное копирование, если передан не шаблон, а сами данные
         protected override IExcelPanel CopyPanel(IXLCell cell)
         {
-            var panel = new ExcelDataSourcePanel(_dataSourceTemplate, CopyNamedRange(cell), Report)
+            var panel = new ExcelDataSourcePanel(_dataSourceTemplate, CopyNamedRange(cell), _report, _templateProcessor)
             {
                 BeforeDataItemRenderMethodName = BeforeDataItemRenderMethodName,
                 AfterDataItemRenderMethodName = AfterDataItemRenderMethodName,

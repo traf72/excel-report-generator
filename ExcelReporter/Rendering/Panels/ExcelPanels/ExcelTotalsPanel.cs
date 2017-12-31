@@ -4,7 +4,7 @@ using ExcelReporter.Enums;
 using ExcelReporter.Extensions;
 using ExcelReporter.Helpers;
 using ExcelReporter.Rendering.Providers.DataItemValueProviders;
-using ExcelReporter.Reports;
+using ExcelReporter.Rendering.TemplateProcessors;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,18 +17,20 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
     {
         private readonly IDataItemValueProviderFactory _dataItemValueProviderFactory = new DataItemValueProviderFactory();
 
-        public ExcelTotalsPanel(string dataSourceTemplate, IXLNamedRange namedRange, IExcelReport report) : base(dataSourceTemplate, namedRange, report)
+        public ExcelTotalsPanel(string dataSourceTemplate, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor)
+            : base(dataSourceTemplate, namedRange, report, templateProcessor)
         {
         }
 
-        public ExcelTotalsPanel(object data, IXLNamedRange namedRange, IExcelReport report) : base(data, namedRange, report)
+        public ExcelTotalsPanel(object data, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor)
+            : base(data, namedRange, report, templateProcessor)
         {
         }
 
         public override void Render()
         {
             // Parent context does not affect on this panel type therefore don't care about it
-            _data = _isDataReceivedDirectly ? _data : Report.TemplateProcessor.GetValue(_dataSourceTemplate);
+            _data = _isDataReceivedDirectly ? _data : _templateProcessor.GetValue(_dataSourceTemplate);
 
             bool isCanceled = CallBeforeRenderMethod();
             if (isCanceled)
@@ -64,7 +66,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
         {
             var result = new Dictionary<IXLCell, IList<ParsedAggregationFunc>>();
             const int aggFuncMaxParamsCount = 3;
-            string aggregationRegexPattern = Report.TemplateProcessor.GetFullAggregationRegexPattern();
+            string aggregationRegexPattern = _templateProcessor.GetFullAggregationRegexPattern();
             foreach (IXLCell cell in Range.CellsUsed())
             {
                 string cellValue = cell.Value.ToString();
@@ -98,7 +100,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
                         throw new InvalidOperationException("\"ColumnName\" parameter in aggregation function cannot be empty");
                     }
 
-                    columnName = Report.TemplateProcessor.TrimDataItemLabel(columnName);
+                    columnName = _templateProcessor.TrimDataItemLabel(columnName);
                     aggFuncs.Add(new ParsedAggregationFunc(aggFunc, columnName) { CustomFunc = allFuncParams[1], PostProcessFunction = allFuncParams[2] });
                 }
                 cell.Value = cellValue;
@@ -203,7 +205,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
         //TODO Проверить корректное копирование, если передан не шаблон, а сами данные
         protected override IExcelPanel CopyPanel(IXLCell cell)
         {
-            var panel = new ExcelTotalsPanel(_dataSourceTemplate, CopyNamedRange(cell), Report);
+            var panel = new ExcelTotalsPanel(_dataSourceTemplate, CopyNamedRange(cell), _report, _templateProcessor);
             FillCopyProperties(panel);
             return panel;
         }

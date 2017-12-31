@@ -25,7 +25,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             ws.Cell(1, 6).Value = "{Mix(di:Sum)}";
             ws.Cell(1, 7).Value = "{Sum(di:Sum)}";
 
-            var panel = new ExcelTotalsPanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("Test"), report)
+            var panel = new ExcelTotalsPanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("Test"), report, report.TemplateProcessor)
             {
                 BeforeRenderMethodName = "TestExcelTotalsPanelBeforeRender",
                 AfterRenderMethodName = "TestExcelTotalsPanelAfterRender",
@@ -53,7 +53,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             ws.Cell(1, 4).Value = "{Min(di:Sum)}";
             ws.Cell(1, 5).Value = "Text1 {count(Name)} Text2 {avg(di:Sum, , PostAggregationRound)} Text3 {Max(Sum)}";
 
-            var panel = new ExcelTotalsPanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("Test"), report);
+            var panel = new ExcelTotalsPanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("Test"), report, report.TemplateProcessor);
             panel.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(TotalsPanelRenderTest),
@@ -77,7 +77,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             ws.Cell(1, 4).Value = "{Min(di:Sum)}";
             ws.Cell(1, 5).Value = "Text1 {count(Name)} Text2 {avg(di:Sum, , PostAggregationRound)} Text3 {Max(Sum)}";
 
-            var panel = new ExcelTotalsPanel("m:DataProvider:GetNullItem()", ws.NamedRange("Test"), report);
+            var panel = new ExcelTotalsPanel("m:DataProvider:GetNullItem()", ws.NamedRange("Test"), report, report.TemplateProcessor);
             panel.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(TotalsPanelRenderTest),

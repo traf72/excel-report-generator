@@ -22,7 +22,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(3, 2).Value = "{Data}";
             ws.Cell(4, 2).Value = "{Totals}";
 
-            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataSet()", ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataSet()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 BeforeHeadersRenderMethodName = "TestExcelDynamicPanelBeforeHeadersRender",
                 AfterHeadersRenderMethodName = "TestExcelDynamicPanelAfterHeadersRender",
@@ -57,7 +57,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(2, 3).Value = "{Data}";
             ws.Cell(2, 4).Value = "{Totals}";
 
-            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataSet()", ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataSet()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 BeforeHeadersRenderMethodName = "TestExcelDynamicPanelBeforeHeadersRender",
                 AfterHeadersRenderMethodName = "TestExcelDynamicPanelAfterHeadersRender",
@@ -93,7 +93,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(3, 2).Value = "{Data}";
             ws.Cell(4, 2).Value = "{Totals}";
 
-            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataSet()", ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataSet()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 BeforeRenderMethodName = "TestExcelDynamicPaneBeforeRender",
             };
@@ -119,7 +119,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(3, 2).Value = "{Data}";
             ws.Cell(4, 2).Value = "{Totals}";
 
-            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataSet()", ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataSet()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 AfterRenderMethodName = "TestExcelDynamicPaneAfterRender",
             };
@@ -143,7 +143,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(3, 2).Value = "{Data}";
             ws.Cell(4, 2).Value = "{Totals}";
 
-            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataSet()", ws.NamedRange("TestRange"), report);
+            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataSet()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             panel.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataSetRenderTest),

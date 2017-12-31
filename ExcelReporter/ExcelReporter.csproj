@@ -102,9 +102,11 @@
     <Compile Include="Rendering\EventArgs\PanelBeforeRenderEventArgs.cs" />
     <Compile Include="Rendering\ExcelDynamicColumn.cs" />
     <Compile Include="Rendering\HierarchicalDataItem.cs" />
+    <Compile Include="Rendering\IReportGenerator.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataSourceDynamicPanel.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelTotalsPanel.cs" />
     <Compile Include="Rendering\EventArgs\PanelEventArgs.cs" />
+    <Compile Include="Rendering\ReportGenerator.cs" />
     <Compile Include="Rendering\TemplateParts\MethodCallTemplateParts.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataItemPanel.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataSourcePanel.cs" />
@@ -149,8 +151,6 @@
     <Compile Include="Rendering\TemplateProcessors\DefaultTemplateProcessor.cs" />
     <Compile Include="Rendering\TemplateProcessors\IGenericTemplateProcessor.cs" />
     <Compile Include="Rendering\TemplateProcessors\ITemplateProcessor.cs" />
-    <Compile Include="Reports\IExcelReport.cs" />
-    <Compile Include="Reports\IReport.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

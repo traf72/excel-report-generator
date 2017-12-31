@@ -38,7 +38,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             ws.Cell(5, 2).Value = "{m:Counter()}";
             ws.Cell(6, 1).Value = "Plain text outside range";
 
-            var panel = new ExcelPanel(range, report);
+            var panel = new ExcelPanel(range, report, report.TemplateProcessor);
             panel.Render();
 
             Assert.AreEqual(21, ws.CellsUsed().Count());
@@ -86,7 +86,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             ws.Cell(1, 1).Value = "{p:StrParam}";
             ws.Cell(1, 2).Value = "{p:IntParam}";
 
-            var panel = new ExcelPanel(range, report) { BeforeRenderMethodName = "CancelPanelRender" };
+            var panel = new ExcelPanel(range, report, report.TemplateProcessor) { BeforeRenderMethodName = "CancelPanelRender" };
             panel.Render();
 
             Assert.AreEqual(2, ws.CellsUsed().Count());
@@ -106,7 +106,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             ws.Cell(1, 1).Value = "{p:StrParam}";
             ws.Cell(1, 2).Value = "{p:IntParam}";
 
-            var panel = new ExcelPanel(range, report)
+            var panel = new ExcelPanel(range, report, report.TemplateProcessor)
             {
                 BeforeRenderMethodName = "TestExcelPanelBeforeRender",
                 AfterRenderMethodName = "TestExcelPanelAfterRender",
@@ -150,7 +150,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             ws.Cell(5, 2).Value = "{m:Counter()}";
             ws.Cell(6, 1).Value = "Plain text outside range";
 
-            var panel = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel"), report);
+            var panel = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel"), report, report.TemplateProcessor);
             panel.Render();
 
             Assert.AreEqual(21, ws.CellsUsed().Count());
@@ -209,7 +209,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             ws.Cell(12, 2).Value = "{m:Counter()}";
             ws.Cell(13, 1).Value = "Plain text outside range";
 
-            panel = new ExcelNamedPanel(ws.NamedRange("NamedPanel2"), report);
+            panel = new ExcelNamedPanel(ws.NamedRange("NamedPanel2"), report, report.TemplateProcessor);
             panel.Render();
 
             Assert.AreEqual(42, ws.CellsUsed().Count());
@@ -254,57 +254,57 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
             IXLRange range1 = ws.Range(1, 1, 10, 8);
             ws.Cell(1, 1).Value = "Panel1: {p:IntParam}";
             ws.Cell(10, 8).Value = "Panel1: {p:IntParam}";
-            var panel1 = new ExcelPanel(range1, report);
+            var panel1 = new ExcelPanel(range1, report, report.TemplateProcessor);
 
             IXLRange range2 = ws.Range(3, 1, 8, 2);
             ws.Cell(3, 1).Value = "Panel2: {p:IntParam}";
-            var panel2 = new ExcelPanel(range2, report) { Parent = panel1 };
+            var panel2 = new ExcelPanel(range2, report, report.TemplateProcessor) { Parent = panel1 };
 
             IXLRange range3 = ws.Range(1, 3, 6, 5);
             ws.Cell(1, 3).Value = "Panel3: {p:IntParam}";
             range3.AddToNamed("NamedPanel1");
-            var panel3 = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel1"), report) { Parent = panel1 };
+            var panel3 = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel1"), report, report.TemplateProcessor) { Parent = panel1 };
 
             IXLRange range4 = ws.Range(5, 6, 9, 8);
             ws.Cell(5, 6).Value = "Panel4: {p:IntParam}";
             range4.AddToNamed("NamedPanel2", XLScope.Worksheet);
-            var panel4 = new ExcelNamedPanel(ws.NamedRange("NamedPanel2"), report) { Parent = panel1 };
+            var panel4 = new ExcelNamedPanel(ws.NamedRange("NamedPanel2"), report, report.TemplateProcessor) { Parent = panel1 };
 
             IXLRange range5 = ws.Range(4, 1, 5, 2);
             ws.Cell(4, 1).Value = "Panel5: {p:IntParam}";
-            var panel5 = new ExcelPanel(range5, report) { Parent = panel2 };
+            var panel5 = new ExcelPanel(range5, report, report.TemplateProcessor) { Parent = panel2 };
 
             IXLRange range6 = ws.Range(6, 1, 8, 2);
             ws.Cell(6, 1).Value = "Panel6: {p:IntParam}";
             range6.AddToNamed("NamedPanel3");
-            var panel6 = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel3"), report) { Parent = panel2 };
+            var panel6 = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel3"), report, report.TemplateProcessor) { Parent = panel2 };
 
             IXLRange range7 = ws.Range(6, 1, 6, 2);
             ws.Cell(6, 2).Value = "Panel7: {p:IntParam}";
-            var panel7 = new ExcelPanel(range7, report) { Parent = panel6 };
+            var panel7 = new ExcelPanel(range7, report, report.TemplateProcessor) { Parent = panel6 };
 
             IXLRange range8 = ws.Range(7, 1, 7, 2);
             ws.Cell(7, 2).Value = "Panel8: {p:IntParam}";
             range8.AddToNamed("NamedPanel4", XLScope.Worksheet);
-            var panel8 = new ExcelNamedPanel(ws.NamedRange("NamedPanel4"), report) { Parent = panel6 };
+            var panel8 = new ExcelNamedPanel(ws.NamedRange("NamedPanel4"), report, report.TemplateProcessor) { Parent = panel6 };
 
             IXLRange range9 = ws.Range(1, 3, 6, 5);
             ws.Cell(6, 5).Value = "Panel9: {p:IntParam}";
             range9.AddToNamed("NamedPanel5", XLScope.Worksheet);
-            var panel9 = new ExcelNamedPanel(ws.NamedRange("NamedPanel5"), report) { Parent = panel3 };
+            var panel9 = new ExcelNamedPanel(ws.NamedRange("NamedPanel5"), report, report.TemplateProcessor) { Parent = panel3 };
 
             IXLRange range10 = ws.Range(3, 3, 4, 5);
             ws.Cell(4, 5).Value = "Panel10: {p:IntParam}";
-            var panel10 = new ExcelPanel(range10, report) { Parent = panel9 };
+            var panel10 = new ExcelPanel(range10, report, report.TemplateProcessor) { Parent = panel9 };
 
             IXLRange range11 = ws.Range(5, 6, 9, 8);
             ws.Cell(6, 6).Value = "Panel11: {p:IntParam}";
-            var panel11 = new ExcelPanel(range11, report) { Parent = panel4 };
+            var panel11 = new ExcelPanel(range11, report, report.TemplateProcessor) { Parent = panel4 };
 
             IXLRange range12 = ws.Range(8, 6, 9, 8);
             ws.Cell(9, 8).Value = "Panel12: {p:IntParam}";
             range12.AddToNamed("NamedPanel6");
-            var panel12 = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel6"), report) { Parent = panel11 };
+            var panel12 = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel6"), report, report.TemplateProcessor) { Parent = panel11 };
 
             panel1.Children = new[] { panel2, panel3, panel4 };
             panel2.Children = new[] { panel5, panel6 };

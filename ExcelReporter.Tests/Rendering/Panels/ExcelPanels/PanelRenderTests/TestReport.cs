@@ -5,7 +5,6 @@ using ExcelReporter.Rendering.EventArgs;
 using ExcelReporter.Rendering.Providers;
 using ExcelReporter.Rendering.Providers.DataItemValueProviders;
 using ExcelReporter.Rendering.TemplateProcessors;
-using ExcelReporter.Reports;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -258,7 +257,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
         }
     }
 
-    public class BaseReport : IExcelReport
+    public class BaseReport
     {
         protected BaseReport()
         {
@@ -280,11 +279,6 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
         public static DateTime AddDays(DateTime date, int daysCount)
         {
             return date.AddDays(daysCount);
-        }
-
-        public void Run()
-        {
-            throw new NotImplementedException();
         }
     }
 

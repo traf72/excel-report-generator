@@ -30,12 +30,12 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(9, 2).Value = "{Totals}";
 
             IDictionary<string, object> data1 = new DataProvider().GetDictionaryEnumerable().First();
-            var panel1 = new ExcelDataSourceDynamicPanel(data1, ws.NamedRange("TestRange"), report);
+            var panel1 = new ExcelDataSourceDynamicPanel(data1, ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             panel1.Render();
 
             IEnumerable<KeyValuePair<string, object>> data2 = new DataProvider().GetDictionaryEnumerable().First()
                 .Select(x => new KeyValuePair<string, object>(x.Key, x.Value));
-            var panel2 = new ExcelDataSourceDynamicPanel(data2, ws.NamedRange("TestRange2"), report);
+            var panel2 = new ExcelDataSourceDynamicPanel(data2, ws.NamedRange("TestRange2"), report, report.TemplateProcessor);
             panel2.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDictionaryRenderTest),
@@ -64,11 +64,11 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(9, 2).Value = "{Totals}";
 
             IDictionary<string, object> data1 = new Dictionary<string, object>();
-            var panel1 = new ExcelDataSourceDynamicPanel(data1, ws.NamedRange("TestRange"), report);
+            var panel1 = new ExcelDataSourceDynamicPanel(data1, ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             panel1.Render();
 
             IEnumerable<KeyValuePair<string, object>> data2 = new List<KeyValuePair<string, object>>();
-            var panel2 = new ExcelDataSourceDynamicPanel(data2, ws.NamedRange("TestRange2"), report);
+            var panel2 = new ExcelDataSourceDynamicPanel(data2, ws.NamedRange("TestRange2"), report, report.TemplateProcessor);
             panel2.Render();
 
             Assert.AreEqual(4, ws.CellsUsed().Count());
@@ -92,7 +92,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(3, 2).Value = "{Data}";
             ws.Cell(4, 2).Value = "{Totals}";
 
-            var panel1 = new ExcelDataSourceDynamicPanel("m:DataProvider:GetDictionaryEnumerable()", ws.NamedRange("TestRange1"), report);
+            var panel1 = new ExcelDataSourceDynamicPanel("m:DataProvider:GetDictionaryEnumerable()", ws.NamedRange("TestRange1"), report, report.TemplateProcessor);
             panel1.Render();
 
             var dictWihtDecimalValues = new List<IDictionary<string, decimal>>
@@ -109,7 +109,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(8, 2).Value = "{Data}";
             ws.Cell(9, 2).Value = "{Totals}";
 
-            var panel2 = new ExcelDataSourceDynamicPanel(dictWihtDecimalValues, ws.NamedRange("TestRange2"), report);
+            var panel2 = new ExcelDataSourceDynamicPanel(dictWihtDecimalValues, ws.NamedRange("TestRange2"), report, report.TemplateProcessor);
             panel2.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDictionaryRenderTest),
@@ -130,7 +130,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(3, 2).Value = "{Data}";
             ws.Cell(4, 2).Value = "{Totals}";
 
-            var panel1 = new ExcelDataSourceDynamicPanel(new List<IDictionary<string, decimal>>(), ws.NamedRange("TestRange1"), report);
+            var panel1 = new ExcelDataSourceDynamicPanel(new List<IDictionary<string, decimal>>(), ws.NamedRange("TestRange1"), report, report.TemplateProcessor);
             panel1.Render();
 
             Assert.AreEqual(0, ws.CellsUsed().Count());

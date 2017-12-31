@@ -30,7 +30,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(4, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Dotted;
             ws.Cell(4, 2).Style.Border.OutsideBorderColor = XLColor.Green;
 
-            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataReader()", ws.NamedRange("TestRange"), report);
+            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataReader()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             panel.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataReaderRenderTest),
@@ -60,7 +60,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(2, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Dotted;
             ws.Cell(2, 4).Style.Border.OutsideBorderColor = XLColor.Green;
 
-            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataReader()", ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataReader()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 Type = PanelType.Horizontal,
             };
@@ -93,7 +93,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(4, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Dotted;
             ws.Cell(4, 2).Style.Border.OutsideBorderColor = XLColor.Green;
 
-            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataReader()", ws.NamedRange("TestRange"), report);
+            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataReader()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             panel.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataReaderRenderTest),

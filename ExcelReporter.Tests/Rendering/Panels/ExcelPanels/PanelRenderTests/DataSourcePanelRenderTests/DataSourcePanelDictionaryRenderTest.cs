@@ -32,12 +32,12 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(2, 6).Value = "{di:Value}";
 
             IDictionary<string, object> data1 = new DataProvider().GetDictionaryEnumerable().First();
-            var panel1 = new ExcelDataSourcePanel(data1, ws.NamedRange("TestRange"), report);
+            var panel1 = new ExcelDataSourcePanel(data1, ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             panel1.Render();
 
             IEnumerable<KeyValuePair<string, object>> data2 = new DataProvider().GetDictionaryEnumerable().First()
                 .Select(x => new KeyValuePair<string, object>(x.Key, x.Value));
-            var panel2 = new ExcelDataSourcePanel(data2, ws.NamedRange("TestRange2"), report);
+            var panel2 = new ExcelDataSourcePanel(data2, ws.NamedRange("TestRange2"), report, report.TemplateProcessor);
             panel2.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelDictionaryRenderTest),
@@ -58,7 +58,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(2, 3).Value = "{di:Value}";
             ws.Cell(2, 4).Value = "{di:IsVip}";
 
-            var panel1 = new ExcelDataSourcePanel("m:DataProvider:GetDictionaryEnumerable()", ws.NamedRange("TestRange1"), report);
+            var panel1 = new ExcelDataSourcePanel("m:DataProvider:GetDictionaryEnumerable()", ws.NamedRange("TestRange1"), report, report.TemplateProcessor);
             panel1.Render();
 
             var dictWihtDecimalValues = new List<IDictionary<string, decimal>>
@@ -73,7 +73,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
 
             ws.Cell(2, 6).Value = "{di:Value}";
 
-            var panel2 = new ExcelDataSourcePanel(dictWihtDecimalValues, ws.NamedRange("TestRange2"), report);
+            var panel2 = new ExcelDataSourcePanel(dictWihtDecimalValues, ws.NamedRange("TestRange2"), report, report.TemplateProcessor);
             panel2.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelDictionaryRenderTest),

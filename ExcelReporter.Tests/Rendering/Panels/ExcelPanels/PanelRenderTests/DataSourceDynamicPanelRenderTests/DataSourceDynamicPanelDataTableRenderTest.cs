@@ -29,7 +29,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(4, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Dotted;
             ws.Cell(4, 2).Style.Border.OutsideBorderColor = XLColor.Green;
 
-            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataTable()", ws.NamedRange("TestRange"), report);
+            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataTable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             panel.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataTableRenderTest),
@@ -59,7 +59,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(4, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Dotted;
             ws.Cell(4, 2).Style.Border.OutsideBorderColor = XLColor.Green;
 
-            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataTable()", ws.NamedRange("TestRange"), report);
+            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataTable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             panel.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataTableRenderTest),

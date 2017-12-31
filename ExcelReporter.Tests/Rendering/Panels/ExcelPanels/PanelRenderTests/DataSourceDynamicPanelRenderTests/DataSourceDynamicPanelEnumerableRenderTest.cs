@@ -20,7 +20,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(3, 2).Value = "{Data}";
             ws.Cell(4, 2).Value = "{Totals}";
 
-            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report);
+            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             panel.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelEnumerableRenderTest),
@@ -41,7 +41,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(3, 2).Value = "{Data}";
             ws.Cell(4, 2).Value = "{Totals}";
 
-            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report);
+            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             panel.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelEnumerableRenderTest),

@@ -1,10 +1,11 @@
 ﻿using ClosedXML.Excel;
 using ExcelReporter.Enumerators;
 using ExcelReporter.Enums;
+using ExcelReporter.Exceptions;
 using ExcelReporter.Rendering.Panels.ExcelPanels;
 using ExcelReporter.Rendering.TemplateProcessors;
-using ExcelReporter.Reports;
 using ExcelReporter.Tests.CustomAsserts;
+using ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests;
 using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
@@ -14,8 +15,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
-using ExcelReporter.Exceptions;
-using ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests;
 using DataTable = System.Data.DataTable;
 
 namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
@@ -36,7 +35,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             dataTable.Rows.Add(null, null, null, null);
             dataTable.Rows.Add(2, 30.9m, "def", false);
 
-            var totalPanel = new ExcelTotalsPanel(dataTable, Substitute.For<IXLNamedRange>(), Substitute.For<IExcelReport>());
+            var totalPanel = new ExcelTotalsPanel(dataTable, Substitute.For<IXLNamedRange>(), Substitute.For<object>(), Substitute.For<ITemplateProcessor>());
             IEnumerator enumerator = EnumeratorFactory.Create(dataTable);
             IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
             {
@@ -111,7 +110,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
         public void TestDoAggregationWithEmptyData()
         {
             var data = new List<Test>();
-            var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), Substitute.For<IExcelReport>());
+            var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), Substitute.For<object>(), Substitute.For<ITemplateProcessor>());
             IEnumerator enumerator = EnumeratorFactory.Create(data);
             IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
             {
@@ -137,7 +136,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
         {
             IList<Test> data = GetTestData();
 
-            var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), Substitute.For<IExcelReport>());
+            var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), Substitute.For<object>(), Substitute.For<ITemplateProcessor>());
             IEnumerator enumerator = EnumeratorFactory.Create(data);
             IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
             {
@@ -168,7 +167,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
         public void TestDoAggregationWithComplexType()
         {
             var data = new List<Test>();
-            var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), Substitute.For<IExcelReport>());
+            var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), Substitute.For<object>(), Substitute.For<ITemplateProcessor>());
             IEnumerator enumerator = EnumeratorFactory.Create(data);
             IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
             {
@@ -185,7 +184,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
         {
             IList<Test> data = GetTestData();
 
-            var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), new TestReportForAggregation());
+            var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), new TestReportForAggregation(), Substitute.For<ITemplateProcessor>());
             IEnumerator enumerator = EnumeratorFactory.Create(data);
             IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
             {
@@ -196,7 +195,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             };
 
             MethodInfo method = totalPanel.GetType().GetMethod("DoAggregation", BindingFlags.Instance | BindingFlags.NonPublic);
-            method.Invoke(totalPanel, new object[] {enumerator, totalCells});
+            method.Invoke(totalPanel, new object[] { enumerator, totalCells });
             Assert.AreEqual(24.18125m, totalCells.First().Result);
 
             enumerator.Reset();
@@ -225,7 +224,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
         {
             IList<Test> data = GetTestData();
 
-            var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), new TestReportForAggregation());
+            var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), new TestReportForAggregation(), Substitute.For<ITemplateProcessor>());
             IEnumerator enumerator = EnumeratorFactory.Create(data);
             IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
             {
@@ -274,9 +273,9 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
                 Workbook = wb
             };
 
-            var panel = new ExcelTotalsPanel("Stub", ws.NamedRange("Test"), report);
+            var panel = new ExcelTotalsPanel("Stub", ws.NamedRange("Test"), report, report.TemplateProcessor);
             MethodInfo method = panel.GetType().GetMethod("ParseTotalCells", BindingFlags.Instance | BindingFlags.NonPublic);
-            var result = (IDictionary<IXLCell, IList<ExcelTotalsPanel.ParsedAggregationFunc>>) method.Invoke(panel, null);
+            var result = (IDictionary<IXLCell, IList<ExcelTotalsPanel.ParsedAggregationFunc>>)method.Invoke(panel, null);
 
             Assert.AreEqual(4, result.Count);
             Assert.AreEqual("Plain text", ws.Cell(1, 1).Value);
@@ -349,7 +348,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
                 Workbook = wb
             };
 
-            var panel = new ExcelTotalsPanel("Stub", ws.NamedRange("Test"), report);
+            var panel = new ExcelTotalsPanel("Stub", ws.NamedRange("Test"), report, report.TemplateProcessor);
             MethodInfo method = panel.GetType().GetMethod("ParseTotalCells", BindingFlags.Instance | BindingFlags.NonPublic);
 
             ExceptionAssert.ThrowsBaseException<InvalidOperationException>(() => method.Invoke(panel, null), "\"ColumnName\" parameter in aggregation function cannot be empty");
@@ -400,11 +399,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             public decimal Amount { get; set; }
         }
 
-        private class TestReportForAggregation : IExcelReport
+        private class TestReportForAggregation
         {
-            public ITemplateProcessor TemplateProcessor { get; set; }
-            public XLWorkbook Workbook { get; set; }
-
             public decimal CustomAggregation(decimal result, decimal currentValue, int itemNumber)
             {
                 return (result + currentValue) / 2 + itemNumber;
@@ -423,11 +419,6 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             public int PostCustomAggregation(decimal result, int itemsCount)
             {
                 return (int)decimal.Round(result, 0);
-            }
-
-            public void Run()
-            {
-                throw new NotImplementedException();
             }
         }
     }

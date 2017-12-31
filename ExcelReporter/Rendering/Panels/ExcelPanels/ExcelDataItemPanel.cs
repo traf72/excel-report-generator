@@ -1,13 +1,14 @@
 ﻿using ClosedXML.Excel;
 using ExcelReporter.Excel;
 using ExcelReporter.Rendering.EventArgs;
-using ExcelReporter.Reports;
+using ExcelReporter.Rendering.TemplateProcessors;
 
 namespace ExcelReporter.Rendering.Panels.ExcelPanels
 {
     internal class ExcelDataItemPanel : ExcelPanel, IDataItemPanel
     {
-        public ExcelDataItemPanel(IXLRange range, IExcelReport report) : base(range, report)
+        public ExcelDataItemPanel(IXLRange range, object report, ITemplateProcessor templateProcessor)
+            : base(range, report, templateProcessor)
         {
         }
 
@@ -32,7 +33,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
         protected override IExcelPanel CopyPanel(IXLCell cell)
         {
             IXLRange newRange = ExcelHelper.CopyRange(Range, cell);
-            var panel = new ExcelDataItemPanel(newRange, Report) { DataItem = DataItem };
+            var panel = new ExcelDataItemPanel(newRange, _report, _templateProcessor) { DataItem = DataItem };
             FillCopyProperties(panel);
             return panel;
         }

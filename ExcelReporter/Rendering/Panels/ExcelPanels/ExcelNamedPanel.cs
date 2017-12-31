@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
 using ExcelReporter.Excel;
 using ExcelReporter.Helpers;
-using ExcelReporter.Reports;
+using ExcelReporter.Rendering.TemplateProcessors;
+using System;
+using System.Linq;
 
 namespace ExcelReporter.Rendering.Panels.ExcelPanels
 {
@@ -13,7 +13,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
 
         private string _copiedPanelName;
 
-        public ExcelNamedPanel(IXLNamedRange namedRange, IExcelReport report) : base(report)
+        public ExcelNamedPanel(IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor) : base(report, templateProcessor)
         {
             _namedRange = namedRange ?? throw new ArgumentNullException(nameof(namedRange), ArgumentHelper.NullParamMessage);
         }
@@ -70,7 +70,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
 
         protected override IExcelPanel CopyPanel(IXLCell cell)
         {
-            var panel = new ExcelNamedPanel(CopyNamedRange(cell), Report);
+            var panel = new ExcelNamedPanel(CopyNamedRange(cell), _report, _templateProcessor);
             FillCopyProperties(panel);
             return panel;
         }

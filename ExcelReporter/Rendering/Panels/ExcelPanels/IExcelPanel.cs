@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
 using ExcelReporter.Enums;
-using ExcelReporter.Reports;
+using System.Collections.Generic;
 
 namespace ExcelReporter.Rendering.Panels.ExcelPanels
 {
@@ -10,8 +9,6 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
         IExcelPanel Parent { get; set; }
 
         IEnumerable<IExcelPanel> Children { get; set; }
-
-        IExcelReport Report { get; set; }
 
         IXLRange Range { get; }
 

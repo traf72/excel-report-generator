@@ -4,13 +4,13 @@ using ExcelReporter.Excel;
 using ExcelReporter.Exceptions;
 using ExcelReporter.Extensions;
 using ExcelReporter.Helpers;
-using ExcelReporter.Reports;
+using ExcelReporter.Rendering.EventArgs;
+using ExcelReporter.Rendering.TemplateProcessors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using ExcelReporter.Rendering.EventArgs;
 
 namespace ExcelReporter.Rendering.Panels.ExcelPanels
 {
@@ -20,18 +20,22 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
 
         protected RangeCoords _coordsRelativeParent;
 
-        public ExcelPanel(IXLRange range, IExcelReport report)
+        protected readonly object _report;
+
+        protected readonly ITemplateProcessor _templateProcessor;
+
+        public ExcelPanel(IXLRange range, object report, ITemplateProcessor templateProcessor)
         {
             Range = range ?? throw new ArgumentNullException(nameof(range), ArgumentHelper.NullParamMessage);
-            Report = report ?? throw new ArgumentNullException(nameof(report), ArgumentHelper.NullParamMessage);
+            _report = report ?? throw new ArgumentNullException(nameof(report), ArgumentHelper.NullParamMessage);
+            _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor), ArgumentHelper.NullParamMessage);
         }
 
-        protected ExcelPanel(IExcelReport report)
+        protected ExcelPanel(object report, ITemplateProcessor templateProcessor)
         {
-            Report = report ?? throw new ArgumentNullException(nameof(report), ArgumentHelper.NullParamMessage);
+            _report = report ?? throw new ArgumentNullException(nameof(report), ArgumentHelper.NullParamMessage);
+            _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor), ArgumentHelper.NullParamMessage);
         }
-
-        public IExcelReport Report { get; set; }
 
         public virtual IXLRange Range { get; private set; }
 
@@ -66,7 +70,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             }
 
             IList<IXLCell> childrenCells = Children.SelectMany(c => c.Range.CellsUsed()).ToList();
-            string templatePattern = Report.TemplateProcessor.GetFullRegexPattern();
+            string templatePattern = _templateProcessor.GetFullRegexPattern();
             foreach (IXLCell cell in Range.CellsUsed().Where(c => !childrenCells.Contains(c)))
             {
                 string cellValue = cell.Value.ToString();
@@ -77,14 +81,14 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
                 }
                 if (matches.Count == 1 && Regex.IsMatch(cellValue, $@"^{templatePattern}$", RegexOptions.IgnoreCase))
                 {
-                    cell.Value = Report.TemplateProcessor.GetValue(cellValue, GetDataContext());
+                    cell.Value = _templateProcessor.GetValue(cellValue, GetDataContext());
                     continue;
                 }
 
                 foreach (object match in matches)
                 {
                     string template = match.ToString();
-                    cellValue = cellValue.Replace(template, Report.TemplateProcessor.GetValue(template).ToString());
+                    cellValue = cellValue.Replace(template, _templateProcessor.GetValue(template).ToString());
                 }
 
                 cell.Value = cellValue;
@@ -197,7 +201,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
 
         protected virtual IExcelPanel CopyPanel(IXLCell cell)
         {
-            var panel = new ExcelPanel(CopyRange(cell), Report);
+            var panel = new ExcelPanel(CopyRange(cell), _report, _templateProcessor);
             FillCopyProperties(panel);
             return panel;
         }
@@ -257,12 +261,12 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
                 throw new ArgumentException(ArgumentHelper.EmptyStringParamMessage, nameof(methodName));
             }
 
-            MethodInfo method = Report.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public);
+            MethodInfo method = _report.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public);
             if (method == null)
             {
-                throw new MethodNotFoundException($"Cannot find public instance method \"{methodName}\" in type \"{Report.GetType().Name}\"");
+                throw new MethodNotFoundException($"Cannot find public instance method \"{methodName}\" in type \"{_report.GetType().Name}\"");
             }
-            return method.Invoke(Report, parameters);
+            return method.Invoke(_report, parameters);
         }
     }
 }

@@ -43,7 +43,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(4, 4).Value = "{di:Name}";
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report);
+            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             panel.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelEmptyIEnumerableRenderTest),
@@ -85,7 +85,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(4, 4).Value = "{di:Name}";
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 ShiftType = ShiftType.Row,
             };
@@ -130,7 +130,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(4, 4).Value = "{di:Name}";
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 ShiftType = ShiftType.NoShift,
             };
@@ -175,7 +175,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(4, 4).Value = "{di:Name}";
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 Type = PanelType.Horizontal,
             };
@@ -220,7 +220,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(4, 4).Value = "{di:Name}";
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 Type = PanelType.Horizontal,
                 ShiftType = ShiftType.Row,
@@ -266,7 +266,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(4, 4).Value = "{di:Name}";
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 Type = PanelType.Horizontal,
                 ShiftType = ShiftType.NoShift,

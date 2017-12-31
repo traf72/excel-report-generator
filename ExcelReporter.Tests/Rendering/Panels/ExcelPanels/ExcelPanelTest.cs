@@ -4,8 +4,6 @@ using ExcelReporter.Exceptions;
 using ExcelReporter.Rendering.EventArgs;
 using ExcelReporter.Rendering.Panels;
 using ExcelReporter.Rendering.Panels.ExcelPanels;
-using ExcelReporter.Rendering.TemplateProcessors;
-using ExcelReporter.Reports;
 using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
@@ -13,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ExcelReporter.Rendering.TemplateProcessors;
 
 namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
 {
@@ -24,13 +23,14 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
         {
             XLWorkbook wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
-            var excelReport = Substitute.For<IExcelReport>();
+            var excelReport = Substitute.For<object>();
+            var templateProcessor = Substitute.For<ITemplateProcessor>();
 
             IXLRange range = ws.Range(1, 1, 3, 4);
             IXLRange childRange = ws.Range(2, 1, 3, 4);
             IXLRange childOfChildRange = ws.Range(3, 1, 3, 4);
 
-            var panel = new ExcelPanel(range, excelReport)
+            var panel = new ExcelPanel(range, excelReport, templateProcessor)
             {
                 BeforeRenderMethodName = "BeforeMethod",
                 AfterRenderMethodName = "AfterRender",
@@ -39,7 +39,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
                 RenderPriority = 1,
                 Children = new List<IExcelPanel>
                 {
-                    new ExcelPanel(childRange, excelReport)
+                    new ExcelPanel(childRange, excelReport, templateProcessor)
                     {
                         BeforeRenderMethodName = "BeforeMethod_child",
                         AfterRenderMethodName = "AfterRender_child",
@@ -48,7 +48,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
                         RenderPriority = 2,
                         Children = new List<IExcelPanel>
                         {
-                            new ExcelPanel(childOfChildRange, excelReport)
+                            new ExcelPanel(childOfChildRange, excelReport, templateProcessor)
                             {
                                 BeforeRenderMethodName = "BeforeMethod_child_child",
                                 AfterRenderMethodName = "AfterRender_child_child",
@@ -63,7 +63,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
 
             IExcelPanel copiedPanel = panel.Copy(ws.Cell(5, 5));
 
-            Assert.AreSame(excelReport, copiedPanel.Report);
+            Assert.AreSame(excelReport, copiedPanel.GetType().GetField("_report", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(copiedPanel));
+            Assert.AreSame(templateProcessor, copiedPanel.GetType().GetField("_templateProcessor", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(copiedPanel));
             Assert.AreEqual(ws.Cell(5, 5), copiedPanel.Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Range.LastCell());
             Assert.IsNull(copiedPanel.Parent);
@@ -74,7 +75,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(panel.RenderPriority, copiedPanel.RenderPriority);
 
             Assert.AreEqual(1, copiedPanel.Children.Count());
-            Assert.AreSame(excelReport, copiedPanel.Children.First().Report);
+            Assert.AreSame(excelReport, copiedPanel.Children.First().GetType().GetField("_report", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(copiedPanel.Children.First()));
+            Assert.AreSame(templateProcessor, copiedPanel.GetType().GetField("_templateProcessor", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(copiedPanel.Children.First()));
             Assert.AreEqual(ws.Cell(6, 5), copiedPanel.Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Children.First().Range.LastCell());
             Assert.AreSame(copiedPanel, copiedPanel.Children.First().Parent);
@@ -85,7 +87,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(panel.Children.First().RenderPriority, copiedPanel.Children.First().RenderPriority);
 
             Assert.AreEqual(1, copiedPanel.Children.First().Children.Count());
-            Assert.AreSame(excelReport, copiedPanel.Children.First().Children.First().Report);
+            Assert.AreSame(excelReport, copiedPanel.Children.First().Children.First().GetType().GetField("_report", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(copiedPanel.Children.First().Children.First()));
+            Assert.AreSame(templateProcessor, copiedPanel.Children.First().Children.First().GetType().GetField("_templateProcessor", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(copiedPanel.Children.First().Children.First()));
             Assert.AreEqual(ws.Cell(7, 5), copiedPanel.Children.First().Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Children.First().Children.First().Range.LastCell());
             Assert.AreSame(copiedPanel.Children.First(), copiedPanel.Children.First().Children.First().Parent);
@@ -95,23 +98,23 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(panel.Children.First().Children.First().ShiftType, copiedPanel.Children.First().Children.First().ShiftType);
             Assert.AreEqual(panel.Children.First().Children.First().RenderPriority, copiedPanel.Children.First().Children.First().RenderPriority);
 
-            IExcelPanel globalParent = new ExcelPanel(ws.Range(1, 1, 20, 20), excelReport);
+            IExcelPanel globalParent = new ExcelPanel(ws.Range(1, 1, 20, 20), excelReport, templateProcessor);
             range = ws.Range(1, 1, 3, 4);
             IXLRange childRange1 = ws.Range(1, 1, 1, 4);
             IXLRange childRange2 = ws.Range(2, 1, 3, 4);
             childOfChildRange = ws.Range(3, 1, 3, 4);
 
-            panel = new ExcelPanel(range, excelReport)
+            panel = new ExcelPanel(range, excelReport, templateProcessor)
             {
                 Parent = globalParent,
                 Children = new List<IExcelPanel>
                 {
-                    new ExcelPanel(childRange1, excelReport),
-                    new ExcelPanel(childRange2, excelReport)
+                    new ExcelPanel(childRange1, excelReport, templateProcessor),
+                    new ExcelPanel(childRange2, excelReport, templateProcessor)
                     {
                         Children = new List<IExcelPanel>
                         {
-                            new ExcelPanel(childOfChildRange, excelReport)
+                            new ExcelPanel(childOfChildRange, excelReport, templateProcessor)
                         }
                     },
                 },
@@ -135,13 +138,13 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Children.Last().Children.First().Range.LastCell());
             Assert.AreSame(copiedPanel.Children.Last(), copiedPanel.Children.Last().Children.First().Parent);
 
-            globalParent = new ExcelPanel(ws.Range(1, 1, 7, 7), excelReport);
+            globalParent = new ExcelPanel(ws.Range(1, 1, 7, 7), excelReport, templateProcessor);
             range = ws.Range(1, 1, 3, 4);
             childRange1 = ws.Range(1, 1, 1, 4);
-            panel = new ExcelPanel(range, excelReport)
+            panel = new ExcelPanel(range, excelReport, templateProcessor)
             {
                 Parent = globalParent,
-                Children = new List<IExcelPanel> { new ExcelPanel(childRange1, excelReport) },
+                Children = new List<IExcelPanel> { new ExcelPanel(childRange1, excelReport, templateProcessor) },
             };
 
             copiedPanel = panel.Copy(ws.Cell(5, 5));
@@ -154,7 +157,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(ws.Cell(5, 8), copiedPanel.Children.First().Range.LastCell());
             Assert.AreSame(copiedPanel, copiedPanel.Children.First().Parent);
 
-            globalParent = new ExcelPanel(ws.Range(1, 1, 7, 8), excelReport);
+            globalParent = new ExcelPanel(ws.Range(1, 1, 7, 8), excelReport, templateProcessor);
             panel.Parent = globalParent;
             copiedPanel = panel.Copy(ws.Cell(5, 5), false);
             Assert.AreEqual(ws.Cell(5, 5), copiedPanel.Range.FirstCell());
@@ -170,7 +173,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
         {
             XLWorkbook wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
-            var excelReport = Substitute.For<IExcelReport>();
+            var excelReport = Substitute.For<object>();
+            var templateProcessor = Substitute.For<ITemplateProcessor>();
 
             IXLRange range = ws.Range(1, 1, 4, 5);
             IXLRange childRange1 = ws.Range(1, 1, 2, 5);
@@ -184,28 +188,28 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
 
             IXLRange childOfChildRange2 = ws.Range(4, 1, 4, 5);
 
-            var panel = new ExcelPanel(range, excelReport)
+            var panel = new ExcelPanel(range, excelReport, templateProcessor)
             {
                 Children = new List<IExcelPanel>
                 {
-                    new ExcelPanel(childRange1, excelReport)
+                    new ExcelPanel(childRange1, excelReport, templateProcessor)
                     {
                         Children = new List<IExcelPanel>
                         {
-                            new ExcelDataSourcePanel("fn:DataSource:Method()", childOfChildNamedRange, excelReport)
+                            new ExcelDataSourcePanel("fn:DataSource:Method()", childOfChildNamedRange, excelReport, templateProcessor)
                         }
                     },
-                    new ExcelNamedPanel(namedChildRange, excelReport)
+                    new ExcelNamedPanel(namedChildRange, excelReport, templateProcessor)
                     {
                         Children = new List<IExcelPanel>
                         {
-                            new ExcelPanel(childOfChildRange2, excelReport)
+                            new ExcelPanel(childOfChildRange2, excelReport, templateProcessor)
                         }
                     },
                 }
             };
 
-            IExcelPanel globalParent = new ExcelPanel(ws.Range(1, 1, 8, 10), excelReport);
+            IExcelPanel globalParent = new ExcelPanel(ws.Range(1, 1, 8, 10), excelReport, templateProcessor);
 
             panel.Children.First().Children.First().Parent = panel.Children.First();
             panel.Children.Last().Children.First().Parent = panel.Children.Last();
@@ -290,9 +294,10 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             XLWorkbook wb = InitWorkBookForDeleteRangeTest();
             IXLWorksheet ws = wb.Worksheet("Test");
             IXLRange range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
-            var excelReport = Substitute.For<IExcelReport>();
+            var excelReport = Substitute.For<object>();
+            var templateProcessor = Substitute.For<ITemplateProcessor>();
 
-            var panel = new ExcelPanel(range, excelReport);
+            var panel = new ExcelPanel(range, excelReport, templateProcessor);
             panel.Delete();
 
             IXLCell rangeStartCell = ws.Cells().SingleOrDefault(c => c.Value.ToString() == "RangeStart");
@@ -323,7 +328,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             ws = wb.Worksheet("Test");
             range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
 
-            panel = new ExcelPanel(range, excelReport) { ShiftType = ShiftType.Row };
+            panel = new ExcelPanel(range, excelReport, templateProcessor) { ShiftType = ShiftType.Row };
             panel.Delete();
 
             rangeStartCell = ws.Cells().SingleOrDefault(c => c.Value.ToString() == "RangeStart");
@@ -354,7 +359,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             ws = wb.Worksheet("Test");
             range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
 
-            panel = new ExcelPanel(range, excelReport) { Type = PanelType.Horizontal };
+            panel = new ExcelPanel(range, excelReport, templateProcessor) { Type = PanelType.Horizontal };
             panel.Delete();
 
             rangeStartCell = ws.Cells().SingleOrDefault(c => c.Value.ToString() == "RangeStart");
@@ -385,7 +390,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             ws = wb.Worksheet("Test");
             range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
 
-            panel = new ExcelPanel(range, excelReport) { Type = PanelType.Horizontal, ShiftType = ShiftType.Row };
+            panel = new ExcelPanel(range, excelReport, templateProcessor) { Type = PanelType.Horizontal, ShiftType = ShiftType.Row };
             panel.Delete();
 
             rangeStartCell = ws.Cells().SingleOrDefault(c => c.Value.ToString() == "RangeStart");
@@ -416,7 +421,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             ws = wb.Worksheet("Test");
             range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
 
-            panel = new ExcelPanel(range, excelReport) { ShiftType = ShiftType.NoShift };
+            panel = new ExcelPanel(range, excelReport, templateProcessor) { ShiftType = ShiftType.NoShift };
             panel.Delete();
 
             rangeStartCell = ws.Cells().SingleOrDefault(c => c.Value.ToString() == "RangeStart");
@@ -451,7 +456,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
         public void TestCallReportMethod()
         {
             var report = new TestRep();
-            var panel = new ExcelPanel(Substitute.For<IXLRange>(), report);
+            var panel = new ExcelPanel(Substitute.For<IXLRange>(), report, Substitute.For<ITemplateProcessor>());
             MethodInfo method = panel.GetType().GetMethod("CallReportMethod", BindingFlags.Instance | BindingFlags.NonPublic);
             Assert.AreEqual($"Call {nameof(TestRep.Method1)}", method.Invoke(panel, new object[] { nameof(TestRep.Method1), null }));
             Assert.AreEqual($"Call {nameof(TestRep.Method1)}", method.Invoke(panel, new object[] { nameof(TestRep.Method1), new object[] { } }));
@@ -528,11 +533,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             }
         }
 
-        private class TestRepBase : IExcelReport
+        private class TestRepBase
         {
-            public ITemplateProcessor TemplateProcessor { get; set; }
-            public XLWorkbook Workbook { get; set; }
-
             public string Method2(string arg1, int arg2)
             {
                 return $"Call {nameof(Method2)}; params: {arg1}; {arg2}";

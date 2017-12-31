@@ -41,7 +41,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(4, 4).Value = "{di:Name}";
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report);
+            var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             panel.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelIEnumerableRenderTest),
@@ -81,7 +81,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(4, 4).Value = "{di:Name}";
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 ShiftType = ShiftType.Row,
             };
@@ -137,7 +137,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(8, 5).Style.Border.SetBottomBorderColor(XLColor.Red);
             ws.Cell(8, 5).Style.Border.SetLeftBorderColor(XLColor.Red);
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 ShiftType = ShiftType.NoShift,
             };
@@ -180,7 +180,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(4, 4).Value = "{di:Name}";
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 Type = PanelType.Horizontal,
             };
@@ -223,7 +223,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(1, 4).Value = "{di:Name}";
             ws.Cell(4, 4).Value = "{di:Name}";
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 Type = PanelType.Horizontal,
                 ShiftType = ShiftType.Row,
@@ -268,7 +268,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
             ws.Cell(4, 4).Value = "{di:Name}";
             ws.Cell(2, 14).Value = "{di:Date}";
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 Type = PanelType.Horizontal,
                 ShiftType = ShiftType.NoShift,
@@ -291,7 +291,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
 
             ws.Cell(2, 2).Value = "{di:di}";
 
-            var panel = new ExcelDataSourcePanel(new[] {1, 2, 3, 4}, ws.NamedRange("TestRange"), report);
+            var panel = new ExcelDataSourcePanel(new[] {1, 2, 3, 4}, ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             panel.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelIEnumerableRenderTest),
@@ -310,7 +310,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
 
             ws.Cell(2, 2).Value = "{di:di}";
 
-            var panel = new ExcelDataSourcePanel(new[] { "One", "Two", "Three", "Four" }, ws.NamedRange("TestRange"), report);
+            var panel = new ExcelDataSourcePanel(new[] { "One", "Two", "Three", "Four" }, ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             panel.Render();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelIEnumerableRenderTest),
@@ -329,7 +329,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
 
             ws.Cell(2, 2).Value = "{di:di}";
 
-            var panel = new ExcelDataSourcePanel(new[] { 1, 2, 3, 4 }, ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourcePanel(new[] { 1, 2, 3, 4 }, ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 BeforeRenderMethodName = "CancelPanelRender",
             };
@@ -351,7 +351,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.Data
 
             ws.Cell(2, 2).Value = "{di:Name}";
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report)
+            var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
                 BeforeRenderMethodName = "TestExcelDataSourcePanelBeforeRender",
                 AfterRenderMethodName = "TestExcelDataSourcePanelAfterRender",

@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using ClosedXML.Excel;
 using ExcelReporter.Enums;
 using ExcelReporter.Rendering.Panels.ExcelPanels;
-using ExcelReporter.Reports;
+using ExcelReporter.Rendering.TemplateProcessors;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 
@@ -19,7 +19,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
         {
             XLWorkbook wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
-            var excelReport = Substitute.For<IExcelReport>();
+            var excelReport = Substitute.For<object>();
+            var templateProcessor = Substitute.For<ITemplateProcessor>();
 
             IXLRange range = ws.Range(1, 1, 3, 4);
             range.AddToNamed("Parent", XLScope.Worksheet);
@@ -33,33 +34,40 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             childOfChildRange.AddToNamed("ChildOfChild", XLScope.Worksheet);
             IXLNamedRange namedChildOfChildRange = ws.NamedRange("ChildOfChild");
 
-            var panel = new ExcelNamedPanel(namedRange, excelReport)
+            var panel = new ExcelNamedPanel(namedRange, excelReport, templateProcessor)
             {
                 Children = new List<IExcelPanel>
                 {
-                    new ExcelNamedPanel(namedChildRange, excelReport)
+                    new ExcelNamedPanel(namedChildRange, excelReport, templateProcessor)
                     {
                         Children = new List<IExcelPanel>
                         {
-                            new ExcelDataSourcePanel("fn:DataSource:Method()", namedChildOfChildRange, excelReport)
+                            new ExcelDataSourcePanel("fn:DataSource:Method()", namedChildOfChildRange, excelReport, templateProcessor)
                         }
                     }
                 }
             };
 
             IExcelNamedPanel copiedPanel = (IExcelNamedPanel)panel.Copy(ws.Cell(5, 5));
+
+            Assert.AreSame(excelReport, copiedPanel.GetType().GetField("_report", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(copiedPanel));
+            Assert.AreSame(templateProcessor, copiedPanel.GetType().GetField("_templateProcessor", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(copiedPanel));
             Assert.IsTrue(Regex.IsMatch(copiedPanel.Name, @"Parent_[0-9a-f]{32}"));
             Assert.AreEqual(ws.Cell(5, 5), copiedPanel.Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Range.LastCell());
             Assert.IsNull(copiedPanel.Parent);
 
             Assert.AreEqual(1, copiedPanel.Children.Count());
+            Assert.AreSame(excelReport, copiedPanel.Children.First().GetType().GetField("_report", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(copiedPanel.Children.First()));
+            Assert.AreSame(templateProcessor, copiedPanel.Children.First().GetType().GetField("_templateProcessor", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(copiedPanel.Children.First()));
             Assert.IsTrue(Regex.IsMatch(((IExcelNamedPanel)copiedPanel.Children.First()).Name, @"Parent_[0-9a-f]{32}_Child"));
             Assert.AreEqual(ws.Cell(6, 5), copiedPanel.Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Children.First().Range.LastCell());
             Assert.AreSame(copiedPanel, copiedPanel.Children.First().Parent);
 
             Assert.AreEqual(1, copiedPanel.Children.First().Children.Count());
+            Assert.AreSame(excelReport, copiedPanel.Children.First().Children.First().GetType().GetField("_report", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(copiedPanel.Children.First().Children.First()));
+            Assert.AreSame(templateProcessor, copiedPanel.Children.First().Children.First().GetType().GetField("_templateProcessor", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(copiedPanel.Children.First().Children.First()));
             Assert.IsTrue(Regex.IsMatch(((IExcelNamedPanel)copiedPanel.Children.First().Children.First()).Name, @"Parent_[0-9a-f]{32}_Child_ChildOfChild"));
             Assert.IsInstanceOfType(copiedPanel.Children.First().Children.First(), typeof(ExcelDataSourcePanel));
             Assert.AreEqual(ws.Cell(7, 5), copiedPanel.Children.First().Children.First().Range.FirstCell());
@@ -71,7 +79,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             copiedPanel.Delete();
             copiedPanel.Children.First().Delete();
 
-            IExcelPanel globalParent = new ExcelPanel(ws.Range(1, 1, 20, 20), excelReport);
+            IExcelPanel globalParent = new ExcelPanel(ws.Range(1, 1, 20, 20), excelReport, templateProcessor);
             range = ws.Range(1, 1, 3, 4);
             range.AddToNamed("Parent", XLScope.Worksheet);
             namedRange = ws.NamedRange("Parent");
@@ -86,17 +94,17 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             childOfChildRange.AddToNamed("ChildOfChild", XLScope.Worksheet);
             namedChildOfChildRange = ws.NamedRange("ChildOfChild");
 
-            panel = new ExcelNamedPanel(namedRange, excelReport)
+            panel = new ExcelNamedPanel(namedRange, excelReport, templateProcessor)
             {
                 Parent = globalParent,
                 Children = new List<IExcelPanel>
                 {
-                    new ExcelNamedPanel(namedChildRange, excelReport),
-                    new ExcelPanel(childRange2, excelReport)
+                    new ExcelNamedPanel(namedChildRange, excelReport, templateProcessor),
+                    new ExcelPanel(childRange2, excelReport, templateProcessor)
                     {
                         Children = new List<IExcelPanel>
                         {
-                            new ExcelNamedPanel(namedChildOfChildRange, excelReport)
+                            new ExcelNamedPanel(namedChildOfChildRange, excelReport, templateProcessor)
                         }
                     },
                 },
@@ -132,7 +140,7 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             copiedPanel.Children.First().Delete();
             copiedPanel.Children.Last().Children.First().Delete();
 
-            globalParent = new ExcelPanel(ws.Range(1, 1, 7, 7), excelReport);
+            globalParent = new ExcelPanel(ws.Range(1, 1, 7, 7), excelReport, templateProcessor);
             range = ws.Range(1, 1, 3, 4);
             range.AddToNamed("Parent", XLScope.Worksheet);
             namedRange = ws.NamedRange("Parent");
@@ -141,10 +149,10 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             childRange.AddToNamed("Child", XLScope.Worksheet);
             namedChildRange = ws.NamedRange("Child");
 
-            panel = new ExcelNamedPanel(namedRange, excelReport)
+            panel = new ExcelNamedPanel(namedRange, excelReport, templateProcessor)
             {
                 Parent = globalParent,
-                Children = new List<IExcelPanel> { new ExcelNamedPanel(namedChildRange, excelReport) },
+                Children = new List<IExcelPanel> { new ExcelNamedPanel(namedChildRange, excelReport, templateProcessor) },
             };
 
             copiedPanel = (IExcelNamedPanel)panel.Copy(ws.Cell(5, 5));
@@ -174,7 +182,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
         {
             XLWorkbook wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
-            var excelReport = Substitute.For<IExcelReport>();
+            var excelReport = Substitute.For<object>();
+            var templateProcessor = Substitute.For<ITemplateProcessor>();
 
             IXLRange range = ws.Range(1, 1, 3, 4);
             range.AddToNamed("Parent", XLScope.Worksheet);
@@ -194,22 +203,22 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             childOfChildRange2.AddToNamed("ChildOfChild2", XLScope.Worksheet);
             IXLNamedRange namedChildOfChildRange2 = ws.NamedRange("ChildOfChild2");
 
-            var panel = new ExcelNamedPanel(namedRange, excelReport)
+            var panel = new ExcelNamedPanel(namedRange, excelReport, templateProcessor)
             {
                 Children = new List<IExcelPanel>
                 {
-                    new ExcelNamedPanel(namedChildRange, excelReport)
+                    new ExcelNamedPanel(namedChildRange, excelReport, templateProcessor)
                     {
                         Children = new List<IExcelPanel>
                         {
-                            new ExcelNamedPanel(namedChildOfChildRange1, excelReport)
+                            new ExcelNamedPanel(namedChildOfChildRange1, excelReport, templateProcessor)
                         }
                     },
-                    new ExcelPanel(childRange2, excelReport)
+                    new ExcelPanel(childRange2, excelReport, templateProcessor)
                     {
                         Children = new List<IExcelPanel>
                         {
-                            new ExcelNamedPanel(namedChildOfChildRange2, excelReport)
+                            new ExcelNamedPanel(namedChildOfChildRange2, excelReport, templateProcessor)
                         }
                     }
                 }
@@ -259,7 +268,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
         {
             XLWorkbook wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
-            var excelReport = Substitute.For<IExcelReport>();
+            var excelReport = Substitute.For<object>();
+            var templateProcessor = Substitute.For<ITemplateProcessor>();
 
             IXLRange range = ws.Range(1, 1, 4, 5);
             range.AddToNamed("parentRange", XLScope.Worksheet);
@@ -276,28 +286,28 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
 
             IXLRange childOfChildRange2 = ws.Range(4, 1, 4, 5);
 
-            var panel = new ExcelNamedPanel(namedParentRange, excelReport)
+            var panel = new ExcelNamedPanel(namedParentRange, excelReport, templateProcessor)
             {
                 Children = new List<IExcelPanel>
                 {
-                    new ExcelPanel(childRange1, excelReport)
+                    new ExcelPanel(childRange1, excelReport, templateProcessor)
                     {
                         Children = new List<IExcelPanel>
                         {
-                            new ExcelDataSourcePanel("fn:DataSource:Method()", childOfChildNamedRange, excelReport)
+                            new ExcelDataSourcePanel("fn:DataSource:Method()", childOfChildNamedRange, excelReport, templateProcessor)
                         }
                     },
-                    new ExcelNamedPanel(namedChildRange, excelReport)
+                    new ExcelNamedPanel(namedChildRange, excelReport, templateProcessor)
                     {
                         Children = new List<IExcelPanel>
                         {
-                            new ExcelPanel(childOfChildRange2, excelReport)
+                            new ExcelPanel(childOfChildRange2, excelReport, templateProcessor)
                         }
                     },
                 }
             };
 
-            IExcelPanel globalParent = new ExcelPanel(ws.Range(1, 1, 8, 10), excelReport);
+            IExcelPanel globalParent = new ExcelPanel(ws.Range(1, 1, 8, 10), excelReport, templateProcessor);
 
             panel.Children.First().Children.First().Parent = panel.Children.First();
             panel.Children.Last().Children.First().Parent = panel.Children.Last();
@@ -381,7 +391,8 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
         {
             XLWorkbook wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
-            var excelReport = Substitute.For<IExcelReport>();
+            var excelReport = Substitute.For<object>();
+            var templateProcessor = Substitute.For<ITemplateProcessor>();
 
             IXLRange range = ws.Range(1, 1, 3, 4);
             range.AddToNamed("Parent", XLScope.Worksheet);
@@ -393,9 +404,9 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             childOfChildRange.AddToNamed("ChildOfChild", XLScope.Worksheet);
             IXLNamedRange childOfChildNamedRange = ws.NamedRange("ChildOfChild");
 
-            IExcelPanel childOfChildPanel = new ExcelNamedPanel(childOfChildNamedRange, excelReport);
-            IExcelPanel childPanel = new ExcelPanel(childRange, excelReport);
-            IExcelPanel parentPanel = new ExcelNamedPanel(namedRange, excelReport);
+            IExcelPanel childOfChildPanel = new ExcelNamedPanel(childOfChildNamedRange, excelReport, templateProcessor);
+            IExcelPanel childPanel = new ExcelPanel(childRange, excelReport, templateProcessor);
+            IExcelPanel parentPanel = new ExcelNamedPanel(namedRange, excelReport, templateProcessor);
 
             MethodInfo method = typeof(ExcelNamedPanel).GetMethod("GetNearestNamedParent", BindingFlags.Instance | BindingFlags.NonPublic);
             Assert.IsNull(method.Invoke(childOfChildPanel, null));
@@ -412,21 +423,22 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
         {
             XLWorkbook wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
-            var excelReport = Substitute.For<IExcelReport>();
+            var excelReport = Substitute.For<object>();
+            var templateProcessor = Substitute.For<ITemplateProcessor>();
 
             IXLRange range = ws.Range(1, 1, 3, 4);
             range.AddToNamed("Parent", XLScope.Worksheet);
             IXLNamedRange namedRange = ws.NamedRange("Parent");
-            IExcelNamedPanel parentPanel = new ExcelNamedPanel(namedRange, excelReport);
+            IExcelNamedPanel parentPanel = new ExcelNamedPanel(namedRange, excelReport, templateProcessor);
 
             IXLRange childRange1 = ws.Range(1, 1, 1, 4);
             childRange1.AddToNamed("Child", XLScope.Worksheet);
             IXLNamedRange namedChildRange = ws.NamedRange("Child");
-            IExcelNamedPanel childPanel1 = new ExcelNamedPanel(namedChildRange, excelReport);
+            IExcelNamedPanel childPanel1 = new ExcelNamedPanel(namedChildRange, excelReport, templateProcessor);
             childPanel1.Parent = parentPanel;
 
             IXLRange childRange2 = ws.Range(2, 1, 3, 4);
-            IExcelPanel childPanel2 = new ExcelPanel(childRange2, excelReport);
+            IExcelPanel childPanel2 = new ExcelPanel(childRange2, excelReport, templateProcessor);
             childPanel2.Parent = parentPanel;
 
             parentPanel.Children = new List<IExcelPanel> { childPanel1, childPanel2 };
@@ -434,14 +446,14 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             IXLRange childOfChild1Range = ws.Range(1, 1, 1, 4);
             childOfChild1Range.AddToNamed("ChildOfChild1", XLScope.Worksheet);
             IXLNamedRange namedChildOfChild1RangeRange = ws.NamedRange("ChildOfChild1");
-            IExcelNamedPanel childOfChild1Panel = new ExcelNamedPanel(namedChildOfChild1RangeRange, excelReport);
+            IExcelNamedPanel childOfChild1Panel = new ExcelNamedPanel(namedChildOfChild1RangeRange, excelReport, templateProcessor);
             childOfChild1Panel.Parent = childPanel1;
             childPanel1.Children = new List<IExcelPanel> { childOfChild1Panel };
 
             IXLRange childOfChild2Range = ws.Range(3, 1, 3, 4);
             childOfChild2Range.AddToNamed("ChildOfChild2", XLScope.Worksheet);
             IXLNamedRange namedChildOfChild2RangeRange = ws.NamedRange("ChildOfChild2");
-            IExcelNamedPanel childOfChild2Panel = new ExcelNamedPanel(namedChildOfChild2RangeRange, excelReport);
+            IExcelNamedPanel childOfChild2Panel = new ExcelNamedPanel(namedChildOfChild2RangeRange, excelReport, templateProcessor);
             childOfChild2Panel.Parent = childPanel2;
             childPanel2.Children = new List<IExcelPanel> { childOfChild2Panel };
 
@@ -464,21 +476,22 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
         {
             XLWorkbook wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
-            var excelReport = Substitute.For<IExcelReport>();
+            var excelReport = Substitute.For<object>();
+            var templateProcessor = Substitute.For<ITemplateProcessor>();
 
             IXLRange range = ws.Range(1, 1, 3, 4);
             range.AddToNamed("Parent", XLScope.Worksheet);
             IXLNamedRange namedRange = ws.NamedRange("Parent");
-            IExcelNamedPanel parentPanel = new ExcelNamedPanel(namedRange, excelReport);
+            IExcelNamedPanel parentPanel = new ExcelNamedPanel(namedRange, excelReport, templateProcessor);
 
             IXLRange childRange1 = ws.Range(1, 1, 1, 4);
             childRange1.AddToNamed("Child", XLScope.Worksheet);
             IXLNamedRange namedChildRange = ws.NamedRange("Child");
-            IExcelNamedPanel childPanel1 = new ExcelNamedPanel(namedChildRange, excelReport);
+            IExcelNamedPanel childPanel1 = new ExcelNamedPanel(namedChildRange, excelReport, templateProcessor);
             childPanel1.Parent = parentPanel;
 
             IXLRange childRange2 = ws.Range(2, 1, 3, 4);
-            IExcelPanel childPanel2 = new ExcelPanel(childRange2, excelReport);
+            IExcelPanel childPanel2 = new ExcelPanel(childRange2, excelReport, templateProcessor);
             childPanel2.Parent = parentPanel;
 
             parentPanel.Children = new List<IExcelPanel> { childPanel1, childPanel2 };
@@ -486,14 +499,14 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             IXLRange childOfChild1Range = ws.Range(1, 1, 1, 4);
             childOfChild1Range.AddToNamed("ChildOfChild1", XLScope.Worksheet);
             IXLNamedRange namedChildOfChild1RangeRange = ws.NamedRange("ChildOfChild1");
-            IExcelNamedPanel childOfChild1Panel = new ExcelNamedPanel(namedChildOfChild1RangeRange, excelReport);
+            IExcelNamedPanel childOfChild1Panel = new ExcelNamedPanel(namedChildOfChild1RangeRange, excelReport, templateProcessor);
             childOfChild1Panel.Parent = childPanel1;
             childPanel1.Children = new List<IExcelPanel> { childOfChild1Panel };
 
             IXLRange childOfChild2Range = ws.Range(3, 1, 3, 4);
             childOfChild2Range.AddToNamed("ChildOfChild2", XLScope.Worksheet);
             IXLNamedRange namedChildOfChild2RangeRange = ws.NamedRange("ChildOfChild2");
-            IExcelNamedPanel childOfChild2Panel = new ExcelNamedPanel(namedChildOfChild2RangeRange, excelReport);
+            IExcelNamedPanel childOfChild2Panel = new ExcelNamedPanel(namedChildOfChild2RangeRange, excelReport, templateProcessor);
             childOfChild2Panel.Parent = childPanel2;
             childPanel2.Children = new List<IExcelPanel> { childOfChild2Panel };
 
@@ -512,11 +525,12 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             IXLNamedRange parentRange = ws.NamedRange("Parent");
             IXLNamedRange childRange = ws.NamedRange("Child");
             Assert.AreEqual(2, ws.NamedRanges.Count());
-            var excelReport = Substitute.For<IExcelReport>();
+            var excelReport = Substitute.For<object>();
+            var templateProcessor = Substitute.For<ITemplateProcessor>();
 
-            var panel = new ExcelNamedPanel(parentRange, excelReport)
+            var panel = new ExcelNamedPanel(parentRange, excelReport, templateProcessor)
             {
-                Children = new List<IExcelPanel> { new ExcelNamedPanel(childRange, excelReport) }
+                Children = new List<IExcelPanel> { new ExcelNamedPanel(childRange, excelReport, templateProcessor) }
             };
             panel.Delete();
 
@@ -551,9 +565,9 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             childRange = ws.NamedRange("Child");
             Assert.AreEqual(2, ws.NamedRanges.Count());
 
-            panel = new ExcelNamedPanel(parentRange, excelReport)
+            panel = new ExcelNamedPanel(parentRange, excelReport, templateProcessor)
             {
-                Children = new List<IExcelPanel> { new ExcelNamedPanel(childRange, excelReport) },
+                Children = new List<IExcelPanel> { new ExcelNamedPanel(childRange, excelReport, templateProcessor) },
                 ShiftType = ShiftType.Row,
             };
             panel.Delete();
@@ -589,9 +603,9 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             childRange = ws.NamedRange("Child");
             Assert.AreEqual(2, ws.NamedRanges.Count());
 
-            panel = new ExcelNamedPanel(parentRange, excelReport)
+            panel = new ExcelNamedPanel(parentRange, excelReport, templateProcessor)
             {
-                Children = new List<IExcelPanel> { new ExcelNamedPanel(childRange, excelReport) },
+                Children = new List<IExcelPanel> { new ExcelNamedPanel(childRange, excelReport, templateProcessor) },
                 Type = PanelType.Horizontal
             };
             panel.Delete();
@@ -627,9 +641,9 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             childRange = ws.NamedRange("Child");
             Assert.AreEqual(2, ws.NamedRanges.Count());
 
-            panel = new ExcelNamedPanel(parentRange, excelReport)
+            panel = new ExcelNamedPanel(parentRange, excelReport, templateProcessor)
             {
-                Children = new List<IExcelPanel> { new ExcelNamedPanel(childRange, excelReport) },
+                Children = new List<IExcelPanel> { new ExcelNamedPanel(childRange, excelReport, templateProcessor) },
                 Type = PanelType.Horizontal,
                 ShiftType = ShiftType.Row,
             };
@@ -666,9 +680,9 @@ namespace ExcelReporter.Tests.Rendering.Panels.ExcelPanels
             childRange = ws.NamedRange("Child");
             Assert.AreEqual(2, ws.NamedRanges.Count());
 
-            panel = new ExcelNamedPanel(parentRange, excelReport)
+            panel = new ExcelNamedPanel(parentRange, excelReport, templateProcessor)
             {
-                Children = new List<IExcelPanel> { new ExcelNamedPanel(childRange, excelReport) },
+                Children = new List<IExcelPanel> { new ExcelNamedPanel(childRange, excelReport, templateProcessor) },
                 ShiftType = ShiftType.NoShift,
             };
             panel.Delete();
