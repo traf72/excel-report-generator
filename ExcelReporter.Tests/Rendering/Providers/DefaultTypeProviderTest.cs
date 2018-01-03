@@ -14,8 +14,10 @@ namespace ExcelReporter.Tests.Rendering.Providers
         [TestMethod]
         public void TestGetType()
         {
-            ITypeProvider typeProvider = new DefaultTypeProvider();
+            ExceptionAssert.Throws<InvalidOperationException>(() => new DefaultTypeProvider(), "Assemblies are not provided but entry assembly is null. Provide assemblies and try again.");
+            ExceptionAssert.Throws<InvalidOperationException>(() => new DefaultTypeProvider(new Assembly[0]), "Assemblies are not provided but entry assembly is null. Provide assemblies and try again.");
 
+            var typeProvider = new DefaultTypeProvider(new[] { typeof(ExcelHelper).Assembly });
             Assert.AreSame(typeof(ExcelHelper), typeProvider.GetType("ExcelHelper"));
             ExceptionAssert.Throws<TypeNotFoundException>(() => typeProvider.GetType("TestType_1"), "Cannot find type by template \"TestType_1\"");
             ExceptionAssert.Throws<TypeNotFoundException>(() => typeProvider.GetType("DateTime"), "Cannot find type by template \"DateTime\"");
@@ -23,12 +25,6 @@ namespace ExcelReporter.Tests.Rendering.Providers
             ExceptionAssert.Throws<InvalidOperationException>(() => typeProvider.GetType(null), "Template is not specified but defaultType is null");
             ExceptionAssert.Throws<InvalidOperationException>(() => typeProvider.GetType(string.Empty), "Template is not specified but defaultType is null");
             ExceptionAssert.Throws<InvalidOperationException>(() => typeProvider.GetType(" "), "Template is not specified but defaultType is null");
-
-            typeProvider = new DefaultTypeProvider(new Assembly[0]);
-
-            Assert.AreSame(typeof(ExcelHelper), typeProvider.GetType("ExcelHelper"));
-            ExceptionAssert.Throws<TypeNotFoundException>(() => typeProvider.GetType("TestType_1"), "Cannot find type by template \"TestType_1\"");
-            ExceptionAssert.Throws<TypeNotFoundException>(() => typeProvider.GetType("DateTime"), "Cannot find type by template \"DateTime\"");
 
             typeProvider = new DefaultTypeProvider(new[] { Assembly.GetExecutingAssembly() }, typeof(TestType_1));
 

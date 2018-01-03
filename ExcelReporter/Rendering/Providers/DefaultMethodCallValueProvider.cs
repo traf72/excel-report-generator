@@ -39,7 +39,7 @@ namespace ExcelReporter.Rendering.Providers
         /// <param name="templateProcessor">Template processor that will be used for parameters specified as templates</param>
         /// <param name="dataItem">Data item that will be used for parameters specified as data item templates</param>
         /// <returns>Method result</returns>
-        public virtual object CallMethod(string methodCallTemplate, ITemplateProcessor templateProcessor, object dataItem)
+        public virtual object CallMethod(string methodCallTemplate, ITemplateProcessor templateProcessor, HierarchicalDataItem dataItem)
         {
             if (string.IsNullOrWhiteSpace(methodCallTemplate))
             {
@@ -142,7 +142,7 @@ namespace ExcelReporter.Rendering.Providers
         /// </summary>
         /// <param name="templateProcessor">Template processor that will be used for parameters specified as templates</param>
         /// <param name="dataItem">Data item that will be used for parameters specified as data item templates</param>
-        protected virtual IList<InputParameter> GetInputParametersValues(string inputParamsAsString, ITemplateProcessor templateProcessor, object dataItem)
+        protected virtual IList<InputParameter> GetInputParametersValues(string inputParamsAsString, ITemplateProcessor templateProcessor, HierarchicalDataItem dataItem)
         {
             IList<InputParameter> inputParameters = new List<InputParameter>();
             string pattern = templateProcessor.UnwrapTemplate(templateProcessor.GetFullRegexPattern(), true);

@@ -8,7 +8,7 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
     {
         IExcelPanel Parent { get; set; }
 
-        IEnumerable<IExcelPanel> Children { get; set; }
+        IList<IExcelPanel> Children { get; set; }
 
         IXLRange Range { get; }
 

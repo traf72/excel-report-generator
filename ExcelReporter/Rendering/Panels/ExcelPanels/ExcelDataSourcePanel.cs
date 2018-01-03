@@ -8,6 +8,7 @@ using ExcelReporter.Rendering.TemplateProcessors;
 using System;
 using System.Collections;
 using System.Linq;
+using ExcelReporter.Attributes;
 
 namespace ExcelReporter.Rendering.Panels.ExcelPanels
 {
@@ -33,8 +34,10 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             _isDataReceivedDirectly = true;
         }
 
+        [ExternalProperty]
         public string BeforeDataItemRenderMethodName { get; set; }
 
+        [ExternalProperty]
         public string AfterDataItemRenderMethodName { get; set; }
 
         public override void Render()

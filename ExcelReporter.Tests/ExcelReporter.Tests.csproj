@@ -166,6 +166,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Converters\ExternalPropertiesConverters\PanelTypeConverterTest.cs" />
+    <Compile Include="Converters\ExternalPropertiesConverters\RenderPriorityConverterTest.cs" />
+    <Compile Include="Converters\ExternalPropertiesConverters\ShiftTypeConverterTest.cs" />
     <Compile Include="CustomAsserts\ExcelAssert.cs" />
     <Compile Include="Enumerators\EnumeratorFactoryTest.cs" />
     <Compile Include="Extensions\DataReaderExtensionsTest.cs" />

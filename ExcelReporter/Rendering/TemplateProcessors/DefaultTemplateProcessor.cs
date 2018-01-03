@@ -10,7 +10,7 @@ namespace ExcelReporter.Rendering.TemplateProcessors
     /// <summary>
     /// Handles report templates
     /// </summary>
-    public class DefaultTemplateProcessor : IGenericTemplateProcessor<HierarchicalDataItem>
+    public class DefaultTemplateProcessor : ITemplateProcessor
     {
         public DefaultTemplateProcessor(IPropertyValueProvider propertyValueProvider, IMethodCallValueProvider methodCallValueProvider = null,
             IGenericDataItemValueProvider<HierarchicalDataItem> dataItemValueProvider = null)
@@ -84,11 +84,6 @@ namespace ExcelReporter.Rendering.TemplateProcessors
             }
 
             throw new IncorrectTemplateException($"Incorrect template \"{template}\". Unknown member label \"{memberLabel}\"");
-        }
-
-        object ITemplateProcessor.GetValue(string template, object dataItem)
-        {
-            return GetValue(template, (HierarchicalDataItem)dataItem);
         }
     }
 }

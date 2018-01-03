@@ -18,7 +18,12 @@ namespace ExcelReporter.Rendering.Providers
         {
             if (assemblies == null || !assemblies.Any())
             {
-                Assemblies = new[] { Assembly.GetExecutingAssembly() };
+                Assembly entryAssembly = Assembly.GetEntryAssembly();
+                if (entryAssembly == null)
+                {
+                    throw new InvalidOperationException("Assemblies are not provided but entry assembly is null. Provide assemblies and try again.");
+                }
+                Assemblies = new[] { entryAssembly };
             }
             else
             {

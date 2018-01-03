@@ -2,7 +2,7 @@
 
 namespace ExcelReporter.Helpers
 {
-    public static class EnumHelper
+    internal static class EnumHelper
     {
         public static TEnum Parse<TEnum>(string value, bool ignoreCase = true) where TEnum : struct, IConvertible
         {

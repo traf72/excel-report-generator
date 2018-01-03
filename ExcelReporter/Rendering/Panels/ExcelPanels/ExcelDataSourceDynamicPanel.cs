@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using ExcelReporter.Attributes;
 using ExcelReporter.Enums;
 using ExcelReporter.Excel;
 using ExcelReporter.Extensions;
@@ -27,24 +28,34 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
         {
         }
 
+        [ExternalProperty]
         public string BeforeHeadersRenderMethodName { get; set; }
 
+        [ExternalProperty]
         public string AfterHeadersRenderMethodName { get; set; }
 
+        [ExternalProperty]
         public string BeforeDataTemplatesRenderMethodName { get; set; }
 
+        [ExternalProperty]
         public string AfterDataTemplatesRenderMethodName { get; set; }
 
+        [ExternalProperty]
         public string BeforeDataRenderMethodName { get; set; }
 
+        [ExternalProperty]
         public string AfterDataRenderMethodName { get; set; }
 
+        [ExternalProperty]
         public string BeforeTotalsTemplatesRenderMethodName { get; set; }
 
+        [ExternalProperty]
         public string AfterTotalsTemplatesRenderMethodName { get; set; }
 
+        [ExternalProperty]
         public string BeforeTotalsRenderMethodName { get; set; }
 
+        [ExternalProperty]
         public string AfterTotalsRenderMethodName { get; set; }
 
         public override void Render()

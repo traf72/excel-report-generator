@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using ExcelReporter.Attributes;
+using ExcelReporter.Converters.ExternalPropertiesConverters;
 
 namespace ExcelReporter.Rendering.Panels.ExcelPanels
 {
@@ -49,16 +51,21 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             }
         }
 
-        public IEnumerable<IExcelPanel> Children { get; set; } = new List<IExcelPanel>();
+        public IList<IExcelPanel> Children { get; set; } = new List<IExcelPanel>();
 
+        [ExternalProperty(Converter = typeof(ShiftTypeConverter))]
         public ShiftType ShiftType { get; set; }
 
+        [ExternalProperty(Converter = typeof(PanelTypeConverter))]
         public PanelType Type { get; set; }
 
+        [ExternalProperty(Converter = typeof(RenderPriorityConverter))]
         public int RenderPriority { get; set; }
 
+        [ExternalProperty]
         public string BeforeRenderMethodName { get; set; }
 
+        [ExternalProperty]
         public string AfterRenderMethodName { get; set; }
 
         public virtual void Render()
