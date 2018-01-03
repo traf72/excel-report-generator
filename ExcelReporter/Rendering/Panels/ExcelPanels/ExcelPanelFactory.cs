@@ -32,7 +32,14 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
             _properties = properties ?? new Dictionary<string, string>(0);
 
             IExcelPanel panel;
-            string prefix = namedRange.Name.Substring(0, namedRange.Name.IndexOf(_panelParsingSettings.PanelPrefixSeparator, StringComparison.CurrentCultureIgnoreCase));
+
+            int prefixIndex = namedRange.Name.IndexOf(_panelParsingSettings.PanelPrefixSeparator, StringComparison.CurrentCultureIgnoreCase);
+            if (prefixIndex == -1)
+            {
+                throw new InvalidOperationException($"Panel name \"{namedRange.Name}\" does not contain prefix separator \"{_panelParsingSettings.PanelPrefixSeparator}\"");
+            }
+
+            string prefix = namedRange.Name.Substring(0, prefixIndex);
             if (prefix.Equals(_panelParsingSettings.SimplePanelPrefix, StringComparison.CurrentCultureIgnoreCase))
             {
                 panel = CreateSimplePanel();
@@ -65,12 +72,12 @@ namespace ExcelReporter.Rendering.Panels.ExcelPanels
 
         private IExcelPanel CreateDataSourcePanel()
         {
-            return new ExcelTotalsPanel(GetDataSourceProperty("Data source panel must have the property \"DataSource\""), _namedRange, _report, _templateProcessor);
+            return new ExcelDataSourcePanel(GetDataSourceProperty("Data source panel must have the property \"DataSource\""), _namedRange, _report, _templateProcessor);
         }
 
         private IExcelPanel CreateDynamicPanel()
         {
-            return new ExcelTotalsPanel(GetDataSourceProperty("Dynamic data source panel must have the property \"DataSource\""), _namedRange, _report, _templateProcessor);
+            return new ExcelDataSourceDynamicPanel(GetDataSourceProperty("Dynamic data source panel must have the property \"DataSource\""), _namedRange, _report, _templateProcessor);
         }
 
         private IExcelPanel CreateTotalsPanel()
