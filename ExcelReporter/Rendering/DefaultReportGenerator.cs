@@ -67,7 +67,7 @@ namespace ExcelReporter.Rendering
                                                    $"|{Regex.Escape(PanelParsingSettings.DynamicDataSourcePanelPrefix)}" +
                                                    $"|{Regex.Escape(PanelParsingSettings.TotalsPanelPrefix)}";
 
-                    _panelsRegexPattern = $"^({patternPanelsPrefixes}){Regex.Escape(PanelParsingSettings.PanelPrefixSeparator)}.+";
+                    _panelsRegexPattern = $"^({patternPanelsPrefixes}){Regex.Escape(PanelParsingSettings.PanelPrefixSeparator)}.+$";
                 }
 
                 return _panelsRegexPattern;
@@ -146,7 +146,7 @@ namespace ExcelReporter.Rendering
 
                 if (panelsFlatView.ContainsKey(parentPanelName))
                 {
-                    (IExcelPanel parentPanel, _) = panelFlat.Value;
+                    (IExcelPanel parentPanel, _) = panelsFlatView[parentPanelName];
                     parentPanel.Children.Add(panel);
                     panel.Parent = parentPanel;
                 }

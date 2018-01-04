@@ -186,6 +186,7 @@
     <Compile Include="CustomAsserts\ExceptionAssert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\DataProvider.cs" />
+    <Compile Include="Rendering\DefaultReportGeneratorTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelNamedPanelTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelPanelFactoryTests.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelTotalsPanelTest.cs" />
