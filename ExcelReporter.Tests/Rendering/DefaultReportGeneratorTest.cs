@@ -112,5 +112,44 @@ namespace ExcelReporter.Tests.Rendering
             ExceptionAssert.ThrowsBaseException<InvalidOperationException>(() => method.Invoke(reportGenerator, new object[] { panelsFlatView, rootPanel }),
                 "Cannot find parent panel with name \"panel1\" for panel \"Panel2\"");
         }
+
+        [TestMethod]
+        public void TestGetPanelsNamedRanges()
+        {
+            var wb = new XLWorkbook();
+            IXLWorksheet ws = wb.AddWorksheet("Test");
+
+            IXLRange panel1Range = ws.Range(1, 1, 4, 4);
+            panel1Range.AddToNamed("s_Panel1", XLScope.Worksheet);
+            IXLRange panel2Range = ws.Range(1, 1, 2, 4);
+            panel2Range.AddToNamed("D_Panel2", XLScope.Worksheet);
+            IXLRange panel3Range = ws.Range(2, 1, 2, 4);
+            panel3Range.AddToNamed("DYN_Panel3", XLScope.Worksheet);
+            IXLRange panel4Range = ws.Range(5, 1, 6, 5);
+            panel4Range.AddToNamed("t_Panel4", XLScope.Worksheet);
+            IXLRange panel5Range = ws.Range(6, 1, 6, 5);
+            panel5Range.AddToNamed("ss_Panel5", XLScope.Worksheet);
+            IXLRange panel6Range = ws.Range(3, 1, 4, 4);
+            panel6Range.AddToNamed("S_Panel6", XLScope.Worksheet);
+            IXLRange panel7Range = ws.Range(10, 10, 10, 10);
+            panel7Range.AddToNamed("d-Panel7", XLScope.Worksheet);
+            IXLRange panel8Range = ws.Range(8, 9, 9, 10);
+            panel8Range.AddToNamed("d_Panel8", XLScope.Worksheet);
+            IXLRange panel9Range = ws.Range(11, 11, 11, 11);
+            panel9Range.AddToNamed(" d_Panel9 ", XLScope.Worksheet);
+
+            var reportGenerator = new DefaultReportGenerator(new object());
+            MethodInfo method = reportGenerator.GetType().GetMethod("GetPanelsNamedRanges", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            var restult = (IList<IXLNamedRange>)method.Invoke(reportGenerator, new object[] { ws.NamedRanges });
+
+            Assert.AreEqual(6, restult.Count);
+            Assert.AreEqual("s_Panel1", restult[0].Name);
+            Assert.AreEqual("D_Panel2", restult[1].Name);
+            Assert.AreEqual("DYN_Panel3", restult[2].Name);
+            Assert.AreEqual("t_Panel4", restult[3].Name);
+            Assert.AreEqual("S_Panel6", restult[4].Name);
+            Assert.AreEqual("d_Panel8", restult[5].Name);
+        }
     }
 }

@@ -97,7 +97,7 @@ namespace ExcelReporter.Rendering
                 IList<IXLNamedRange> worksheetPanels = GetPanelsNamedRanges(ws.NamedRanges);
                 foreach (IXLNamedRange workbookPanel in workbookPanels)
                 {
-                    if (workbookPanel.Ranges.FirstOrDefault()?.Worksheet == ws
+                    if (workbookPanel.Ranges.First().Worksheet == ws
                         && !worksheetPanels.Any(p => p.Name.Trim().Equals(workbookPanel.Name.Trim(), StringComparison.CurrentCultureIgnoreCase)))
                     {
                         worksheetPanels.Add(workbookPanel);
