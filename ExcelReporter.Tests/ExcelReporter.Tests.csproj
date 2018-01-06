@@ -339,6 +339,7 @@
     <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalNoShift.xlsx" />
     <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalRowShift.xlsx" />
     <None Include="TestData\DefaultReportGeneratorTest\TestRender.xlsx" />
+    <None Include="TestData\DefaultReportGeneratorTest\TestRenderPartialWorksheets.xlsx" />
     <None Include="TestData\TotalsPanelRenderTest\TestPanelRender.xlsx" />
     <None Include="TestData\TotalsPanelRenderTest\TestPanelWithNoData.xlsx" />
     <None Include="TestData\TotalsPanelRenderTest\TestPanelWithNullData.xlsx" />
