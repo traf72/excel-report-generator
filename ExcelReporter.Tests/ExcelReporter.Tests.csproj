@@ -257,6 +257,9 @@
     <None Include="TestData\DataSourceDynamicPanelDataTableRenderTest\TestRenderEmptyDataTable.xlsx" />
     <None Include="TestData\DataSourceDynamicPanelDictionaryRenderTest\TestRenderDictionary.xlsx" />
     <None Include="TestData\DataSourceDynamicPanelDictionaryRenderTest\TestRenderDictionaryEnumerable.xlsx" />
+    <None Include="TestData\DataSourceDynamicPanelEnumerableRenderTest\TestRenderEmptyEnumerable.xlsx" />
+    <None Include="TestData\DataSourceDynamicPanelEnumerableRenderTest\TestRenderEnumerable.xlsx" />
+    <None Include="TestData\DataSourceDynamicPanelSingleItemRenderTest\TestRenderSingleItem.xlsx" />
     <None Include="TestData\DataSourcePanelDataReaderRenderTest\TestRenderDataReader.xlsx" />
     <None Include="TestData\DataSourcePanelDataSetRenderTest\TestRenderDataSet.xlsx" />
     <None Include="TestData\DataSourcePanelDataTableRenderTest\TestRenderDataTable.xlsx" />
@@ -335,6 +338,7 @@
     <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalCellsShift.xlsx" />
     <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalNoShift.xlsx" />
     <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalRowShift.xlsx" />
+    <None Include="TestData\DefaultReportGeneratorTest\TestRender.xlsx" />
     <None Include="TestData\TotalsPanelRenderTest\TestPanelRender.xlsx" />
     <None Include="TestData\TotalsPanelRenderTest\TestPanelWithNoData.xlsx" />
     <None Include="TestData\TotalsPanelRenderTest\TestPanelWithNullData.xlsx" />

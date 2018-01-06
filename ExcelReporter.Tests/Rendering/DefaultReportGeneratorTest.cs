@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
 using ExcelReporter.Rendering;
 using ExcelReporter.Rendering.Panels.ExcelPanels;
 using ExcelReporter.Rendering.TemplateProcessors;
 using ExcelReporter.Tests.CustomAsserts;
+using ExcelReporter.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using ExcelReporter.Rendering.Providers;
 
 namespace ExcelReporter.Tests.Rendering
 {
@@ -150,6 +152,80 @@ namespace ExcelReporter.Tests.Rendering
             Assert.AreEqual("t_Panel4", restult[3].Name);
             Assert.AreEqual("S_Panel6", restult[4].Name);
             Assert.AreEqual("d_Panel8", restult[5].Name);
+        }
+
+        [TestMethod]
+        public void TestRender()
+        {
+            var report = new TestReport();
+            XLWorkbook wb = report.Workbook;
+            IXLWorksheet sheet1 = wb.AddWorksheet("Sheet1");
+            IXLWorksheet sheet2 = wb.AddWorksheet("Sheet2");
+            var reprotGenerator = new TestReportGenerator(report);
+
+            IXLRange parentRange = sheet1.Range(2, 2, 3, 5);
+            parentRange.AddToNamed("d_Parent", XLScope.Worksheet);
+            IXLNamedRange parentNamedRange = sheet1.NamedRange("d_Parent");
+            parentNamedRange.Comment = "DataSource = m:DataProvider:GetIEnumerable()";
+
+            IXLRange childRange = sheet1.Range(3, 2, 3, 5);
+            childRange.AddToNamed("d_Child", XLScope.Workbook);
+            IXLNamedRange childNamedRange = wb.NamedRange("d_Child");
+            childNamedRange.Comment = $"ParentPanel = d_Parent{Environment.NewLine}DataSource = m:DataProvider:GetChildIEnumerable(di:Name)";
+
+            sheet1.Cell(2, 2).Value = "{di:Name}";
+            sheet1.Cell(2, 3).Value = "{di:Date}";
+            sheet1.Cell(3, 3).Value = "{di:Field1}";
+            sheet1.Cell(3, 4).Value = "{di:Field2}";
+            sheet1.Cell(3, 5).Value = "{di:parent:Sum}";
+
+            IXLRange simpleRange = sheet1.Range(2, 7, 3, 8);
+            simpleRange.AddToNamed("s_Simple", XLScope.Worksheet);
+
+            sheet1.Cell(2, 7).Value = "{p:StrParam}";
+            sheet1.Cell(3, 8).Value = "{p:IntParam}";
+
+            IXLRange dynamicRange = sheet2.Range(2, 2, 4, 2);
+            dynamicRange.AddToNamed("dyn_Dynamic", XLScope.Workbook);
+            IXLNamedRange dynamicNamedRange = wb.NamedRange("dyn_Dynamic");
+            dynamicNamedRange.Comment = "DataSource = m:DataProvider:GetAllCustomersDataReader()";
+
+            sheet2.Cell(2, 2).Value = "{Headers}";
+            sheet2.Cell(3, 2).Value = "{Data}";
+            sheet2.Cell(4, 2).Value = "{Totals}";
+
+            IXLRange totalsRange = sheet2.Range(6, 2, 6, 7);
+            totalsRange.AddToNamed("t_Totals", XLScope.Worksheet);
+            IXLNamedRange totalsNamedRange = sheet2.NamedRange("t_Totals");
+            totalsNamedRange.Comment = "DataSource = m:DataProvider:GetIEnumerable(); BeforeRenderMethodName = TestExcelTotalsPanelBeforeRender; AfterRenderMethodName = TestExcelTotalsPanelAfterRender";
+
+            sheet2.Cell(6, 2).Value = "Plain text";
+            sheet2.Cell(6, 3).Value = "{Sum(di:Sum)}";
+            sheet2.Cell(6, 4).Value = "{ Custom(DI:Sum, CustomAggregation, PostAggregation)  }";
+            sheet2.Cell(6, 5).Value = "{Min(di:Sum)}";
+            sheet2.Cell(6, 6).Value = "Text1 {count(Name)} Text2 {avg(di:Sum, , PostAggregationRound)} Text3 {Max(Sum)}";
+            sheet2.Cell(6, 7).Value = "{Mix(di:Sum)}";
+
+            sheet2.Cell(10, 10).Value = "Plain text";
+            sheet2.Cell(1, 1).Value = " { m:Format ( p:DateParam ) } ";
+            sheet2.Cell(7, 1).Value = "{P:BoolParam}";
+
+            reprotGenerator.Render(wb);
+
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRender)), wb);
+
+            //wb.SaveAs("test.xlsx");
+        }
+
+        private class TestReportGenerator : DefaultReportGenerator
+        {
+            private ITypeProvider _typeProvider;
+
+            public TestReportGenerator(object report) : base(report)
+            {
+            }
+
+            public override ITypeProvider TypeProvider => _typeProvider ?? (_typeProvider = new DefaultTypeProvider(new[] { Assembly.GetExecutingAssembly() },  _report.GetType()));
         }
     }
 }

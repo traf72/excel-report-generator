@@ -94,6 +94,11 @@ namespace ExcelReporter.Rendering
             IList<IXLNamedRange> workbookPanels = GetPanelsNamedRanges(reportTemplate.NamedRanges);
             foreach (IXLWorksheet ws in worksheets)
             {
+                if (!ws.CellsUsed().Any())
+                {
+                    continue;
+                }
+
                 IList<IXLNamedRange> worksheetPanels = GetPanelsNamedRanges(ws.NamedRanges);
                 foreach (IXLNamedRange workbookPanel in workbookPanels)
                 {
