@@ -49,42 +49,65 @@ namespace ExcelReporter.Rendering.Providers
 
             Type type = TypeProvider.GetType(templateParts.TypeName);
             string[] props = templateParts.MemberName.Split(PropertiesSeparator);
-            object firstPropValue = GetFirstPropertyOrFieldValue(props[0], type);
-            return props.Length == 1
-                ? firstPropValue
-                : _reflectionHelper.GetValueOfPropertiesChain(string.Join(PropertiesSeparator.ToString(), props.Skip(1)), firstPropValue);
+            MemberInfo member = GetFirstMember(props[0], type);
+            object firstMemberValue = GetFirstMemberValue(member, type);
+
+            if (props.Length == 1)
+            {
+                return firstMemberValue ?? _reflectionHelper.GetNullValueAttributeValue(member);
+            }
+            return _reflectionHelper.GetValueOfPropertiesChain(string.Join(PropertiesSeparator.ToString(), props.Skip(1)), firstMemberValue);
         }
 
-        private object GetFirstPropertyOrFieldValue(string propOrFieldName, Type type)
+        private MemberInfo GetFirstMember(string memberName, Type type)
         {
             var flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.FlattenHierarchy;
+            PropertyInfo prop = _reflectionHelper.TryGetProperty(type, memberName, flags);
+            if (prop != null)
+            {
+                return prop;
+            }
+
+            FieldInfo field = _reflectionHelper.TryGetField(type, memberName, flags);
+            if (field != null)
+            {
+                return field;
+            }
+
+            throw new MemberNotFoundException($"Cannot find property or field \"{memberName}\" in class \"{type.Name}\" and all its parents. BindingFlags = {flags}");
+        }
+
+        private object GetFirstMemberValue(MemberInfo member, Type type)
+        {
             object instance = null;
-            PropertyInfo prop = _reflectionHelper.TryGetProperty(type, propOrFieldName, flags);
+            PropertyInfo prop = member as PropertyInfo;
             if (prop != null)
             {
                 MethodInfo getMethod = prop.GetGetMethod();
                 if (getMethod == null)
                 {
-                    throw new InvalidOperationException($"Property \"{propOrFieldName}\" of type \"{type.Name}\" has no public getter");
+                    throw new InvalidOperationException($"Property \"{prop.Name}\" of type \"{type.Name}\" has no public getter");
                 }
                 if (!getMethod.IsStatic)
                 {
                     instance = InstanceProvider.GetInstance(type);
                 }
+
                 return prop.GetValue(instance);
             }
 
-            FieldInfo field = _reflectionHelper.TryGetField(type, propOrFieldName, flags);
+            FieldInfo field = member as FieldInfo;
             if (field != null)
             {
                 if (!field.IsStatic)
                 {
                     instance = InstanceProvider.GetInstance(type);
                 }
+
                 return field.GetValue(instance);
             }
 
-            throw new MemberNotFoundException($"Cannot find property or field \"{propOrFieldName}\" in class \"{type.Name}\" and all its parents. BindingFlags = {flags}");
+            throw new ArgumentException($"Parameter must have the type of \"{nameof(PropertyInfo)}\" or {nameof(FieldInfo)}", nameof(member));
         }
 
         protected virtual MemberTemplateParts ParseTemplate(string template)

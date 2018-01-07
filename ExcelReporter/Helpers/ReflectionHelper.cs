@@ -1,4 +1,5 @@
-﻿using ExcelReporter.Exceptions;
+﻿using ExcelReporter.Attributes;
+using ExcelReporter.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -17,14 +18,17 @@ namespace ExcelReporter.Helpers
             {
                 throw new ArgumentException(ArgumentHelper.EmptyStringParamMessage, nameof(propertiesChain));
             }
-            if ((flags & BindingFlags.Static) == BindingFlags.Static)
+            if (flags.HasFlag(BindingFlags.Static))
             {
                 throw new InvalidOperationException("BindingFlags.Static is specified but static properties and fields are not supported");
             }
 
-            Queue<string> queue = new Queue<string>(propertiesChain.Trim().Split('.'));
+            var queue = new Queue<string>(propertiesChain.Trim().Split('.'));
+            int propsCount = queue.Count;
+            int currentPropNumber = 0;
             while (queue.Count > 0)
             {
+                currentPropNumber++;
                 string propOrFieldName = queue.Dequeue();
                 if (instance == null)
                 {
@@ -35,6 +39,10 @@ namespace ExcelReporter.Helpers
                 if (prop != null)
                 {
                     instance = prop.GetValue(instance);
+                    if (instance == null && currentPropNumber == propsCount)
+                    {
+                        instance = GetNullValueAttributeValue(prop);
+                    }
                     continue;
                 }
 
@@ -42,6 +50,10 @@ namespace ExcelReporter.Helpers
                 if (field != null)
                 {
                     instance = field.GetValue(instance);
+                    if (instance == null && currentPropNumber == propsCount)
+                    {
+                        instance = GetNullValueAttributeValue(field);
+                    }
                     continue;
                 }
 
@@ -113,6 +125,12 @@ namespace ExcelReporter.Helpers
             {
                 return null;
             }
+        }
+
+        public object GetNullValueAttributeValue(MemberInfo member)
+        {
+            var nullValueAttr = (NullValueAttribute)member.GetCustomAttribute(typeof(NullValueAttribute));
+            return nullValueAttr?.Value;
         }
     }
 }

@@ -14,5 +14,7 @@ namespace ExcelReporter.Helpers
         FieldInfo GetField(Type type, string fieldName, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public);
 
         FieldInfo TryGetField(Type type, string fieldName, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public);
+
+        object GetNullValueAttributeValue(MemberInfo member);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using ExcelReporter.Attributes;
 using ExcelReporter.Exceptions;
 using ExcelReporter.Helpers;
 using ExcelReporter.Rendering.Providers;
@@ -89,6 +90,18 @@ namespace ExcelReporter.Tests.Rendering.Providers
             Assert.AreEqual(Guid.Parse("5be1d032-6d93-466e-bce0-31dfcefdda22"), propertyValueProvider.GetValue("StaticObjProp.ObjField.GuidProp"));
             Assert.AreEqual(Guid.Parse("5be1d032-6d93-466e-bce0-31dfcefdda22"), propertyValueProvider.GetValue("ExcelReporter.Tests.Rendering.Providers:PropValProviderTestClass:StaticObjField.ObjField.GuidProp"));
 
+            testInstance.StrProp = null;
+            Assert.AreEqual("DefaultStrProp", propertyValueProvider.GetValue("StrProp"));
+
+            testInstance.ObjProp.StrField = null;
+            Assert.AreEqual("DefaultStrField", propertyValueProvider.GetValue("ObjProp.StrField"));
+
+            testInstance.ObjProp.ObjField.GuidProp = null;
+            Assert.AreEqual(0, propertyValueProvider.GetValue("ObjProp.ObjField.GuidProp"));
+
+            testInstance.ObjProp = null;
+            Assert.IsNull(propertyValueProvider.GetValue("ObjProp"));
+
             ExceptionAssert.Throws<ArgumentException>(() => propertyValueProvider.GetValue(null));
             ExceptionAssert.Throws<ArgumentException>(() => propertyValueProvider.GetValue(string.Empty));
             ExceptionAssert.Throws<ArgumentException>(() => propertyValueProvider.GetValue(" "));
@@ -112,6 +125,7 @@ namespace ExcelReporter.Tests.Rendering.Providers
 
         private class PropValProviderTestClass : Parent
         {
+            [NullValue("DefaultStrProp")]
             public string StrProp { get; set; } = "StrProp";
 
             public int IntField = 1;
@@ -135,6 +149,7 @@ namespace ExcelReporter.Tests.Rendering.Providers
         {
             public string StrProp { get; set; } = "TestClass2:StrProp";
 
+            [NullValue("DefaultStrField")]
             public string StrField = "TestClass2:StrField";
 
             public TestClass3 ObjField = new TestClass3();
@@ -142,7 +157,8 @@ namespace ExcelReporter.Tests.Rendering.Providers
 
         private class TestClass3
         {
-            public Guid GuidProp { get; set; } = new Guid("5be1d032-6d93-466e-bce0-31dfcefdda22");
+            [NullValue(0)]
+            public Guid? GuidProp { get; set; } = new Guid("5be1d032-6d93-466e-bce0-31dfcefdda22");
         }
 
         private class Parent

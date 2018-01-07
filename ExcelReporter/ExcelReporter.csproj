@@ -67,6 +67,7 @@
     <Compile Include="Attributes\ExternalPropertyAttribute.cs" />
     <Compile Include="Attributes\NoExcelColumnAttribute.cs" />
     <Compile Include="Attributes\ExcelColumnAttribute.cs" />
+    <Compile Include="Attributes\NullValueAttribute.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Converters\ExternalPropertiesConverters\IExternalPropertyConverter.cs" />
     <Compile Include="Converters\ExternalPropertiesConverters\PanelTypeConverter.cs" />

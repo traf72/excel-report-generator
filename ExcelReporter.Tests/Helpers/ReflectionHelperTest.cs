@@ -4,6 +4,7 @@ using ExcelReporter.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Reflection;
+using ExcelReporter.Attributes;
 
 #pragma warning disable 169
 #pragma warning disable 108,114
@@ -122,16 +123,22 @@ namespace ExcelReporter.Tests.Helpers
             ExceptionAssert.Throws<MemberNotFoundException>(() => reflectionHelper.GetValueOfPropertiesChain("ObjProp.GuidProp", instance),
                 "Cannot find property or field \"GuidProp\" in class \"TestClass2\" and all its parents. BindingFlags = Instance, Public");
 
+            instance.ObjProp.StrProp = null;
+            Assert.AreEqual("DefaultStr", reflectionHelper.GetValueOfPropertiesChain("ObjProp.StrProp", instance));
+
             instance.StrProp = null;
             instance.ObjProp = null;
+            instance.IntField = null;
 
             Assert.IsNull(reflectionHelper.GetValueOfPropertiesChain("StrProp", instance));
+            Assert.AreEqual(777, reflectionHelper.GetValueOfPropertiesChain("IntField", instance));
+            Assert.AreEqual("DefaultObjProp", reflectionHelper.GetValueOfPropertiesChain("ObjProp", instance));
 
             ExceptionAssert.Throws<InvalidOperationException>(() => reflectionHelper.GetValueOfPropertiesChain("ObjProp.StrProp", instance),
                 "Cannot get property or field \"StrProp\" because instance is null");
 
-            ExceptionAssert.Throws<InvalidOperationException>(() => reflectionHelper.GetValueOfPropertiesChain("IntProp", null),
-                "Cannot get property or field \"IntProp\" because instance is null");
+            ExceptionAssert.Throws<InvalidOperationException>(() => reflectionHelper.GetValueOfPropertiesChain("IntField", null),
+                "Cannot get property or field \"IntField\" because instance is null");
 
             ExceptionAssert.Throws<ArgumentException>(() => reflectionHelper.GetValueOfPropertiesChain(null, instance));
             ExceptionAssert.Throws<ArgumentException>(() => reflectionHelper.GetValueOfPropertiesChain(string.Empty, instance));
@@ -141,12 +148,25 @@ namespace ExcelReporter.Tests.Helpers
                 "BindingFlags.Static is specified but static properties and fields are not supported");
         }
 
+        [TestMethod]
+        public void TestGetNullValueAttributeValue()
+        {
+            IReflectionHelper reflectionHelper = new ReflectionHelper();
+            var instance = new TestClass();
+
+            Assert.AreEqual(777, reflectionHelper.GetNullValueAttributeValue(instance.GetType().GetField("IntField")));
+            Assert.AreEqual("DefaultObjProp", reflectionHelper.GetNullValueAttributeValue(instance.GetType().GetProperty("ObjProp")));
+            Assert.IsNull(reflectionHelper.GetNullValueAttributeValue(instance.GetType().GetProperty("StrProp")));
+        }
+
         private class TestClass : Parent
         {
             public string StrProp { get; set; } = "StrProp";
 
-            public int IntField = 1;
+            [NullValue(777)]
+            public int? IntField = 1;
 
+            [NullValue("DefaultObjProp")]
             public TestClass2 ObjProp { get; set; } = new TestClass2();
 
             public static string StaticProp { get; set; } = "StaticProp";
@@ -166,7 +186,8 @@ namespace ExcelReporter.Tests.Helpers
 
         private class TestClass2
         {
-            public string StrProp { get; } = "TestClass2:StrProp";
+            [NullValue("DefaultStr")]
+            public string StrProp { get; set; } = "TestClass2:StrProp";
 
             public readonly TestClass3 ObjField = new TestClass3();
         }
