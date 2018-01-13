@@ -98,7 +98,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.DataItemValueProviders
             dataRowValueProvider.DidNotReceiveWithAnyArgs().GetValue(null, null);
             dataReaderValueProvider.DidNotReceiveWithAnyArgs().GetValue(null, null);
 
-            ExceptionAssert.Throws<IncorrectTemplateException>(() => dataItemValueProvider.GetValue("par:Prop", hierarchicalDataItem), "Template \"par:Prop\" is incorrect");
+            ExceptionAssert.Throws<InvalidTemplateException>(() => dataItemValueProvider.GetValue("par:Prop", hierarchicalDataItem), "Template \"par:Prop\" is invalid");
         }
 
         private class TestClass

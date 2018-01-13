@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using ExcelReportGenerator.Rendering.Providers.VariableProviders;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 {
@@ -265,9 +266,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             var typeProvider = new DefaultTypeProvider(new[] { Assembly.GetExecutingAssembly(), Assembly.GetAssembly(typeof(DateTime)), }, GetType());
             var instanceProvider = new DefaultInstanceProvider(this);
 
-            TemplateProcessor = new DefaultTemplateProcessor(new DefaultPropertyValueProvider(typeProvider, instanceProvider),
-                new DefaultMethodCallValueProvider(typeProvider, instanceProvider),
-                new HierarchicalDataItemValueProvider(new DataItemValueProviderFactory()));
+            TemplateProcessor = new DefaultTemplateProcessor(new DefaultPropertyValueProvider(typeProvider, instanceProvider), new DefaultVariableValueProvider(),
+                new DefaultMethodCallValueProvider(typeProvider, instanceProvider), new HierarchicalDataItemValueProvider(new DataItemValueProviderFactory()));
         }
 
         public bool BoolParam { get; set; } = true;

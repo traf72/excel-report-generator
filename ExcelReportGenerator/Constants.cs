@@ -2,6 +2,6 @@
 {
     internal static class Constants
     {
-        public const string IncorrectTemplateMessage = "Template \"{0}\" is incorrect";
+        public const string InvalidTemplateMessage = "Template \"{0}\" is invalid";
     }
 }

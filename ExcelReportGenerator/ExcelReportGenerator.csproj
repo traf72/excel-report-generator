@@ -141,7 +141,8 @@
     <Compile Include="Enums\ShiftType.cs" />
     <Compile Include="Excel\ExcelHelper.cs" />
     <Compile Include="Excel\AddressShift.cs" />
-    <Compile Include="Exceptions\IncorrectTemplateException.cs" />
+    <Compile Include="Exceptions\InvalidVariableException.cs" />
+    <Compile Include="Exceptions\InvalidTemplateException.cs" />
     <Compile Include="Exceptions\MethodNotFoundException.cs" />
     <Compile Include="Exceptions\ColumnNotFoundException.cs" />
     <Compile Include="Exceptions\TypeNotFoundException.cs" />
@@ -179,6 +180,8 @@
     <Compile Include="Rendering\DefaultReportGenerator.cs" />
     <Compile Include="Rendering\Parsers\DefaultPanelPropertiesParser.cs" />
     <Compile Include="Rendering\Parsers\IPanelPropertiesParser.cs" />
+    <Compile Include="Rendering\Providers\VariableProviders\DefaultVariableValueProvider.cs" />
+    <Compile Include="Rendering\Providers\VariableProviders\IVariableValueProvider.cs" />
     <Compile Include="Rendering\TemplateParts\MethodCallTemplateParts.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataItemPanel.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataSourcePanel.cs" />

@@ -42,6 +42,12 @@
         string DataItemMemberLabel { get; }
 
         /// <summary>
+        /// Variable label
+        /// Cannot be null, empty or whitespace
+        /// </summary>
+        string VariableMemberLabel { get; }
+
+        /// <summary>
         /// Get value based on template
         /// </summary>
         /// <param name="dataItem">Data item that will be used if template is data item template</param>

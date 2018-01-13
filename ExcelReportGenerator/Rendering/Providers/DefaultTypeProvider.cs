@@ -69,7 +69,7 @@ namespace ExcelReportGenerator.Rendering.Providers
             }
             else
             {
-                throw new IncorrectTemplateException($"Type name template \"{typeTemplate}\" is incorrect");
+                throw new InvalidTemplateException($"Type name template \"{typeTemplate}\" is invalid");
             }
 
             name = name.Trim();
@@ -89,7 +89,7 @@ namespace ExcelReportGenerator.Rendering.Providers
                 throw new TypeNotFoundException($"Cannot find type by template \"{typeTemplate}\"");
             }
 
-            throw new IncorrectTemplateException($"More than one type found by template \"{typeTemplate}\"");
+            throw new InvalidTemplateException($"More than one type found by template \"{typeTemplate}\"");
         }
     }
 }

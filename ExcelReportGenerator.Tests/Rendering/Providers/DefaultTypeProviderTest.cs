@@ -39,7 +39,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
 
             Assert.AreSame(typeof(TestType_3), typeProvider.GetType("ExcelReportGenerator.Tests.Rendering.Providers:TestType_3"));
             Assert.AreSame(typeof(InnerNamespace.TestType_3), typeProvider.GetType("ExcelReportGenerator.Tests.Rendering.Providers.InnerNamespace:TestType_3"));
-            ExceptionAssert.Throws<IncorrectTemplateException>(() => typeProvider.GetType("TestType_3"), "More than one type found by template \"TestType_3\"");
+            ExceptionAssert.Throws<InvalidTemplateException>(() => typeProvider.GetType("TestType_3"), "More than one type found by template \"TestType_3\"");
             ExceptionAssert.Throws<TypeNotFoundException>(() => typeProvider.GetType("DateTime"), "Cannot find type by template \"DateTime\"");
 
             typeProvider = new DefaultTypeProvider(new[] { Assembly.GetExecutingAssembly(), Assembly.GetAssembly(typeof(DateTime)) });
@@ -49,15 +49,15 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
             Assert.AreSame(typeof(TestType_5), typeProvider.GetType(":TestType_5"));
             Assert.AreSame(typeof(DateTime), typeProvider.GetType("DateTime"));
             Assert.AreSame(typeof(DateTime), typeProvider.GetType("System:DateTime"));
-            ExceptionAssert.Throws<IncorrectTemplateException>(() => typeProvider.GetType("TestType_5"), "More than one type found by template \"TestType_5\"");
+            ExceptionAssert.Throws<InvalidTemplateException>(() => typeProvider.GetType("TestType_5"), "More than one type found by template \"TestType_5\"");
 
             Assert.AreSame(typeof(InnerNamespace.TestType_4), typeProvider.GetType("ExcelReportGenerator.Tests.Rendering.Providers.InnerNamespace:TestType_4"));
             Assert.AreSame(typeof(InnerNamespace.TestType_4), typeProvider.GetType("TestType_4"));
             ExceptionAssert.Throws<TypeNotFoundException>(() => typeProvider.GetType("ExcelReportGenerator.Tests.Rendering.Providers:TestType_4"),
                 "Cannot find type by template \"ExcelReportGenerator.Tests.Rendering.Providers:TestType_4\"");
 
-            ExceptionAssert.Throws<IncorrectTemplateException>(() => typeProvider.GetType("ExcelReportGenerator.Tests.Rendering.Providers:InnerNamespace:TestType_4"),
-                "Type name template \"ExcelReportGenerator.Tests.Rendering.Providers:InnerNamespace:TestType_4\" is incorrect");
+            ExceptionAssert.Throws<InvalidTemplateException>(() => typeProvider.GetType("ExcelReportGenerator.Tests.Rendering.Providers:InnerNamespace:TestType_4"),
+                "Type name template \"ExcelReportGenerator.Tests.Rendering.Providers:InnerNamespace:TestType_4\" is invalid");
         }
 
         private class TestType_1

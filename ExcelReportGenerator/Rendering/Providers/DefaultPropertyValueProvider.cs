@@ -44,7 +44,7 @@ namespace ExcelReportGenerator.Rendering.Providers
             MemberTemplateParts templateParts = ParseTemplate(propertyTemplate);
             if (string.IsNullOrWhiteSpace(templateParts.MemberName))
             {
-                throw new IncorrectTemplateException(string.Format(Constants.IncorrectTemplateMessage, propertyTemplate));
+                throw new InvalidTemplateException(string.Format(Constants.InvalidTemplateMessage, propertyTemplate));
             }
 
             Type type = TypeProvider.GetType(templateParts.TypeName);

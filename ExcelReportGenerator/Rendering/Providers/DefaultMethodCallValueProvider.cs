@@ -97,17 +97,17 @@ namespace ExcelReportGenerator.Rendering.Providers
 
         protected virtual MethodCallTemplateParts ParseTemplate(string template)
         {
-            string incorrectTemplateMessage = string.Format(Constants.IncorrectTemplateMessage, template);
+            string invalidTemplateMessage = string.Format(Constants.InvalidTemplateMessage, template);
             int firstParenthesisIndex = template.IndexOf('(');
             if (firstParenthesisIndex == -1)
             {
-                throw new IncorrectTemplateException(incorrectTemplateMessage);
+                throw new InvalidTemplateException(invalidTemplateMessage);
             }
 
             int lastParenthesisIndex = template.LastIndexOf(')');
             if (lastParenthesisIndex == -1)
             {
-                throw new IncorrectTemplateException(incorrectTemplateMessage);
+                throw new InvalidTemplateException(invalidTemplateMessage);
             }
 
             string methodParams = template.Substring(firstParenthesisIndex + 1, lastParenthesisIndex - firstParenthesisIndex - 1);

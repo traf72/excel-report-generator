@@ -106,8 +106,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
             ExceptionAssert.Throws<ArgumentException>(() => propertyValueProvider.GetValue(string.Empty));
             ExceptionAssert.Throws<ArgumentException>(() => propertyValueProvider.GetValue(" "));
 
-            ExceptionAssert.Throws<IncorrectTemplateException>(() => propertyValueProvider.GetValue("PropValProviderTestClass:"));
-            ExceptionAssert.Throws<IncorrectTemplateException>(() => propertyValueProvider.GetValue("ExcelReportGenerator.Tests.Rendering.Providers:PropValProviderTestClass: "));
+            ExceptionAssert.Throws<InvalidTemplateException>(() => propertyValueProvider.GetValue("PropValProviderTestClass:"));
+            ExceptionAssert.Throws<InvalidTemplateException>(() => propertyValueProvider.GetValue("ExcelReportGenerator.Tests.Rendering.Providers:PropValProviderTestClass: "));
 
             ExceptionAssert.Throws<MemberNotFoundException>(() => propertyValueProvider.GetValue("BadField"),
                 "Cannot find property or field \"BadField\" in class \"PropValProviderTestClass\" and all its parents. BindingFlags = Instance, Static, Public, FlattenHierarchy");

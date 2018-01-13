@@ -55,7 +55,7 @@ namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
             {
                 if (!part.Trim().Equals("parent", StringComparison.OrdinalIgnoreCase))
                 {
-                    throw new IncorrectTemplateException($"Template \"{template}\" is incorrect");
+                    throw new InvalidTemplateException($"Template \"{template}\" is invalid");
                 }
                 dataItem = dataItem.Parent;
             }

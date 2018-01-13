@@ -4,6 +4,7 @@ using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Rendering.Parsers;
 using ExcelReportGenerator.Rendering.Providers;
 using ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
+using ExcelReportGenerator.Rendering.Providers.VariableProviders;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace ExcelReportGenerator.Rendering
         private IPropertyValueProvider _propertyValueProvider;
         private IMethodCallValueProvider _methodCallValueProvider;
         private IGenericDataItemValueProvider<HierarchicalDataItem> _dataItemValueProvider;
+        private DefaultVariableValueProvider _variableValueProvider;
         private ITemplateProcessor _templateProcessor;
         private IPanelPropertiesParser _panelPropertiesParser;
         private PanelParsingSettings _panelParsingSettings;
@@ -41,7 +43,9 @@ namespace ExcelReportGenerator.Rendering
 
         public virtual IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider => _dataItemValueProvider ?? (_dataItemValueProvider = new HierarchicalDataItemValueProvider());
 
-        public virtual ITemplateProcessor TemplateProcessor => _templateProcessor ?? (_templateProcessor = new DefaultTemplateProcessor(PropertyValueProvider, MethodCallValueProvider, DataItemValueProvider));
+        public virtual DefaultVariableValueProvider VariableValueProvider => _variableValueProvider ?? (_variableValueProvider = new DefaultVariableValueProvider());
+
+        public virtual ITemplateProcessor TemplateProcessor => _templateProcessor ?? (_templateProcessor = new DefaultTemplateProcessor(PropertyValueProvider, VariableValueProvider, MethodCallValueProvider, DataItemValueProvider));
 
         public virtual IPanelPropertiesParser PanelPropertiesParser => _panelPropertiesParser ?? (_panelPropertiesParser = new DefaultPanelPropertiesParser(PanelParsingSettings));
 
@@ -91,6 +95,8 @@ namespace ExcelReportGenerator.Rendering
                 return reportTemplate;
             }
 
+            VariableValueProvider.RenderDate = DateTime.Now;
+
             IList<IXLNamedRange> workbookPanels = GetPanelsNamedRanges(reportTemplate.NamedRanges);
             foreach (IXLWorksheet ws in worksheets)
             {
@@ -98,6 +104,9 @@ namespace ExcelReportGenerator.Rendering
                 {
                     continue;
                 }
+
+                VariableValueProvider.SheetName = ws.Name;
+                VariableValueProvider.SheetNumber = ws.Position;
 
                 IList<IXLNamedRange> worksheetPanels = GetPanelsNamedRanges(ws.NamedRanges);
                 foreach (IXLNamedRange workbookPanel in workbookPanels)

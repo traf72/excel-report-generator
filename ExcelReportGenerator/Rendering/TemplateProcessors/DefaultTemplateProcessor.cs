@@ -3,6 +3,7 @@ using ExcelReportGenerator.Extensions;
 using ExcelReportGenerator.Helpers;
 using ExcelReportGenerator.Rendering.Providers;
 using ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
+using ExcelReportGenerator.Rendering.Providers.VariableProviders;
 using System;
 
 namespace ExcelReportGenerator.Rendering.TemplateProcessors
@@ -12,15 +13,18 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
     /// </summary>
     public class DefaultTemplateProcessor : ITemplateProcessor
     {
-        public DefaultTemplateProcessor(IPropertyValueProvider propertyValueProvider, IMethodCallValueProvider methodCallValueProvider = null,
-            IGenericDataItemValueProvider<HierarchicalDataItem> dataItemValueProvider = null)
+        public DefaultTemplateProcessor(IPropertyValueProvider propertyValueProvider, IVariableValueProvider variableValueProvider,
+            IMethodCallValueProvider methodCallValueProvider = null, IGenericDataItemValueProvider<HierarchicalDataItem> dataItemValueProvider = null)
         {
             PropertyValueProvider = propertyValueProvider ?? throw new ArgumentNullException(nameof(propertyValueProvider), ArgumentHelper.NullParamMessage);
+            VariableValueProvider = variableValueProvider ?? throw new ArgumentNullException(nameof(variableValueProvider), ArgumentHelper.NullParamMessage);
             MethodCallValueProvider = methodCallValueProvider;
             DataItemValueProvider = dataItemValueProvider;
         }
 
         protected IPropertyValueProvider PropertyValueProvider { get; }
+
+        protected IVariableValueProvider VariableValueProvider { get; }
 
         protected IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider { get; }
 
@@ -38,6 +42,8 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
 
         public virtual string DataItemMemberLabel => "di";
 
+        public virtual string VariableMemberLabel => "v";
+
         /// <summary>
         /// Get value based on template
         /// </summary>
@@ -53,7 +59,7 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
             int separatorIndex = unwrappedTemplate.IndexOf(MemberLabelSeparator, StringComparison.CurrentCultureIgnoreCase);
             if (separatorIndex == -1)
             {
-                throw new IncorrectTemplateException($"Incorrect template \"{template}\". Cannot find separator \"{MemberLabelSeparator}\" between member label and member template");
+                throw new InvalidTemplateException($"Invalid template \"{template}\". Cannot find separator \"{MemberLabelSeparator}\" between member label and member template");
             }
 
             string memberLabel = unwrappedTemplate.Substring(0, separatorIndex).ToLower().Trim();
@@ -82,8 +88,12 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
                 }
                 return MethodCallValueProvider.CallMethod(memberTemplate, this, dataItem);
             }
+            if (memberLabel == VariableMemberLabel)
+            {
+                return VariableValueProvider.GetVariable(memberTemplate);
+            }
 
-            throw new IncorrectTemplateException($"Incorrect template \"{template}\". Unknown member label \"{memberLabel}\"");
+            throw new InvalidTemplateException($"Invalid template \"{template}\". Unknown member label \"{memberLabel}\"");
         }
     }
 }

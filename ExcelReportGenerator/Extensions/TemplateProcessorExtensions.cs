@@ -1,9 +1,9 @@
-﻿using ExcelReportGenerator.Helpers;
+﻿using ExcelReportGenerator.Enums;
+using ExcelReportGenerator.Helpers;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using ExcelReportGenerator.Enums;
 
 namespace ExcelReportGenerator.Extensions
 {
@@ -69,6 +69,12 @@ namespace ExcelReportGenerator.Extensions
             return BuildTemplate(processor, processor.MethodCallMemberLabel, methodCallTemplate);
         }
 
+        public static string BuildVariableTemplate(this ITemplateProcessor processor, string variableTemplate)
+        {
+            //CheckForNullOrWhiteSpace(processor.VariableMemberLabel, nameof(processor.VariableMemberLabel));
+            return BuildTemplate(processor, processor.VariableMemberLabel, variableTemplate);
+        }
+
         private static string BuildTemplate(ITemplateProcessor processor, string memberLabel, string memberTemplate)
         {
             //CheckForNullOrWhiteSpace(processor.LeftTemplateBorder, nameof(processor.LeftTemplateBorder));
@@ -93,6 +99,12 @@ namespace ExcelReportGenerator.Extensions
         {
             //CheckForNullOrWhiteSpace(processor.MethodCallMemberLabel, nameof(processor.MethodCallMemberLabel));
             return TrimMemberLabel(processor, processor.MethodCallMemberLabel, methodCallTemplate);
+        }
+
+        public static string TrimVariableLabel(this ITemplateProcessor processor, string variableTemplate)
+        {
+            //CheckForNullOrWhiteSpace(processor.VariableMemberLabel, nameof(processor.VariableMemberLabel));
+            return TrimMemberLabel(processor, processor.VariableMemberLabel, variableTemplate);
         }
 
         private static string TrimMemberLabel(ITemplateProcessor processor, string memberLabel, string memberTemplate)
@@ -123,7 +135,11 @@ namespace ExcelReportGenerator.Extensions
             //CheckForNullOrWhiteSpace(processor.PropertyMemberLabel, nameof(processor.PropertyMemberLabel));
             //CheckForNullOrWhiteSpace(processor.DataItemMemberLabel, nameof(processor.DataItemMemberLabel));
             //CheckForNullOrWhiteSpace(processor.MethodCallMemberLabel, nameof(processor.MethodCallMemberLabel));
-            return GetRegexPattern(processor, $"({Regex.Escape(processor.PropertyMemberLabel)}|{Regex.Escape(processor.DataItemMemberLabel)}|{Regex.Escape(processor.MethodCallMemberLabel)})");
+            //CheckForNullOrWhiteSpace(processor.VariableMemberLabel, nameof(processor.VariableMemberLabel));
+            return GetRegexPattern(processor, $"({Regex.Escape(processor.PropertyMemberLabel)}" +
+                                              $"|{Regex.Escape(processor.DataItemMemberLabel)}" +
+                                              $"|{Regex.Escape(processor.MethodCallMemberLabel)}" +
+                                              $"|{Regex.Escape(processor.VariableMemberLabel)})");
         }
 
         public static string GetPropertyRegexPattern(this ITemplateProcessor processor)
@@ -142,6 +158,12 @@ namespace ExcelReportGenerator.Extensions
         {
             //CheckForNullOrWhiteSpace(processor.MethodCallMemberLabel, nameof(processor.MethodCallMemberLabel));
             return GetRegexPattern(processor, $"{Regex.Escape(processor.MethodCallMemberLabel)}");
+        }
+
+        public static string GetVariableRegexPattern(this ITemplateProcessor processor)
+        {
+            //CheckForNullOrWhiteSpace(processor.VariableMemberLabel, nameof(processor.VariableMemberLabel));
+            return GetRegexPattern(processor, $"{Regex.Escape(processor.VariableMemberLabel)}");
         }
 
         private static string GetRegexPattern(ITemplateProcessor processor, string escapedMemberLabel)

@@ -146,9 +146,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
             Assert.AreEqual("ExcelReportGenerator.Tests.Implementations.Providers:TestClass", typeNameProp.GetValue(result));
             Assert.AreEqual("p:Name, m:Method2(p:Name,  p:value , m:Method3(hi, 5, p:Desc)), di:Field", methodParamsProp.GetValue(result));
 
-            ExceptionAssert.ThrowsBaseException<IncorrectTemplateException>(() => method.Invoke(methodCallValueProvider, new[] { "Method1" }), "Template \"Method1\" is incorrect");
-            ExceptionAssert.ThrowsBaseException<IncorrectTemplateException>(() => method.Invoke(methodCallValueProvider, new[] { "Method1(" }), "Template \"Method1(\" is incorrect");
-            ExceptionAssert.ThrowsBaseException<IncorrectTemplateException>(() => method.Invoke(methodCallValueProvider, new[] { "Method1)" }), "Template \"Method1)\" is incorrect");
+            ExceptionAssert.ThrowsBaseException<InvalidTemplateException>(() => method.Invoke(methodCallValueProvider, new[] { "Method1" }), "Template \"Method1\" is invalid");
+            ExceptionAssert.ThrowsBaseException<InvalidTemplateException>(() => method.Invoke(methodCallValueProvider, new[] { "Method1(" }), "Template \"Method1(\" is invalid");
+            ExceptionAssert.ThrowsBaseException<InvalidTemplateException>(() => method.Invoke(methodCallValueProvider, new[] { "Method1)" }), "Template \"Method1)\" is invalid");
         }
 
         [TestMethod]
