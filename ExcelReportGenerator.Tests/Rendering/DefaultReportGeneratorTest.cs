@@ -185,6 +185,9 @@ namespace ExcelReportGenerator.Tests.Rendering
             sheet1.Cell(2, 7).Value = "{p:StrParam}";
             sheet1.Cell(3, 8).Value = "{p:IntParam}";
 
+            sheet1.Cell(2, 10).Value = "{v:SheetName}";
+            sheet1.Cell(3, 10).Value = "{v:SheetNumber}";
+
             IXLRange dynamicRange = sheet2.Range(2, 2, 4, 2);
             dynamicRange.AddToNamed("dyn_Dynamic", XLScope.Workbook);
             IXLNamedRange dynamicNamedRange = wb.NamedRange("dyn_Dynamic");
@@ -209,6 +212,9 @@ namespace ExcelReportGenerator.Tests.Rendering
             sheet2.Cell(10, 10).Value = "Plain text";
             sheet2.Cell(1, 1).Value = " { m:Format ( p:DateParam ) } ";
             sheet2.Cell(7, 1).Value = "{P:BoolParam}";
+
+            sheet2.Cell(2, 10).Value = "{v:SheetName}";
+            sheet2.Cell(3, 10).Value = "{v:SheetNumber}";
 
             reprotGenerator.Render(wb);
 
