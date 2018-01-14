@@ -84,6 +84,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             }
 
             RenderHeaders(columns);
+            RenderColumnNumbers(columns);
             IXLRange dataRange = RenderDataTemplates(columns);
             if (dataRange != null)
             {
@@ -134,6 +135,38 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             SetColumnsWidth(resultRange, columns);
 
             CallAfterRenderMethod(AfterHeadersRenderMethodName, resultRange, columns);
+        }
+
+        private void RenderColumnNumbers(IList<ExcelDynamicColumn> columns)
+        {
+            string template = _templateProcessor.WrapTemplate(@"Numbers(\((?<start>\d+)\))?");
+            IXLCell cell = Range.CellsUsed().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase));
+            if (cell == null)
+            {
+                return;
+            }
+
+            IXLWorksheet ws = Range.Worksheet;
+            IXLRange range = ws.Range(cell, cell);
+
+            Match match = Regex.Match(cell.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase);
+            if (!int.TryParse(match.Groups["start"]?.Value, out int startNumber))
+            {
+                startNumber = 1;
+            }
+
+            cell.Value = _templateProcessor.BuildDataItemTemplate("Number");
+            string rangeName = $"ColumnNumbers_{Guid.NewGuid():N}";
+            range.AddToNamed(rangeName, XLScope.Worksheet);
+
+            var panel = new ExcelDataSourcePanel(columns.Select((c, i) => new { Number = i + startNumber }).ToList(),
+                ws.NamedRange(rangeName), _report, _templateProcessor)
+            {
+                ShiftType = ShiftType.Cells,
+                Type = Type == PanelType.Vertical ? PanelType.Horizontal : PanelType.Vertical,
+            };
+
+            panel.Render();
         }
 
         private IXLRange RenderDataTemplates(IList<ExcelDynamicColumn> columns)

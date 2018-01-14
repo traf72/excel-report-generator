@@ -14,7 +14,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 4, 2);
+            IXLRange range = ws.Range(2, 2, 5, 2);
             range.AddToNamed("TestRange", XLScope.Worksheet);
 
             ws.Cell(2, 2).Value = "{Headers}";
@@ -22,13 +22,18 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(2, 2).Style.Border.OutsideBorderColor = XLColor.Red;
             ws.Cell(2, 2).Style.Font.Bold = true;
 
-            ws.Cell(3, 2).Value = "{Data}";
+            ws.Cell(3, 2).Value = "{Numbers}";
             ws.Cell(3, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
             ws.Cell(3, 2).Style.Border.OutsideBorderColor = XLColor.Black;
+            ws.Cell(3, 2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-            ws.Cell(4, 2).Value = "{Totals}";
-            ws.Cell(4, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Dotted;
-            ws.Cell(4, 2).Style.Border.OutsideBorderColor = XLColor.Green;
+            ws.Cell(4, 2).Value = "{Data}";
+            ws.Cell(4, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            ws.Cell(4, 2).Style.Border.OutsideBorderColor = XLColor.Black;
+
+            ws.Cell(5, 2).Value = "{Totals}";
+            ws.Cell(5, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Dotted;
+            ws.Cell(5, 2).Style.Border.OutsideBorderColor = XLColor.Green;
 
             var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataReader()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             panel.Render();
@@ -44,7 +49,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 2, 4);
+            IXLRange range = ws.Range(2, 2, 2, 5);
             range.AddToNamed("TestRange", XLScope.Worksheet);
 
             ws.Cell(2, 2).Value = "{Headers}";
@@ -52,13 +57,18 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(2, 2).Style.Border.OutsideBorderColor = XLColor.Red;
             ws.Cell(2, 2).Style.Font.Bold = true;
 
-            ws.Cell(2, 3).Value = "{Data}";
+            ws.Cell(2, 3).Value = "{Numbers(5)}";
             ws.Cell(2, 3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
             ws.Cell(2, 3).Style.Border.OutsideBorderColor = XLColor.Black;
+            ws.Cell(2, 3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-            ws.Cell(2, 4).Value = "{Totals}";
-            ws.Cell(2, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Dotted;
-            ws.Cell(2, 4).Style.Border.OutsideBorderColor = XLColor.Green;
+            ws.Cell(2, 4).Value = "{Data}";
+            ws.Cell(2, 4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            ws.Cell(2, 4).Style.Border.OutsideBorderColor = XLColor.Black;
+
+            ws.Cell(2, 5).Value = "{Totals}";
+            ws.Cell(2, 5).Style.Border.OutsideBorder = XLBorderStyleValues.Dotted;
+            ws.Cell(2, 5).Style.Border.OutsideBorderColor = XLColor.Green;
 
             var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataReader()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
