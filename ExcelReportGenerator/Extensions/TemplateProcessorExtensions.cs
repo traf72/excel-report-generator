@@ -75,6 +75,12 @@ namespace ExcelReportGenerator.Extensions
             return BuildTemplate(processor, processor.VariableMemberLabel, variableTemplate);
         }
 
+        public static string BuildSystemFunctionTemplate(this ITemplateProcessor processor, string systemFunctionTemplate)
+        {
+            //CheckForNullOrWhiteSpace(processor.SystemFunctionMemberLabel, nameof(processor.SystemFunctionMemberLabel));
+            return BuildTemplate(processor, processor.SystemFunctionMemberLabel, systemFunctionTemplate);
+        }
+
         private static string BuildTemplate(ITemplateProcessor processor, string memberLabel, string memberTemplate)
         {
             //CheckForNullOrWhiteSpace(processor.LeftTemplateBorder, nameof(processor.LeftTemplateBorder));
@@ -107,6 +113,12 @@ namespace ExcelReportGenerator.Extensions
             return TrimMemberLabel(processor, processor.VariableMemberLabel, variableTemplate);
         }
 
+        public static string TrimSystemFunctionLabel(this ITemplateProcessor processor, string systemFunctionTemplate)
+        {
+            //CheckForNullOrWhiteSpace(processor.SystemFunctionMemberLabel, nameof(processor.SystemFunctionMemberLabel));
+            return TrimMemberLabel(processor, processor.SystemFunctionMemberLabel, systemFunctionTemplate);
+        }
+
         private static string TrimMemberLabel(ITemplateProcessor processor, string memberLabel, string memberTemplate)
         {
             //CheckForNullOrEmpty(processor.MemberLabelSeparator, nameof(processor.MemberLabelSeparator));
@@ -136,10 +148,12 @@ namespace ExcelReportGenerator.Extensions
             //CheckForNullOrWhiteSpace(processor.DataItemMemberLabel, nameof(processor.DataItemMemberLabel));
             //CheckForNullOrWhiteSpace(processor.MethodCallMemberLabel, nameof(processor.MethodCallMemberLabel));
             //CheckForNullOrWhiteSpace(processor.VariableMemberLabel, nameof(processor.VariableMemberLabel));
+            //CheckForNullOrWhiteSpace(processor.SystemFunctionMemberLabel, nameof(processor.SystemFunctionMemberLabel));
             return GetRegexPattern(processor, $"({Regex.Escape(processor.PropertyMemberLabel)}" +
                                               $"|{Regex.Escape(processor.DataItemMemberLabel)}" +
                                               $"|{Regex.Escape(processor.MethodCallMemberLabel)}" +
-                                              $"|{Regex.Escape(processor.VariableMemberLabel)})");
+                                              $"|{Regex.Escape(processor.VariableMemberLabel)}" +
+                                              $"|{Regex.Escape(processor.SystemFunctionMemberLabel)})");
         }
 
         public static string GetPropertyRegexPattern(this ITemplateProcessor processor)
@@ -164,6 +178,12 @@ namespace ExcelReportGenerator.Extensions
         {
             //CheckForNullOrWhiteSpace(processor.VariableMemberLabel, nameof(processor.VariableMemberLabel));
             return GetRegexPattern(processor, $"{Regex.Escape(processor.VariableMemberLabel)}");
+        }
+
+        public static string GetSystemFunctionRegexPattern(this ITemplateProcessor processor)
+        {
+            //CheckForNullOrWhiteSpace(processor.SystemFunctionMemberLabel, nameof(processor.SystemFunctionMemberLabel));
+            return GetRegexPattern(processor, $"{Regex.Escape(processor.SystemFunctionMemberLabel)}");
         }
 
         private static string GetRegexPattern(ITemplateProcessor processor, string escapedMemberLabel)

@@ -182,6 +182,7 @@
     <Compile Include="Rendering\Parsers\IPanelPropertiesParser.cs" />
     <Compile Include="Rendering\Providers\VariableProviders\DefaultVariableValueProvider.cs" />
     <Compile Include="Rendering\Providers\VariableProviders\IVariableValueProvider.cs" />
+    <Compile Include="Rendering\SystemFunctions.cs" />
     <Compile Include="Rendering\TemplateParts\MethodCallTemplateParts.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataItemPanel.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataSourcePanel.cs" />

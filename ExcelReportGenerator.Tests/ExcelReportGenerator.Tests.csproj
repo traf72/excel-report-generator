@@ -230,6 +230,7 @@
     <Compile Include="Rendering\Providers\DefaultInstanceProviderTest.cs" />
     <Compile Include="Rendering\Providers\DefaultTypeProviderTest.cs" />
     <Compile Include="Rendering\Providers\VariableProviders\DefaultVariableProviderTest.cs" />
+    <Compile Include="Rendering\SystemFunctionsTest.cs" />
     <Compile Include="Rendering\TemplateProcessors\DefaultTemplateProcessorTest.cs" />
     <Compile Include="TestHelper.cs" />
   </ItemGroup>

@@ -44,6 +44,8 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
 
         public virtual string VariableMemberLabel => "v";
 
+        public virtual string SystemFunctionMemberLabel => "sf";
+
         /// <summary>
         /// Get value based on template
         /// </summary>
@@ -91,6 +93,14 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
             if (memberLabel == VariableMemberLabel)
             {
                 return VariableValueProvider.GetVariable(memberTemplate);
+            }
+            if (memberLabel == SystemFunctionMemberLabel)
+            {
+                if (MethodCallValueProvider == null)
+                {
+                    throw new InvalidOperationException($"Template \"{template}\" contains system function call but methodCallValueProvider is null");
+                }
+                return MethodCallValueProvider.CallMethod(memberTemplate, typeof(SystemFunctions), this, dataItem);
             }
 
             throw new InvalidTemplateException($"Invalid template \"{template}\". Unknown member label \"{memberLabel}\"");

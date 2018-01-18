@@ -1,6 +1,7 @@
 ﻿using ExcelReportGenerator.Exceptions;
 using ExcelReportGenerator.Extensions;
 using ExcelReportGenerator.Helpers;
+using ExcelReportGenerator.Rendering.TemplateParts;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using ExcelReportGenerator.Rendering.TemplateParts;
 
 namespace ExcelReportGenerator.Rendering.Providers
 {
@@ -33,13 +33,12 @@ namespace ExcelReportGenerator.Rendering.Providers
 
         private string MethodCallTemplate => TemplateStack.Peek();
 
-        /// <summary>
-        /// Call method by template
-        /// </summary>
-        /// <param name="templateProcessor">Template processor that will be used for parameters specified as templates</param>
-        /// <param name="dataItem">Data item that will be used for parameters specified as data item templates</param>
-        /// <returns>Method result</returns>
         public virtual object CallMethod(string methodCallTemplate, ITemplateProcessor templateProcessor, HierarchicalDataItem dataItem)
+        {
+            return CallMethod(methodCallTemplate, null, templateProcessor, dataItem);
+        }
+
+        public object CallMethod(string methodCallTemplate, Type concreteType, ITemplateProcessor templateProcessor, HierarchicalDataItem dataItem)
         {
             if (string.IsNullOrWhiteSpace(methodCallTemplate))
             {
@@ -50,7 +49,7 @@ namespace ExcelReportGenerator.Rendering.Providers
             try
             {
                 MethodCallTemplateParts templateParts = ParseTemplate(MethodCallTemplate);
-                Type type = TypeProvider.GetType(templateParts.TypeName);
+                Type type = concreteType ?? TypeProvider.GetType(templateParts.TypeName);
                 IList<InputParameter> inputParams = GetInputParametersValues(templateParts.MethodParams, templateProcessor, dataItem);
                 MethodInfo method = GetMethod(type, templateParts.MemberName, inputParams);
                 object instance = GetInstance(type, method.IsStatic);

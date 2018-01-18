@@ -28,9 +28,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(2, 5).Value = "''{m:Format(p:DateParam)}";
             ws.Cell(3, 1).Value = "Int: { p:IntParam }. Str: {p:ComplexTypeParam.StrParam}. FormattedDate: {M:Format(p:DateParam)}";
             ws.Cell(3, 2).Value = "''{m:Format(m:DateTime:AddDays(p:ComplexTypeParam.IntParam), \"yyyy-MM-dd\")}";
-            ws.Cell(3, 3).Value = "''{m:Format(m:AddDays(p:DateParam, 5), ddMMyyyy)}";
+            ws.Cell(3, 3).Value = "''{sf:Format(m:AddDays(p:DateParam, 5), ddMMyyyy)}";
             ws.Cell(3, 4).Value = "''{m:Format(m:AddDays(p:DateParam, -2), dd.MM.yyyy)}";
-            ws.Cell(3, 5).Value = "''{m:Format(m:AddDays(p:DateParam, [int]-3), \"dd.MM.yyyy HH:mm:ss\")}";
+            ws.Cell(3, 5).Value = "''{sf:Format(m:AddDays(p:DateParam, [int]-3), \"dd.MM.yyyy HH:mm:ss\")}";
             ws.Cell(4, 1).Value = "{m:TestReport:Counter()}";
             ws.Cell(4, 2).Value = "{ m:TestReport : Counter ( ) }";
             ws.Cell(4, 3).Value = "{m:Counter()}";

@@ -223,6 +223,31 @@ namespace ExcelReportGenerator.Tests.Extensions
         }
 
         [TestMethod]
+        public void TestBuildSystemFunctionTemplate()
+        {
+            ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
+            processor.LeftTemplateBorder.Returns("{");
+            processor.RightTemplateBorder.Returns("}");
+            processor.MemberLabelSeparator.Returns(":");
+            processor.SystemFunctionMemberLabel.Returns("sf");
+
+            Assert.AreEqual("{sf:Format(p:Prop, 0)}", processor.BuildSystemFunctionTemplate("Format(p:Prop, 0)"));
+            Assert.AreEqual("{sf:}", processor.BuildSystemFunctionTemplate(string.Empty));
+            Assert.AreEqual("{sf: }", processor.BuildSystemFunctionTemplate(" "));
+            Assert.AreEqual("{sf:}", processor.BuildSystemFunctionTemplate(null));
+
+            processor.LeftTemplateBorder.Returns((string)null);
+            processor.RightTemplateBorder.Returns((string)null);
+            processor.MemberLabelSeparator.Returns((string)null);
+            processor.SystemFunctionMemberLabel.Returns((string)null);
+
+            Assert.AreEqual("Format(p:Prop, 0)", processor.BuildSystemFunctionTemplate("Format(p:Prop, 0)"));
+            Assert.AreEqual(string.Empty, processor.BuildSystemFunctionTemplate(string.Empty));
+            Assert.AreEqual(" ", processor.BuildSystemFunctionTemplate(" "));
+            Assert.AreEqual(string.Empty, processor.BuildSystemFunctionTemplate(null));
+        }
+
+        [TestMethod]
         public void TestTrimPropertyLabel()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -315,6 +340,25 @@ namespace ExcelReportGenerator.Tests.Extensions
         }
 
         [TestMethod]
+        public void TestTrimSystemFunctionLabel()
+        {
+            ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
+            processor.MemberLabelSeparator.Returns(":");
+            processor.SystemFunctionMemberLabel.Returns("sf");
+
+            Assert.AreEqual("Format(p:Prop, 0)", processor.TrimSystemFunctionLabel("sf:Format(p:Prop, 0)"));
+            Assert.AreEqual(" { Format(p:Prop, 0) } ", processor.TrimSystemFunctionLabel(" { sf:Format(p:Prop, 0) } "));
+            ExceptionAssert.Throws<ArgumentNullException>(() => processor.TrimSystemFunctionLabel(null));
+
+            processor.MemberLabelSeparator.Returns((string)null);
+            Assert.AreEqual("Format(p:Prop, 0)", processor.TrimSystemFunctionLabel("sfFormat(p:Prop, 0)"));
+            Assert.AreEqual("{Format(p:Prop, 0)}", processor.TrimSystemFunctionLabel("{sfFormat(p:Prop, 0)}"));
+
+            processor.SystemFunctionMemberLabel.Returns((string)null);
+            Assert.AreEqual("sf:Format(p:Prop, 0)", processor.TrimSystemFunctionLabel("sf:Format(p:Prop, 0)"));
+        }
+
+        [TestMethod]
         public void TestGetFullRegexPattern()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -327,9 +371,10 @@ namespace ExcelReportGenerator.Tests.Extensions
             processor.DataItemMemberLabel.Returns("di");
             processor.MethodCallMemberLabel.Returns("m");
             processor.VariableMemberLabel.Returns("v");
+            processor.SystemFunctionMemberLabel.Returns("sf");
 
             string pattern = processor.GetFullRegexPattern();
-            Assert.AreEqual("\\{\\s*(p|di|m|v):.+?\\s*}", pattern);
+            Assert.AreEqual("\\{\\s*(p|di|m|v|sf):.+?\\s*}", pattern);
 
             MatchCollection matches = Regex.Matches("{p:Name}", pattern);
             Assert.AreEqual(1, matches.Count);
@@ -365,6 +410,10 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual(1, matches.Count);
             Assert.AreEqual("{v:Now}", matches[0].Value);
 
+            matches = Regex.Matches("{sf:Format(p:Prop, 0,##)}", pattern);
+            Assert.AreEqual(1, matches.Count);
+            Assert.AreEqual("{sf:Format(p:Prop, 0,##)}", matches[0].Value);
+
             matches = Regex.Matches("{ms:Meth()}", pattern);
             Assert.AreEqual(0, matches.Count);
 
@@ -391,9 +440,10 @@ namespace ExcelReportGenerator.Tests.Extensions
             processor.DataItemMemberLabel.Returns("data");
             processor.MethodCallMemberLabel.Returns("meth");
             processor.VariableMemberLabel.Returns("var");
+            processor.SystemFunctionMemberLabel.Returns("sysf");
 
             pattern = processor.GetFullRegexPattern();
-            Assert.AreEqual("\\[\\s*(prop|data|meth|var)\\*.+?\\s*]", pattern);
+            Assert.AreEqual("\\[\\s*(prop|data|meth|var|sysf)\\*.+?\\s*]", pattern);
 
             matches = Regex.Matches("[prop*Name]", pattern);
             Assert.AreEqual(1, matches.Count);
@@ -429,6 +479,10 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual(1, matches.Count);
             Assert.AreEqual("[var*Now]", matches[0].Value);
 
+            matches = Regex.Matches("[sysf*Format(prop*Prop, 0,##)]", pattern);
+            Assert.AreEqual(1, matches.Count);
+            Assert.AreEqual("[sysf*Format(prop*Prop, 0,##)]", matches[0].Value);
+
             matches = Regex.Matches("[[prop*Name]]", pattern);
             Assert.AreEqual(1, matches.Count);
 
@@ -440,9 +494,10 @@ namespace ExcelReportGenerator.Tests.Extensions
             processor.DataItemMemberLabel.Returns("data");
             processor.MethodCallMemberLabel.Returns("meth");
             processor.VariableMemberLabel.Returns("var");
+            processor.SystemFunctionMemberLabel.Returns("sysf");
 
             pattern = processor.GetFullRegexPattern();
-            Assert.AreEqual("<<\\s*(prop|data|meth|var)&&.+?\\s*@@", pattern);
+            Assert.AreEqual("<<\\s*(prop|data|meth|var|sysf)&&.+?\\s*@@", pattern);
 
             matches = Regex.Matches("<<prop&&Name@@", pattern);
             Assert.AreEqual(1, matches.Count);
@@ -467,6 +522,10 @@ namespace ExcelReportGenerator.Tests.Extensions
             matches = Regex.Matches("<<var&&Now@@", pattern);
             Assert.AreEqual(1, matches.Count);
             Assert.AreEqual("<<var&&Now@@", matches[0].Value);
+
+            matches = Regex.Matches("<<sysf&&Format(prop&&Prop, 0,##)@@", pattern);
+            Assert.AreEqual(1, matches.Count);
+            Assert.AreEqual("<<sysf&&Format(prop&&Prop, 0,##)@@", matches[0].Value);
 
             matches = Regex.Matches("<<meth&&Meth(prop&&Value, data&&Name, 5, \"Hi\", meth&&Meth2(meth&&Meth3()))@@", pattern);
             Assert.AreEqual(1, matches.Count);
@@ -496,60 +555,69 @@ namespace ExcelReportGenerator.Tests.Extensions
             processor.DataItemMemberLabel.Returns("di");
             processor.MethodCallMemberLabel.Returns("m");
             processor.VariableMemberLabel.Returns("v");
+            processor.SystemFunctionMemberLabel.Returns("sf");
 
             ExceptionAssert.Throws<Exception>(() => processor.GetFullRegexPattern());
             processor.LeftTemplateBorder.Returns(string.Empty);
-            Assert.AreEqual("\\s*(p|di|m|v):.+?\\s*}", processor.GetFullRegexPattern());
+            Assert.AreEqual("\\s*(p|di|m|v|sf):.+?\\s*}", processor.GetFullRegexPattern());
             processor.LeftTemplateBorder.Returns(" ");
-            Assert.AreEqual("\\ \\s*(p|di|m|v):.+?\\s*}", processor.GetFullRegexPattern());
+            Assert.AreEqual("\\ \\s*(p|di|m|v|sf):.+?\\s*}", processor.GetFullRegexPattern());
 
             processor.LeftTemplateBorder.Returns("{");
             processor.RightTemplateBorder.Returns((string)null);
             ExceptionAssert.Throws<Exception>(() => processor.GetFullRegexPattern());
             processor.RightTemplateBorder.Returns(string.Empty);
-            Assert.AreEqual("\\{\\s*(p|di|m|v):.+?\\s*", processor.GetFullRegexPattern());
+            Assert.AreEqual("\\{\\s*(p|di|m|v|sf):.+?\\s*", processor.GetFullRegexPattern());
             processor.RightTemplateBorder.Returns(" ");
-            Assert.AreEqual("\\{\\s*(p|di|m|v):.+?\\s*\\ ", processor.GetFullRegexPattern());
+            Assert.AreEqual("\\{\\s*(p|di|m|v|sf):.+?\\s*\\ ", processor.GetFullRegexPattern());
 
             processor.RightTemplateBorder.Returns("}");
             processor.MemberLabelSeparator.Returns((string)null);
             ExceptionAssert.Throws<Exception>(() => processor.GetFullRegexPattern());
             processor.MemberLabelSeparator.Returns(string.Empty);
-            Assert.AreEqual("\\{\\s*(p|di|m|v).+?\\s*}", processor.GetFullRegexPattern());
+            Assert.AreEqual("\\{\\s*(p|di|m|v|sf).+?\\s*}", processor.GetFullRegexPattern());
             processor.MemberLabelSeparator.Returns(" ");
-            Assert.AreEqual("\\{\\s*(p|di|m|v)\\ .+?\\s*}", processor.GetFullRegexPattern());
+            Assert.AreEqual("\\{\\s*(p|di|m|v|sf)\\ .+?\\s*}", processor.GetFullRegexPattern());
 
             processor.MemberLabelSeparator.Returns(":");
             processor.PropertyMemberLabel.Returns((string)null);
             ExceptionAssert.Throws<Exception>(() => processor.GetFullRegexPattern());
             processor.PropertyMemberLabel.Returns(string.Empty);
-            Assert.AreEqual("\\{\\s*(|di|m|v):.+?\\s*}", processor.GetFullRegexPattern());
+            Assert.AreEqual("\\{\\s*(|di|m|v|sf):.+?\\s*}", processor.GetFullRegexPattern());
             processor.PropertyMemberLabel.Returns(" ");
-            Assert.AreEqual("\\{\\s*(\\ |di|m|v):.+?\\s*}", processor.GetFullRegexPattern());
+            Assert.AreEqual("\\{\\s*(\\ |di|m|v|sf):.+?\\s*}", processor.GetFullRegexPattern());
 
             processor.PropertyMemberLabel.Returns("p");
             processor.DataItemMemberLabel.Returns((string)null);
             ExceptionAssert.Throws<Exception>(() => processor.GetFullRegexPattern());
             processor.DataItemMemberLabel.Returns(string.Empty);
-            Assert.AreEqual("\\{\\s*(p||m|v):.+?\\s*}", processor.GetFullRegexPattern());
+            Assert.AreEqual("\\{\\s*(p||m|v|sf):.+?\\s*}", processor.GetFullRegexPattern());
             processor.DataItemMemberLabel.Returns(" ");
-            Assert.AreEqual("\\{\\s*(p|\\ |m|v):.+?\\s*}", processor.GetFullRegexPattern());
+            Assert.AreEqual("\\{\\s*(p|\\ |m|v|sf):.+?\\s*}", processor.GetFullRegexPattern());
 
             processor.DataItemMemberLabel.Returns("di");
             processor.MethodCallMemberLabel.Returns((string)null);
             ExceptionAssert.Throws<Exception>(() => processor.GetFullRegexPattern());
             processor.MethodCallMemberLabel.Returns(string.Empty);
-            Assert.AreEqual("\\{\\s*(p|di||v):.+?\\s*}", processor.GetFullRegexPattern());
+            Assert.AreEqual("\\{\\s*(p|di||v|sf):.+?\\s*}", processor.GetFullRegexPattern());
             processor.MethodCallMemberLabel.Returns(" ");
-            Assert.AreEqual("\\{\\s*(p|di|\\ |v):.+?\\s*}", processor.GetFullRegexPattern());
+            Assert.AreEqual("\\{\\s*(p|di|\\ |v|sf):.+?\\s*}", processor.GetFullRegexPattern());
 
             processor.MethodCallMemberLabel.Returns("m");
             processor.VariableMemberLabel.Returns((string)null);
             ExceptionAssert.Throws<Exception>(() => processor.GetFullRegexPattern());
             processor.VariableMemberLabel.Returns(string.Empty);
-            Assert.AreEqual("\\{\\s*(p|di|m|):.+?\\s*}", processor.GetFullRegexPattern());
+            Assert.AreEqual("\\{\\s*(p|di|m||sf):.+?\\s*}", processor.GetFullRegexPattern());
             processor.VariableMemberLabel.Returns(" ");
-            Assert.AreEqual("\\{\\s*(p|di|m|\\ ):.+?\\s*}", processor.GetFullRegexPattern());
+            Assert.AreEqual("\\{\\s*(p|di|m|\\ |sf):.+?\\s*}", processor.GetFullRegexPattern());
+
+            processor.VariableMemberLabel.Returns("v");
+            processor.SystemFunctionMemberLabel.Returns((string)null);
+            ExceptionAssert.Throws<Exception>(() => processor.GetFullRegexPattern());
+            processor.SystemFunctionMemberLabel.Returns(string.Empty);
+            Assert.AreEqual("\\{\\s*(p|di|m|v|):.+?\\s*}", processor.GetFullRegexPattern());
+            processor.SystemFunctionMemberLabel.Returns(" ");
+            Assert.AreEqual("\\{\\s*(p|di|m|v|\\ ):.+?\\s*}", processor.GetFullRegexPattern());
         }
 
         [TestMethod]
@@ -726,6 +794,44 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual("\\{\\s*:.+?\\s*}", processor.GetVariableRegexPattern());
             processor.VariableMemberLabel.Returns(" ");
             Assert.AreEqual("\\{\\s*\\ :.+?\\s*}", processor.GetVariableRegexPattern());
+        }
+
+        [TestMethod]
+        public void TestGetSystemFunctionRegexPattern()
+        {
+            ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
+            processor.LeftTemplateBorder.Returns("{");
+            processor.RightTemplateBorder.Returns("}");
+            processor.MemberLabelSeparator.Returns(":");
+            processor.SystemFunctionMemberLabel.Returns("sf");
+
+            string pattern = processor.GetSystemFunctionRegexPattern();
+            Assert.AreEqual("\\{\\s*sf:.+?\\s*}", pattern);
+
+            MatchCollection matches = Regex.Matches("{ sf:Format(p:Prop, 0) }", pattern);
+            Assert.AreEqual(1, matches.Count);
+            Assert.AreEqual("{ sf:Format(p:Prop, 0) }", matches[0].Value);
+
+            matches = Regex.Matches("{d:Now}", pattern);
+            Assert.AreEqual(0, matches.Count);
+
+            processor.SystemFunctionMemberLabel.Returns("*");
+            pattern = processor.GetSystemFunctionRegexPattern();
+            Assert.AreEqual("\\{\\s*\\*:.+?\\s*}", pattern);
+
+            matches = Regex.Matches("{ *:Format(p:Prop, 0)}", pattern);
+            Assert.AreEqual(1, matches.Count);
+            Assert.AreEqual("{ *:Format(p:Prop, 0)}", matches[0].Value);
+
+            matches = Regex.Matches("{**:Format(p:Prop, 0)}", pattern);
+            Assert.AreEqual(0, matches.Count);
+
+            processor.SystemFunctionMemberLabel.Returns((string)null);
+            ExceptionAssert.Throws<Exception>(() => processor.GetSystemFunctionRegexPattern());
+            processor.SystemFunctionMemberLabel.Returns(string.Empty);
+            Assert.AreEqual("\\{\\s*:.+?\\s*}", processor.GetSystemFunctionRegexPattern());
+            processor.SystemFunctionMemberLabel.Returns(" ");
+            Assert.AreEqual("\\{\\s*\\ :.+?\\s*}", processor.GetSystemFunctionRegexPattern());
         }
 
         [TestMethod]

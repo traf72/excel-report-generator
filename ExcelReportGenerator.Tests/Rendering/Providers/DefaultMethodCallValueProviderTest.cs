@@ -296,6 +296,12 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
 
             typeProvider.ClearReceivedCalls();
             instanceProvider.ClearReceivedCalls();
+            Assert.AreEqual("Str_5", methodCallValueProvider.CallMethod("Method1()", typeof(TestClass), templateProcessor, null));
+            typeProvider.DidNotReceiveWithAnyArgs().GetType(Arg.Any<string>());
+            instanceProvider.Received(1).GetInstance(typeof(TestClass));
+            templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
+
+            instanceProvider.ClearReceivedCalls();
             Assert.AreEqual(25, methodCallValueProvider.CallMethod("Method2(prop**Value, 18)", templateProcessor, dataItem));
             typeProvider.Received(1).GetType(null);
             instanceProvider.DidNotReceiveWithAnyArgs().GetInstance(Arg.Any<Type>());
