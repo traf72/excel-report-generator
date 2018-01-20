@@ -266,7 +266,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             var typeProvider = new DefaultTypeProvider(new[] { Assembly.GetExecutingAssembly(), Assembly.GetAssembly(typeof(DateTime)), }, GetType());
             var instanceProvider = new DefaultInstanceProvider(this);
 
-            TemplateProcessor = new DefaultTemplateProcessor(new DefaultPropertyValueProvider(typeProvider, instanceProvider), new DefaultVariableValueProvider(),
+            TemplateProcessor = new DefaultTemplateProcessor(new DefaultPropertyValueProvider(typeProvider, instanceProvider), new SystemVariableProvider(),
                 new DefaultMethodCallValueProvider(typeProvider, instanceProvider), new HierarchicalDataItemValueProvider(new DataItemValueProviderFactory()));
         }
 

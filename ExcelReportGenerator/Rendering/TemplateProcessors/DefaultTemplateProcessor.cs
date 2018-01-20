@@ -13,18 +13,18 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
     /// </summary>
     public class DefaultTemplateProcessor : ITemplateProcessor
     {
-        public DefaultTemplateProcessor(IPropertyValueProvider propertyValueProvider, IVariableValueProvider variableValueProvider,
+        public DefaultTemplateProcessor(IPropertyValueProvider propertyValueProvider, SystemVariableProvider systemVariableProvider,
             IMethodCallValueProvider methodCallValueProvider = null, IGenericDataItemValueProvider<HierarchicalDataItem> dataItemValueProvider = null)
         {
             PropertyValueProvider = propertyValueProvider ?? throw new ArgumentNullException(nameof(propertyValueProvider), ArgumentHelper.NullParamMessage);
-            VariableValueProvider = variableValueProvider ?? throw new ArgumentNullException(nameof(variableValueProvider), ArgumentHelper.NullParamMessage);
+            SystemVariableProvider = systemVariableProvider ?? throw new ArgumentNullException(nameof(systemVariableProvider), ArgumentHelper.NullParamMessage);
             MethodCallValueProvider = methodCallValueProvider;
             DataItemValueProvider = dataItemValueProvider;
         }
 
         protected IPropertyValueProvider PropertyValueProvider { get; }
 
-        protected IVariableValueProvider VariableValueProvider { get; }
+        protected SystemVariableProvider SystemVariableProvider { get; }
 
         protected IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider { get; }
 
@@ -42,7 +42,7 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
 
         public virtual string DataItemMemberLabel => "di";
 
-        public virtual string VariableMemberLabel => "v";
+        public virtual string SystemVariableMemberLabel => "sv";
 
         public virtual string SystemFunctionMemberLabel => "sf";
 
@@ -90,9 +90,9 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
                 }
                 return MethodCallValueProvider.CallMethod(memberTemplate, this, dataItem);
             }
-            if (memberLabel == VariableMemberLabel)
+            if (memberLabel == SystemVariableMemberLabel)
             {
-                return VariableValueProvider.GetVariable(memberTemplate);
+                return SystemVariableProvider.GetVariable(memberTemplate);
             }
             if (memberLabel == SystemFunctionMemberLabel)
             {

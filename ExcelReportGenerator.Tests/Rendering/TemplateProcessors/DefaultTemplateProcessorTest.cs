@@ -18,7 +18,7 @@ namespace ExcelReportGenerator.Tests.Rendering.TemplateProcessors
         public void TestGetValue()
         {
             var propertyValueProvider = Substitute.For<IPropertyValueProvider>();
-            var variableValueProvider = Substitute.For<IVariableValueProvider>();
+            var variableValueProvider = Substitute.For<SystemVariableProvider>();
             var methodCallValueProvider = Substitute.For<IMethodCallValueProvider>();
             var dataItemValueProvider = Substitute.For<IGenericDataItemValueProvider<HierarchicalDataItem>>();
             var dataItem = new HierarchicalDataItem();
@@ -58,7 +58,7 @@ namespace ExcelReportGenerator.Tests.Rendering.TemplateProcessors
             dataItemValueProvider.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>(), null);
 
             propertyValueProvider.ClearReceivedCalls();
-            templateProcessor.GetValue("v:Now");
+            templateProcessor.GetValue("sv:Now");
 
             variableValueProvider.Received(1).GetVariable("Now");
             propertyValueProvider.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());

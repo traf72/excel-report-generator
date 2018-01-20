@@ -22,7 +22,7 @@ namespace ExcelReportGenerator.Rendering
         private IPropertyValueProvider _propertyValueProvider;
         private IMethodCallValueProvider _methodCallValueProvider;
         private IGenericDataItemValueProvider<HierarchicalDataItem> _dataItemValueProvider;
-        private DefaultVariableValueProvider _variableValueProvider;
+        private SystemVariableProvider _systemVariableProvider;
         private ITemplateProcessor _templateProcessor;
         private IPanelPropertiesParser _panelPropertiesParser;
         private PanelParsingSettings _panelParsingSettings;
@@ -43,9 +43,9 @@ namespace ExcelReportGenerator.Rendering
 
         public virtual IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider => _dataItemValueProvider ?? (_dataItemValueProvider = new HierarchicalDataItemValueProvider());
 
-        public virtual DefaultVariableValueProvider VariableValueProvider => _variableValueProvider ?? (_variableValueProvider = new DefaultVariableValueProvider());
+        public virtual SystemVariableProvider SystemVariableProvider => _systemVariableProvider ?? (_systemVariableProvider = new SystemVariableProvider());
 
-        public virtual ITemplateProcessor TemplateProcessor => _templateProcessor ?? (_templateProcessor = new DefaultTemplateProcessor(PropertyValueProvider, VariableValueProvider, MethodCallValueProvider, DataItemValueProvider));
+        public virtual ITemplateProcessor TemplateProcessor => _templateProcessor ?? (_templateProcessor = new DefaultTemplateProcessor(PropertyValueProvider, _systemVariableProvider, MethodCallValueProvider, DataItemValueProvider));
 
         public virtual IPanelPropertiesParser PanelPropertiesParser => _panelPropertiesParser ?? (_panelPropertiesParser = new DefaultPanelPropertiesParser(PanelParsingSettings));
 
@@ -84,6 +84,14 @@ namespace ExcelReportGenerator.Rendering
             {
                 throw new ArgumentNullException(nameof(reportTemplate), ArgumentHelper.NullParamMessage);
             }
+            if (SystemVariableProvider == null)
+            {
+                throw new Exception($"Property {nameof(SystemVariableProvider)} cannot be null");
+            }
+
+            SystemVariableProvider.RenderDate = DateTime.Now;
+
+            // TODO Call BeforeRender event
 
             if (worksheets == null || !worksheets.Any())
             {
@@ -95,18 +103,18 @@ namespace ExcelReportGenerator.Rendering
                 return reportTemplate;
             }
 
-            VariableValueProvider.RenderDate = DateTime.Now;
-
             IList<IXLNamedRange> workbookPanels = GetPanelsNamedRanges(reportTemplate.NamedRanges);
             foreach (IXLWorksheet ws in worksheets)
             {
+                SystemVariableProvider.SheetName = ws.Name;
+                SystemVariableProvider.SheetNumber = ws.Position;
+
+                // TODO Call BeforeRenderSheet event
+
                 if (!ws.CellsUsed().Any())
                 {
                     continue;
                 }
-
-                VariableValueProvider.SheetName = ws.Name;
-                VariableValueProvider.SheetNumber = ws.Position;
 
                 IList<IXLNamedRange> worksheetPanels = GetPanelsNamedRanges(ws.NamedRanges);
                 foreach (IXLNamedRange workbookPanel in workbookPanels)

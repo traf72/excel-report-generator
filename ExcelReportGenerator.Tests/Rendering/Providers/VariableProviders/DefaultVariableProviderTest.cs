@@ -1,8 +1,8 @@
-﻿using System;
-using ExcelReportGenerator.Exceptions;
+﻿using ExcelReportGenerator.Exceptions;
 using ExcelReportGenerator.Rendering.Providers.VariableProviders;
 using ExcelReportGenerator.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.VariableProviders
 {
@@ -12,7 +12,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.VariableProviders
         [TestMethod]
         public void TestGetVariable()
         {
-            IVariableValueProvider variableProvider = new CustomVariableProvider
+            SystemVariableProvider variableProvider = new CustomVariableProvider
             {
                 RenderDate = new DateTime(2018, 1, 1),
                 CustomProp = 999,
@@ -31,7 +31,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.VariableProviders
             ExceptionAssert.Throws<ArgumentException>(() => variableProvider.GetVariable(" "));
         }
 
-        private class CustomVariableProvider : DefaultVariableValueProvider
+        private class CustomVariableProvider : SystemVariableProvider
         {
             public string SheetName { get; set; }
 

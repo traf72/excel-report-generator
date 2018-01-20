@@ -2,11 +2,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace ExcelReportGenerator.Rendering
 {
-    internal static class SystemFunctions
+    public class SystemFunctions
     {
         public static object GetDictVal(object dictionary, object key)
         {

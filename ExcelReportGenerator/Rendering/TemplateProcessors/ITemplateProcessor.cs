@@ -42,10 +42,10 @@
         string DataItemMemberLabel { get; }
 
         /// <summary>
-        /// Variable label
+        /// System variable label
         /// Cannot be null, empty or whitespace
         /// </summary>
-        string VariableMemberLabel { get; }
+        string SystemVariableMemberLabel { get; }
 
         /// <summary>
         /// System function label
