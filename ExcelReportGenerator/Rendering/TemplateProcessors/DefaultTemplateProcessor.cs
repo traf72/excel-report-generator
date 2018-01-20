@@ -30,6 +30,8 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
 
         protected IMethodCallValueProvider MethodCallValueProvider { get; }
 
+        public Type SystemFunctionsType { get; set; } = typeof(SystemFunctions);
+
         public virtual string LeftTemplateBorder => "{";
 
         public virtual string RightTemplateBorder => "}";
@@ -96,11 +98,15 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
             }
             if (memberLabel == SystemFunctionMemberLabel)
             {
+                if (SystemFunctionsType == null)
+                {
+                    throw new InvalidOperationException($"Template \"{template}\" contains system function call but property SystemFunctionsType is null");
+                }
                 if (MethodCallValueProvider == null)
                 {
                     throw new InvalidOperationException($"Template \"{template}\" contains system function call but methodCallValueProvider is null");
                 }
-                return MethodCallValueProvider.CallMethod(memberTemplate, typeof(SystemFunctions), this, dataItem);
+                return MethodCallValueProvider.CallMethod(memberTemplate, SystemFunctionsType, this, dataItem);
             }
 
             throw new InvalidTemplateException($"Invalid template \"{template}\". Unknown member label \"{memberLabel}\"");

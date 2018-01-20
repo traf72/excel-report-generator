@@ -91,6 +91,7 @@ namespace ExcelReportGenerator.Tests.Rendering.TemplateProcessors
             methodCallValueProvider.ClearReceivedCalls();
             ExceptionAssert.Throws<InvalidOperationException>(() => new DefaultTemplateProcessor(propertyValueProvider, variableValueProvider).GetValue("{m:Method()}"), "Template \"{m:Method()}\" contains method call but methodCallValueProvider is null");
             ExceptionAssert.Throws<InvalidOperationException>(() => new DefaultTemplateProcessor(propertyValueProvider, variableValueProvider).GetValue("{sf:Format(p:Prop, 0))}"), "Template \"{sf:Format(p:Prop, 0))}\" contains system function call but methodCallValueProvider is null");
+            ExceptionAssert.Throws<InvalidOperationException>(() => new DefaultTemplateProcessor(propertyValueProvider, variableValueProvider){ SystemFunctionsType = null }.GetValue("{sf:Format(p:Prop, 0))}"), "Template \"{sf:Format(p:Prop, 0))}\" contains system function call but property SystemFunctionsType is null");
 
             templateProcessor.GetValue("{di:Field}", dataItem);
             propertyValueProvider.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());

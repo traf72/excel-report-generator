@@ -22,7 +22,6 @@ namespace ExcelReportGenerator.Rendering
         private IPropertyValueProvider _propertyValueProvider;
         private IMethodCallValueProvider _methodCallValueProvider;
         private IGenericDataItemValueProvider<HierarchicalDataItem> _dataItemValueProvider;
-        private SystemVariableProvider _systemVariableProvider;
         private ITemplateProcessor _templateProcessor;
         private IPanelPropertiesParser _panelPropertiesParser;
         private PanelParsingSettings _panelParsingSettings;
@@ -32,6 +31,10 @@ namespace ExcelReportGenerator.Rendering
         {
             _report = report ?? throw new ArgumentNullException(nameof(report), ArgumentHelper.NullParamMessage);
         }
+
+        public virtual Type SystemFunctionsType { get; set; } = typeof(SystemFunctions);
+
+        public virtual SystemVariableProvider SystemVariableProvider { get; set; } = new SystemVariableProvider();
 
         public virtual ITypeProvider TypeProvider => _typeProvider ?? (_typeProvider = new DefaultTypeProvider(defaultType: _report.GetType()));
 
@@ -43,9 +46,8 @@ namespace ExcelReportGenerator.Rendering
 
         public virtual IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider => _dataItemValueProvider ?? (_dataItemValueProvider = new HierarchicalDataItemValueProvider());
 
-        public virtual SystemVariableProvider SystemVariableProvider => _systemVariableProvider ?? (_systemVariableProvider = new SystemVariableProvider());
-
-        public virtual ITemplateProcessor TemplateProcessor => _templateProcessor ?? (_templateProcessor = new DefaultTemplateProcessor(PropertyValueProvider, _systemVariableProvider, MethodCallValueProvider, DataItemValueProvider));
+        public virtual ITemplateProcessor TemplateProcessor => _templateProcessor ?? (_templateProcessor =
+            new DefaultTemplateProcessor(PropertyValueProvider, SystemVariableProvider, MethodCallValueProvider, DataItemValueProvider) { SystemFunctionsType = SystemFunctionsType });
 
         public virtual IPanelPropertiesParser PanelPropertiesParser => _panelPropertiesParser ?? (_panelPropertiesParser = new DefaultPanelPropertiesParser(PanelParsingSettings));
 
@@ -127,7 +129,7 @@ namespace ExcelReportGenerator.Rendering
                 }
 
                 IDictionary<string, (IExcelPanel, string)> panelsFlatView = GetPanelsFlatView(worksheetPanels);
-                IExcelPanel rootPanel = new ExcelPanel(ws.Range(ws.FirstCellUsed(), ws.LastCellUsed()), _report, _templateProcessor);
+                IExcelPanel rootPanel = new ExcelPanel(ws.Range(ws.FirstCellUsed(), ws.LastCellUsed()), _report, TemplateProcessor);
                 MakePanelsHierarchy(panelsFlatView, rootPanel);
                 rootPanel.Render();
             }

@@ -10,6 +10,7 @@ using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using ExcelReportGenerator.Rendering.Providers.VariableProviders;
 
 namespace ExcelReportGenerator.Tests.Rendering
 {
@@ -286,6 +287,32 @@ namespace ExcelReportGenerator.Tests.Rendering
             //wb.SaveAs("test.xlsx");
         }
 
+        [TestMethod]
+        public void TestRenderWithCustomVariableAndFunctionProviders()
+        {
+            var report = new TestReport();
+            XLWorkbook wb = report.Workbook;
+            IXLWorksheet sheet1 = wb.AddWorksheet("Sheet1");
+            var reprotGenerator = new TestReportGenerator(report)
+            {
+                SystemVariableProvider = new VariableProvider(),
+                SystemFunctionsType = typeof(Functions),
+            };
+
+            sheet1.Cell(2, 2).Value = "{sv:SheetName}";
+            sheet1.Cell(2, 3).Value = "{sv:SheetNumber}";
+            sheet1.Cell(2, 4).Value = "{sv:CustomVar}";
+            sheet1.Cell(2, 5).Value = "{sf:Format(p:DateParam, yyyyMMdd)}";
+            sheet1.Cell(2, 6).Value = "{sf:StaticFunc(p:IntParam)}";
+            sheet1.Cell(2, 7).Value = "{sf:InstanceFunc(p:IntParam)}";
+
+            reprotGenerator.Render(wb);
+
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRenderWithCustomVariableAndFunctionProviders)), wb);
+
+            //wb.SaveAs("test.xlsx");
+        }
+
         private class TestReportGenerator : DefaultReportGenerator
         {
             private ITypeProvider _typeProvider;
@@ -295,6 +322,24 @@ namespace ExcelReportGenerator.Tests.Rendering
             }
 
             public override ITypeProvider TypeProvider => _typeProvider ?? (_typeProvider = new DefaultTypeProvider(new[] { Assembly.GetExecutingAssembly() }, _report.GetType()));
+        }
+
+        private class VariableProvider : SystemVariableProvider
+        {
+            public string CustomVar { get; set; } = "Custom";
+        }
+
+        private class Functions : SystemFunctions
+        {
+            public static string StaticFunc(int param)
+            {
+                return (param + 5).ToString();
+            }
+
+            public string InstanceFunc(int param)
+            {
+                return (param + 10).ToString();
+            }
         }
     }
 }
