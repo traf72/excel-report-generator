@@ -41,6 +41,37 @@ namespace ExcelReportGenerator.Rendering
             return realDict.Contains(key) ? realDict[key] : null;
         }
 
+        public static object GetByIndex(object list, int index)
+        {
+            if (list == null)
+            {
+                throw new ArgumentNullException(nameof(list), ArgumentHelper.NullParamMessage);
+            }
+            if (!(list is IList realList))
+            {
+                throw new ArgumentException($"Parameter \"{nameof(list)}\" must implement {nameof(IList)} interface");
+            }
+
+            return realList[index];
+        }
+
+        public static object TryGetByIndex(object list, int index)
+        {
+            if (list == null || !(list is IList realList))
+            {
+                return null;
+            }
+
+            try
+            {
+                return realList[index];
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public static string Format(object input, string format, IFormatProvider formatProvider = null)
         {
             if (input == null)

@@ -74,6 +74,76 @@ namespace ExcelReportGenerator.Tests.Rendering
         }
 
         [TestMethod]
+        public void TestGetByIndex()
+        {
+            int[] intArray = { 100, 200 };
+            Assert.AreEqual(100, SystemFunctions.GetByIndex(intArray, 0));
+            Assert.AreEqual(200, SystemFunctions.GetByIndex(intArray, 1));
+
+            Guid guid = Guid.NewGuid();
+            string str = "Str";
+            Random rnd = new Random();
+            object[] mixedArray = { guid, str, rnd };
+
+            Assert.AreEqual(guid, SystemFunctions.GetByIndex(mixedArray, 0));
+            Assert.AreEqual("Str", SystemFunctions.GetByIndex(mixedArray, 1));
+            Assert.AreSame(rnd, SystemFunctions.GetByIndex(mixedArray, 2));
+
+            IList<string> strList = new List<string> { "One", "Two" };
+            Assert.AreEqual("One", SystemFunctions.GetByIndex(strList, 0));
+            Assert.AreEqual("Two", SystemFunctions.GetByIndex(strList, 1));
+
+            IList mixedList = new ArrayList();
+            mixedList.Add(guid);
+            mixedList.Add(str);
+            mixedList.Add(rnd);
+
+            Assert.AreEqual(guid, SystemFunctions.GetByIndex(mixedList, 0));
+            Assert.AreEqual("Str", SystemFunctions.GetByIndex(mixedList, 1));
+            Assert.AreSame(rnd, SystemFunctions.GetByIndex(mixedList, 2));
+
+            ExceptionAssert.Throws<ArgumentNullException>(() => SystemFunctions.GetByIndex(null, 0));
+            ExceptionAssert.Throws<ArgumentException>(() => SystemFunctions.GetByIndex(Guid.NewGuid(), 0), $"Parameter \"list\" must implement {nameof(IList)} interface");
+            ExceptionAssert.Throws<IndexOutOfRangeException>(() => SystemFunctions.GetByIndex(mixedArray, -1));
+            ExceptionAssert.Throws<IndexOutOfRangeException>(() => SystemFunctions.GetByIndex(mixedArray, 3));
+        }
+
+        [TestMethod]
+        public void TestTryGetByIndex()
+        {
+            int[] intArray = { 100, 200 };
+            Assert.AreEqual(100, SystemFunctions.TryGetByIndex(intArray, 0));
+            Assert.AreEqual(200, SystemFunctions.TryGetByIndex(intArray, 1));
+
+            Guid guid = Guid.NewGuid();
+            string str = "Str";
+            Random rnd = new Random();
+            object[] mixedArray = { guid, str, rnd };
+
+            Assert.AreEqual(guid, SystemFunctions.TryGetByIndex(mixedArray, 0));
+            Assert.AreEqual("Str", SystemFunctions.TryGetByIndex(mixedArray, 1));
+            Assert.AreSame(rnd, SystemFunctions.TryGetByIndex(mixedArray, 2));
+
+            IList<string> strList = new List<string> { "One", "Two" };
+            Assert.AreEqual("One", SystemFunctions.TryGetByIndex(strList, 0));
+            Assert.AreEqual("Two", SystemFunctions.TryGetByIndex(strList, 1));
+
+            IList mixedList = new ArrayList();
+            mixedList.Add(guid);
+            mixedList.Add(str);
+            mixedList.Add(rnd);
+
+            Assert.AreEqual(guid, SystemFunctions.TryGetByIndex(mixedList, 0));
+            Assert.AreEqual("Str", SystemFunctions.TryGetByIndex(mixedList, 1));
+            Assert.AreSame(rnd, SystemFunctions.TryGetByIndex(mixedList, 2));
+
+            Assert.IsNull(SystemFunctions.TryGetByIndex(null, 0));
+            Assert.IsNull(SystemFunctions.TryGetByIndex(Guid.NewGuid(), 0));
+            Assert.IsNull(SystemFunctions.TryGetByIndex(mixedArray, -1));
+            Assert.IsNull(SystemFunctions.TryGetByIndex(mixedArray, 3));
+        }
+
+        [TestMethod]
         public void TestFormat()
         {
             Assert.AreEqual("31.01.2018", SystemFunctions.Format(new DateTime(2018, 1, 31), "dd.MM.yyyy"));
@@ -82,7 +152,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             Assert.AreEqual(6535.676.ToString("0,0.##"), SystemFunctions.Format(6535.676, "0,0.##"));
             Assert.AreEqual(6535.676.ToString("0,0.##", CultureInfo.InvariantCulture), SystemFunctions.Format(6535.676, "0,0.##", CultureInfo.InvariantCulture));
 
-            Assert.AreEqual(new DateTime(2018, 1, 31).ToString((string) null), SystemFunctions.Format(new DateTime(2018, 1, 31), null));
+            Assert.AreEqual(new DateTime(2018, 1, 31).ToString((string)null), SystemFunctions.Format(new DateTime(2018, 1, 31), null));
             Assert.AreEqual(new DateTime(2018, 1, 31).ToString(null, CultureInfo.InvariantCulture), SystemFunctions.Format(new DateTime(2018, 1, 31), null, CultureInfo.InvariantCulture));
             Assert.IsNull(SystemFunctions.Format(null, "dd.MM.yyyy"));
             Assert.IsNull(SystemFunctions.Format(null, "dd.MM.yyyy", CultureInfo.InvariantCulture));
