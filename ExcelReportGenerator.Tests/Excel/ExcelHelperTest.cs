@@ -860,5 +860,57 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(1, wb.Worksheets.Count);
             Assert.IsTrue(Regex.IsMatch(wb.Worksheets.First().Name, "[0-9a-f]{31}"));
         }
+
+        [TestMethod]
+        public void TestMergeRanges()
+        {
+            XLWorkbook wb = new XLWorkbook();
+            IXLWorksheet ws = wb.AddWorksheet("Test");
+            IXLWorksheet ws2 = wb.AddWorksheet("Test2");
+            IXLRange range1 = ws.Range(3, 3, 5, 5);
+            IXLRange range2 = ws.Range(1, 7, 2, 8);
+            IXLRange range3 = ws2.Range(1, 7, 2, 8);
+
+            Assert.AreEqual(ws.Range(ws.Cell(1, 3), ws.Cell(5, 8)), ExcelHelper.MergeRanges(range1, range2));
+
+            range2 = ws.Range(6, 7, 7, 8);
+            Assert.AreEqual(ws.Range(ws.Cell(3, 3), ws.Cell(7, 8)), ExcelHelper.MergeRanges(range1, range2));
+
+            range2 = ws.Range(4, 7, 4, 8);
+            Assert.AreEqual(ws.Range(ws.Cell(3, 3), ws.Cell(5, 8)), ExcelHelper.MergeRanges(range1, range2));
+
+            range2 = ws.Range(4, 1, 4, 2);
+            Assert.AreEqual(ws.Range(ws.Cell(3, 1), ws.Cell(5, 5)), ExcelHelper.MergeRanges(range1, range2));
+
+            range2 = ws.Range(4, 4, 4, 4);
+            Assert.AreEqual(range1, ExcelHelper.MergeRanges(range1, range2));
+
+            range2 = ws.Range(2, 2, 3, 4);
+            Assert.AreEqual(ws.Range(ws.Cell(2, 2), ws.Cell(5, 5)), ExcelHelper.MergeRanges(range1, range2));
+
+            range2 = ws.Range(4, 4, 6, 6);
+            Assert.AreEqual(ws.Range(ws.Cell(3, 3), ws.Cell(6, 6)), ExcelHelper.MergeRanges(range1, range2));
+
+            Assert.AreEqual(range1, ExcelHelper.MergeRanges(range1, null));
+            Assert.AreEqual(range2, ExcelHelper.MergeRanges(null, range2));
+            Assert.IsNull(ExcelHelper.MergeRanges(null, null));
+
+            ExceptionAssert.Throws<InvalidOperationException>(() => ExcelHelper.MergeRanges(range1, range3), "Ranges belongs to different worksheets");
+
+            range1.Delete(XLShiftDeletedCells.ShiftCellsLeft);
+
+            Assert.AreEqual(range2, ExcelHelper.MergeRanges(range1, range2));
+            Assert.IsNull(ExcelHelper.MergeRanges(range1, null));
+
+            range1 = ws.Range(3, 3, 5, 5);
+            range2.Delete(XLShiftDeletedCells.ShiftCellsLeft);
+
+            Assert.AreEqual(range1, ExcelHelper.MergeRanges(range1, range2));
+            Assert.IsNull(ExcelHelper.MergeRanges(null, range2));
+
+            range1.Delete(XLShiftDeletedCells.ShiftCellsLeft);
+
+            Assert.IsNull(ExcelHelper.MergeRanges(range1, range2));
+        }
     }
 }

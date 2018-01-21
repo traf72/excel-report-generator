@@ -30,7 +30,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(4, 2).Style.Border.OutsideBorderColor = XLColor.Green;
 
             var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataTable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            panel.Render();
+            IXLRange resultRange = panel.Render();
+
+            Assert.AreEqual(ws.Range(2, 2, 6, 7), resultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataTableRenderTest),
                 nameof(TestRenderDataTable)), ws.Workbook);
@@ -60,7 +62,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(4, 2).Style.Border.OutsideBorderColor = XLColor.Green;
 
             var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataTable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            panel.Render();
+            IXLRange resultRange = panel.Render();
+
+            Assert.AreEqual(ws.Range(2, 2, 3, 7), resultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataTableRenderTest),
                 nameof(TestRenderEmptyDataTable)), ws.Workbook);

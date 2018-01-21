@@ -68,12 +68,12 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         [ExternalProperty]
         public string AfterRenderMethodName { get; set; }
 
-        public virtual void Render()
+        public virtual IXLRange Render()
         {
             bool isCanceled = CallBeforeRenderMethod();
             if (isCanceled)
             {
-                return;
+                return Range;
             }
 
             IList<IXLCell> childrenCells = Children.SelectMany(c => c.Range.CellsUsed()).ToList();
@@ -101,12 +101,16 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 cell.Value = cellValue;
             }
 
+            IXLRange resultRange = Range;
             foreach (IExcelPanel child in Children.OrderByDescending(p => p.RenderPriority))
             {
-                child.Render();
+                IXLRange childResultRange = child.Render();
+                resultRange = ExcelHelper.MergeRanges(resultRange, childResultRange);
             }
 
-            CallAfterRenderMethod();
+            CallAfterRenderMethod(resultRange);
+
+            return resultRange;
         }
 
         public virtual IExcelPanel Copy(IXLCell cell, bool recursive = true)
@@ -248,17 +252,17 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             return new PanelBeforeRenderEventArgs { Range = Range };
         }
 
-        protected void CallAfterRenderMethod()
+        protected void CallAfterRenderMethod(IXLRange resultRange)
         {
             if (!string.IsNullOrWhiteSpace(AfterRenderMethodName))
             {
-                CallReportMethod(AfterRenderMethodName, new object[] { GetAfterPanelRenderEventArgs() });
+                CallReportMethod(AfterRenderMethodName, new object[] { GetAfterPanelRenderEventArgs(resultRange) });
             }
         }
 
-        protected virtual PanelEventArgs GetAfterPanelRenderEventArgs()
+        protected virtual PanelEventArgs GetAfterPanelRenderEventArgs(IXLRange resultRange)
         {
-            return new PanelEventArgs { Range = Range };
+            return new PanelEventArgs { Range = resultRange };
         }
 
         protected object CallReportMethod(string methodName, object[] parameters = null)

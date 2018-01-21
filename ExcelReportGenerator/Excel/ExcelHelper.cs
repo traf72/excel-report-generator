@@ -238,6 +238,33 @@ namespace ExcelReportGenerator.Excel
             return cell.Worksheet.NamedRange(name);
         }
 
+        public static IXLRange MergeRanges(IXLRange range1, IXLRange range2)
+        {
+            if (range1 == null || range1.RangeAddress.IsInvalid)
+            {
+                return range2 == null || range2.RangeAddress.IsInvalid ? null : range2;
+            }
+
+            if (range2 == null || range2.RangeAddress.IsInvalid)
+            {
+                return range1.RangeAddress.IsInvalid ? null : range1;
+            }
+
+            if (range1.Worksheet != range2.Worksheet)
+            {
+                throw new InvalidOperationException("Ranges belongs to different worksheets");
+            }
+
+            IXLWorksheet ws = range1.Worksheet;
+
+            IXLCell newRangeFirstCell = ws.Cell(Math.Min(range1.FirstRow().RowNumber(), range2.FirstRow().RowNumber()),
+                Math.Min(range1.FirstColumn().ColumnNumber(), range2.FirstColumn().ColumnNumber()));
+            IXLCell newRangeLastCell = ws.Cell(Math.Max(range1.LastRow().RowNumber(), range2.LastRow().RowNumber()),
+                Math.Max(range1.LastColumn().ColumnNumber(), range2.LastColumn().ColumnNumber()));
+
+            return ws.Range(newRangeFirstCell, newRangeLastCell);
+        }
+
         public static IXLWorksheet AddTempWorksheet(XLWorkbook wb)
         {
             // Отсекаем один символ от Guid'а, так как наименование листа не может быть больше 31 символа

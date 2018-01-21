@@ -22,7 +22,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(4, 2).Value = "{Totals}";
 
             var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetSingleItem()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            panel.Render();
+            IXLRange resultRange = panel.Render();
+
+            Assert.AreEqual(ws.Range(2, 2, 4, 4), resultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelSingleItemRenderTest),
                 nameof(TestRenderSingleItem)), ws.Workbook);
@@ -43,7 +45,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(4, 2).Value = "{Totals}";
 
             var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetNullItem()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            panel.Render();
+            IXLRange resultRange = panel.Render();
+
+            Assert.IsNull(resultRange);
 
             Assert.AreEqual(0, ws.CellsUsed().Count());
         }

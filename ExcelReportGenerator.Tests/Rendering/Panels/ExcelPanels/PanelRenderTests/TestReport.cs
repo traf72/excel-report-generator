@@ -115,6 +115,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
         {
             IList<TestItem> data = ((IEnumerable<TestItem>)args.Data).ToList();
             data[2].Name = "ChangedName";
+            args.Range.LastCell().Delete(XLShiftDeletedCells.ShiftCellsLeft);
         }
 
         public void TestExcelDataSourcePanelAfterRender(DataSourcePanelEventArgs args)
@@ -206,7 +207,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
         public void TestExcelDynamicPanelAfterDataRender(DataSourcePanelEventArgs args)
         {
-            args.Range.FirstCell().Style.Font.FontColor = XLColor.ChromeYellow;
+            args.Range.Style.Border.InsideBorder = args.Range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            args.Range.Style.Border.InsideBorderColor = args.Range.Style.Border.OutsideBorderColor = XLColor.Orange;
         }
 
         public void TestExcelDynamicPanelBeforeDataItemRender(DataItemPanelBeforeRenderEventArgs args)

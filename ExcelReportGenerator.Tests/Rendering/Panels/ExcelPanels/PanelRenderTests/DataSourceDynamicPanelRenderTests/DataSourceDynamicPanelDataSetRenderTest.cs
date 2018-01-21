@@ -37,7 +37,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 BeforeTotalsRenderMethodName = "TestExcelDynamicPanelBeforeTotalsRender",
                 AfterTotalsRenderMethodName = "TestExcelDynamicPaneAfterTotalsRender",
             };
-            panel.Render();
+            IXLRange resultRange = panel.Render();
+
+            Assert.AreEqual(ws.Range(2, 2, 6, 8), resultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataSetRenderTest),
                 nameof(TestRenderDataSetWithEvents)), ws.Workbook);
@@ -73,7 +75,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 AfterTotalsRenderMethodName = "TestExcelDynamicPaneAfterTotalsRender",
                 Type = PanelType.Horizontal,
             };
-            panel.Render();
+            IXLRange resultRange = panel.Render();
+
+            Assert.AreEqual(ws.Range(2, 2, 8, 6), resultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataSetRenderTest),
                 nameof(TestRenderDataSetWithEvents_HorizontalPanel)), ws.Workbook);
@@ -97,7 +101,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             {
                 BeforeRenderMethodName = "TestExcelDynamicPaneBeforeRender",
             };
-            panel.Render();
+            IXLRange resultRange = panel.Render();
+
+            Assert.AreEqual(range, resultRange);
 
             Assert.AreEqual(3, ws.CellsUsed().Count());
             Assert.AreEqual("CanceledHeaders", ws.Cell(2, 2).Value);
@@ -123,7 +129,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             {
                 AfterRenderMethodName = "TestExcelDynamicPaneAfterRender",
             };
-            panel.Render();
+            IXLRange resultRange = panel.Render();
+
+            Assert.AreEqual(ws.Range(2, 2, 6, 7), resultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataSetRenderTest),
                 nameof(TestDynamicPanelAfterRenderEvent)), ws.Workbook);
@@ -144,7 +152,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(4, 2).Value = "{Totals}";
 
             var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataSet()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            panel.Render();
+            IXLRange resultRange = panel.Render();
+
+            Assert.AreEqual(ws.Range(2, 2, 3, 7), resultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataSetRenderTest),
                 nameof(TestRenderEmptyDataSet)), ws.Workbook);

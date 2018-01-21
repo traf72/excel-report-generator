@@ -18,6 +18,8 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
         int RenderPriority { get; set; }
 
+        IXLRange Render();
+
         IExcelPanel Copy(IXLCell cell, bool recursive = true);
 
         void Move(IXLCell cell);

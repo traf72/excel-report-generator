@@ -58,7 +58,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         [ExternalProperty]
         public string AfterTotalsRenderMethodName { get; set; }
 
-        public override void Render()
+        public override IXLRange Render()
         {
             // Parent context does not affect on this panel type therefore don't care about it
             _data = _isDataReceivedDirectly ? _data : _templateProcessor.GetValue(_dataSourceTemplate);
@@ -66,48 +66,50 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             bool isCanceled = CallBeforeRenderMethod();
             if (isCanceled)
             {
-                return;
+                return Range;
             }
 
             IColumnsProvider columnsProvider = _columnsFactory.Create(_data);
             if (columnsProvider == null)
             {
                 DeletePanel(this);
-                return;
+                return null;
             }
 
             IList<ExcelDynamicColumn> columns = columnsProvider.GetColumnsList(_data);
             if (!columns.Any())
             {
                 DeletePanel(this);
-                return;
+                return null;
             }
 
-            RenderHeaders(columns);
-            RenderColumnNumbers(columns);
+            IXLRange resultRange = RenderHeaders(columns);
+            resultRange = ExcelHelper.MergeRanges(resultRange, RenderColumnNumbers(columns));
+
             IXLRange dataRange = RenderDataTemplates(columns);
             if (dataRange != null)
             {
-                RenderData(dataRange);
+                resultRange = ExcelHelper.MergeRanges(resultRange, RenderData(dataRange));
             }
 
             IXLRange totalsRange = RenderTotalsTemplates(columns);
             if (totalsRange != null)
             {
-                RenderTotals(totalsRange);
+                resultRange = ExcelHelper.MergeRanges(resultRange, RenderTotals(totalsRange));
             }
 
             RemoveName();
-            CallAfterRenderMethod();
+            CallAfterRenderMethod(resultRange);
+            return resultRange;
         }
 
-        private void RenderHeaders(IList<ExcelDynamicColumn> columns)
+        private IXLRange RenderHeaders(IList<ExcelDynamicColumn> columns)
         {
             string template = _templateProcessor.WrapTemplate("Headers");
             IXLCell cell = Range.CellsUsed().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase));
             if (cell == null)
             {
-                return;
+                return null;
             }
 
             IXLWorksheet ws = Range.Worksheet;
@@ -116,7 +118,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             bool isCanceled = CallBeforeRenderMethod(BeforeHeadersRenderMethodName, range, columns);
             if (isCanceled)
             {
-                return;
+                return range;
             }
 
             cell.Value = _templateProcessor.BuildDataItemTemplate(nameof(ExcelDynamicColumn.Caption));
@@ -129,21 +131,21 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 Type = Type == PanelType.Vertical ? PanelType.Horizontal : PanelType.Vertical,
             };
 
-            panel.Render();
+            IXLRange resultRange = panel.Render();
 
-            IXLRange resultRange = GetColumnsRange(ws, cell, columns.Count);
             SetColumnsWidth(resultRange, columns);
-
             CallAfterRenderMethod(AfterHeadersRenderMethodName, resultRange, columns);
+
+            return resultRange;
         }
 
-        private void RenderColumnNumbers(IList<ExcelDynamicColumn> columns)
+        private IXLRange RenderColumnNumbers(IList<ExcelDynamicColumn> columns)
         {
             string template = _templateProcessor.WrapTemplate(@"Numbers(\((?<start>\d+)\))?");
             IXLCell cell = Range.CellsUsed().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase));
             if (cell == null)
             {
-                return;
+                return null;
             }
 
             IXLWorksheet ws = Range.Worksheet;
@@ -166,7 +168,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 Type = Type == PanelType.Vertical ? PanelType.Horizontal : PanelType.Vertical,
             };
 
-            panel.Render();
+            return panel.Render();
         }
 
         private IXLRange RenderDataTemplates(IList<ExcelDynamicColumn> columns)
@@ -198,9 +200,8 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 Type = Type == PanelType.Vertical ? PanelType.Horizontal : PanelType.Vertical,
             };
 
-            panel.Render();
+            IXLRange resultRange = panel.Render();
 
-            IXLRange resultRange = GetColumnsRange(ws, cell, columns.Count);
             SetColumnsWidth(resultRange, columns);
             SetCellsDisplayFormat(resultRange, columns);
 
@@ -209,7 +210,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             return resultRange;
         }
 
-        public void RenderData(IXLRange dataRange)
+        public IXLRange RenderData(IXLRange dataRange)
         {
             string rangeName = $"DynamicPanelData_{Guid.NewGuid():N}";
             dataRange.AddToNamed(rangeName, XLScope.Worksheet);
@@ -223,7 +224,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 AfterDataItemRenderMethodName = AfterDataItemRenderMethodName,
             };
 
-            dataPanel.Render();
+            return dataPanel.Render();
         }
 
         private IXLRange RenderTotalsTemplates(IList<ExcelDynamicColumn> columns)
@@ -262,9 +263,8 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 Type = Type == PanelType.Vertical ? PanelType.Horizontal : PanelType.Vertical,
             };
 
-            panel.Render();
+            IXLRange resultRange = panel.Render();
 
-            IXLRange resultRange = GetColumnsRange(ws, cell, columns.Count);
             SetColumnsWidth(resultRange, columns);
             SetCellsDisplayFormat(resultRange, columns);
 
@@ -273,7 +273,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             return resultRange;
         }
 
-        public void RenderTotals(IXLRange totalsRange)
+        public IXLRange RenderTotals(IXLRange totalsRange)
         {
             string rangeName = $"DynamicPanelTotals_{Guid.NewGuid():N}";
             totalsRange.AddToNamed(rangeName, XLScope.Worksheet);
@@ -295,14 +295,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 AfterRenderMethodName = AfterTotalsRenderMethodName,
             };
 
-            totalsPanel.Render();
-        }
-
-        private IXLRange GetColumnsRange(IXLWorksheet ws, IXLCell rangeFirstCell, int columnsCount)
-        {
-            return Type == PanelType.Vertical
-                ? ws.Range(rangeFirstCell, ExcelHelper.ShiftCell(rangeFirstCell, new AddressShift(0, columnsCount - 1)))
-                : ws.Range(rangeFirstCell, ExcelHelper.ShiftCell(rangeFirstCell, new AddressShift(columnsCount - 1, 0)));
+            return totalsPanel.Render();
         }
 
         private bool CallBeforeRenderMethod(string methodName, IXLRange range, IList<ExcelDynamicColumn> columns)

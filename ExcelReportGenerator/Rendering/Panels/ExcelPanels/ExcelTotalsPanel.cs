@@ -27,7 +27,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         {
         }
 
-        public override void Render()
+        public override IXLRange Render()
         {
             // Parent context does not affect on this panel type therefore don't care about it
             _data = _isDataReceivedDirectly ? _data : _templateProcessor.GetValue(_dataSourceTemplate);
@@ -35,7 +35,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             bool isCanceled = CallBeforeRenderMethod();
             if (isCanceled)
             {
-                return;
+                return Range;
             }
 
             IEnumerator enumerator = null;
@@ -59,7 +59,8 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             }
 
             RemoveName();
-            CallAfterRenderMethod();
+            CallAfterRenderMethod(Range);
+            return Range;
         }
 
         private IDictionary<IXLCell, IList<ParsedAggregationFunc>> ParseTotalCells()

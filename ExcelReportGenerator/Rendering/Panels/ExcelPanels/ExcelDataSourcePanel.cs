@@ -40,7 +40,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         [ExternalProperty]
         public string AfterDataItemRenderMethodName { get; set; }
 
-        public override void Render()
+        public override IXLRange Render()
         {
             // Получаем контекст родительского элемента данных, если он есть
             HierarchicalDataItem parentDataItem = GetDataContext();
@@ -50,10 +50,11 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             bool isCanceled = CallBeforeRenderMethod();
             if (isCanceled)
             {
-                return;
+                return Range;
             }
 
             IEnumerator enumerator = null;
+            IXLRange resultRange = null;
             try
             {
                 enumerator = EnumeratorFactory.Create(_data);
@@ -61,7 +62,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 if (enumerator == null || !enumerator.MoveNext())
                 {
                     DeletePanel(this);
-                    return;
+                    return null;
                 }
 
                 object currentItem = enumerator.Current;
@@ -89,7 +90,8 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
                     currentPanel.DataItem = new HierarchicalDataItem { Value = currentItem, Parent = parentDataItem };
                     // Заполняем шаблон данными
-                    currentPanel.Render();
+                    IXLRange dataItemResultRange = currentPanel.Render();
+                    resultRange = ExcelHelper.MergeRanges(resultRange, dataItemResultRange);
                     // Удаляем все сгенерированные имена Range'ей
                     RemoveAllNamesRecursive(currentPanel);
 
@@ -108,7 +110,8 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 (enumerator as IDisposable)?.Dispose();
             }
 
-            CallAfterRenderMethod();
+            CallAfterRenderMethod(resultRange);
+            return resultRange;
         }
 
         private ExcelDataItemPanel CreateTemplatePanel()
@@ -166,9 +169,9 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             return new DataSourcePanelBeforeRenderEventArgs { Range = Range, Data = _data };
         }
 
-        protected override PanelEventArgs GetAfterPanelRenderEventArgs()
+        protected override PanelEventArgs GetAfterPanelRenderEventArgs(IXLRange resultRange)
         {
-            return new DataSourcePanelEventArgs { Range = Range, Data = _data };
+            return new DataSourcePanelEventArgs { Range = resultRange, Data = _data };
         }
 
         //TODO Проверить корректное копирование, если передан не шаблон, а сами данные

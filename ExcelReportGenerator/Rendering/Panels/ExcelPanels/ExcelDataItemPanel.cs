@@ -24,9 +24,9 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             return new DataItemPanelBeforeRenderEventArgs { Range = Range, DataItem = DataItem };
         }
 
-        protected override PanelEventArgs GetAfterPanelRenderEventArgs()
+        protected override PanelEventArgs GetAfterPanelRenderEventArgs(IXLRange resultRange)
         {
-            return new DataItemPanelEventArgs { Range = Range, DataItem = DataItem };
+            return new DataItemPanelEventArgs { Range = resultRange, DataItem = DataItem };
         }
 
         // TODO Покрыть Unit-тестами
