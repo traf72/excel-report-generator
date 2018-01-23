@@ -68,7 +68,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             var result = new Dictionary<IXLCell, IList<ParsedAggregationFunc>>();
             const int aggFuncMaxParamsCount = 3;
             string aggregationRegexPattern = _templateProcessor.GetFullAggregationRegexPattern();
-            foreach (IXLCell cell in Range.CellsUsed())
+            foreach (IXLCell cell in Range.CellsUsedWithoutFormulas())
             {
                 string cellValue = cell.Value.ToString();
                 MatchCollection matches = Regex.Matches(cellValue, aggregationRegexPattern, RegexOptions.IgnoreCase);

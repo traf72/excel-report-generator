@@ -34,6 +34,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(4, 1).Value = "{m:TestReport:Counter()}";
             ws.Cell(4, 2).Value = "{ m:TestReport : Counter ( ) }";
             ws.Cell(4, 3).Value = "{m:Counter()}";
+            ws.Cell(4, 4).FormulaA1 = "=$B$1+A$4";
             ws.Cell(5, 1).Value = "{p:StrParam}";
             ws.Cell(5, 2).Value = "{m:Counter()}";
             ws.Cell(6, 1).Value = "Plain text outside range";
@@ -43,7 +44,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.AreEqual(range, resultRange);
 
-            Assert.AreEqual(21, ws.CellsUsed().Count());
+            Assert.AreEqual(22, ws.CellsUsed().Count());
             Assert.AreEqual("String parameter", ws.Cell(1, 1).Value);
             Assert.AreEqual(10d, ws.Cell(1, 2).Value);
             Assert.AreEqual(new DateTime(2017, 10, 25), ws.Cell(1, 3).Value);
@@ -63,7 +64,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             Assert.AreEqual(1d, ws.Cell(4, 1).Value);
             Assert.AreEqual(2d, ws.Cell(4, 2).Value);
             Assert.AreEqual(3d, ws.Cell(4, 3).Value);
-            Assert.IsTrue(ws.Cell(4, 4).IsEmpty());
+            Assert.AreEqual(11d, ws.Cell(4, 4).Value);
             Assert.IsTrue(ws.Cell(4, 5).IsEmpty());
 
             Assert.AreEqual("{p:StrParam}", ws.Cell(5, 1).Value);

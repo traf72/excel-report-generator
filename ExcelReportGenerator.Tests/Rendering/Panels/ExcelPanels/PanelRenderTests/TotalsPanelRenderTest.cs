@@ -14,7 +14,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
 
-            IXLRange range = ws.Range(1, 1, 1, 6);
+            IXLRange range = ws.Range(1, 1, 1, 8);
             range.AddToNamed("Test", XLScope.Worksheet);
 
             ws.Cell(1, 1).Value = "Plain text";
@@ -23,7 +23,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(1, 4).Value = "{Min(di:Sum)}";
             ws.Cell(1, 5).Value = "Text1 {count(Name)} Text2 {avg(di:Sum, , PostAggregationRound)} Text3 {Max(Sum)}";
             ws.Cell(1, 6).Value = "{Mix(di:Sum)}";
-            ws.Cell(1, 7).Value = "{Sum(di:Sum)}";
+            ws.Cell(1, 7).FormulaA1 = "=SUM(B1:D1)";
+            ws.Cell(1, 8).FormulaA1 = "=ROW()";
+            ws.Cell(1, 9).Value = "{Sum(di:Sum)}";
 
             var panel = new ExcelTotalsPanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("Test"), report, report.TemplateProcessor)
             {
