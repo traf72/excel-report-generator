@@ -134,7 +134,11 @@
     <Compile Include="Converters\ExternalPropertiesConverters\ShiftTypeConverter.cs" />
     <Compile Include="Converters\IConverter.cs" />
     <Compile Include="Converters\IGenericConverter.cs" />
+    <Compile Include="Enumerators\DataReaderEnumeratorNew.cs" />
+    <Compile Include="Enumerators\DataTableEnumerator.cs" />
+    <Compile Include="Enumerators\EnumeratorFactoryNew.cs" />
     <Compile Include="Enumerators\EnumeratorFactory.cs" />
+    <Compile Include="Enumerators\ICustomEnumerator.cs" />
     <Compile Include="Enums\AggregateFunction.cs" />
     <Compile Include="Enums\Direction.cs" />
     <Compile Include="Enums\PanelType.cs" />

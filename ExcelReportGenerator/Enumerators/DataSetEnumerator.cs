@@ -1,13 +1,15 @@
-﻿using System;
+﻿using ExcelReportGenerator.Helpers;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using ExcelReportGenerator.Helpers;
 
 namespace ExcelReportGenerator.Enumerators
 {
-    internal class DataSetEnumerator : IEnumerator<DataRow>
+    internal class DataSetEnumerator : ICustomEnumerator<DataRow>
     {
+        private readonly DataTable _dataTable;
+
         private readonly IEnumerator<DataRow> _dataTableEnumerator;
 
         public DataSetEnumerator(DataSet dataSet, string tableName = null)
@@ -18,21 +20,20 @@ namespace ExcelReportGenerator.Enumerators
                 throw new InvalidOperationException("DataSet does not contain any table");
             }
 
-            DataTable dataTable;
             if (!string.IsNullOrWhiteSpace(tableName))
             {
-                dataTable = dataSet.Tables[tableName];
-                if (dataTable == null)
+                _dataTable = dataSet.Tables[tableName];
+                if (_dataTable == null)
                 {
                     throw new InvalidOperationException($"DataSet does not contain table with name \"{tableName}\"");
                 }
             }
             else
             {
-                dataTable = dataSet.Tables[0];
+                _dataTable = dataSet.Tables[0];
             }
 
-            _dataTableEnumerator = dataTable.AsEnumerable().GetEnumerator();
+            _dataTableEnumerator = _dataTable.AsEnumerable().GetEnumerator();
         }
 
         public DataRow Current => _dataTableEnumerator.Current;
@@ -44,5 +45,7 @@ namespace ExcelReportGenerator.Enumerators
         public void Reset() => _dataTableEnumerator.Reset();
 
         public void Dispose() => _dataTableEnumerator.Dispose();
+
+        public int RowCount => _dataTable.Rows.Count;
     }
 }

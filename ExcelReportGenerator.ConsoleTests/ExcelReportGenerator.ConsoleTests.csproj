@@ -120,6 +120,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExcelReportGenerator.Tests\ExcelReportGenerator.Tests.csproj">
+      <Project>{2632c242-3378-4fe0-8f49-098782b75433}</Project>
+      <Name>ExcelReportGenerator.Tests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ExcelReportGenerator\ExcelReportGenerator.csproj">
       <Project>{64270919-ef05-443d-ae3d-2348c1f9c2b6}</Project>
       <Name>ExcelReportGenerator</Name>

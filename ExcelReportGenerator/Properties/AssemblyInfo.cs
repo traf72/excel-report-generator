@@ -36,5 +36,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: InternalsVisibleTo("ExcelReportGenerator.Tests")]
+[assembly: InternalsVisibleTo("ExcelReportGenerator.ConsoleTests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 

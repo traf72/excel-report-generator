@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using ClosedXML.Excel;
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
@@ -383,6 +386,50 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelIEnumerableRenderTest),
                 nameof(TestPanelRenderEvents)), ws.Workbook);
+
+            //report.Workbook.SaveAs("test.xlsx");
+        }
+
+        [TestMethod]
+        public void TestPanelRenderSpeed()
+        {
+            var report = new TestReport();
+            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
+            IXLRange range = ws.Range(2, 2, 2, 6);
+            range.AddToNamed("TestRange", XLScope.Worksheet);
+
+            ws.Cell(2, 2).Value = "{di:Name}";
+            ws.Cell(2, 3).Value = "{di:Date}";
+            ws.Cell(2, 4).Value = "{di:Sum}";
+            ws.Cell(2, 5).Value = "{di:Contacts.Phone}";
+            ws.Cell(2, 6).Value = "{di:Contacts.Fax}";
+
+            const int dataCount = 3000;
+            IList<TestItem> data = new List<TestItem>(dataCount);
+            for (int i = 0; i < dataCount; i++)
+            {
+                data.Add(new TestItem($"Name_{i}", DateTime.Now.AddHours(1), i + 10, new Contacts($"Phone_{i}", $"Fax_{i}")));
+            }
+
+            var panel = new ExcelDataSourcePanel(data, ws.NamedRange("TestRange"), report, report.TemplateProcessor)
+            {
+                //ShiftType = ShiftType.NoShift,
+                ShiftType = ShiftType.Row,
+            };
+
+            Stopwatch sw = Stopwatch.StartNew();
+
+            //for (int i = 0; i < dataCount; i++)
+            //{
+            //    //range.InsertRowsBelow(1, true);
+            //    range.Worksheet.Row(range.FirstRow().RowNumber()).InsertRowsAbove(range.RowCount());
+            //}
+
+            IXLRange resultRange = panel.Render();
+
+            sw.Stop();
+
+            //Assert.AreEqual(ws.Range(2, 2, 4, 2), resultRange);
 
             //report.Workbook.SaveAs("test.xlsx");
         }

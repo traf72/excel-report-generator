@@ -6,7 +6,7 @@ using ExcelReportGenerator.Helpers;
 
 namespace ExcelReportGenerator.Enumerators
 {
-    internal class DataReaderEnumerator : ICustomEnumerator<DataRow>
+    internal class DataReaderEnumeratorNew : ICustomEnumerator<DataRow>
     {
         private const string ClosedDataReaderMessage = "DataReader has been closed";
         private const string FinishedEnumeratorMessage = "Enumerator has been finished";
@@ -17,7 +17,7 @@ namespace ExcelReportGenerator.Enumerators
         private bool _isStarted;
         private bool _isFinished;
 
-        public DataReaderEnumerator(IDataReader dataReader)
+        public DataReaderEnumeratorNew(IDataReader dataReader)
         {
             _dataReader = dataReader ?? throw new ArgumentNullException(nameof(dataReader), ArgumentHelper.NullParamMessage);
             CreateDataTable();
