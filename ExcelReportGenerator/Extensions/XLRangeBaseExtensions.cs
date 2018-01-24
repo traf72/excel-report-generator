@@ -3,7 +3,7 @@ using System;
 
 namespace ExcelReportGenerator.Extensions
 {
-    public static class XLRangeBaseExtensions
+    internal static class XLRangeBaseExtensions
     {
         public static IXLCells CellsUsedWithoutFormulas(this IXLRangeBase range)
         {

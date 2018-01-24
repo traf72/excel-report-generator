@@ -170,6 +170,7 @@
     <Compile Include="Extensions\TemplateProcessorExtensionsTest.cs" />
     <Compile Include="Extensions\ParameterInfoExtensionsTest.cs" />
     <Compile Include="Extensions\TypeExtensionsTest.cs" />
+    <Compile Include="Extensions\XLRangeBaseExtensionsTest.cs" />
     <Compile Include="Helpers\ReflectionHelperTest.cs" />
     <Compile Include="Helpers\EnumHelperTest.cs" />
     <Compile Include="Helpers\RegexHelperTest.cs" />
