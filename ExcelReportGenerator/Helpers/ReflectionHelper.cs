@@ -2,6 +2,7 @@
 using ExcelReportGenerator.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Reflection;
 
 namespace ExcelReportGenerator.Helpers
@@ -33,6 +34,20 @@ namespace ExcelReportGenerator.Helpers
                 if (instance == null)
                 {
                     throw new InvalidOperationException($"Cannot get property or field \"{propOrFieldName}\" because instance is null");
+                }
+
+                if (instance is ExpandoObject expando)
+                {
+                    var dict = (IDictionary<string, object>)expando;
+                    if (dict.TryGetValue(propOrFieldName, out object value))
+                    {
+                        instance = value;
+                    }
+                    else
+                    {
+                        throw new MemberNotFoundException($"Cannot find property \"{propOrFieldName}\" in ExpandoObject");
+                    }
+                    continue;
                 }
 
                 PropertyInfo prop = TryGetProperty(instance.GetType(), propOrFieldName, flags);

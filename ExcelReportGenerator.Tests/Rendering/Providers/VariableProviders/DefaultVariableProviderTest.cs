@@ -33,7 +33,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.VariableProviders
 
         private class CustomVariableProvider : SystemVariableProvider
         {
-            public string SheetName { get; set; }
+            public new string SheetName { get; set; }
 
             public int CustomProp { get; set; }
         }
