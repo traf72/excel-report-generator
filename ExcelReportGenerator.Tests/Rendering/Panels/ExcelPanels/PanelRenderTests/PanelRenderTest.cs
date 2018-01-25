@@ -26,7 +26,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(2, 3).Value = "{Plain text}";
             ws.Cell(2, 4).Value = " { m:Format ( p:DateParam ) } ";
             ws.Cell(2, 5).Value = "''{m:Format(p:DateParam)}";
-            ws.Cell(3, 1).Value = "Int: { p:IntParam }. Str: {p:ComplexTypeParam.StrParam}. FormattedDate: {M:Format(p:DateParam)}";
+            ws.Cell(3, 1).Value = "Int: { p:IntParam }. Str: {p:ComplexTypeParam.StrParam}. FormattedDate: {M:Format(p:DateParam)}. NullProp: {p:NullProp}";
             ws.Cell(3, 2).Value = "''{m:Format(m:DateTime:AddDays(p:ComplexTypeParam.IntParam), \"yyyy-MM-dd\")}";
             ws.Cell(3, 3).Value = "''{sf:Format(m:AddDays(p:DateParam, 5), ddMMyyyy)}";
             ws.Cell(3, 4).Value = "''{m:Format(m:AddDays(p:DateParam, -2), dd.MM.yyyy)}";
@@ -37,6 +37,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(4, 4).FormulaA1 = "=$B$1+A$4";
             ws.Cell(5, 1).Value = "{p:ExpandoObj.StrProp}";
             ws.Cell(5, 2).Value = "{p:ExpandoObj.DecimalProp}";
+            ws.Cell(5, 3).Value = "{p:NullProp}";
             ws.Cell(6, 1).Value = "{p:StrParam}";
             ws.Cell(6, 2).Value = "{m:Counter()}";
             ws.Cell(7, 1).Value = "Plain text outside range";
@@ -57,7 +58,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             Assert.AreEqual("{Plain text}", ws.Cell(2, 3).Value);
             Assert.AreEqual(20171025d, ws.Cell(2, 4).Value);
             Assert.AreEqual("20171025", ws.Cell(2, 5).Value);
-            Assert.AreEqual("Int: 10. Str: Complex type string parameter. FormattedDate: 20171025", ws.Cell(3, 1).Value);
+            Assert.AreEqual("Int: 10. Str: Complex type string parameter. FormattedDate: 20171025. NullProp: ", ws.Cell(3, 1).Value);
             Assert.AreEqual("0001-01-12", ws.Cell(3, 2).Value);
             Assert.AreEqual("30102017", ws.Cell(3, 3).Value);
             Assert.AreEqual("23.10.2017", ws.Cell(3, 4).Value);
@@ -71,6 +72,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.AreEqual("ExpandoStr", ws.Cell(5, 1).Value);
             Assert.AreEqual(5.56d, ws.Cell(5, 2).Value);
+            Assert.IsTrue(ws.Cell(5, 3).IsEmpty());
 
             Assert.AreEqual("{p:StrParam}", ws.Cell(6, 1).Value);
             Assert.AreEqual("{m:Counter()}", ws.Cell(6, 2).Value);

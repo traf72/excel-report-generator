@@ -95,7 +95,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 foreach (object match in matches)
                 {
                     string template = match.ToString();
-                    cellValue = cellValue.Replace(template, _templateProcessor.GetValue(template).ToString());
+                    cellValue = cellValue.Replace(template, _templateProcessor.GetValue(template)?.ToString());
                 }
 
                 cell.Value = cellValue;

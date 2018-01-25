@@ -37,6 +37,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
         public dynamic ExpandoObj { get; set; } = new ExpandoObject();
 
+        public string NullProp { get; set; }
+
         public string Format(DateTime date, string format = "yyyyMMdd")
         {
             return date.ToString(format);
