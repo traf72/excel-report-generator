@@ -52,9 +52,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         public override IXLRange Render()
         {
             var totalSw = Stopwatch.StartNew();
-            
-            // Получаем контекст родительского элемента данных, если он есть
-            HierarchicalDataItem parentDataItem = GetDataContext();
+            // Receieve parent data item context            HierarchicalDataItem parentDataItem = GetDataContext();
 
             _data = _isDataReceivedDirectly ? _data : _templateProcessor.GetValue(_dataSourceTemplate, parentDataItem);
 

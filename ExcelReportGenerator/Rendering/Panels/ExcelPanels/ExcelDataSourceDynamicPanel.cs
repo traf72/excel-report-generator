@@ -83,7 +83,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 return null;
             }
 
-            IXLRange resultRange = RenderHeaders(columns);
+            IXLRange resultRange = ExcelHelper.MergeRanges(Range, RenderHeaders(columns));
             resultRange = ExcelHelper.MergeRanges(resultRange, RenderColumnNumbers(columns));
 
             IXLRange dataRange = RenderDataTemplates(columns);
@@ -106,7 +106,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         private IXLRange RenderHeaders(IList<ExcelDynamicColumn> columns)
         {
             string template = _templateProcessor.WrapTemplate("Headers");
-            IXLCell cell = Range.CellsUsed().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase));
+            IXLCell cell = Range.CellsUsedWithoutFormulas().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase));
             if (cell == null)
             {
                 return null;
@@ -142,7 +142,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         private IXLRange RenderColumnNumbers(IList<ExcelDynamicColumn> columns)
         {
             string template = _templateProcessor.WrapTemplate(@"Numbers(\((?<start>\d+)\))?");
-            IXLCell cell = Range.CellsUsed().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase));
+            IXLCell cell = Range.CellsUsedWithoutFormulas().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase));
             if (cell == null)
             {
                 return null;
@@ -174,7 +174,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         private IXLRange RenderDataTemplates(IList<ExcelDynamicColumn> columns)
         {
             string template = _templateProcessor.WrapTemplate("Data");
-            IXLCell cell = Range.CellsUsed().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase));
+            IXLCell cell = Range.CellsUsedWithoutFormulas().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase));
             if (cell == null)
             {
                 return null;
@@ -230,7 +230,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         private IXLRange RenderTotalsTemplates(IList<ExcelDynamicColumn> columns)
         {
             string template = _templateProcessor.WrapTemplate("Totals");
-            IXLCell cell = Range.CellsUsed().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase));
+            IXLCell cell = Range.CellsUsedWithoutFormulas().SingleOrDefault(c => Regex.IsMatch(c.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase));
             if (cell == null)
             {
                 return null;

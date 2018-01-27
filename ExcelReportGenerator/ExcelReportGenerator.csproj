@@ -152,6 +152,7 @@
     <Compile Include="Exceptions\TypeNotFoundException.cs" />
     <Compile Include="Exceptions\MemberNotFoundException.cs" />
     <Compile Include="Extensions\DataReaderExtensions.cs" />
+    <Compile Include="Extensions\XLRangeBaseExtensions.cs" />
     <Compile Include="Extensions\ParameterInfoExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />

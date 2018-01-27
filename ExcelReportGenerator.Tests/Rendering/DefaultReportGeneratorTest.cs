@@ -207,7 +207,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             sheet2.Cell(6, 3).Value = "{Sum(di:Sum)}";
             sheet2.Cell(6, 4).Value = "{ Custom(DI:Sum, CustomAggregation, PostAggregation)  }";
             sheet2.Cell(6, 5).Value = "{Min(di:Sum)}";
-            sheet2.Cell(6, 6).Value = "Text1 {count(Name)} Text2 {avg(di:Sum, , PostAggregationRound)} Text3 {Max(Sum)}";
+            sheet2.Cell(6, 6).Value = "Text1 {count(di:Name)} Text2 {avg(di:Sum, , PostAggregationRound)} Text3 {Max(di:Sum)}";
             sheet2.Cell(6, 7).Value = "{Mix(di:Sum)}";
 
             sheet2.Cell(10, 10).Value = "Plain text";

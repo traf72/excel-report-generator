@@ -8,6 +8,7 @@ using ExcelReportGenerator.Rendering.TemplateProcessors;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -29,8 +30,10 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
         public override IXLRange Render()
         {
-            // Parent context does not affect on this panel type therefore don't care about it
-            _data = _isDataReceivedDirectly ? _data : _templateProcessor.GetValue(_dataSourceTemplate);
+            // Receieve parent data item context
+            HierarchicalDataItem parentDataItem = GetDataContext();
+
+            _data = _isDataReceivedDirectly ? _data : _templateProcessor.GetValue(_dataSourceTemplate, parentDataItem);
 
             bool isCanceled = CallBeforeRenderMethod();
             if (isCanceled)
@@ -44,14 +47,23 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 enumerator = EnumeratorFactory.Create(_data) ?? Enumerable.Empty<object>().GetEnumerator();
                 IDictionary<IXLCell, IList<ParsedAggregationFunc>> totalCells = ParseTotalCells();
                 DoAggregation(enumerator, totalCells.SelectMany(t => t.Value).ToArray());
+                IXLWorksheet ws = Range.Worksheet;
+                dynamic dataSource = new ExpandoObject();
+                var dataSourceAsDict = (IDictionary<string, object>)dataSource;
                 foreach (KeyValuePair<IXLCell, IList<ParsedAggregationFunc>> totalCell in totalCells)
                 {
-                    IXLCell cell = totalCell.Key;
                     IList<ParsedAggregationFunc> aggFuncs = totalCell.Value;
-                    cell.Value = cell.Value.ToString() == "{0}"
-                        ? aggFuncs.First().Result
-                        : string.Format(cell.Value.ToString(), aggFuncs.Select(f => f.Result).ToArray());
+                    foreach (ParsedAggregationFunc f in aggFuncs)
+                    {
+                        dataSourceAsDict[$"AggFunc_{f.UniqueName}"] = f.Result;
+                    }
                 }
+
+                string rangeName = $"AggFuncs_{Guid.NewGuid():N}";
+                Range.AddToNamed(rangeName, XLScope.Worksheet);
+
+                var dataPanel = new ExcelDataSourcePanel(new[] { dataSource }, ws.NamedRange(rangeName), _report, _templateProcessor) { Parent = Parent };
+                dataPanel.Render();
             }
             finally
             {
@@ -67,43 +79,52 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         {
             var result = new Dictionary<IXLCell, IList<ParsedAggregationFunc>>();
             const int aggFuncMaxParamsCount = 3;
-            string aggregationRegexPattern = _templateProcessor.GetFullAggregationRegexPattern();
-            foreach (IXLCell cell in Range.CellsUsed())
+            string templatesWithAggregationRegexPattern = _templateProcessor.GetTemplatesWithAggregationRegexPattern();
+            string aggregationFuncRegexPattern = _templateProcessor.GetAggregationFuncRegexPattern();
+            foreach (IXLCell cell in Range.CellsUsedWithoutFormulas())
             {
                 string cellValue = cell.Value.ToString();
-                MatchCollection matches = Regex.Matches(cellValue, aggregationRegexPattern, RegexOptions.IgnoreCase);
+                MatchCollection matches = Regex.Matches(cellValue, templatesWithAggregationRegexPattern, RegexOptions.IgnoreCase);
                 if (matches.Count == 0)
                 {
                     continue;
                 }
 
                 IList<ParsedAggregationFunc> aggFuncs = new List<ParsedAggregationFunc>();
-                for (int i = 0; i < matches.Count; i++)
+                foreach (Match match in matches)
                 {
-                    Match match = matches[i];
-                    cellValue = cellValue.ReplaceFirst(match.Value, $"{{{i}}}");
-                    AggregateFunction aggFunc = EnumHelper.Parse<AggregateFunction>(match.Groups[1].Value);
-                    string[] allFuncParams = new string[aggFuncMaxParamsCount];
-                    string[] realFuncParams = match.Groups[2].Value.Trim().Split(',').Select(m => m.Trim()).ToArray();
-                    if (!realFuncParams.Any() || realFuncParams.Length > aggFuncMaxParamsCount)
+                    string matchValue = match.Value;
+                    MatchCollection innerMatches = Regex.Matches(match.Value, aggregationFuncRegexPattern, RegexOptions.IgnoreCase);
+                    foreach (Match innerMatch in innerMatches)
                     {
-                        throw new InvalidOperationException($"Aggregation function must have at least one but no more than {aggFuncMaxParamsCount} parameters");
+                        string uniqueName = Guid.NewGuid().ToString("N");
+                        matchValue = matchValue.ReplaceFirst(innerMatch.Value, _templateProcessor.UnwrapTemplate(_templateProcessor.BuildDataItemTemplate($"AggFunc_{uniqueName}")));
+                        AggregateFunction aggFunc = EnumHelper.Parse<AggregateFunction>(innerMatch.Groups[1].Value);
+                        string[] allFuncParams = new string[aggFuncMaxParamsCount];
+                        string[] realFuncParams = innerMatch.Groups[2].Value.Trim().Split(',').Select(m => m.Trim()).ToArray();
+                        if (!realFuncParams.Any() || realFuncParams.Length > aggFuncMaxParamsCount)
+                        {
+                            throw new InvalidOperationException($"Aggregation function must have at least one but no more than {aggFuncMaxParamsCount} parameters");
+                        }
+
+                        for (int j = 0; j < realFuncParams.Length; j++)
+                        {
+                            allFuncParams[j] = string.IsNullOrWhiteSpace(realFuncParams[j]) ? null : realFuncParams[j];
+                        }
+
+                        string columnName = allFuncParams[0];
+                        if (columnName == null)
+                        {
+                            throw new InvalidOperationException("\"ColumnName\" parameter in aggregation function cannot be empty");
+                        }
+
+                        columnName = _templateProcessor.TrimDataItemLabel(columnName).Trim();
+                        aggFuncs.Add(new ParsedAggregationFunc(aggFunc, columnName) { CustomFunc = allFuncParams[1], PostProcessFunction = allFuncParams[2], UniqueName = uniqueName });
                     }
 
-                    for (int j = 0; j < realFuncParams.Length; j++)
-                    {
-                        allFuncParams[j] = string.IsNullOrWhiteSpace(realFuncParams[j]) ? null : realFuncParams[j];
-                    }
-
-                    string columnName = allFuncParams[0];
-                    if (columnName == null)
-                    {
-                        throw new InvalidOperationException("\"ColumnName\" parameter in aggregation function cannot be empty");
-                    }
-
-                    columnName = _templateProcessor.TrimDataItemLabel(columnName);
-                    aggFuncs.Add(new ParsedAggregationFunc(aggFunc, columnName) { CustomFunc = allFuncParams[1], PostProcessFunction = allFuncParams[2] });
+                    cellValue = cellValue.ReplaceFirst(match.Value, matchValue);
                 }
+
                 cell.Value = cellValue;
                 result[cell] = aggFuncs;
             }
@@ -234,6 +255,11 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             public string PostProcessFunction { get; set; }
 
             public dynamic Result { get; set; }
+
+            /// <summary>
+            /// Auxiliary property
+            /// </summary>
+            public string UniqueName { get; set; }
         }
     }
 }

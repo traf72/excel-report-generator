@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using DataTable = System.Data.DataTable;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
@@ -164,22 +165,6 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         }
 
         [TestMethod]
-        public void TestDoAggregationWithComplexType()
-        {
-            var data = new List<Test>();
-            var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), Substitute.For<object>(), Substitute.For<ITemplateProcessor>());
-            IEnumerator enumerator = EnumeratorFactory.Create(data);
-            IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
-            {
-                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Sum, "TestColumn1"),
-                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Count, "TestColumn1"),
-                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Avg, "TestColumn1"),
-                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Min, "TestColumn1"),
-                new ExcelTotalsPanel.ParsedAggregationFunc(AggregateFunction.Max, "TestColumn1"),
-            };
-        }
-
-        [TestMethod]
         public void TestCustomAggregation()
         {
             IList<Test> data = GetTestData();
@@ -250,16 +235,17 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             XLWorkbook wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
 
-            IXLRange range = ws.Range(1, 1, 1, 6);
+            IXLRange range = ws.Range(1, 1, 1, 7);
             range.AddToNamed("Test", XLScope.Worksheet);
 
             ws.Cell(1, 1).Value = "Plain text";
             ws.Cell(1, 2).Value = "{Sum(di:Amount)}";
             ws.Cell(1, 3).Value = "{ Custom(DI:Amount, CustomFunc)  }";
             ws.Cell(1, 4).Value = "{Min(di:Value, CustomFunc, PostFunc)}";
-            ws.Cell(1, 5).Value = "Text {count(Number)} {Text} {AVG( di:Value, ,  PostFunc )} Text {Max(Val)}";
+            ws.Cell(1, 5).Value = "Text {count(di:Number)} {p:Text} {AVG( di:Value, ,  PostFunc )} {Text} Text {Max(di:Val)} {Min(val)}";
             ws.Cell(1, 6).Value = "{Mix(di:Amount)}";
-            ws.Cell(1, 7).Value = "{Sum(di:Amount)}";
+            ws.Cell(1, 7).Value = "Text {Plain Text} Sum(di:Count) {sf:Format(Sum(di:Amount,,PostAggregation), #,,0.00)} {p:Text} {Max(di:Count)} {m:Meth(1, Avg( di : Value ), Min(di:Amount, CustomAggregation, PostAggregation), \"Str\"} {sv:RenderDate} m:Meth2(Avg(di:Value))";
+            ws.Cell(1, 8).Value = "{Sum(di:Amount)}";
 
             var templateProcessor = Substitute.For<ITemplateProcessor>();
             templateProcessor.LeftTemplateBorder.Returns("{");
@@ -277,52 +263,85 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             MethodInfo method = panel.GetType().GetMethod("ParseTotalCells", BindingFlags.Instance | BindingFlags.NonPublic);
             var result = (IDictionary<IXLCell, IList<ExcelTotalsPanel.ParsedAggregationFunc>>)method.Invoke(panel, null);
 
-            Assert.AreEqual(4, result.Count);
+            Assert.AreEqual(5, result.Count);
             Assert.AreEqual("Plain text", ws.Cell(1, 1).Value);
             Assert.AreEqual("{Mix(di:Amount)}", ws.Cell(1, 6).Value);
-            Assert.AreEqual("{Sum(di:Amount)}", ws.Cell(1, 7).Value);
+            Assert.AreEqual("{Sum(di:Amount)}", ws.Cell(1, 8).Value);
 
-            Assert.AreEqual("{0}", ws.Cell(1, 2).Value);
+            Assert.IsTrue(Regex.IsMatch(ws.Cell(1, 2).Value.ToString(), @"{di:AggFunc_[0-9a-f]{32}}"));
             Assert.AreEqual(1, result[ws.Cell(1, 2)].Count);
             Assert.AreEqual(AggregateFunction.Sum, result[ws.Cell(1, 2)].First().AggregateFunction);
             Assert.AreEqual("Amount", result[ws.Cell(1, 2)].First().ColumnName);
             Assert.IsNull(result[ws.Cell(1, 2)].First().CustomFunc);
             Assert.IsNull(result[ws.Cell(1, 2)].First().PostProcessFunction);
             Assert.IsNull(result[ws.Cell(1, 2)].First().Result);
+            Assert.IsTrue(Guid.TryParse(result[ws.Cell(1, 2)].First().UniqueName, out _));
 
-            Assert.AreEqual("{0}", ws.Cell(1, 3).Value);
+            Assert.IsTrue(Regex.IsMatch(ws.Cell(1, 3).Value.ToString(), @"{ di:AggFunc_[0-9a-f]{32}  }"));
             Assert.AreEqual(1, result[ws.Cell(1, 3)].Count);
             Assert.AreEqual(AggregateFunction.Custom, result[ws.Cell(1, 3)].First().AggregateFunction);
             Assert.AreEqual("Amount", result[ws.Cell(1, 3)].First().ColumnName);
             Assert.AreEqual("CustomFunc", result[ws.Cell(1, 3)].First().CustomFunc);
             Assert.IsNull(result[ws.Cell(1, 3)].First().PostProcessFunction);
             Assert.IsNull(result[ws.Cell(1, 3)].First().Result);
+            Assert.IsTrue(Guid.TryParse(result[ws.Cell(1, 3)].First().UniqueName, out _));
 
-            Assert.AreEqual("{0}", ws.Cell(1, 4).Value);
+            Assert.IsTrue(Regex.IsMatch(ws.Cell(1, 4).Value.ToString(), @"{di:AggFunc_[0-9a-f]{32}}"));
             Assert.AreEqual(1, result[ws.Cell(1, 4)].Count);
             Assert.AreEqual(AggregateFunction.Min, result[ws.Cell(1, 4)].First().AggregateFunction);
             Assert.AreEqual("Value", result[ws.Cell(1, 4)].First().ColumnName);
             Assert.AreEqual("CustomFunc", result[ws.Cell(1, 4)].First().CustomFunc);
             Assert.AreEqual("PostFunc", result[ws.Cell(1, 4)].First().PostProcessFunction);
             Assert.IsNull(result[ws.Cell(1, 4)].First().Result);
+            Assert.IsTrue(Guid.TryParse(result[ws.Cell(1, 4)].First().UniqueName, out _));
 
-            Assert.AreEqual("Text {0} {Text} {1} Text {2}", ws.Cell(1, 5).Value);
+            Assert.IsTrue(Regex.IsMatch(ws.Cell(1, 5).Value.ToString(), @"Text {di:AggFunc_[0-9a-f]{32}} {p:Text} {di:AggFunc_[0-9a-f]{32}} {Text} Text {di:AggFunc_[0-9a-f]{32}} {Min\(val\)}"));
             Assert.AreEqual(3, result[ws.Cell(1, 5)].Count);
             Assert.AreEqual(AggregateFunction.Count, result[ws.Cell(1, 5)][0].AggregateFunction);
             Assert.AreEqual("Number", result[ws.Cell(1, 5)][0].ColumnName);
             Assert.IsNull(result[ws.Cell(1, 5)][0].CustomFunc);
             Assert.IsNull(result[ws.Cell(1, 5)][0].PostProcessFunction);
             Assert.IsNull(result[ws.Cell(1, 5)][0].Result);
+            Assert.IsTrue(Guid.TryParse(result[ws.Cell(1, 5)][0].UniqueName, out _));
             Assert.AreEqual(AggregateFunction.Avg, result[ws.Cell(1, 5)][1].AggregateFunction);
             Assert.AreEqual("Value", result[ws.Cell(1, 5)][1].ColumnName);
             Assert.IsNull(result[ws.Cell(1, 5)][1].CustomFunc);
             Assert.AreEqual("PostFunc", result[ws.Cell(1, 5)][1].PostProcessFunction);
             Assert.IsNull(result[ws.Cell(1, 5)][1].Result);
+            Assert.IsTrue(Guid.TryParse(result[ws.Cell(1, 5)][1].UniqueName, out _));
             Assert.AreEqual(AggregateFunction.Max, result[ws.Cell(1, 5)][2].AggregateFunction);
             Assert.AreEqual("Val", result[ws.Cell(1, 5)][2].ColumnName);
             Assert.IsNull(result[ws.Cell(1, 5)][2].CustomFunc);
             Assert.IsNull(result[ws.Cell(1, 5)][2].PostProcessFunction);
             Assert.IsNull(result[ws.Cell(1, 5)][2].Result);
+            Assert.IsTrue(Guid.TryParse(result[ws.Cell(1, 5)][2].UniqueName, out _));
+
+            Assert.IsTrue(Regex.IsMatch(ws.Cell(1, 7).Value.ToString(), @"Text {Plain Text} Sum\(di:Count\) {sf:Format\(di:AggFunc_[0-9a-f]{32}, #,,0.00\)} {p:Text} {di:AggFunc_[0-9a-f]{32}} {m:Meth\(1, di:AggFunc_[0-9a-f]{32}, di:AggFunc_[0-9a-f]{32}, ""Str""} {sv:RenderDate} m:Meth2\(Avg\(di:Value\)\)"));
+            Assert.AreEqual(4, result[ws.Cell(1, 7)].Count);
+            Assert.AreEqual(AggregateFunction.Sum, result[ws.Cell(1, 7)][0].AggregateFunction);
+            Assert.AreEqual("Amount", result[ws.Cell(1, 7)][0].ColumnName);
+            Assert.IsNull(result[ws.Cell(1, 7)][0].CustomFunc);
+            Assert.AreEqual("PostAggregation", result[ws.Cell(1, 7)][0].PostProcessFunction);
+            Assert.IsNull(result[ws.Cell(1, 7)][0].Result);
+            Assert.IsTrue(Guid.TryParse(result[ws.Cell(1, 7)][0].UniqueName, out _));
+            Assert.AreEqual(AggregateFunction.Max, result[ws.Cell(1, 7)][1].AggregateFunction);
+            Assert.AreEqual("Count", result[ws.Cell(1, 7)][1].ColumnName);
+            Assert.IsNull(result[ws.Cell(1, 7)][1].CustomFunc);
+            Assert.IsNull(result[ws.Cell(1, 7)][1].PostProcessFunction);
+            Assert.IsNull(result[ws.Cell(1, 7)][1].Result);
+            Assert.IsTrue(Guid.TryParse(result[ws.Cell(1, 7)][1].UniqueName, out _));
+            Assert.AreEqual(AggregateFunction.Avg, result[ws.Cell(1, 7)][2].AggregateFunction);
+            Assert.AreEqual("Value", result[ws.Cell(1, 7)][2].ColumnName);
+            Assert.IsNull(result[ws.Cell(1, 7)][2].CustomFunc);
+            Assert.IsNull(result[ws.Cell(1, 7)][2].PostProcessFunction);
+            Assert.IsNull(result[ws.Cell(1, 7)][2].Result);
+            Assert.IsTrue(Guid.TryParse(result[ws.Cell(1, 7)][2].UniqueName, out _));
+            Assert.AreEqual(AggregateFunction.Min, result[ws.Cell(1, 7)][3].AggregateFunction);
+            Assert.AreEqual("Amount", result[ws.Cell(1, 7)][3].ColumnName);
+            Assert.AreEqual("CustomAggregation", result[ws.Cell(1, 7)][3].CustomFunc);
+            Assert.AreEqual("PostAggregation", result[ws.Cell(1, 7)][3].PostProcessFunction);
+            Assert.IsNull(result[ws.Cell(1, 7)][3].Result);
+            Assert.IsTrue(Guid.TryParse(result[ws.Cell(1, 7)][3].UniqueName, out _));
         }
 
         [TestMethod]
@@ -333,8 +352,6 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
 
             IXLRange range = ws.Range(1, 1, 1, 1);
             range.AddToNamed("Test", XLScope.Worksheet);
-
-            ws.Cell(1, 1).Value = "<Sum( )>";
 
             var templateProcessor = Substitute.For<ITemplateProcessor>();
             templateProcessor.LeftTemplateBorder.Returns("<");
@@ -351,13 +368,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             var panel = new ExcelTotalsPanel("Stub", ws.NamedRange("Test"), report, report.TemplateProcessor);
             MethodInfo method = panel.GetType().GetMethod("ParseTotalCells", BindingFlags.Instance | BindingFlags.NonPublic);
 
-            ExceptionAssert.ThrowsBaseException<InvalidOperationException>(() => method.Invoke(panel, null), "\"ColumnName\" parameter in aggregation function cannot be empty");
-
-            ws.Cell(1, 1).Value = "<Sum(di-Val, fn1, fn2, fn3)>";
+            ws.Cell(1, 1).Value = "<Sum(d-Val, fn1, fn2, fn3)>";
             ExceptionAssert.ThrowsBaseException<InvalidOperationException>(() => method.Invoke(panel, null), "Aggregation function must have at least one but no more than 3 parameters");
-
-            ws.Cell(1, 1).Value = "<Sum( , fn1, fn2)>";
-            ExceptionAssert.ThrowsBaseException<InvalidOperationException>(() => method.Invoke(panel, null), "\"ColumnName\" parameter in aggregation function cannot be empty");
         }
 
         private IList<Test> GetTestData()

@@ -8,6 +8,7 @@ using ExcelReportGenerator.Rendering.TemplateProcessors;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using ExcelReportGenerator.Rendering.Providers.VariableProviders;
@@ -18,6 +19,12 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
     {
         private int _counter;
 
+        public TestReport()
+        {
+            ExpandoObj.StrProp = "ExpandoStr";
+            ExpandoObj.DecimalProp = 5.56m;
+        }
+
         public string StrParam { get; } = "String parameter";
 
         public int IntParam = 10;
@@ -27,6 +34,10 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
         public TimeSpan TimeSpanParam { get; set; } = new TimeSpan(36500, 22, 30, 40);
 
         public ComplexType ComplexTypeParam { get; set; } = new ComplexType();
+
+        public dynamic ExpandoObj { get; set; } = new ExpandoObject();
+
+        public string NullProp { get; set; }
 
         public string Format(DateTime date, string format = "yyyyMMdd")
         {
@@ -238,7 +249,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
         public void TestExcelDynamicPanelBeforeTotalsRender(DataSourcePanelBeforeRenderEventArgs args)
         {
-            args.Range.Cells().ElementAt(1).Value = "{Count(Name)}";
+            args.Range.Cells().ElementAt(1).Value = "{Count(di:Name)}";
         }
 
         public void TestExcelDynamicPaneAfterTotalsRender(DataSourcePanelEventArgs args)

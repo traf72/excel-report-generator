@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace ExcelReportGenerator.Tests.CustomAsserts
 {
@@ -26,7 +26,17 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
             foreach (IXLCell expectedCell in range.Cells())
             {
                 IXLCell actualCell = actual.Cell(expectedCell.Address);
-                Assert.AreEqual(expectedCell.Value, actualCell.Value, $"Cell {expectedCell.Address} Value failed.");
+                if (expectedCell.HasFormula)
+                {
+                    Assert.AreEqual(expectedCell.FormulaA1, actualCell.FormulaA1, $"Cell {expectedCell.Address} FormulaA1 failed.");
+                    //// For some reason sometimes the formulas "FormulaR1C1" are different although the formulas "FormulaA1" are match
+                    //Assert.AreEqual(expectedCell.FormulaR1C1, actualCell.FormulaR1C1, $"Cell {expectedCell.Address} FormulaR1C1 failed.");
+                    Assert.AreEqual(expectedCell.FormulaReference, actualCell.FormulaReference, $"Cell {expectedCell.Address} FormulaReference failed.");
+                }
+                else
+                {
+                    Assert.AreEqual(expectedCell.Value, actualCell.Value, $"Cell {expectedCell.Address} Value failed.");
+                }
                 Assert.AreEqual(expectedCell.DataType, actualCell.DataType, $"Cell {expectedCell.Address} DataType failed.");
                 Assert.AreEqual(expectedCell.Active, actualCell.Active, $"Cell {expectedCell.Address} Active failed.");
                 AreColumnsEquals(expectedCell.WorksheetColumn(), actualCell.WorksheetColumn(), $"Column {actualCell.WorksheetColumn().RangeAddress} {{0}} failed.");

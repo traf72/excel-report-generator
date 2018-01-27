@@ -3,6 +3,7 @@ using ExcelReportGenerator.Helpers;
 using ExcelReportGenerator.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Dynamic;
 using System.Reflection;
 using ExcelReportGenerator.Attributes;
 
@@ -111,6 +112,12 @@ namespace ExcelReportGenerator.Tests.Helpers
             Assert.AreSame(instance.ParentProp, reflectionHelper.GetValueOfPropertiesChain("ParentProp", instance));
             Assert.AreSame(instance.SameNameProp, reflectionHelper.GetValueOfPropertiesChain("SameNameProp", instance));
             Assert.AreSame(instance.SameNameField, reflectionHelper.GetValueOfPropertiesChain("SameNameField", instance));
+            Assert.AreEqual(instance.DynamicObj.GuidProp, reflectionHelper.GetValueOfPropertiesChain("DynamicObj.GuidProp", instance));
+            Assert.AreEqual(instance.ExpandoObj.StrProp, reflectionHelper.GetValueOfPropertiesChain("ExpandoObj.StrProp", instance));
+            Assert.AreEqual(instance.ExpandoObj.DecimalProp, reflectionHelper.GetValueOfPropertiesChain("ExpandoObj.DecimalProp", instance));
+            Assert.AreEqual(instance.ExpandoObj.ComplexProp.GuidProp, reflectionHelper.GetValueOfPropertiesChain("ExpandoObj.ComplexProp.GuidProp", instance));
+            Assert.AreEqual(instance.ExpandoObj.InnerExpando.IntProp, reflectionHelper.GetValueOfPropertiesChain("ExpandoObj.InnerExpando.IntProp", instance));
+            Assert.AreEqual(instance.ObjProp.ExpandoField.GuidProp, reflectionHelper.GetValueOfPropertiesChain("ObjProp.ExpandoField.GuidProp", instance));
 
             ExceptionAssert.Throws<MemberNotFoundException>(() => reflectionHelper.GetValueOfPropertiesChain("strProp", instance),
                 "Cannot find property or field \"strProp\" in class \"TestClass\" and all its parents. BindingFlags = Instance, Public");
@@ -122,6 +129,10 @@ namespace ExcelReportGenerator.Tests.Helpers
                 "Cannot find property or field \"DoubleProp\" in class \"TestClass\" and all its parents. BindingFlags = Instance, Public");
             ExceptionAssert.Throws<MemberNotFoundException>(() => reflectionHelper.GetValueOfPropertiesChain("ObjProp.GuidProp", instance),
                 "Cannot find property or field \"GuidProp\" in class \"TestClass2\" and all its parents. BindingFlags = Instance, Public");
+            ExceptionAssert.Throws<MemberNotFoundException>(() => reflectionHelper.GetValueOfPropertiesChain("ExpandoObj.BadProp", instance),
+                "Cannot find property \"BadProp\" in ExpandoObject");
+            ExceptionAssert.Throws<MemberNotFoundException>(() => reflectionHelper.GetValueOfPropertiesChain("ExpandoObj.InnerExpando.BadInnerProp", instance),
+                "Cannot find property \"BadInnerProp\" in ExpandoObject");
 
             instance.ObjProp.StrProp = null;
             Assert.AreEqual("DefaultStr", reflectionHelper.GetValueOfPropertiesChain("ObjProp.StrProp", instance));
@@ -161,6 +172,15 @@ namespace ExcelReportGenerator.Tests.Helpers
 
         private class TestClass : Parent
         {
+            public TestClass()
+            {
+                ExpandoObj.StrProp = "Str";
+                ExpandoObj.DecimalProp = 56.34m;
+                ExpandoObj.ComplexProp = new TestClass3();
+                ExpandoObj.InnerExpando = new ExpandoObject();
+                ExpandoObj.InnerExpando.IntProp = 100;
+            }
+
             public string StrProp { get; set; } = "StrProp";
 
             [NullValue(777)]
@@ -182,12 +202,23 @@ namespace ExcelReportGenerator.Tests.Helpers
             public string SameNameField = "ChildSameNameField";
 
             public static string SameNameStaticField = "ChildSameNameStaticField";
+
+            public dynamic DynamicObj { get; set; } = new TestClass3();
+
+            public dynamic ExpandoObj { get; set; } = new ExpandoObject();
         }
 
         private class TestClass2
         {
+            public TestClass2()
+            {
+                ExpandoField.GuidProp = Guid.NewGuid();
+            }
+
             [NullValue("DefaultStr")]
             public string StrProp { get; set; } = "TestClass2:StrProp";
+
+            public dynamic ExpandoField = new ExpandoObject();
 
             public readonly TestClass3 ObjField = new TestClass3();
         }

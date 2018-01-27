@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Dynamic;
 using System.Reflection;
 using ExcelReportGenerator.Attributes;
 using ExcelReportGenerator.Exceptions;
@@ -75,6 +76,13 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
             Assert.AreEqual(testInstance.ParentField, propertyValueProvider.GetValue("ExcelReportGenerator.Tests.Rendering.Providers:PropValProviderTestClass:ParentField"));
             Assert.AreEqual(PropValProviderTestClass.StaticParentProp, propertyValueProvider.GetValue("StaticParentProp"));
             Assert.AreEqual(Parent.StaticParentField, propertyValueProvider.GetValue("StaticParentField"));
+            Assert.AreEqual(testInstance.DynamicObj.GuidProp, propertyValueProvider.GetValue("DynamicObj.GuidProp"));
+            Assert.AreEqual(testInstance.ExpandoObj.StrProp, propertyValueProvider.GetValue("ExpandoObj.StrProp"));
+            Assert.AreEqual(testInstance.ExpandoObj.DecimalProp, propertyValueProvider.GetValue("ExpandoObj.DecimalProp"));
+            Assert.AreEqual(testInstance.ExpandoObj.ComplexProp.GuidProp, propertyValueProvider.GetValue("ExpandoObj.ComplexProp.GuidProp"));
+            Assert.AreEqual(PropValProviderTestClass.ExpandoField.FloatProp, propertyValueProvider.GetValue("ExpandoField.FloatProp"));
+            Assert.AreEqual(testInstance.ObjField.ExpandoField.IntProp, propertyValueProvider.GetValue("ObjField.ExpandoField.IntProp"));
+            Assert.AreEqual(PropValProviderTestClass.StaticObjField.ExpandoField.IntProp, propertyValueProvider.GetValue("StaticObjField.ExpandoField.IntProp"));
 
             Assert.AreEqual("TestClass2:StrProp", propertyValueProvider.GetValue("ObjProp.StrProp"));
             Assert.AreEqual("TestClass2:StrProp", propertyValueProvider.GetValue("ExcelReportGenerator.Tests.Rendering.Providers:PropValProviderTestClass:ObjField.StrProp"));
@@ -125,6 +133,18 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
 
         private class PropValProviderTestClass : Parent
         {
+            static PropValProviderTestClass()
+            {
+                ExpandoField.FloatProp = 15.643f;
+            }
+
+            public PropValProviderTestClass()
+            {
+                ExpandoObj.StrProp = "Str";
+                ExpandoObj.DecimalProp = 56.34m;
+                ExpandoObj.ComplexProp = new TestClass3();
+            }
+
             [NullValue("DefaultStrProp")]
             public string StrProp { get; set; } = "StrProp";
 
@@ -143,16 +163,29 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
             public static TestClass2 StaticObjField = new TestClass2();
 
             public string PrivateGetterProp { private get; set; } = "PrivateGetterProp";
+
+            public dynamic DynamicObj { get; set; } = new TestClass3();
+
+            public dynamic ExpandoObj { get; set; } = new ExpandoObject();
+
+            public static dynamic ExpandoField = new ExpandoObject();
         }
 
         private class TestClass2
         {
+            public TestClass2()
+            {
+                ExpandoField.IntProp = 100;
+            }
+
             public string StrProp { get; set; } = "TestClass2:StrProp";
 
             [NullValue("DefaultStrField")]
             public string StrField = "TestClass2:StrField";
 
             public TestClass3 ObjField = new TestClass3();
+
+            public dynamic ExpandoField = new ExpandoObject();
         }
 
         private class TestClass3

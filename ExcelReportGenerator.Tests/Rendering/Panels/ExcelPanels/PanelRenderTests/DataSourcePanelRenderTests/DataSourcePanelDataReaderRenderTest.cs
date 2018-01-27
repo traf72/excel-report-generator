@@ -14,7 +14,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 2, 6);
+            IXLRange range = ws.Range(2, 2, 2, 9);
             range.AddToNamed("TestRange", XLScope.Worksheet);
 
             ws.Cell(2, 2).Value = "{di:Id}";
@@ -22,11 +22,14 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(2, 4).Value = "{di:IsVip}";
             ws.Cell(2, 5).Value = "{di:Description}";
             ws.Cell(2, 6).Value = "{di:Type}";
+            ws.Cell(2, 7).FormulaA1 = "=ROW()";
+            ws.Cell(2, 8).FormulaA1 = "=SUM(B2,F2)";
+            ws.Cell(2, 9).FormulaA1 = "=SUM(B$2,F$2)";
 
             var panel = new ExcelDataSourcePanel("m:DataProvider:GetAllCustomersDataReader()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             IXLRange resultRange = panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 4, 6), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 4, 9), resultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelDataReaderRenderTest),
                 nameof(TestRenderDataReader)), ws.Workbook);

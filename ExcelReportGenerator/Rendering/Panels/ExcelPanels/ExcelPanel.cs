@@ -1,4 +1,6 @@
 ﻿using ClosedXML.Excel;
+using ExcelReportGenerator.Attributes;
+using ExcelReportGenerator.Converters.ExternalPropertiesConverters;
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Excel;
 using ExcelReportGenerator.Exceptions;
@@ -11,8 +13,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using ExcelReportGenerator.Attributes;
-using ExcelReportGenerator.Converters.ExternalPropertiesConverters;
 
 namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 {
@@ -78,7 +78,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
             IList<IXLCell> childrenCells = Children.SelectMany(c => c.Range.CellsUsed()).ToList();
             string templatePattern = _templateProcessor.GetFullRegexPattern();
-            foreach (IXLCell cell in Range.CellsUsed().Where(c => !childrenCells.Contains(c)))
+            foreach (IXLCell cell in Range.CellsUsedWithoutFormulas(c => !childrenCells.Contains(c)))
             {
                 string cellValue = cell.Value.ToString();
                 MatchCollection matches = Regex.Matches(cellValue, templatePattern, RegexOptions.IgnoreCase);
@@ -86,16 +86,18 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 {
                     continue;
                 }
+
+                HierarchicalDataItem dataContext = GetDataContext();
                 if (matches.Count == 1 && Regex.IsMatch(cellValue, $@"^{templatePattern}$", RegexOptions.IgnoreCase))
                 {
-                    cell.Value = _templateProcessor.GetValue(cellValue, GetDataContext());
+                    cell.Value = _templateProcessor.GetValue(cellValue, dataContext);
                     continue;
                 }
 
                 foreach (object match in matches)
                 {
                     string template = match.ToString();
-                    cellValue = cellValue.Replace(template, _templateProcessor.GetValue(template).ToString());
+                    cellValue = cellValue.Replace(template, _templateProcessor.GetValue(template, dataContext)?.ToString());
                 }
 
                 cell.Value = cellValue;

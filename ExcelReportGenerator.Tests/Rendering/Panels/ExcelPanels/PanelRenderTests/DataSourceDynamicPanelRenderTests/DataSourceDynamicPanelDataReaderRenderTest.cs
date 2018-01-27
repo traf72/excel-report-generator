@@ -14,7 +14,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 5, 2);
+            IXLRange range = ws.Range(2, 2, 7, 2);
             range.AddToNamed("TestRange", XLScope.Worksheet);
 
             ws.Cell(2, 2).Value = "{Headers}";
@@ -35,10 +35,14 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(5, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Dotted;
             ws.Cell(5, 2).Style.Border.OutsideBorderColor = XLColor.Green;
 
+            ws.Cell(7, 2).FormulaA1 = "=COLUMN()";
+            ws.Cell(7, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Dashed;
+            ws.Cell(7, 2).Style.Border.OutsideBorderColor = XLColor.Blue;
+
             var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataReader()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             IXLRange resultRange = panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 7, 7), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 9, 7), resultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataReaderRenderTest),
                 nameof(TestRenderDataReader)), ws.Workbook);
