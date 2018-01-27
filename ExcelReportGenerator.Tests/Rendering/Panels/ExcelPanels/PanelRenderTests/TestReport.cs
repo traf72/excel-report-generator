@@ -249,7 +249,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
         public void TestExcelDynamicPanelBeforeTotalsRender(DataSourcePanelBeforeRenderEventArgs args)
         {
-            args.Range.Cells().ElementAt(1).Value = "{Count(Name)}";
+            args.Range.Cells().ElementAt(1).Value = "{Count(di:Name)}";
         }
 
         public void TestExcelDynamicPaneAfterTotalsRender(DataSourcePanelEventArgs args)

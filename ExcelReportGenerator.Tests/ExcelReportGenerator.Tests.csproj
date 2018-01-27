@@ -334,6 +334,7 @@
     <None Include="TestData\DefaultReportGeneratorTest\TestRenderPartialWorksheets.xlsx" />
     <None Include="TestData\DefaultReportGeneratorTest\TestRenderWithCustomVariableAndFunctionProviders.xlsx" />
     <None Include="TestData\TotalsPanelRenderTest\TestPanelRender.xlsx" />
+    <None Include="TestData\TotalsPanelRenderTest\TestPanelRenderWithParentContext.xlsx" />
     <None Include="TestData\TotalsPanelRenderTest\TestPanelWithNoData.xlsx" />
     <None Include="TestData\TotalsPanelRenderTest\TestPanelWithNullData.xlsx" />
   </ItemGroup>

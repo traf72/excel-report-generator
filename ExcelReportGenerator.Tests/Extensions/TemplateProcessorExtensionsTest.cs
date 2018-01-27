@@ -255,20 +255,21 @@ namespace ExcelReportGenerator.Tests.Extensions
             processor.PropertyMemberLabel.Returns("p");
 
             Assert.AreEqual("Name", processor.TrimPropertyLabel("p:Name"));
-            Assert.AreEqual("Name p:Phone", processor.TrimPropertyLabel("p:Name p:Phone"));
+            Assert.AreEqual("  Name p:Phone", processor.TrimPropertyLabel(" p : Name p:Phone"));
             Assert.AreEqual("di:Name", processor.TrimPropertyLabel("di:Name"));
             Assert.AreEqual("Contacts.Phone", processor.TrimPropertyLabel("Contacts.Phone"));
             Assert.AreEqual(" { Name } ", processor.TrimPropertyLabel(" { p:Name } "));
+            Assert.AreEqual(" { Name } ", processor.TrimPropertyLabel(" { P :Name } "));
             Assert.AreEqual("{Name p:Phone}", processor.TrimPropertyLabel("{p:Name p:Phone}"));
             Assert.AreEqual(" { di:Name } ", processor.TrimPropertyLabel(" { di:Name } "));
             Assert.AreEqual("{Contacts.Phone}", processor.TrimPropertyLabel("{Contacts.Phone}"));
             ExceptionAssert.Throws<ArgumentNullException>(() => processor.TrimPropertyLabel(null));
 
-            processor.MemberLabelSeparator.Returns((string)null);
+            processor.MemberLabelSeparator.Returns(string.Empty);
             Assert.AreEqual("Name", processor.TrimPropertyLabel("pName"));
             Assert.AreEqual("{Name}", processor.TrimPropertyLabel("{pName}"));
 
-            processor.PropertyMemberLabel.Returns((string)null);
+            processor.PropertyMemberLabel.Returns(string.Empty);
             Assert.AreEqual("p:Name", processor.TrimPropertyLabel("p:Name"));
         }
 
@@ -279,21 +280,21 @@ namespace ExcelReportGenerator.Tests.Extensions
             processor.MemberLabelSeparator.Returns(":");
             processor.DataItemMemberLabel.Returns("di");
 
-            Assert.AreEqual("Name", processor.TrimDataItemLabel("di:Name"));
+            Assert.AreEqual("Name", processor.TrimDataItemLabel("DI:Name"));
             Assert.AreEqual("Name di:Phone", processor.TrimDataItemLabel("di:Name di:Phone"));
             Assert.AreEqual("p:Name", processor.TrimDataItemLabel("p:Name"));
             Assert.AreEqual("Contacts.Phone", processor.TrimDataItemLabel("Contacts.Phone"));
-            Assert.AreEqual(" { Name } ", processor.TrimDataItemLabel(" { di:Name } "));
+            Assert.AreEqual(" {  Name } ", processor.TrimDataItemLabel(" { di : Name } "));
             Assert.AreEqual("{Name di:Phone}", processor.TrimDataItemLabel("{di:Name di:Phone}"));
             Assert.AreEqual(" { p:Name } ", processor.TrimDataItemLabel(" { p:Name } "));
             Assert.AreEqual("{Contacts.Phone}", processor.TrimDataItemLabel("{Contacts.Phone}"));
             ExceptionAssert.Throws<ArgumentNullException>(() => processor.TrimDataItemLabel(null));
 
-            processor.MemberLabelSeparator.Returns((string)null);
+            processor.MemberLabelSeparator.Returns(string.Empty);
             Assert.AreEqual("Name", processor.TrimDataItemLabel("diName"));
             Assert.AreEqual("{Name}", processor.TrimDataItemLabel("{diName}"));
 
-            processor.DataItemMemberLabel.Returns((string)null);
+            processor.DataItemMemberLabel.Returns(string.Empty);
             Assert.AreEqual("di:Name", processor.TrimDataItemLabel("di:Name"));
         }
 
@@ -308,15 +309,16 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual("Meth1(p:Name, di:Value, m:MethInner()) m:Meth2()", processor.TrimMethodCallLabel("m:Meth1(p:Name, di:Value, m:MethInner()) m:Meth2()"));
             Assert.AreEqual("p:Name", processor.TrimMethodCallLabel("p:Name"));
             Assert.AreEqual(" { Name } ", processor.TrimMethodCallLabel(" { m:Name } "));
+            Assert.AreEqual(" {  Name } ", processor.TrimMethodCallLabel(" { m: Name } "));
             Assert.AreEqual("{Meth1(p:Name, di:Value, m:MethInner()) m:Meth2()}", processor.TrimMethodCallLabel("{m:Meth1(p:Name, di:Value, m:MethInner()) m:Meth2()}"));
             Assert.AreEqual(" { p:Name } ", processor.TrimMethodCallLabel(" { p:Name } "));
             ExceptionAssert.Throws<ArgumentNullException>(() => processor.TrimMethodCallLabel(null));
 
-            processor.MemberLabelSeparator.Returns((string)null);
+            processor.MemberLabelSeparator.Returns(string.Empty);
             Assert.AreEqual("Meth()", processor.TrimMethodCallLabel("mMeth()"));
             Assert.AreEqual("{Meth()}", processor.TrimMethodCallLabel("{mMeth()}"));
 
-            processor.MethodCallMemberLabel.Returns((string)null);
+            processor.MethodCallMemberLabel.Returns(string.Empty);
             Assert.AreEqual("m:Meth()", processor.TrimMethodCallLabel("m:Meth()"));
         }
 
@@ -329,13 +331,14 @@ namespace ExcelReportGenerator.Tests.Extensions
 
             Assert.AreEqual("Now", processor.TrimVariableLabel("sv:Now"));
             Assert.AreEqual(" { SheetName } ", processor.TrimVariableLabel(" { sv:SheetName } "));
+            Assert.AreEqual(" {  SheetName } ", processor.TrimVariableLabel(" { sv : SheetName } "));
             ExceptionAssert.Throws<ArgumentNullException>(() => processor.TrimVariableLabel(null));
 
-            processor.MemberLabelSeparator.Returns((string)null);
+            processor.MemberLabelSeparator.Returns(string.Empty);
             Assert.AreEqual("Now", processor.TrimVariableLabel("svNow"));
             Assert.AreEqual("{Now}", processor.TrimVariableLabel("{svNow}"));
 
-            processor.SystemVariableMemberLabel.Returns((string)null);
+            processor.SystemVariableMemberLabel.Returns(string.Empty);
             Assert.AreEqual("sv:Now", processor.TrimVariableLabel("sv:Now"));
         }
 
@@ -350,11 +353,11 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual(" { Format(p:Prop, 0) } ", processor.TrimSystemFunctionLabel(" { sf:Format(p:Prop, 0) } "));
             ExceptionAssert.Throws<ArgumentNullException>(() => processor.TrimSystemFunctionLabel(null));
 
-            processor.MemberLabelSeparator.Returns((string)null);
+            processor.MemberLabelSeparator.Returns(string.Empty);
             Assert.AreEqual("Format(p:Prop, 0)", processor.TrimSystemFunctionLabel("sfFormat(p:Prop, 0)"));
             Assert.AreEqual("{Format(p:Prop, 0)}", processor.TrimSystemFunctionLabel("{sfFormat(p:Prop, 0)}"));
 
-            processor.SystemFunctionMemberLabel.Returns((string)null);
+            processor.SystemFunctionMemberLabel.Returns(string.Empty);
             Assert.AreEqual("sf:Format(p:Prop, 0)", processor.TrimSystemFunctionLabel("sf:Format(p:Prop, 0)"));
         }
 
@@ -835,58 +838,149 @@ namespace ExcelReportGenerator.Tests.Extensions
         }
 
         [TestMethod]
-        public void TestGetFullAggregationRegexPattern()
+        public void TestGetAggregationRegexPatterns()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
 
             // Standard case
             processor.LeftTemplateBorder.Returns("{");
             processor.RightTemplateBorder.Returns("}");
+            processor.DataItemMemberLabel.Returns("di");
+            processor.MemberLabelSeparator.Returns(":");
 
-            string pattern = processor.GetFullAggregationRegexPattern();
             string[] allAggFuncs = Enum.GetNames(typeof(AggregateFunction)).Where(n => n != AggregateFunction.NoAggregation.ToString()).ToArray();
-
             Assert.AreEqual(6, allAggFuncs.Length);
-            Assert.AreEqual($"\\{{\\s*({string.Join("|", allAggFuncs)})\\((.+?)\\)\\s*}}", pattern);
 
-            MatchCollection matches = Regex.Matches("{Sum(di:Amount)}", pattern);
+            string templatesWithAggregationPattern = processor.GetTemplatesWithAggregationRegexPattern();
+            Assert.AreEqual($@"\{{[^}}]*({string.Join("|", allAggFuncs)})\(\s*di\s*:.+?\)[^}}]*}}", templatesWithAggregationPattern);
+
+            string aggregationFuncPattern = processor.GetAggregationFuncRegexPattern();
+            Assert.AreEqual($@"({string.Join("|", allAggFuncs)})\((\s*di\s*:.+?)\)", aggregationFuncPattern);
+
+            MatchCollection matches = Regex.Matches("{Sum(di:Amount)}", templatesWithAggregationPattern);
             Assert.AreEqual(1, matches.Count);
             Assert.AreEqual("{Sum(di:Amount)}", matches[0].Value);
 
-            matches = Regex.Matches("{ Count(di:Amount) }", pattern);
-            Assert.AreEqual(1, matches.Count);
-            Assert.AreEqual("{ Count(di:Amount) }", matches[0].Value);
+            MatchCollection innerMatches = Regex.Matches(matches[0].Value, aggregationFuncPattern);
+            Assert.AreEqual(1, innerMatches.Count);
+            Assert.AreEqual("Sum(di:Amount)", innerMatches[0].Value);
+            Assert.AreEqual("Sum", innerMatches[0].Groups[1].Value);
+            Assert.AreEqual("di:Amount", innerMatches[0].Groups[2].Value);
 
-            matches = Regex.Matches("{  Max(Amount)  }", pattern);
+            matches = Regex.Matches("{ Count( di : Amount, CustomAggregation, PostAggregation) }", templatesWithAggregationPattern);
             Assert.AreEqual(1, matches.Count);
-            Assert.AreEqual("{  Max(Amount)  }", matches[0].Value);
+            Assert.AreEqual("{ Count( di : Amount, CustomAggregation, PostAggregation) }", matches[0].Value);
 
-            matches = Regex.Matches("{ Min(Result.Amount) }", pattern);
+            innerMatches = Regex.Matches(matches[0].Value, aggregationFuncPattern);
+            Assert.AreEqual(1, innerMatches.Count);
+            Assert.AreEqual("Count( di : Amount, CustomAggregation, PostAggregation)", innerMatches[0].Value);
+            Assert.AreEqual("Count", innerMatches[0].Groups[1].Value);
+            Assert.AreEqual(" di : Amount, CustomAggregation, PostAggregation", innerMatches[0].Groups[2].Value);
+
+            matches = Regex.Matches("{  Max(di:Amount,,PostAggregation)  }", templatesWithAggregationPattern);
             Assert.AreEqual(1, matches.Count);
-            Assert.AreEqual("{ Min(Result.Amount) }", matches[0].Value);
+            Assert.AreEqual("{  Max(di:Amount,,PostAggregation)  }", matches[0].Value);
 
-            matches = Regex.Matches("{Avg(di:Amount)}", pattern);
+            innerMatches = Regex.Matches(matches[0].Value, aggregationFuncPattern);
+            Assert.AreEqual(1, innerMatches.Count);
+            Assert.AreEqual("Max(di:Amount,,PostAggregation)", innerMatches[0].Value);
+            Assert.AreEqual("Max", innerMatches[0].Groups[1].Value);
+            Assert.AreEqual("di:Amount,,PostAggregation", innerMatches[0].Groups[2].Value);
+
+            matches = Regex.Matches("{ Min(di:Result.Amount) }", templatesWithAggregationPattern);
             Assert.AreEqual(1, matches.Count);
-            Assert.AreEqual("{Avg(di:Amount)}", matches[0].Value);
+            Assert.AreEqual("{ Min(di:Result.Amount) }", matches[0].Value);
 
-            matches = Regex.Matches("{Custom(di:Amount)}", pattern);
+            innerMatches = Regex.Matches(matches[0].Value, aggregationFuncPattern);
+            Assert.AreEqual(1, innerMatches.Count);
+            Assert.AreEqual("Min(di:Result.Amount)", innerMatches[0].Value);
+            Assert.AreEqual("Min", innerMatches[0].Groups[1].Value);
+            Assert.AreEqual("di:Result.Amount", innerMatches[0].Groups[2].Value);
+
+            matches = Regex.Matches("{Avg(di:Amount,  CustomFunc)}", templatesWithAggregationPattern);
+            Assert.AreEqual(1, matches.Count);
+            Assert.AreEqual("{Avg(di:Amount,  CustomFunc)}", matches[0].Value);
+
+            innerMatches = Regex.Matches(matches[0].Value, aggregationFuncPattern);
+            Assert.AreEqual(1, innerMatches.Count);
+            Assert.AreEqual("Avg(di:Amount,  CustomFunc)", innerMatches[0].Value);
+            Assert.AreEqual("Avg", innerMatches[0].Groups[1].Value);
+            Assert.AreEqual("di:Amount,  CustomFunc", innerMatches[0].Groups[2].Value);
+
+            matches = Regex.Matches("{Custom(di:Amount)}", templatesWithAggregationPattern);
             Assert.AreEqual(1, matches.Count);
             Assert.AreEqual("{Custom(di:Amount)}", matches[0].Value);
 
-            matches = Regex.Matches("Text {Sum(di:Amount))} {Text} {Avg(Value)}", pattern);
+            innerMatches = Regex.Matches(matches[0].Value, aggregationFuncPattern);
+            Assert.AreEqual(1, innerMatches.Count);
+            Assert.AreEqual("Custom(di:Amount)", innerMatches[0].Value);
+            Assert.AreEqual("Custom", innerMatches[0].Groups[1].Value);
+            Assert.AreEqual("di:Amount", innerMatches[0].Groups[2].Value);
+
+            matches = Regex.Matches("Text {Plain Text} {Sum(di:Amount))} {p:Text} {Avg(di:Value)} {sv:RenderDate}", templatesWithAggregationPattern);
             Assert.AreEqual(2, matches.Count);
             Assert.AreEqual("{Sum(di:Amount))}", matches[0].Value);
-            Assert.AreEqual("{Avg(Value)}", matches[1].Value);
+            Assert.AreEqual("{Avg(di:Value)}", matches[1].Value);
 
-            matches = Regex.Matches("{Mix(di:Amount)}", pattern);
+            innerMatches = Regex.Matches(matches[0].Value, aggregationFuncPattern);
+            Assert.AreEqual(1, innerMatches.Count);
+            Assert.AreEqual("Sum(di:Amount)", innerMatches[0].Value);
+            Assert.AreEqual("Sum", innerMatches[0].Groups[1].Value);
+            Assert.AreEqual("di:Amount", innerMatches[0].Groups[2].Value);
+
+            innerMatches = Regex.Matches(matches[1].Value, aggregationFuncPattern);
+            Assert.AreEqual(1, innerMatches.Count);
+            Assert.AreEqual("Avg(di:Value)", innerMatches[0].Value);
+            Assert.AreEqual("Avg", innerMatches[0].Groups[1].Value);
+            Assert.AreEqual("di:Value", innerMatches[0].Groups[2].Value);
+
+            matches = Regex.Matches("Text {Plain Text} Sum(di:Count) {sf:Format(Sum(di:Amount,,PostAggregation), #,,0.00)} {p:Text} {Max(di:Count)} {m:Meth(1, Avg( di : Value ), Min(di:Amount, CustomAggregation, PostAggregation), \"Str\"} {sv:RenderDate} m:Meth2(Avg(di:Value))", templatesWithAggregationPattern);
+            Assert.AreEqual(3, matches.Count);
+            Assert.AreEqual("{sf:Format(Sum(di:Amount,,PostAggregation), #,,0.00)}", matches[0].Value);
+            Assert.AreEqual("{Max(di:Count)}", matches[1].Value);
+            Assert.AreEqual("{m:Meth(1, Avg( di : Value ), Min(di:Amount, CustomAggregation, PostAggregation), \"Str\"}", matches[2].Value);
+
+            innerMatches = Regex.Matches(matches[0].Value, aggregationFuncPattern);
+            Assert.AreEqual(1, innerMatches.Count);
+            Assert.AreEqual("Sum(di:Amount,,PostAggregation)", innerMatches[0].Value);
+            Assert.AreEqual("Sum", innerMatches[0].Groups[1].Value);
+            Assert.AreEqual("di:Amount,,PostAggregation", innerMatches[0].Groups[2].Value);
+
+            innerMatches = Regex.Matches(matches[1].Value, aggregationFuncPattern);
+            Assert.AreEqual(1, innerMatches.Count);
+            Assert.AreEqual("Max(di:Count)", innerMatches[0].Value);
+            Assert.AreEqual("Max", innerMatches[0].Groups[1].Value);
+            Assert.AreEqual("di:Count", innerMatches[0].Groups[2].Value);
+
+            innerMatches = Regex.Matches(matches[2].Value, aggregationFuncPattern);
+            Assert.AreEqual(2, innerMatches.Count);
+            Assert.AreEqual("Avg( di : Value )", innerMatches[0].Value);
+            Assert.AreEqual("Avg", innerMatches[0].Groups[1].Value);
+            Assert.AreEqual(" di : Value ", innerMatches[0].Groups[2].Value);
+            Assert.AreEqual("Min(di:Amount, CustomAggregation, PostAggregation)", innerMatches[1].Value);
+            Assert.AreEqual("Min", innerMatches[1].Groups[1].Value);
+            Assert.AreEqual("di:Amount, CustomAggregation, PostAggregation", innerMatches[1].Groups[2].Value);
+
+            matches = Regex.Matches("{Mix(di:Amount)}", templatesWithAggregationPattern);
+            Assert.AreEqual(0, matches.Count);
+
+            matches = Regex.Matches("{Max(Amount)}", templatesWithAggregationPattern);
+            Assert.AreEqual(0, matches.Count);
+
+            matches = Regex.Matches("{Max()}", templatesWithAggregationPattern);
             Assert.AreEqual(0, matches.Count);
 
             // Overriden borders
             processor.LeftTemplateBorder.Returns("<");
             processor.RightTemplateBorder.Returns(">");
+            processor.DataItemMemberLabel.Returns("d");
+            processor.MemberLabelSeparator.Returns("-");
 
-            pattern = processor.GetFullAggregationRegexPattern();
-            Assert.AreEqual($"<\\s*({string.Join("|", allAggFuncs)})\\((.+?)\\)\\s*>", pattern);
+            templatesWithAggregationPattern = processor.GetTemplatesWithAggregationRegexPattern();
+            Assert.AreEqual($@"<[^>]*({string.Join("|", allAggFuncs)})\(\s*d\s*-.+?\)[^>]*>", templatesWithAggregationPattern);
+
+            aggregationFuncPattern = processor.GetAggregationFuncRegexPattern();
+            Assert.AreEqual($@"({string.Join("|", allAggFuncs)})\((\s*d\s*-.+?)\)", aggregationFuncPattern);
         }
 
         [TestMethod]

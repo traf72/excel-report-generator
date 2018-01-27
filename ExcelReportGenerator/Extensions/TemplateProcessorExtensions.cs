@@ -127,16 +127,13 @@ namespace ExcelReportGenerator.Extensions
                 throw new ArgumentNullException(nameof(memberTemplate), ArgumentHelper.NullParamMessage);
             }
 
-            string memberLabelWithSeparator = $"{memberLabel}{processor.MemberLabelSeparator}";
-            int index = memberTemplate.IndexOf(memberLabelWithSeparator, StringComparison.CurrentCultureIgnoreCase);
-            if (index == -1)
+            string memberLabelWithSeparatorPattern = $@"(.*?){Regex.Escape(memberLabel)}\s*{Regex.Escape(processor.MemberLabelSeparator)}(.*)";
+            Match match = Regex.Match(memberTemplate, memberLabelWithSeparatorPattern, RegexOptions.IgnoreCase);
+            if (!match.Success)
             {
                 return memberTemplate;
             }
-
-            string firstPart = memberTemplate.Substring(0, index);
-            string lastPart = memberTemplate.Substring(index + memberLabelWithSeparator.Length);
-            return $"{firstPart}{lastPart}";
+            return match.Groups[1].Value + match.Groups[2].Value;
         }
 
         /// <summary>
@@ -194,9 +191,14 @@ namespace ExcelReportGenerator.Extensions
             return $@"{Regex.Escape(processor.LeftTemplateBorder)}\s*{escapedMemberLabel}{Regex.Escape(processor.MemberLabelSeparator)}.+?\s*{Regex.Escape(processor.RightTemplateBorder)}";
         }
 
-        public static string GetFullAggregationRegexPattern(this ITemplateProcessor processor)
+        public static string GetTemplatesWithAggregationRegexPattern(this ITemplateProcessor processor)
         {
-            return $@"{Regex.Escape(processor.LeftTemplateBorder)}\s*({string.Join("|", AllAggregationFuncs)})\((.+?)\)\s*{Regex.Escape(processor.RightTemplateBorder)}";
+            return $@"{Regex.Escape(processor.LeftTemplateBorder)}[^{Regex.Escape(processor.RightTemplateBorder)}]*({string.Join("|", AllAggregationFuncs)})\(\s*{Regex.Escape(processor.DataItemMemberLabel)}\s*{Regex.Escape(processor.MemberLabelSeparator)}.+?\)[^{Regex.Escape(processor.RightTemplateBorder)}]*{Regex.Escape(processor.RightTemplateBorder)}";
+        }
+
+        public static string GetAggregationFuncRegexPattern(this ITemplateProcessor processor)
+        {
+            return $@"({string.Join("|", AllAggregationFuncs)})\((\s*{Regex.Escape(processor.DataItemMemberLabel)}\s*{Regex.Escape(processor.MemberLabelSeparator)}.+?)\)";
         }
 
         public static string BuildAggregationFuncTemplate(this ITemplateProcessor processor, AggregateFunction aggFunc, string columnName)

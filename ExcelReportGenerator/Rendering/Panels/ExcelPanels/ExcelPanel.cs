@@ -86,16 +86,18 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 {
                     continue;
                 }
+
+                HierarchicalDataItem dataContext = GetDataContext();
                 if (matches.Count == 1 && Regex.IsMatch(cellValue, $@"^{templatePattern}$", RegexOptions.IgnoreCase))
                 {
-                    cell.Value = _templateProcessor.GetValue(cellValue, GetDataContext());
+                    cell.Value = _templateProcessor.GetValue(cellValue, dataContext);
                     continue;
                 }
 
                 foreach (object match in matches)
                 {
                     string template = match.ToString();
-                    cellValue = cellValue.Replace(template, _templateProcessor.GetValue(template)?.ToString());
+                    cellValue = cellValue.Replace(template, _templateProcessor.GetValue(template, dataContext)?.ToString());
                 }
 
                 cell.Value = cellValue;
