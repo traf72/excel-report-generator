@@ -8,7 +8,6 @@ using ExcelReportGenerator.Rendering.EventArgs;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 {
@@ -77,11 +76,19 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 while (enumerator.MoveNext())
                 {
                     object currentItem = enumerator.Current;
-                    ExcelDataItemPanel currentPanel = templatePanel;
+                    ExcelDataItemPanel currentPanel;
                     if (rowNum != enumerator.RowCount - 1)
                     {
-                        // Сам шаблон копируем вниз или вправо в зависимости от типа панели
-                        templatePanel = CopyTemplatePanel(templatePanel);
+                        IXLCell templateFirstCell = templatePanel.Range.FirstCell();
+                        // Сам шаблон перемещаем вниз или вправо в зависимости от типа панели
+                        MoveTemplatePanel(templatePanel);
+                        // Копируем шаблон на его предыдущее место для панели, в которую будем ренедрить текущий элемент данных
+                        currentPanel = (ExcelDataItemPanel)templatePanel.Copy(templateFirstCell);
+                    }
+                    else
+                    {
+                        // Если это последний элемент данных, то уже на размножаем шаблон, а рендерим данные напрямую в него
+                        currentPanel = templatePanel;
                     }
 
                     currentPanel.DataItem = new HierarchicalDataItem { Value = currentItem, Parent = parentDataItem };
@@ -104,18 +111,6 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             CallAfterRenderMethod(resultRange);
             return resultRange;
         }
-
-        //private void AddToBenchmark(string key, TimeSpan elapsed)
-        //{
-        //    if (Benchmark.TryGetValue(key, out TimeSpan current))
-        //    {
-        //        Benchmark[key] = current.Add(elapsed);
-        //    }
-        //    else
-        //    {
-        //        Benchmark[key] = elapsed;
-        //    }
-        //}
 
         private ExcelDataItemPanel CreateTemplatePanel()
         {
@@ -172,13 +167,13 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             }
         }
 
-        private ExcelDataItemPanel CopyTemplatePanel(IExcelPanel templatePanel)
+        private void MoveTemplatePanel(IExcelPanel templatePanel)
         {
             AddressShift shift = Type == PanelType.Vertical
                 ? new AddressShift(templatePanel.Range.RowCount(), 0)
                 : new AddressShift(0, templatePanel.Range.ColumnCount());
 
-            return (ExcelDataItemPanel)templatePanel.Copy(ExcelHelper.ShiftCell(templatePanel.Range.FirstCell(), shift));
+            templatePanel.Move(ExcelHelper.ShiftCell(templatePanel.Range.FirstCell(), shift));
         }
 
         protected void DeletePanel(IExcelPanel panel)

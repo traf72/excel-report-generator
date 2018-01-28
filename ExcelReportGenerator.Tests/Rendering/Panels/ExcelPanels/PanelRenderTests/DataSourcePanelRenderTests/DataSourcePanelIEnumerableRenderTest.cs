@@ -390,7 +390,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        // Тестирование скорости рендеринга
+        //[TestMethod]
         public void TestPanelRenderSpeed()
         {
             var report = new TestReport();
@@ -404,7 +405,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(2, 5).Value = "{di:Contacts.Phone}";
             ws.Cell(2, 6).Value = "{di:Contacts.Fax}";
 
-            const int dataCount = 3000;
+            const int dataCount = 6000;
             IList<TestItem> data = new List<TestItem>(dataCount);
             for (int i = 0; i < dataCount; i++)
             {
@@ -413,23 +414,15 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             var panel = new ExcelDataSourcePanel(data, ws.NamedRange("TestRange"), report, report.TemplateProcessor)
             {
+                //ShiftType = ShiftType.Row,
                 //ShiftType = ShiftType.NoShift,
-                ShiftType = ShiftType.Row,
             };
 
             Stopwatch sw = Stopwatch.StartNew();
 
-            //for (int i = 0; i < dataCount; i++)
-            //{
-            //    //range.InsertRowsBelow(1, true);
-            //    range.Worksheet.Row(range.FirstRow().RowNumber()).InsertRowsAbove(range.RowCount());
-            //}
-
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
             sw.Stop();
-
-            //Assert.AreEqual(ws.Range(2, 2, 4, 2), resultRange);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
