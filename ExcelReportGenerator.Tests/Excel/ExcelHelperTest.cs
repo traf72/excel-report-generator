@@ -912,5 +912,24 @@ namespace ExcelReportGenerator.Tests.Excel
 
             Assert.IsNull(ExcelHelper.MergeRanges(range1, range2));
         }
+
+        [TestMethod]
+        public void TestIsRangeInvalid()
+        {
+            XLWorkbook wb = new XLWorkbook();
+            IXLWorksheet ws = wb.AddWorksheet("Test");
+
+            var range = ws.Range(3, 3, 5, 5);
+            Assert.IsFalse(ExcelHelper.IsRangeInvalid(range));
+
+            range.Delete(XLShiftDeletedCells.ShiftCellsUp);
+            Assert.IsTrue(ExcelHelper.IsRangeInvalid(range));
+
+            Assert.IsFalse(ExcelHelper.IsRangeInvalid(ws.Range(2, 2, 2, 2)));
+            Assert.IsFalse(ExcelHelper.IsRangeInvalid(ws.Range(1, 2, 2, 3)));
+            Assert.IsTrue(ExcelHelper.IsRangeInvalid(ws.Range(2, 2, 1, 3)));
+            Assert.IsTrue(ExcelHelper.IsRangeInvalid(ws.Range(1, 3, 2, 2)));
+            Assert.IsTrue(ExcelHelper.IsRangeInvalid(ws.Range(2, 3, 1, 2)));
+        }
     }
 }

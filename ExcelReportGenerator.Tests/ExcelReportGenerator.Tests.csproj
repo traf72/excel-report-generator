@@ -201,6 +201,7 @@
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelEmptyIEnumerableRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelIEnumerableRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelNullItemRenderTest.cs" />
+    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_ChildEqualsParent_Test.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_MixedPanels_Test.cs" />
@@ -287,6 +288,7 @@
     <None Include="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalCellsShift.xlsx" />
     <None Include="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalNoShift.xlsx" />
     <None Include="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalRowShift.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_ChildEqualsParent_Test\Test_VerticalPanelsGrouping_ChildEqualsParent.xlsx" />
     <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentCellsShiftChildCellsShift.xlsx" />
     <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumn.xlsx" />
     <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumnWhichDeleteAfterRender.xlsx" />

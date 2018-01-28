@@ -240,14 +240,14 @@ namespace ExcelReportGenerator.Excel
 
         public static IXLRange MergeRanges(IXLRange range1, IXLRange range2)
         {
-            if (range1 == null || range1.RangeAddress.IsInvalid)
+            if (range1 == null || IsRangeInvalid(range1))
             {
-                return range2 == null || range2.RangeAddress.IsInvalid ? null : range2;
+                return range2 == null || IsRangeInvalid(range2) ? null : range2;
             }
 
-            if (range2 == null || range2.RangeAddress.IsInvalid)
+            if (range2 == null || IsRangeInvalid(range2))
             {
-                return range1.RangeAddress.IsInvalid ? null : range1;
+                return IsRangeInvalid(range1) ? null : range1;
             }
 
             if (range1.Worksheet != range2.Worksheet)
@@ -263,6 +263,28 @@ namespace ExcelReportGenerator.Excel
                 Math.Max(range1.LastColumn().ColumnNumber(), range2.LastColumn().ColumnNumber()));
 
             return ws.Range(newRangeFirstCell, newRangeLastCell);
+        }
+
+        public static bool IsRangeInvalid(IXLRange range)
+        {
+            if (range.RangeAddress.IsInvalid)
+            {
+                return true;
+            }
+
+            try
+            {
+                range.FirstRow().RowNumber();
+                range.LastRow().RowNumber();
+                range.FirstColumn().ColumnNumber();
+                range.LastColumn().ColumnNumber();
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public static IXLWorksheet AddTempWorksheet(XLWorkbook wb)
