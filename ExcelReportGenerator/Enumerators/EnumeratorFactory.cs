@@ -5,7 +5,7 @@ namespace ExcelReportGenerator.Enumerators
 {
     internal static class EnumeratorFactory
     {
-        public static IEnumerator Create(object instance)
+        public static ICustomEnumerator Create(object instance)
         {
             switch (instance)
             {
@@ -14,14 +14,14 @@ namespace ExcelReportGenerator.Enumerators
                 case IDataReader dr:
                     return new DataReaderEnumerator(dr);
                 case DataTable dt:
-                    return dt.AsEnumerable().GetEnumerator();
+                    return new DataTableEnumerator(dt);
                 case DataSet ds:
                     return new DataSetEnumerator(ds);
                 case IEnumerable e:
-                    return e.GetEnumerator();
+                    return new EnumerableEnumerator(e);
             }
 
-            return new[] { instance }.GetEnumerator();
+            return new EnumerableEnumerator(new[] { instance });
         }
     }
 }

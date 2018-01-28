@@ -1,103 +1,37 @@
-﻿using System;
+﻿using ExcelReportGenerator.Helpers;
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Data;
-using ExcelReportGenerator.Helpers;
 
 namespace ExcelReportGenerator.Enumerators
 {
-    internal class DataReaderEnumerator : ICustomEnumerator<DataRow>
+    internal class DataReaderEnumerator : IGenericCustomEnumerator<DataRow>
     {
-        private const string ClosedDataReaderMessage = "DataReader has been closed";
-        private const string FinishedEnumeratorMessage = "Enumerator has been finished";
-
-        private readonly IDataReader _dataReader;
-        private DataTable _dataTable;
-        private DataRow _currentDataRow;
-        private bool _isStarted;
-        private bool _isFinished;
+        private readonly IGenericCustomEnumerator<DataRow> _dataTableEnumerator;
 
         public DataReaderEnumerator(IDataReader dataReader)
         {
-            _dataReader = dataReader ?? throw new ArgumentNullException(nameof(dataReader), ArgumentHelper.NullParamMessage);
-            CreateDataTable();
+            if (dataReader == null)
+            {
+                throw new ArgumentNullException(nameof(dataReader), ArgumentHelper.NullParamMessage);
+            }
+
+            var dataTable = new DataTable();
+            dataTable.Load(dataReader);
+            dataReader.Dispose();
+            _dataTableEnumerator = new DataTableEnumerator(dataTable);
         }
 
-        private void CreateDataTable()
-        {
-            DataTable schemaTable = _dataReader.GetSchemaTable();
-            if (schemaTable != null)
-            {
-                _dataTable = new DataTable();
-                foreach (DataRow row in schemaTable.Rows)
-                {
-                    string colName = row.Field<string>("ColumnName");
-                    Type type = row.Field<Type>("DataType");
-                    _dataTable.Columns.Add(colName, type);
-                }
-            }
-        }
-
-        public DataRow Current
-        {
-            get
-            {
-                if (_dataReader.IsClosed)
-                {
-                    throw new InvalidOperationException(ClosedDataReaderMessage);
-                }
-                if (!_isStarted)
-                {
-                    throw new InvalidOperationException("Enumerator has not been started. Call MoveNext() method.");
-                }
-                if (_isFinished)
-                {
-                    throw new InvalidOperationException(FinishedEnumeratorMessage);
-                }
-                return _currentDataRow;
-            }
-        }
+        public DataRow Current => _dataTableEnumerator.Current;
 
         object IEnumerator.Current => Current;
 
-        public bool MoveNext()
-        {
-            if (_dataReader.IsClosed)
-            {
-                throw new InvalidOperationException(ClosedDataReaderMessage);
-            }
-            if (_isFinished)
-            {
-                throw new InvalidOperationException(FinishedEnumeratorMessage);
-            }
-            _isStarted = true;
-            _isFinished = !_dataReader.Read();
-            if (!_isFinished)
-            {
-                ExtractDataRow();
-            }
+        public bool MoveNext() => _dataTableEnumerator.MoveNext();
 
-            return !_isFinished;
-        }
+        public void Reset() => _dataTableEnumerator.Reset();
 
-        private void ExtractDataRow()
-        {
-            if (_dataTable == null)
-            {
-                return;
-            }
+        public int RowCount => _dataTableEnumerator.RowCount;
 
-            _currentDataRow = _dataTable.Rows.Add();
-            foreach (DataColumn col in _dataTable.Columns)
-            {
-                _currentDataRow[col.ColumnName] = _dataReader[col.ColumnName];
-            }
-        }
-
-        public void Reset() => throw new NotSupportedException($"{nameof(DataReaderEnumerator)} does not support reset method");
-
-        public void Dispose() => _dataReader.Close();
-
-        public int RowCount { get; }
+        public void Dispose() => _dataTableEnumerator.Dispose();
     }
 }

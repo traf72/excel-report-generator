@@ -41,10 +41,10 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 return Range;
             }
 
-            IEnumerator enumerator = null;
+            ICustomEnumerator enumerator = null;
             try
             {
-                enumerator = EnumeratorFactory.Create(_data) ?? Enumerable.Empty<object>().GetEnumerator();
+                enumerator = EnumeratorFactory.Create(_data) ?? new EnumerableEnumerator(new object[] { });
                 IDictionary<IXLCell, IList<ParsedAggregationFunc>> totalCells = ParseTotalCells();
                 DoAggregation(enumerator, totalCells.SelectMany(t => t.Value).ToArray());
                 IXLWorksheet ws = Range.Worksheet;

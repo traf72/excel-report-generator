@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using ExcelReportGenerator.Enumerators;
+﻿using ExcelReportGenerator.Enumerators;
 using ExcelReportGenerator.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Data;
 
 namespace ExcelReportGenerator.Tests.Enumerators
 {
@@ -57,9 +57,9 @@ namespace ExcelReportGenerator.Tests.Enumerators
             Assert.AreEqual(2, result[1]);
             Assert.AreEqual(3, result[2]);
 
-            ExceptionAssert.Throws<NotSupportedException>(() => enumerator.Reset());
-
+            enumerator.Reset();
             result.Clear();
+
             enumerator = new DataSetEnumerator(dataSet, "Table2");
             Assert.IsNull(enumerator.Current);
             Assert.IsNull(enumerator.Current);

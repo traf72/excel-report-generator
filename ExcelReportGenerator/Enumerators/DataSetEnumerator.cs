@@ -1,39 +1,40 @@
 ﻿using ExcelReportGenerator.Helpers;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Data;
 
 namespace ExcelReportGenerator.Enumerators
 {
-    internal class DataSetEnumerator : ICustomEnumerator<DataRow>
+    internal class DataSetEnumerator : IGenericCustomEnumerator<DataRow>
     {
-        private readonly DataTable _dataTable;
-
-        private readonly IEnumerator<DataRow> _dataTableEnumerator;
+        private readonly IGenericCustomEnumerator<DataRow> _dataTableEnumerator;
 
         public DataSetEnumerator(DataSet dataSet, string tableName = null)
         {
-            _ = dataSet ?? throw new ArgumentNullException(nameof(dataSet), ArgumentHelper.NullParamMessage);
+            if (dataSet == null)
+            {
+                throw new ArgumentNullException(nameof(dataSet), ArgumentHelper.NullParamMessage);
+            }
             if (dataSet.Tables.Count == 0)
             {
                 throw new InvalidOperationException("DataSet does not contain any table");
             }
 
+            DataTable dataTable;
             if (!string.IsNullOrWhiteSpace(tableName))
             {
-                _dataTable = dataSet.Tables[tableName];
-                if (_dataTable == null)
+                dataTable = dataSet.Tables[tableName];
+                if (dataTable == null)
                 {
                     throw new InvalidOperationException($"DataSet does not contain table with name \"{tableName}\"");
                 }
             }
             else
             {
-                _dataTable = dataSet.Tables[0];
+                dataTable = dataSet.Tables[0];
             }
 
-            _dataTableEnumerator = _dataTable.AsEnumerable().GetEnumerator();
+            _dataTableEnumerator = new DataTableEnumerator(dataTable);
         }
 
         public DataRow Current => _dataTableEnumerator.Current;
@@ -44,8 +45,8 @@ namespace ExcelReportGenerator.Enumerators
 
         public void Reset() => _dataTableEnumerator.Reset();
 
-        public void Dispose() => _dataTableEnumerator.Dispose();
+        public int RowCount => _dataTableEnumerator.RowCount;
 
-        public int RowCount => _dataTable.Rows.Count;
+        public void Dispose() => _dataTableEnumerator.Dispose();
     }
 }

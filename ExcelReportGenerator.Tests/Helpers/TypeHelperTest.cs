@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using ExcelReportGenerator.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -74,6 +75,7 @@ namespace ExcelReportGenerator.Tests.Helpers
             @interface = TypeHelper.TryGetGenericEnumerableInterface(typeof(IDictionary<string, object>));
             Assert.IsTrue(TypeHelper.IsKeyValuePair(@interface.GetGenericArguments()[0]));
 
+            Assert.IsNull(TypeHelper.TryGetGenericEnumerableInterface(typeof(IEnumerable)));
             Assert.IsNull(TypeHelper.TryGetGenericEnumerableInterface(typeof(ArrayList)));
             Assert.IsNull(TypeHelper.TryGetGenericEnumerableInterface(typeof(int)));
             Assert.IsNull(TypeHelper.TryGetGenericEnumerableInterface(null));
@@ -94,6 +96,7 @@ namespace ExcelReportGenerator.Tests.Helpers
             Assert.AreEqual(typeof(short), @interface.GetGenericArguments()[0]);
             Assert.AreEqual(typeof(object), @interface.GetGenericArguments()[1]);
 
+            Assert.IsNull(TypeHelper.TryGetGenericDictionaryInterface(typeof(IDictionary)));
             Assert.IsNull(TypeHelper.TryGetGenericDictionaryInterface(typeof(IEnumerable<string>)));
             Assert.IsNull(TypeHelper.TryGetGenericDictionaryInterface(typeof(int)));
             Assert.IsNull(TypeHelper.TryGetGenericDictionaryInterface(null));
@@ -111,6 +114,43 @@ namespace ExcelReportGenerator.Tests.Helpers
             Assert.IsFalse(TypeHelper.IsGenericEnumerable(typeof(ArrayList)));
             Assert.IsFalse(TypeHelper.IsGenericEnumerable(typeof(int)));
             Assert.IsFalse(TypeHelper.IsGenericEnumerable(null));
+        }
+
+        [TestMethod]
+        public void TestTryGetGenericCollectionInterface()
+        {
+            var @interface = TypeHelper.TryGetGenericCollectionInterface(typeof(ICollection<string>));
+            Assert.AreEqual(typeof(string), @interface.GetGenericArguments()[0]);
+
+            @interface = TypeHelper.TryGetGenericCollectionInterface(typeof(IList<int>));
+            Assert.AreEqual(typeof(int), @interface.GetGenericArguments()[0]);
+
+            @interface = TypeHelper.TryGetGenericCollectionInterface(typeof(List<Guid>));
+            Assert.AreEqual(typeof(Guid), @interface.GetGenericArguments()[0]);
+
+            @interface = TypeHelper.TryGetGenericCollectionInterface(typeof(Collection<int>));
+            Assert.AreEqual(typeof(int), @interface.GetGenericArguments()[0]);
+
+            @interface = TypeHelper.TryGetGenericCollectionInterface(typeof(decimal[]));
+            Assert.AreEqual(typeof(decimal), @interface.GetGenericArguments()[0]);
+
+            @interface = TypeHelper.TryGetGenericCollectionInterface(typeof(ISet<object>));
+            Assert.AreEqual(typeof(object), @interface.GetGenericArguments()[0]);
+
+            @interface = TypeHelper.TryGetGenericCollectionInterface(typeof(HashSet<double>));
+            Assert.AreEqual(typeof(double), @interface.GetGenericArguments()[0]);
+
+            @interface = TypeHelper.TryGetGenericCollectionInterface(typeof(IDictionary<string, object>));
+            Assert.IsTrue(TypeHelper.IsKeyValuePair(@interface.GetGenericArguments()[0]));
+
+            Assert.IsNull(TypeHelper.TryGetGenericCollectionInterface(typeof(string)));
+            Assert.IsNull(TypeHelper.TryGetGenericCollectionInterface(typeof(ICollection)));
+            Assert.IsNull(TypeHelper.TryGetGenericCollectionInterface(typeof(Queue)));
+            Assert.IsNull(TypeHelper.TryGetGenericCollectionInterface(typeof(Stack)));
+            Assert.IsNull(TypeHelper.TryGetGenericCollectionInterface(typeof(IDictionary)));
+            Assert.IsNull(TypeHelper.TryGetGenericCollectionInterface(typeof(ArrayList)));
+            Assert.IsNull(TypeHelper.TryGetGenericCollectionInterface(typeof(int)));
+            Assert.IsNull(TypeHelper.TryGetGenericCollectionInterface(null));
         }
     }
 }

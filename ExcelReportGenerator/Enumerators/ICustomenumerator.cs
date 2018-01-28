@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
 
 namespace ExcelReportGenerator.Enumerators
 {
-    public interface ICustomEnumerator<out T> : IEnumerator<T>
+    internal interface ICustomEnumerator : IEnumerator
     {
         int RowCount { get; }
     }

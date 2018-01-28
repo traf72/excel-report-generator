@@ -8,6 +8,5 @@ namespace ExcelReportGenerator.Helpers
         {
             return value == null ? null : Regex.Escape(value);
         }
-
     }
 }

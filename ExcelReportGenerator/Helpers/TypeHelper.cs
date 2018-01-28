@@ -73,5 +73,19 @@ namespace ExcelReportGenerator.Helpers
         {
             return TryGetGenericEnumerableInterface(type) != null;
         }
+
+        public static Type TryGetGenericCollectionInterface(Type type)
+        {
+            if (type == null)
+            {
+                return null;
+            }
+
+            if (type.IsInterface && type.Namespace == "System.Collections.Generic" && type.Name.StartsWith("ICollection"))
+            {
+                return type;
+            }
+            return type.GetInterfaces().SingleOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICollection<>));
+        }
     }
 }

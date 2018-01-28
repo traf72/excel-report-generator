@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using ExcelReportGenerator.Attributes;
 using ExcelReportGenerator.Enumerators;
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Excel;
@@ -6,13 +7,8 @@ using ExcelReportGenerator.Helpers;
 using ExcelReportGenerator.Rendering.EventArgs;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
-using ExcelReportGenerator.Attributes;
 
 namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 {
@@ -23,9 +19,6 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         protected readonly string _dataSourceTemplate;
         protected readonly bool _isDataReceivedDirectly;
         protected object _data;
-
-        private int _templateRangeFirstRowOrColumnNumber;
-        private int _templateRangeRowOrColumnCount;
 
         public ExcelDataSourcePanel(string dataSourceTemplate, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor)
             : base(namedRange, report, templateProcessor)
@@ -51,7 +44,6 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
         public override IXLRange Render()
         {
-            var totalSw = Stopwatch.StartNew();
             // Receieve parent data item context
             HierarchicalDataItem parentDataItem = GetDataContext();
 
@@ -63,114 +55,44 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 return Range;
             }
 
-            IEnumerator enumerator = null;
+            ICustomEnumerator enumerator = null;
             IXLRange resultRange = null;
             try
             {
                 enumerator = EnumeratorFactory.Create(_data);
                 // Если данных нет, то просто удаляем сам шаблон
-                if (enumerator == null || !enumerator.MoveNext())
+                if (enumerator == null || enumerator.RowCount == 0)
                 {
                     DeletePanel(this);
                     return null;
                 }
 
-                object currentItem = enumerator.Current;
                 // Создаём шаблон панели, который дальше будет размножаться
-                var templatePanel = CreateTemplatePanel();
-                //if (Type == PanelType.Vertical)
-                //{
-                //    _templateRangeFirstRowOrColumnNumber = templatePanel.Range.FirstRow().RowNumber();
-                //    _templateRangeRowOrColumnCount = templatePanel.Range.RowCount();
-                //}
-                //else
-                //{
-                //    _templateRangeFirstRowOrColumnNumber = templatePanel.Range.FirstColumn().ColumnNumber();
-                //    _templateRangeRowOrColumnCount = templatePanel.Range.ColumnCount();
-                //}
+                ExcelDataItemPanel templatePanel = CreateTemplatePanel();
 
-                var whileSw = Stopwatch.StartNew();
+                // Выделяем место под данные
+                AllocateSpaceForData(templatePanel, enumerator.RowCount);
 
-                while (true)
+                int rowNum = 0;
+                while (enumerator.MoveNext())
                 {
-                    ExcelDataItemPanel currentPanel;
-                    bool nextItemExist = false;
-                    object nextItem = null;
-                    if (!enumerator.MoveNext())
+                    object currentItem = enumerator.Current;
+                    ExcelDataItemPanel currentPanel = templatePanel;
+                    if (rowNum != enumerator.RowCount - 1)
                     {
-                        // Если это последний элемент данных, то уже на размножаем шаблон, а рендерим данные напрямую в него
-                        currentPanel = templatePanel;
-                    }
-                    else
-                    {
-                        nextItemExist = true;
-                        nextItem = enumerator.Current;
-                        // Сам шаблон сдвигаем вниз или вправо в зависимости от типа панели
-                        var shiftSw = Stopwatch.StartNew();
-
-                        ShiftTemplatePanel(templatePanel);
-
-                        shiftSw.Stop();
-                        AddToBenchmark("Shift", shiftSw.Elapsed);
-
-
-                        // Копируем шаблон на его предыдущее место
-                        var copySw = Stopwatch.StartNew();
-
-                        currentPanel = (ExcelDataItemPanel)templatePanel.Copy(ExcelHelper.ShiftCell(templatePanel.Range.FirstCell(), GetNextPanelAddressShift(templatePanel)));
-
-                        copySw.Stop();
-                        AddToBenchmark("Copy", copySw.Elapsed);
+                        // Сам шаблон копируем вниз или вправо в зависимости от типа панели
+                        templatePanel = CopyTemplatePanel(templatePanel);
                     }
 
                     currentPanel.DataItem = new HierarchicalDataItem { Value = currentItem, Parent = parentDataItem };
+
                     // Заполняем шаблон данными
-
-                    var renderSw = Stopwatch.StartNew();
-
                     IXLRange dataItemResultRange = currentPanel.Render();
-                    //_templateRangeFirstRowOrColumnNumber++;
-                    //if (dataItemResultRange != null && !dataItemResultRange.RangeAddress.IsInvalid)
-                    //{
-                    //    if (Type == PanelType.Vertical)
-                    //    {
-                    //        _templateRangeFirstRowOrColumnNumber += dataItemResultRange.RowCount();
-                    //    }
-                    //    else
-                    //    {
-                    //        _templateRangeFirstRowOrColumnNumber += dataItemResultRange.ColumnCount();
-                    //    }
-                    //}
-
-                    renderSw.Stop();
-                    AddToBenchmark("Render", renderSw.Elapsed);
-
-                    var mergeSw = Stopwatch.StartNew();
-
                     resultRange = ExcelHelper.MergeRanges(resultRange, dataItemResultRange);
 
-                    mergeSw.Stop();
-                    AddToBenchmark("Merge", mergeSw.Elapsed);
-
-                    // Удаляем все сгенерированные имена Range'ей
-
-                    var removeSw = Stopwatch.StartNew();
-
                     RemoveAllNamesRecursive(currentPanel);
-
-                    removeSw.Stop();
-                    AddToBenchmark("Remove", removeSw.Elapsed);
-
-                    if (!nextItemExist)
-                    {
-                        break;
-                    }
-
-                    currentItem = nextItem;
+                    rowNum++;
                 }
-
-                whileSw.Stop();
-                AddToBenchmark("While", whileSw.Elapsed);
 
                 RemoveName();
             }
@@ -180,38 +102,27 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             }
 
             CallAfterRenderMethod(resultRange);
-
-            totalSw.Stop();
-            AddToBenchmark("Total", totalSw.Elapsed);
-
             return resultRange;
         }
 
-        private void AddToBenchmark(string key, TimeSpan elapsed)
-        {
-            if (Benchmark.TryGetValue(key, out TimeSpan current))
-            {
-                Benchmark[key] = current.Add(elapsed);
-            }
-            else
-            {
-                Benchmark[key] = elapsed;
-            }
-        }
+        //private void AddToBenchmark(string key, TimeSpan elapsed)
+        //{
+        //    if (Benchmark.TryGetValue(key, out TimeSpan current))
+        //    {
+        //        Benchmark[key] = current.Add(elapsed);
+        //    }
+        //    else
+        //    {
+        //        Benchmark[key] = elapsed;
+        //    }
+        //}
 
         private ExcelDataItemPanel CreateTemplatePanel()
         {
-            var tempWs = ExcelHelper.AddTempWorksheet(Range.Worksheet.Workbook);
-            var tempRange = ExcelHelper.CopyRange(Range, tempWs.Cell(Range.FirstRow().RowNumber(), Range.FirstColumn().ColumnNumber()));
-
-            //IDataReader dr = null;
-
-            //SqlDataReader dr2 = null;
-
             var templatePanel = new ExcelDataItemPanel(Range, _report, _templateProcessor)
             {
                 Parent = Parent,
-                Children = Children.Select(c => c.Copy(c.Range.FirstCell())).ToList(),
+                Children = Children,
                 RenderPriority = RenderPriority,
                 ShiftType = ShiftType,
                 Type = Type,
@@ -227,44 +138,47 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             return templatePanel;
         }
 
-        private AddressShift GetNextPanelAddressShift(IExcelPanel currentPanel)
-        {
-            return Type == PanelType.Vertical
-                ? new AddressShift(-currentPanel.Range.RowCount(), 0)
-                : new AddressShift(0, -currentPanel.Range.ColumnCount());
-        }
-
-        private void ShiftTemplatePanel(IExcelPanel templatePanel)
+        private void AllocateSpaceForData(IExcelPanel templatePanel, int dataItemsCount)
         {
             if (ShiftType == ShiftType.NoShift)
             {
-                var addressShift = Type == PanelType.Vertical
-                    ? new AddressShift(templatePanel.Range.RowCount(), 0)
-                    : new AddressShift(0, templatePanel.Range.ColumnCount());
+                return;
+            }
 
-                templatePanel.Move(ExcelHelper.ShiftCell(templatePanel.Range.FirstCell(), addressShift));
+            IXLRange range = templatePanel.Range;
+            if (Type == PanelType.Vertical)
+            {
+                int rowCount = (dataItemsCount - 1) * Range.RowCount();
+                if (ShiftType == ShiftType.Row)
+                {
+                    range.Worksheet.Row(range.LastRow().RowNumber()).InsertRowsBelow(rowCount);
+                }
+                else
+                {
+                    range.InsertRowsBelow(rowCount, false);
+                }
             }
             else
             {
-                //if (Type == PanelType.Vertical)
-                //{
-                //    if (ShiftType == ShiftType.Row)
-                //    {
-                //        templatePanel.Range.Worksheet.Row(_templateRangeFirstRowOrColumnNumber).InsertRowsAbove(_templateRangeRowOrColumnCount);
-                //    }
-                //}
-                //else
-                //{
-                //    if (ShiftType == ShiftType.Row)
-                //    {
-                //        templatePanel.Range.Worksheet.Column(_templateRangeFirstRowOrColumnNumber).InsertColumnsBefore(_templateRangeRowOrColumnCount);
-                //    }
-                //}
-
-                //templatePanel.Range.InsertRowsAbove(templatePanel.Range.RowCount(), true);
-                //templatePanel.Range.InsertRowsBelow(templatePanel.Range.RowCount(), false);
-                ExcelHelper.AllocateSpaceForNextRange(templatePanel.Range, Type == PanelType.Vertical ? Direction.Top : Direction.Left, ShiftType);
+                int columnCount = (dataItemsCount - 1) * Range.ColumnCount();
+                if (ShiftType == ShiftType.Row)
+                {
+                    range.Worksheet.Column(range.LastColumn().ColumnNumber()).InsertColumnsAfter(columnCount);
+                }
+                else
+                {
+                    range.InsertColumnsAfter(columnCount, false);
+                }
             }
+        }
+
+        private ExcelDataItemPanel CopyTemplatePanel(IExcelPanel templatePanel)
+        {
+            AddressShift shift = Type == PanelType.Vertical
+                ? new AddressShift(templatePanel.Range.RowCount(), 0)
+                : new AddressShift(0, templatePanel.Range.ColumnCount());
+
+            return (ExcelDataItemPanel)templatePanel.Copy(ExcelHelper.ShiftCell(templatePanel.Range.FirstCell(), shift));
         }
 
         protected void DeletePanel(IExcelPanel panel)

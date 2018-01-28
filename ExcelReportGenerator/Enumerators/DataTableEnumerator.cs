@@ -6,11 +6,11 @@ using System.Data;
 
 namespace ExcelReportGenerator.Enumerators
 {
-    internal class DataTableEnumerator : ICustomEnumerator<DataRow>
+    internal class DataTableEnumerator : IGenericCustomEnumerator<DataRow>
     {
         private readonly DataTable _dataTable;
 
-        private readonly IEnumerator<DataRow> _dataTableEnumerator;
+        private IEnumerator<DataRow> _dataTableEnumerator;
 
         public DataTableEnumerator(DataTable dataTable)
         {
@@ -24,10 +24,10 @@ namespace ExcelReportGenerator.Enumerators
 
         public bool MoveNext() => _dataTableEnumerator.MoveNext();
 
-        public void Reset() => _dataTableEnumerator.Reset();
-
-        public void Dispose() => _dataTableEnumerator.Dispose();
+        public void Reset() => _dataTableEnumerator = _dataTable.AsEnumerable().GetEnumerator();
 
         public int RowCount => _dataTable.Rows.Count;
+
+        public void Dispose() => _dataTableEnumerator.Dispose();
     }
 }
