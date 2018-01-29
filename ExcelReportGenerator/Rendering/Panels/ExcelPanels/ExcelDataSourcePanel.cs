@@ -70,7 +70,10 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 ExcelDataItemPanel templatePanel = CreateTemplatePanel();
 
                 // Выделяем место под данные
-                AllocateSpaceForData(templatePanel, enumerator.RowCount);
+                if (enumerator.RowCount > 1)
+                {
+                    AllocateSpaceForData(templatePanel, enumerator.RowCount);
+                }
 
                 int rowNum = 0;
                 while (enumerator.MoveNext())
