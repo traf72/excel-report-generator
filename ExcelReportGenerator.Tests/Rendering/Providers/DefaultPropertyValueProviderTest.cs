@@ -124,7 +124,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
                 "Property \"PrivateGetterProp\" of type \"PropValProviderTestClass\" has no public getter");
 
             // Static system type props
-            Assert.AreEqual(DateTime.Now.Date, ((DateTime)propertyValueProvider.GetValue("DateTime:Now.Date")));
+            Assert.AreEqual(DateTime.Now.Date, (DateTime)propertyValueProvider.GetValue("DateTime:Now.Date"));
             Assert.AreEqual(Guid.Empty, (Guid)propertyValueProvider.GetValue("Guid:Empty"));
 
             // Non static system type prop

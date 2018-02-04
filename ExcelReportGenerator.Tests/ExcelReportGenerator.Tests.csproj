@@ -213,6 +213,7 @@
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\TotalsPanelRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\PanelRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\TestReport.cs" />
+    <Compile Include="Rendering\Panels\ExcelPanels\PanelsExpandTest.cs" />
     <Compile Include="Rendering\Parsers\DefaultPanelPropertiesParserTest.cs" />
     <Compile Include="Rendering\Providers\ColumnsProvider\ColumnsProviderFactoryTest.cs" />
     <Compile Include="Rendering\Providers\ColumnsProvider\DataReaderColumnsProviderTest.cs" />

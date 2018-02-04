@@ -129,7 +129,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 return newPanel;
             }
 
-            IList<IExcelPanel> children = new List<IExcelPanel>(Children.Count());
+            IList<IExcelPanel> children = new List<IExcelPanel>(Children.Count);
             foreach (IExcelPanel child in Children)
             {
                 CellCoords firstCellRelativeCoords = ExcelHelper.GetCellCoordsRelativeRange(Range, child.Range.FirstCell());
