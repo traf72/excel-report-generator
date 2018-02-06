@@ -145,10 +145,10 @@ namespace ExcelReportGenerator.Tests.Helpers
             Assert.AreEqual(777, reflectionHelper.GetValueOfPropertiesChain("IntField", instance));
             Assert.AreEqual("DefaultObjProp", reflectionHelper.GetValueOfPropertiesChain("ObjProp", instance));
 
-            ExceptionAssert.Throws<InvalidOperationException>(() => reflectionHelper.GetValueOfPropertiesChain("ObjProp.StrProp", instance),
+            ExceptionAssert.Throws<NullReferenceException>(() => reflectionHelper.GetValueOfPropertiesChain("ObjProp.StrProp", instance),
                 "Cannot get property or field \"StrProp\" because instance is null");
 
-            ExceptionAssert.Throws<InvalidOperationException>(() => reflectionHelper.GetValueOfPropertiesChain("IntField", null),
+            ExceptionAssert.Throws<NullReferenceException>(() => reflectionHelper.GetValueOfPropertiesChain("IntField", null),
                 "Cannot get property or field \"IntField\" because instance is null");
 
             ExceptionAssert.Throws<ArgumentException>(() => reflectionHelper.GetValueOfPropertiesChain(null, instance));

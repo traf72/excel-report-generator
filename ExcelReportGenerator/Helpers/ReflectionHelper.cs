@@ -33,7 +33,7 @@ namespace ExcelReportGenerator.Helpers
                 string propOrFieldName = queue.Dequeue();
                 if (instance == null)
                 {
-                    throw new InvalidOperationException($"Cannot get property or field \"{propOrFieldName}\" because instance is null");
+                    throw new NullReferenceException($"Cannot get property or field \"{propOrFieldName}\" because instance is null");
                 }
 
                 if (instance is ExpandoObject expando)
