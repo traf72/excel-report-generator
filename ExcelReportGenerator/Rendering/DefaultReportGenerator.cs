@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ExcelReportGenerator.Excel;
 
 namespace ExcelReportGenerator.Rendering
 {
@@ -129,12 +130,22 @@ namespace ExcelReportGenerator.Rendering
                 }
 
                 IDictionary<string, (IExcelPanel, string)> panelsFlatView = GetPanelsFlatView(worksheetPanels);
-                IExcelPanel rootPanel = new ExcelPanel(ws.Range(ws.FirstCellUsed(), ws.LastCellUsed()), _report, TemplateProcessor);
+                IExcelPanel rootPanel = new ExcelPanel(GetRootRange(ws, worksheetPanels), _report, TemplateProcessor);
                 MakePanelsHierarchy(panelsFlatView, rootPanel);
                 rootPanel.Render();
             }
 
             return reportTemplate;
+        }
+
+        private IXLRange GetRootRange(IXLWorksheet ws, IList<IXLNamedRange> worksheetPanels)
+        {
+            return ws.Range(ws.FirstCell(), GetRootRangeLastCell(ws.LastCellUsed(), worksheetPanels ?? new List<IXLNamedRange>()));
+        }
+
+        private IXLCell GetRootRangeLastCell(IXLCell lastWorksheetCellUsed, IList<IXLNamedRange> worksheetPanels)
+        {
+            return ExcelHelper.GetMaxCell(worksheetPanels.SelectMany(p => p.Ranges.First().Cells()).Concat(new[] { lastWorksheetCellUsed }).ToArray());
         }
 
         private IList<IXLNamedRange> GetPanelsNamedRanges(IXLNamedRanges namedRanges)

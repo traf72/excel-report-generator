@@ -895,7 +895,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(range2, ExcelHelper.MergeRanges(null, range2));
             Assert.IsNull(ExcelHelper.MergeRanges(null, null));
 
-            ExceptionAssert.Throws<InvalidOperationException>(() => ExcelHelper.MergeRanges(range1, range3), "Ranges belongs to different worksheets");
+            ExceptionAssert.Throws<InvalidOperationException>(() => ExcelHelper.MergeRanges(range1, range3), "Ranges belong to different worksheets");
 
             range1.Delete(XLShiftDeletedCells.ShiftCellsLeft);
 
@@ -930,6 +930,31 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.IsTrue(ExcelHelper.IsRangeInvalid(ws.Range(2, 2, 1, 3)));
             Assert.IsTrue(ExcelHelper.IsRangeInvalid(ws.Range(1, 3, 2, 2)));
             Assert.IsTrue(ExcelHelper.IsRangeInvalid(ws.Range(2, 3, 1, 2)));
+        }
+
+        [TestMethod]
+        public void TestGetMaxCell()
+        {
+            XLWorkbook wb = new XLWorkbook();
+            IXLWorksheet ws = wb.AddWorksheet("Test");
+
+            IXLRange range = ws.Range(3, 3, 5, 5);
+
+            Assert.AreEqual(ws.Cell(5, 5), ExcelHelper.GetMaxCell(range.Cells().Concat(new[] { ws.Cell(2, 1) }).ToArray()));
+            Assert.AreEqual(ws.Cell(5, 5), ExcelHelper.GetMaxCell(range.Cells().Concat(new[] { ws.Cell(5, 1) }).ToArray()));
+            Assert.AreEqual(ws.Cell(5, 5), ExcelHelper.GetMaxCell(range.Cells().Concat(new[] { ws.Cell(1, 3) }).ToArray()));
+            Assert.AreEqual(ws.Cell(5, 5), ExcelHelper.GetMaxCell(range.Cells().Concat(new[] { ws.Cell(1, 5) }).ToArray()));
+            Assert.AreEqual(ws.Cell(5, 5), ExcelHelper.GetMaxCell(range.Cells().Concat(new[] { ws.Cell(4, 4) }).ToArray()));
+            Assert.AreEqual(ws.Cell(5, 5), ExcelHelper.GetMaxCell(range.Cells().Concat(new[] { ws.Cell(5, 5) }).ToArray()));
+            Assert.AreEqual(ws.Cell(6, 5), ExcelHelper.GetMaxCell(range.Cells().Concat(new[] { ws.Cell(6, 1) }).ToArray()));
+            Assert.AreEqual(ws.Cell(10, 5), ExcelHelper.GetMaxCell(range.Cells().Concat(new[] { ws.Cell(10, 4) }).ToArray()));
+            Assert.AreEqual(ws.Cell(10, 10), ExcelHelper.GetMaxCell(range.Cells().Concat(new[] { ws.Cell(10, 10) }).ToArray()));
+            Assert.AreEqual(ws.Cell(5, 6), ExcelHelper.GetMaxCell(range.Cells().Concat(new[] { ws.Cell(1, 6) }).ToArray()));
+            Assert.AreEqual(ws.Cell(5, 10), ExcelHelper.GetMaxCell(range.Cells().Concat(new[] { ws.Cell(3, 10) }).ToArray()));
+            Assert.AreEqual(ws.Cell(20, 20), ExcelHelper.GetMaxCell(new[] { ws.Cell(20, 20) }));
+
+            Assert.IsNull(ExcelHelper.GetMaxCell(null));
+            Assert.IsNull(ExcelHelper.GetMaxCell(Enumerable.Empty<IXLCell>().ToArray()));
         }
     }
 }

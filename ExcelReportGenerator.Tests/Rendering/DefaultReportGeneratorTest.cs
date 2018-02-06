@@ -144,15 +144,56 @@ namespace ExcelReportGenerator.Tests.Rendering
             var reportGenerator = new DefaultReportGenerator(new object());
             MethodInfo method = reportGenerator.GetType().GetMethod("GetPanelsNamedRanges", BindingFlags.Instance | BindingFlags.NonPublic);
 
-            var restult = (IList<IXLNamedRange>)method.Invoke(reportGenerator, new object[] { ws.NamedRanges });
+            var result = (IList<IXLNamedRange>)method.Invoke(reportGenerator, new object[] { ws.NamedRanges });
 
-            Assert.AreEqual(6, restult.Count);
-            Assert.AreEqual("s_Panel1", restult[0].Name);
-            Assert.AreEqual("D_Panel2", restult[1].Name);
-            Assert.AreEqual("DYN_Panel3", restult[2].Name);
-            Assert.AreEqual("t_Panel4", restult[3].Name);
-            Assert.AreEqual("S_Panel6", restult[4].Name);
-            Assert.AreEqual("d_Panel8", restult[5].Name);
+            Assert.AreEqual(6, result.Count);
+            Assert.AreEqual("s_Panel1", result[0].Name);
+            Assert.AreEqual("D_Panel2", result[1].Name);
+            Assert.AreEqual("DYN_Panel3", result[2].Name);
+            Assert.AreEqual("t_Panel4", result[3].Name);
+            Assert.AreEqual("S_Panel6", result[4].Name);
+            Assert.AreEqual("d_Panel8", result[5].Name);
+        }
+
+        [TestMethod]
+        public void TestGetRootRange()
+        {
+            var wb = new XLWorkbook();
+            IXLWorksheet ws = wb.AddWorksheet("Test");
+
+            var reportGenerator = new DefaultReportGenerator(new object());
+            MethodInfo method = reportGenerator.GetType().GetMethod("GetRootRange", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            ws.Cell(10, 10).Value = "Val";
+            ws.Cell(20, 20).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(10, 10)), method.Invoke(reportGenerator, new object[] { ws, null }));
+
+            var namedRanges = new List<IXLNamedRange>();
+            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(10, 10)), method.Invoke(reportGenerator, new object[] { ws, namedRanges }));
+
+            IXLRange range = ws.Range(ws.Cell(2, 2), ws.Cell(3, 3));
+            range.AddToNamed("range1", XLScope.Worksheet);
+            namedRanges.Add(ws.NamedRange("range1"));
+            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(10, 10)), method.Invoke(reportGenerator, new object[] { ws, namedRanges }));
+
+            range = ws.Range(ws.Cell(2, 2), ws.Cell(10, 11));
+            range.AddToNamed("range2", XLScope.Worksheet);
+            namedRanges.Add(ws.NamedRange("range2"));
+            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(10, 11)), method.Invoke(reportGenerator, new object[] { ws, namedRanges }));
+
+            range = ws.Range(ws.Cell(5, 5), ws.Cell(11, 10));
+            range.AddToNamed("range3", XLScope.Worksheet);
+            namedRanges.Add(ws.NamedRange("range3"));
+            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(11, 11)), method.Invoke(reportGenerator, new object[] { ws, namedRanges }));
+
+            range = ws.Range(ws.Cell(18, 18), ws.Cell(18, 18));
+            range.AddToNamed("range4", XLScope.Worksheet);
+            namedRanges.Add(ws.NamedRange("range4"));
+            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(18, 18)), method.Invoke(reportGenerator, new object[] { ws, namedRanges }));
+
+            ws.Cell(21, 21).Value = "Val2";
+            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(21, 21)), method.Invoke(reportGenerator, new object[] { ws, namedRanges }));
         }
 
         [TestMethod]

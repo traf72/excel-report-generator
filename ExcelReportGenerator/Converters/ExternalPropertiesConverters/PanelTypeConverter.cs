@@ -10,7 +10,7 @@ namespace ExcelReportGenerator.Converters.ExternalPropertiesConverters
         {
             if (string.IsNullOrWhiteSpace(panelType))
             {
-                throw new ArgumentException("PanelType property cannot be null or empty");
+                throw new ArgumentException("Type property cannot be null or empty");
             }
 
             try
@@ -19,7 +19,7 @@ namespace ExcelReportGenerator.Converters.ExternalPropertiesConverters
             }
             catch (ArgumentException e)
             {
-                throw new ArgumentException($"Value \"{panelType}\" is invalid for PanelType property", e);
+                throw new ArgumentException($"Value \"{panelType}\" is invalid for Type property", e);
             }
         }
 

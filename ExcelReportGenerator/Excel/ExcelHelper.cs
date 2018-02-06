@@ -252,7 +252,7 @@ namespace ExcelReportGenerator.Excel
 
             if (range1.Worksheet != range2.Worksheet)
             {
-                throw new InvalidOperationException("Ranges belongs to different worksheets");
+                throw new InvalidOperationException("Ranges belong to different worksheets");
             }
 
             IXLWorksheet ws = range1.Worksheet;
@@ -285,6 +285,24 @@ namespace ExcelReportGenerator.Excel
             }
 
             return false;
+        }
+
+        public static IXLCell GetMaxCell(IXLCell[] cells)
+        {
+            if (cells == null || !cells.Any())
+            {
+                return null;
+            }
+
+            IXLCell cellWithMaxRowNum = cells.First(c1 => c1.Address.RowNumber == cells.Max(c2 => c2.Address.RowNumber));
+            IXLCell cellWithMaxColumnNum = cells.First(c1 => c1.Address.ColumnNumber == cells.Max(c2 => c2.Address.ColumnNumber));
+
+            IXLWorksheet ws = cellWithMaxRowNum.Worksheet;
+            IXLCell maxCell = ws.Cell(
+                Math.Max(cellWithMaxRowNum.Address.RowNumber, cellWithMaxColumnNum.Address.RowNumber),
+                Math.Max(cellWithMaxRowNum.Address.ColumnNumber, cellWithMaxColumnNum.Address.ColumnNumber));
+
+            return maxCell;
         }
 
         public static IXLWorksheet AddTempWorksheet(XLWorkbook wb)
