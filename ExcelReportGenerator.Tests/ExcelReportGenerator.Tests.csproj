@@ -191,6 +191,7 @@
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelPanelTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDataSetRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDataTableRenderTest.cs" />
+    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanel_InsideDataSourcePanel_Test.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelSingleItemRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelEnumerableRenderTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDictionaryRenderTest.cs" />
@@ -263,6 +264,8 @@
     <None Include="TestData\DataSourceDynamicPanelEnumerableRenderTest\TestRenderEmptyEnumerable.xlsx" />
     <None Include="TestData\DataSourceDynamicPanelEnumerableRenderTest\TestRenderEnumerable.xlsx" />
     <None Include="TestData\DataSourceDynamicPanelSingleItemRenderTest\TestRenderSingleItem.xlsx" />
+    <None Include="TestData\DataSourceDynamicPanel_InsideDataSourcePanel_Test\TestRender_DynamicPanel_In_DataSourcePanel_Horizontal.xlsx" />
+    <None Include="TestData\DataSourceDynamicPanel_InsideDataSourcePanel_Test\TestRender_DynamicPanel_In_DataSourcePanel_Vertical.xlsx" />
     <None Include="TestData\DataSourcePanelDataReaderRenderTest\TestRenderDataReader.xlsx" />
     <None Include="TestData\DataSourcePanelDataSetRenderTest\TestRenderDataSet.xlsx" />
     <None Include="TestData\DataSourcePanelDataTableRenderTest\TestRenderDataTable.xlsx" />

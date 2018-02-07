@@ -60,8 +60,10 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
         public override IXLRange Render()
         {
-            // Parent context does not affect on this panel type therefore don't care about it
-            _data = _isDataReceivedDirectly ? _data : _templateProcessor.GetValue(_dataSourceTemplate);
+            // Receieve parent data item context
+            HierarchicalDataItem parentDataItem = GetDataContext();
+
+            _data = _isDataReceivedDirectly ? _data : _templateProcessor.GetValue(_dataSourceTemplate, parentDataItem);
 
             bool isCanceled = CallBeforeRenderMethod();
             if (isCanceled)

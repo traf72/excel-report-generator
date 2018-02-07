@@ -207,6 +207,7 @@ namespace ExcelReportGenerator.Tests.Rendering
 
         public string Field1 { get; set; }
 
+        [ExcelColumn(AggregateFunction = AggregateFunction.Min)]
         public string Field2 { get; set; }
 
         public ChildOfChildItem[] Children { get; set; }
