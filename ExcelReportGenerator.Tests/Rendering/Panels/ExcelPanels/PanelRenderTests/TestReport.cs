@@ -193,6 +193,17 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             args.Range.Style.Font.Bold = true;
         }
 
+        public void TestExcelDynamicPanelBeforeNumbersRender(DataSourceDynamicPanelBeforeRenderEventArgs args)
+        {
+            args.Range.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+        }
+
+        public void TestExcelDynamicPanelAfterNumbersRender(DataSourceDynamicPanelEventArgs args)
+        {
+            args.Range.Style.Fill.BackgroundColor = XLColor.Gray;
+            args.Range.Style.Font.FontColor = XLColor.White;
+        }
+
         public void TestExcelDynamicPanelBeforeDataTemplatesRender(DataSourcePanelBeforeRenderEventArgs args)
         {
             args.Range.Style.Font.Underline = XLFontUnderlineValues.Single;

@@ -35,6 +35,12 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         public string AfterHeadersRenderMethodName { get; set; }
 
         [ExternalProperty]
+        public string BeforeNumbersRenderMethodName { get; set; }
+
+        [ExternalProperty]
+        public string AfterNumbersRenderMethodName { get; set; }
+
+        [ExternalProperty]
         public string BeforeDataTemplatesRenderMethodName { get; set; }
 
         [ExternalProperty]
@@ -153,6 +159,12 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             IXLWorksheet ws = Range.Worksheet;
             IXLRange range = ws.Range(cell, cell);
 
+            bool isCanceled = CallBeforeRenderMethod(BeforeNumbersRenderMethodName, range, columns);
+            if (isCanceled)
+            {
+                return range;
+            }
+
             Match match = Regex.Match(cell.Value.ToString(), $@"^{template}$", RegexOptions.IgnoreCase);
             if (!int.TryParse(match.Groups["start"]?.Value, out int startNumber))
             {
@@ -170,7 +182,12 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 Type = Type == PanelType.Vertical ? PanelType.Horizontal : PanelType.Vertical,
             };
 
-            return panel.Render();
+            IXLRange resultRange = panel.Render();
+
+            SetColumnsWidth(resultRange, columns);
+            CallAfterRenderMethod(AfterNumbersRenderMethodName, resultRange, columns);
+
+            return resultRange;
         }
 
         private IXLRange RenderDataTemplates(IList<ExcelDynamicColumn> columns)
