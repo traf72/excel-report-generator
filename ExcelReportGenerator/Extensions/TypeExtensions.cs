@@ -16,8 +16,8 @@ namespace ExcelReportGenerator.Extensions
         {
             _extendedPrimitiveTypes = _numericTypes.Concat(new[]
             {
-                typeof(char), typeof(bool), typeof(string), typeof(Guid),
-                typeof(char?), typeof(bool?), typeof(Guid?),
+                typeof(char), typeof(bool), typeof(string), typeof(Guid), typeof(DateTime),
+                typeof(char?), typeof(bool?), typeof(Guid?), typeof(DateTime?)
             }).ToArray();
         }
 

@@ -24,7 +24,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetSingleItem()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
             IXLRange resultRange = panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 4, 4), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 4, 5), resultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelSingleItemRenderTest),
                 nameof(TestRenderSingleItem)), ws.Workbook);

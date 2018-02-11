@@ -73,6 +73,8 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.IsTrue(typeof(string).IsExtendedPrimitive());
             Assert.IsTrue(typeof(Guid).IsExtendedPrimitive());
             Assert.IsTrue(typeof(Guid?).IsExtendedPrimitive());
+            Assert.IsTrue(typeof(DateTime).IsExtendedPrimitive());
+            Assert.IsTrue(typeof(DateTime?).IsExtendedPrimitive());
 
             Assert.IsFalse(typeof(object).IsExtendedPrimitive());
             Assert.IsFalse(typeof(Regex).IsExtendedPrimitive());

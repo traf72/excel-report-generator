@@ -33,7 +33,7 @@ namespace ExcelReportGenerator.Rendering
         /// </summary>
         public string Caption
         {
-            get => _caption ?? Name;
+            get => string.IsNullOrWhiteSpace(_caption) ? Name : _caption;
             set => _caption = value;
         }
 
@@ -63,8 +63,8 @@ namespace ExcelReportGenerator.Rendering
         public bool AdjustToContent { get; set; }
 
         /// <summary>
-        /// Order in which the column appears in Excel
+        /// Order in which the column appears in Excel (for internal use)
         /// </summary>
-        public int Order { get; set; }
+        internal int Order { get; set; }
     }
 }

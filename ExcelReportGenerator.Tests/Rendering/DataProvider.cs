@@ -38,7 +38,7 @@ namespace ExcelReportGenerator.Tests.Rendering
                 },
                 ChildrenPrimitive = new[] {1},
             },
-            new TestItem("Test2", new DateTime(2017, 11, 2), 110m, new Contacts("76", "753465"))
+            new TestItem("Test2", new DateTime(2017, 11, 2), 110m, new Contacts("76", "753465"), Sex.Female)
             {
                 ChildrenPrimitive = new[] {2, 3, 4},
             },
@@ -175,12 +175,13 @@ namespace ExcelReportGenerator.Tests.Rendering
 
     public class TestItem
     {
-        public TestItem(string name, DateTime date, decimal sum, Contacts contacts = null)
+        public TestItem(string name, DateTime date, decimal sum, Contacts contacts = null, Sex sex = Sex.Male)
         {
             Name = name;
             Date = date;
             Sum = sum;
             Contacts = contacts;
+            Sex = sex;
         }
 
         public string Name { get; set; }
@@ -190,11 +191,19 @@ namespace ExcelReportGenerator.Tests.Rendering
 
         public decimal Sum { get; set; }
 
+        public Sex Sex;
+
         public Contacts Contacts { get; set; }
 
         public IEnumerable<ChildItem> Children { get; set; }
 
         public IEnumerable<int> ChildrenPrimitive { get; set; }
+    }
+
+    public enum Sex
+    {
+        Male,
+        Female
     }
 
     public class ChildItem

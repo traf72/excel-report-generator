@@ -44,7 +44,7 @@ namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
                         };
                     result.Add(excelColumn);
                 }
-                else if (memberType.IsExtendedPrimitive())
+                else if (memberType.IsExtendedPrimitive() || memberType.IsEnum)
                 {
                     result.Add(new ExcelDynamicColumn(probableColumnMember.Name, memberType));
                 }
