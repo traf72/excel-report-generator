@@ -207,6 +207,7 @@
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_MixedPanels_Test.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent.cs" />
+    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_PageBreaks_Test.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDataReaderRenderTest.cs" />
@@ -317,6 +318,8 @@
     <None Include="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestVerticalInHorizontalPanelsGrouping.xlsx" />
     <None Include="TestData\DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent\Test_TwoChildren_Horizontal.xlsx" />
     <None Include="TestData\DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent\Test_TwoChildren_Vertical.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_PageBreaks_Test\Test_HorizontalPageBreaks.xlsx" />
+    <None Include="TestData\DataSourcePanelRender_WithGrouping_PageBreaks_Test\Test_VerticalPageBreaks.xlsx" />
     <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentCellsShiftChildCellsShift.xlsx" />
     <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentCellsShiftChildCellsShift_WithFictitiousRow.xlsx" />
     <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentCellsShiftChildCellsShift_WithFictitiousRowWhichDeleteAfterRender.xlsx" />

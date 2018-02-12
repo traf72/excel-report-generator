@@ -81,6 +81,19 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             foreach (IXLCell cell in Range.CellsUsedWithoutFormulas(c => !childrenCells.Contains(c)))
             {
                 string cellValue = cell.Value.ToString();
+                if (_templateProcessor.IsHorizontalPageBreak(cellValue))
+                {
+                    cell.Worksheet.PageSetup.AddHorizontalPageBreak(cell.WorksheetRow().RowNumber());
+                    cell.Value = null;
+                    continue;
+                }
+                if (_templateProcessor.IsVerticalPageBreak(cellValue))
+                    {
+                    cell.Worksheet.PageSetup.AddVerticalPageBreak(cell.WorksheetColumn().ColumnNumber());
+                    cell.Value = null;
+                    continue;
+                }
+
                 MatchCollection matches = Regex.Matches(cellValue, templatePattern, RegexOptions.IgnoreCase);
                 if (matches.Count == 0)
                 {

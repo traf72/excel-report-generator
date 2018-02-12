@@ -48,6 +48,10 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
 
         public virtual string SystemFunctionMemberLabel => "sf";
 
+        public virtual string HorizontalPageBreakLabel => "HorizPageBreak";
+
+        public virtual string VerticalPageBreakLabel => "VertPageBreak";
+
         /// <summary>
         /// Get value based on template
         /// </summary>

@@ -45,8 +45,8 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
                 AreCellsCommentEquals(expectedCell.Comment, actualCell.Comment, $"Cell {expectedCell.Address} Comment {{0}} failed.");
             }
 
-            Assert.AreEqual(expected.NamedRanges.Count(), actual.NamedRanges.Count(), "Worksheet named ranges count failed");
             AreNamedRangesEquals(expected.NamedRanges, actual.NamedRanges);
+            ArePageSetupEquals(expected.PageSetup, actual.PageSetup, "PageSetup {0} failed.");
         }
 
         public static void AreWorkbooksContentEquals(XLWorkbook expected, XLWorkbook actual)
@@ -128,6 +128,7 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
 
         public static void AreNamedRangesEquals(IXLNamedRanges expected, IXLNamedRanges actual)
         {
+            Assert.AreEqual(expected.Count(), actual.Count(), "Worksheet named ranges count failed");
             foreach (IXLNamedRange expectedNamedRange in expected)
             {
                 IXLNamedRange actualNamedRange = actual.NamedRange(expectedNamedRange.Name);
@@ -140,6 +141,52 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
                     Assert.AreEqual(expectedRange.FirstCell().Address, actualRange.FirstCell().Address, $"Named range {expectedNamedRange.Name} range {i + 1} first cell address failed");
                     Assert.AreEqual(expectedRange.LastCell().Address, actualRange.LastCell().Address, $"Named range {expectedNamedRange.Name} range {i + 1} last cell address failed");
                 }
+            }
+        }
+
+        public static void ArePageSetupEquals(IXLPageSetup expected, IXLPageSetup actual, string message = null)
+        {
+            if (expected == actual)
+            {
+                return;
+            }
+
+            message = message ?? string.Empty;
+
+            Assert.AreEqual(expected.PagesTall, actual.PagesTall, string.Format(message, "PagesTall"));
+            Assert.AreEqual(expected.PagesWide, actual.PagesWide, string.Format(message, "PagesWide"));
+            Assert.AreEqual(expected.AlignHFWithMargins, actual.AlignHFWithMargins, string.Format(message, "AlignHFWithMargins"));
+            Assert.AreEqual(expected.CenterVertically, actual.CenterVertically, string.Format(message, "CenterVertically"));
+            Assert.AreEqual(expected.CenterHorizontally, actual.CenterHorizontally, string.Format(message, "CenterHorizontally"));
+            Assert.AreEqual(expected.DifferentFirstPageOnHF, actual.DifferentFirstPageOnHF, string.Format(message, "DifferentFirstPageOnHF"));
+            Assert.AreEqual(expected.DifferentOddEvenPagesOnHF, actual.DifferentOddEvenPagesOnHF, string.Format(message, "DifferentOddEvenPagesOnHF"));
+            Assert.AreEqual(expected.DraftQuality, actual.DraftQuality, string.Format(message, "DraftQuality"));
+            Assert.AreEqual(expected.FirstPageNumber, actual.FirstPageNumber, string.Format(message, "FirstPageNumber"));
+            Assert.AreEqual(expected.VerticalDpi, actual.VerticalDpi, string.Format(message, "VerticalDpi"));
+            Assert.AreEqual(expected.HorizontalDpi, actual.HorizontalDpi, string.Format(message, "HorizontalDpi"));
+            Assert.AreEqual(expected.FirstRowToRepeatAtTop, actual.FirstRowToRepeatAtTop, string.Format(message, "FirstRowToRepeatAtTop"));
+            Assert.AreEqual(expected.LastRowToRepeatAtTop, actual.LastRowToRepeatAtTop, string.Format(message, "LastRowToRepeatAtTop"));
+            Assert.AreEqual(expected.FirstColumnToRepeatAtLeft, actual.FirstColumnToRepeatAtLeft, string.Format(message, "FirstColumnToRepeatAtLeft"));
+            Assert.AreEqual(expected.LastColumnToRepeatAtLeft, actual.LastColumnToRepeatAtLeft, string.Format(message, "LastColumnToRepeatAtLeft"));
+            Assert.AreEqual(expected.ScaleHFWithDocument, actual.ScaleHFWithDocument, string.Format(message, "ScaleHFWithDocument"));
+            Assert.AreEqual(expected.ShowGridlines, actual.ShowGridlines, string.Format(message, "ShowGridlines"));
+            Assert.AreEqual(expected.ShowRowAndColumnHeadings, actual.ShowRowAndColumnHeadings, string.Format(message, "ShowRowAndColumnHeadings"));
+            Assert.AreEqual(expected.Scale, actual.Scale, string.Format(message, "Scale"));
+            Assert.AreEqual(expected.PaperSize, actual.PaperSize, string.Format(message, "PaperSize"));
+            Assert.AreEqual(expected.PageOrder, actual.PageOrder, string.Format(message, "PageOrder"));
+            Assert.AreEqual(expected.PageOrientation, actual.PageOrientation, string.Format(message, "PageOrientation"));
+            Assert.AreEqual(expected.BlackAndWhite, actual.BlackAndWhite, string.Format(message, "BlackAndWhite"));
+
+            Assert.AreEqual(expected.ColumnBreaks.Count, actual.ColumnBreaks.Count, string.Format(message, "ColumnBreaks"));
+            for (int i = 0; i < expected.ColumnBreaks.Count; i++)
+            {
+                Assert.AreEqual(expected.ColumnBreaks[i], actual.ColumnBreaks[i], string.Format(message, "ColumnBreaks"));
+            }
+
+            Assert.AreEqual(expected.RowBreaks.Count, actual.RowBreaks.Count, string.Format(message, "RowBreaks"));
+            for (int i = 0; i < expected.RowBreaks.Count; i++)
+            {
+                Assert.AreEqual(expected.RowBreaks[i], actual.RowBreaks[i], string.Format(message, "RowBreaks"));
             }
         }
     }

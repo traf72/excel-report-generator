@@ -998,5 +998,50 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual("{Min(di:)}", processor.BuildAggregationFuncTemplate(AggregateFunction.Min, null));
             Assert.AreEqual("{Max(di:)}", processor.BuildAggregationFuncTemplate(AggregateFunction.Max, string.Empty));
         }
+
+        [TestMethod]
+        public void TestIsHorizontalPageBreak()
+        {
+            ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
+            processor.LeftTemplateBorder.Returns("{");
+            processor.RightTemplateBorder.Returns("}");
+            processor.HorizontalPageBreakLabel.Returns("Horiz");
+
+            Assert.IsTrue(processor.IsHorizontalPageBreak("{Horiz}"));
+            Assert.IsTrue(processor.IsHorizontalPageBreak("{HORIZ}"));
+            Assert.IsTrue(processor.IsHorizontalPageBreak("{  Horiz  }"));
+            Assert.IsTrue(processor.IsHorizontalPageBreak(" {Horiz} "));
+            Assert.IsTrue(processor.IsHorizontalPageBreak("  {  horiz  }  "));
+
+            Assert.IsFalse(processor.IsHorizontalPageBreak("Text {Horiz}"));
+            Assert.IsFalse(processor.IsHorizontalPageBreak("{Horiz} Text"));
+            Assert.IsFalse(processor.IsHorizontalPageBreak("Horiz"));
+            Assert.IsFalse(processor.IsHorizontalPageBreak("{Vert}"));
+            Assert.IsFalse(processor.IsHorizontalPageBreak("Bad"));
+            Assert.IsFalse(processor.IsHorizontalPageBreak(string.Empty));
+            Assert.IsFalse(processor.IsHorizontalPageBreak(null));
+        }
+
+        [TestMethod]
+        public void TestIsVerticalPageBreak()
+        {
+            ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
+            processor.LeftTemplateBorder.Returns("{");
+            processor.RightTemplateBorder.Returns("}");
+            processor.VerticalPageBreakLabel.Returns("Vert");
+
+            Assert.IsTrue(processor.IsVerticalPageBreak("{Vert}"));
+            Assert.IsTrue(processor.IsVerticalPageBreak(" {  vert  } "));
+            Assert.IsTrue(processor.IsVerticalPageBreak("{ VERT }"));
+            Assert.IsTrue(processor.IsVerticalPageBreak(" {vErT} "));
+
+            Assert.IsFalse(processor.IsVerticalPageBreak("Text {Vert}"));
+            Assert.IsFalse(processor.IsVerticalPageBreak("{Vert} Text"));
+            Assert.IsFalse(processor.IsVerticalPageBreak("Vert"));
+            Assert.IsFalse(processor.IsVerticalPageBreak("{Horiz}"));
+            Assert.IsFalse(processor.IsVerticalPageBreak("Bad"));
+            Assert.IsFalse(processor.IsVerticalPageBreak(string.Empty));
+            Assert.IsFalse(processor.IsHorizontalPageBreak(null));
+        }
     }
 }
