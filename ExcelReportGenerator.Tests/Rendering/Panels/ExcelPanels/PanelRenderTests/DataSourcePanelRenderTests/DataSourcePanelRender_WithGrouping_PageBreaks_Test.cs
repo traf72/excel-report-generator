@@ -17,6 +17,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             IXLRange parentRange = ws.Range(2, 2, 4, 5);
             parentRange.AddToNamed("ParentRange", XLScope.Worksheet);
 
+            parentRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
             IXLRange child1 = ws.Range(3, 2, 3, 5);
             child1.AddToNamed("ChildRange1", XLScope.Worksheet);
 
@@ -60,6 +62,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             IXLRange parentRange = ws.Range(2, 2, 4, 5);
             parentRange.AddToNamed("ParentRange", XLScope.Worksheet);
 
+            parentRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
             IXLRange child = ws.Range(3, 2, 3, 5);
             child.AddToNamed("ChildRange", XLScope.Worksheet);
 
@@ -95,6 +99,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
             IXLRange parentRange = ws.Range(2, 2, 4, 5);
             parentRange.AddToNamed("ParentRange", XLScope.Worksheet);
+
+            parentRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
 
             IXLRange child1 = ws.Range(3, 2, 3, 5);
             child1.AddToNamed("ChildRange1", XLScope.Worksheet);
@@ -140,6 +146,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             IXLRange parentRange = ws.Range(2, 2, 4, 5);
             parentRange.AddToNamed("ParentRange", XLScope.Worksheet);
 
+            parentRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
             IXLRange child = ws.Range(3, 2, 3, 5);
             child.AddToNamed("ChildRange", XLScope.Worksheet);
 
@@ -179,6 +187,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
             IXLRange parentRange = ws.Range(2, 2, 5, 4);
             parentRange.AddToNamed("ParentRange", XLScope.Worksheet);
+
+            parentRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
 
             IXLRange child1 = ws.Range(2, 3, 5, 3);
             child1.AddToNamed("ChildRange1", XLScope.Worksheet);
@@ -227,6 +237,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             IXLRange parentRange = ws.Range(2, 2, 5, 4);
             parentRange.AddToNamed("ParentRange", XLScope.Worksheet);
 
+            parentRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
             IXLRange child = ws.Range(2, 3, 5, 3);
             child.AddToNamed("ChildRange", XLScope.Worksheet);
 
@@ -266,6 +278,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
             IXLRange parentRange = ws.Range(2, 2, 5, 4);
             parentRange.AddToNamed("ParentRange", XLScope.Worksheet);
+
+            parentRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
 
             IXLRange child1 = ws.Range(2, 3, 5, 3);
             child1.AddToNamed("ChildRange1", XLScope.Worksheet);
@@ -315,6 +329,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
             IXLRange parentRange = ws.Range(2, 2, 5, 4);
             parentRange.AddToNamed("ParentRange", XLScope.Worksheet);
+
+            parentRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
 
             IXLRange child = ws.Range(2, 3, 5, 3);
             child.AddToNamed("ChildRange", XLScope.Worksheet);
