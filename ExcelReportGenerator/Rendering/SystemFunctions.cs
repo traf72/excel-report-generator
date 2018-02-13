@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace ExcelReportGenerator.Rendering
 {
@@ -72,7 +73,7 @@ namespace ExcelReportGenerator.Rendering
             }
         }
 
-        public static string Format(object input, string format, IFormatProvider formatProvider = null)
+        public static string Format(object input, string format, object formatProvider = null)
         {
             if (input == null)
             {
@@ -84,7 +85,30 @@ namespace ExcelReportGenerator.Rendering
                 throw new ArgumentException($"Parameter \"{nameof(input)}\" must implement {nameof(IFormattable)} interface");
             }
 
-            return formattable.ToString(format, formatProvider);
+            IFormatProvider fp;
+            switch (formatProvider)
+            {
+                case null:
+                    fp = null;
+                    break;
+
+                case IFormatProvider p:
+                    fp = p;
+                    break;
+
+                case string str:
+                    fp = new CultureInfo(str);
+                    break;
+
+                case int integer:
+                    fp = new CultureInfo(integer);
+                    break;
+
+                default:
+                    throw new ArgumentException($"Invalid type \"{formatProvider.GetType().Name}\" of {nameof(formatProvider)}");
+            }
+
+            return formattable.ToString(format, fp);
         }
     }
 }

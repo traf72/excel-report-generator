@@ -1,5 +1,8 @@
-﻿using ExcelReportGenerator.Rendering;
+﻿using ClosedXML.Excel;
+using ExcelReportGenerator.Rendering;
+using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
+using ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
@@ -147,8 +150,17 @@ namespace ExcelReportGenerator.Tests.Rendering
         public void TestFormat()
         {
             Assert.AreEqual("31.01.2018", SystemFunctions.Format(new DateTime(2018, 1, 31), "dd.MM.yyyy"));
+            Assert.AreEqual("31.01.2018", SystemFunctions.Format(new DateTime(2018, 1, 31), "dd.MM.yyyy", "RU"));
+            Assert.AreEqual("31.01.2018", SystemFunctions.Format(new DateTime(2018, 1, 31), "dd.MM.yyyy", "ru-ru"));
+            Assert.AreEqual("31.01.2018", SystemFunctions.Format(new DateTime(2018, 1, 31), "dd.MM.yyyy", 25)); // ru
+            Assert.AreEqual("31.01.2018", SystemFunctions.Format(new DateTime(2018, 1, 31), "dd.MM.yyyy", 1049)); // ru-RU
             Assert.AreEqual("31.01.2018", SystemFunctions.Format(new DateTime(2018, 1, 31), "d"));
             Assert.AreEqual("01/31/2018", SystemFunctions.Format(new DateTime(2018, 1, 31), "d", CultureInfo.InvariantCulture));
+            Assert.AreEqual("01/31/2018", SystemFunctions.Format(new DateTime(2018, 1, 31), "d", 127)); // Invariant
+            Assert.AreEqual("1/31/2018", SystemFunctions.Format(new DateTime(2018, 1, 31), "d", "en"));
+            Assert.AreEqual("1/31/2018", SystemFunctions.Format(new DateTime(2018, 1, 31), "d", "en-US"));
+            Assert.AreEqual("1/31/2018", SystemFunctions.Format(new DateTime(2018, 1, 31), "d", 9)); // en
+            Assert.AreEqual("1/31/2018", SystemFunctions.Format(new DateTime(2018, 1, 31), "d", 1033)); // en-US
             Assert.AreEqual(6535.676.ToString("0,0.##"), SystemFunctions.Format(6535.676, "0,0.##"));
             Assert.AreEqual(6535.676.ToString("0,0.##", CultureInfo.InvariantCulture), SystemFunctions.Format(6535.676, "0,0.##", CultureInfo.InvariantCulture));
 
@@ -158,6 +170,50 @@ namespace ExcelReportGenerator.Tests.Rendering
             Assert.IsNull(SystemFunctions.Format(null, "dd.MM.yyyy", CultureInfo.InvariantCulture));
 
             ExceptionAssert.Throws<ArgumentException>(() => SystemFunctions.Format(new Random(), "0,0.##"), $"Parameter \"input\" must implement {nameof(IFormattable)} interface");
+            ExceptionAssert.Throws<CultureNotFoundException>(() => SystemFunctions.Format(new DateTime(2018, 1, 31), "dd.MM.yyyy", "BadCulture"));
+            ExceptionAssert.Throws<CultureNotFoundException>(() => SystemFunctions.Format(new DateTime(2018, 1, 31), "dd.MM.yyyy", 10000000));
+            ExceptionAssert.Throws<ArgumentOutOfRangeException>(() => SystemFunctions.Format(new DateTime(2018, 1, 31), "dd.MM.yyyy", -1));
+            ExceptionAssert.Throws<ArgumentException>(() => SystemFunctions.Format(new DateTime(2018, 1, 31), "dd.MM.yyyy", new Random()), "Invalid type \"Random\" of formatProvider");
+        }
+
+        [TestMethod]
+        public void TestFormatOnRender()
+        {
+            var report = new TestReport();
+            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
+            IXLRange range = ws.Range(1, 1, 30, 30);
+
+            ws.Cell(1, 1).Value = "''{sf:Format(p:FormatTest:Date, dd.MM.yyyy)}";
+            ws.Cell(1, 2).Value = "''{sf:Format(p:FormatTest:Date, d, p:FormatTest:InvariantFormat)}";
+            ws.Cell(1, 3).Value = "''{sf:Format(p:FormatTest:Date, d, p:FormatTest:UsFormat)}";
+            ws.Cell(1, 4).Value = "''{sf:Format(p:FormatTest:Date, d, p:FormatTest:RuFormat)}";
+            ws.Cell(1, 5).Value = "''{sf:Format(p:FormatTest:Date, d, RU)}";
+            ws.Cell(1, 6).Value = "''{sf:Format(p:FormatTest:Date, d, [string]ru-RU)}";
+            ws.Cell(1, 7).Value = "''{sf:Format(p:FormatTest:Date, d, en)}";
+            ws.Cell(1, 8).Value = "''{sf:Format(p:FormatTest:Date, d, \"en-US\")}";
+            ws.Cell(1, 9).Value = "''{sf:Format(p:FormatTest:Date, d, [int]25)}"; // ru
+            ws.Cell(1, 10).Value = "''{sf:Format(p:FormatTest:Date, d, [int]1049)}"; // ru-RU
+            ws.Cell(1, 11).Value = "''{sf:Format(p:FormatTest:Date, d, [int]9)}"; // en
+            ws.Cell(1, 12).Value = "''{sf:Format(p:FormatTest:Date, d, [int]1033)}"; // en-US
+            ws.Cell(1, 13).Value = "''{sf:Format(p:FormatTest:Date, d, [int]127)}"; // Invariant
+
+            var panel = new ExcelPanel(range, report, report.TemplateProcessor);
+            panel.Render();
+
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(SystemFunctionsTest), "TestFormatOnRender"), ws.Workbook);
+
+            //report.Workbook.SaveAs("test.xlsx");
+        }
+
+        private class FormatTest
+        {
+            public DateTime Date { get; set; } = new DateTime(2018, 1, 31);
+
+            public IFormatProvider InvariantFormat { get; set; } = CultureInfo.InvariantCulture;
+
+            public IFormatProvider UsFormat { get; set; } = new CultureInfo("en-US");
+
+            public IFormatProvider RuFormat { get; set; } = new CultureInfo("ru-RU");
         }
     }
 }
