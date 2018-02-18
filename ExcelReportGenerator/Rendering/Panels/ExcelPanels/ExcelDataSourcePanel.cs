@@ -37,13 +37,13 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         }
 
         [ExternalProperty]
+        public string GroupBy { get; set; }
+
+        [ExternalProperty]
         public string BeforeDataItemRenderMethodName { get; set; }
 
         [ExternalProperty]
         public string AfterDataItemRenderMethodName { get; set; }
-
-        [ExternalProperty]
-        public string GroupBy { get; set; }
 
         public override IXLRange Render()
         {
@@ -292,9 +292,9 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         {
             var panel = new ExcelDataSourcePanel(_dataSourceTemplate, CopyNamedRange(cell), _report, _templateProcessor)
             {
+                GroupBy = GroupBy,
                 BeforeDataItemRenderMethodName = BeforeDataItemRenderMethodName,
                 AfterDataItemRenderMethodName = AfterDataItemRenderMethodName,
-                GroupBy = GroupBy,
             };
             FillCopyProperties(panel);
             return panel;

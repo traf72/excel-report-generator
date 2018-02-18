@@ -237,6 +237,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             {
                 ShiftType = ShiftType,
                 Type = Type,
+                GroupBy = GroupBy,
                 BeforeRenderMethodName = BeforeDataRenderMethodName,
                 AfterRenderMethodName = AfterDataRenderMethodName,
                 BeforeDataItemRenderMethodName = BeforeDataItemRenderMethodName,

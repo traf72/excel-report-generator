@@ -220,6 +220,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
         {
             var dataSet = (DataSet)args.Data;
             DataTable dataTable = dataSet.Tables[0];
+            dataTable.Rows[2]["Type"] = 1;
             dataTable.Columns.Add(new DataColumn("DynamicAdded", typeof(decimal)));
             for (int i = 0; i < dataTable.Rows.Count; i++)
             {

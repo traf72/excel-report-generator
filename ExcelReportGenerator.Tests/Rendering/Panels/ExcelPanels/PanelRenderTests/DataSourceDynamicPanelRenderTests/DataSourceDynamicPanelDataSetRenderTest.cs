@@ -39,10 +39,17 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 AfterTotalsTemplatesRenderMethodName = "TestExcelDynamicPanelAfterTotalsTemplatesRender",
                 BeforeTotalsRenderMethodName = "TestExcelDynamicPanelBeforeTotalsRender",
                 AfterTotalsRenderMethodName = "TestExcelDynamicPaneAfterTotalsRender",
+                GroupBy = "4",
             };
             IXLRange resultRange = panel.Render();
 
             Assert.AreEqual(ws.Range(2, 2, 7, 8), resultRange);
+
+            // Bug of ClosedXml - invalid determine of FirstCellUsed and LastCellUsed if merged ranges exist
+            ws.Cell(1, 1).Value = "Stub";
+            ws.Range(1, 1, 1, 1).Merge();
+            ws.Cell(8, 9).Value = "Stub";
+            ws.Range(8, 9, 8, 9).Merge();
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataSetRenderTest),
                 nameof(TestRenderDataSetWithEvents)), ws.Workbook);
@@ -77,6 +84,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 BeforeTotalsRenderMethodName = "TestExcelDynamicPanelBeforeTotalsRender",
                 AfterTotalsRenderMethodName = "TestExcelDynamicPaneAfterTotalsRender",
                 Type = PanelType.Horizontal,
+                GroupBy = "4",
             };
             IXLRange resultRange = panel.Render();
 
