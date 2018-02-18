@@ -294,6 +294,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             {
                 BeforeDataItemRenderMethodName = BeforeDataItemRenderMethodName,
                 AfterDataItemRenderMethodName = AfterDataItemRenderMethodName,
+                GroupBy = GroupBy,
             };
             FillCopyProperties(panel);
             return panel;

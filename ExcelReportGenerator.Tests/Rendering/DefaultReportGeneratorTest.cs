@@ -208,18 +208,21 @@ namespace ExcelReportGenerator.Tests.Rendering
             IXLRange parentRange = sheet1.Range(2, 2, 3, 5);
             parentRange.AddToNamed("d_Parent", XLScope.Worksheet);
             IXLNamedRange parentNamedRange = sheet1.NamedRange("d_Parent");
-            parentNamedRange.Comment = "DataSource = m:DataProvider:GetIEnumerable()";
+            parentNamedRange.Comment = "DataSource = m:DataProvider:GetIEnumerable();";
 
             IXLRange childRange = sheet1.Range(3, 2, 3, 5);
             childRange.AddToNamed("d_Child", XLScope.Workbook);
             IXLNamedRange childNamedRange = wb.NamedRange("d_Child");
-            childNamedRange.Comment = $"ParentPanel = d_Parent{Environment.NewLine}DataSource = m:DataProvider:GetChildIEnumerable(di:Name)";
+            childNamedRange.Comment = $"ParentPanel = d_Parent{Environment.NewLine}DataSource = m:DataProvider:GetChildIEnumerable(di:Name);GroupBy=1,4";
 
             sheet1.Cell(2, 2).Value = "{di:Name}";
             sheet1.Cell(2, 3).Value = "{di:Date}";
             sheet1.Cell(3, 3).Value = "{di:Field1}";
             sheet1.Cell(3, 4).Value = "{di:Field2}";
             sheet1.Cell(3, 5).Value = "{di:parent:Sum}";
+
+            sheet1.Cell(3, 5).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+            sheet1.Cell(3, 5).Style.Font.Bold = true;
 
             IXLRange simpleRange = sheet1.Range(2, 7, 3, 8);
             simpleRange.AddToNamed("s_Simple", XLScope.Worksheet);
