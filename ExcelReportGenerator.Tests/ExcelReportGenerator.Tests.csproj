@@ -187,6 +187,7 @@
     <Compile Include="Rendering\DefaultReportGeneratorTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelNamedPanelTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelPanelFactoryTests.cs" />
+    <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataSourcePanelTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelTotalsPanelTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelPanelTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDataSetRenderTest.cs" />
@@ -345,6 +346,9 @@
     <None Include="TestData\DefaultReportGeneratorTest\TestRender.xlsx" />
     <None Include="TestData\DefaultReportGeneratorTest\TestRenderPartialWorksheets.xlsx" />
     <None Include="TestData\DefaultReportGeneratorTest\TestRenderWithCustomVariableAndFunctionProviders.xlsx" />
+    <None Include="TestData\ExcelDataSourcePanelTest\TestGroupResultHorizontal.xlsx" />
+    <None Include="TestData\ExcelDataSourcePanelTest\TestGroupResultVertical.xlsx" />
+    <None Include="TestData\ExcelDataSourcePanelTest\TestIfGroupByPropertyIsEmpty.xlsx" />
     <None Include="TestData\SystemFunctionsTest\TestFormatOnRender.xlsx" />
     <None Include="TestData\TotalsPanelRenderTest\TestPanelRender.xlsx" />
     <None Include="TestData\TotalsPanelRenderTest\TestPanelRenderWithParentContext.xlsx" />

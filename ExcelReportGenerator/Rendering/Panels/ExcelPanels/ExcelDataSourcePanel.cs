@@ -8,6 +8,7 @@ using ExcelReportGenerator.Rendering.EventArgs;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 {
@@ -40,6 +41,9 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
         [ExternalProperty]
         public string AfterDataItemRenderMethodName { get; set; }
+
+        [ExternalProperty]
+        public string GroupBy { get; set; }
 
         public override IXLRange Render()
         {
@@ -111,8 +115,96 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 (enumerator as IDisposable)?.Dispose();
             }
 
+            GroupResult(resultRange);
+
             CallAfterRenderMethod(resultRange);
             return resultRange;
+        }
+
+        private void GroupResult(IXLRange resultRange)
+        {
+            if (string.IsNullOrWhiteSpace(GroupBy))
+            {
+                return;
+            }
+
+            int[] groupColOrRowNumbers = GroupBy.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(strNum =>
+            {
+                if (int.TryParse(strNum, out int num))
+                {
+                    return num;
+                }
+                throw new InvalidCastException($"Parse \"{nameof(GroupBy)}\" property failed. Cannot convert value \"{strNum.Trim()}\" to {nameof(Int32)}");
+            }).ToArray();
+
+            if (Type == PanelType.Vertical)
+            {
+                GroupCellsVertical(resultRange, groupColOrRowNumbers);
+            }
+            else
+            {
+                GroupCellsHorizontal(resultRange, groupColOrRowNumbers);
+            }
+        }
+
+        private void GroupCellsVertical(IXLRange range, int[] groupColNumbers)
+        {
+            IDictionary<int, (object StartCellValue, int StartRowNum)> previousCellValues = new Dictionary<int, (object, int)>();
+            int rowsCount = range.Rows().Count();
+            for (int rowNum = 1; rowNum <= rowsCount; rowNum++)
+            {
+                IXLRangeRow row = range.Row(rowNum);
+                foreach (int colNum in groupColNumbers)
+                {
+                    object cellValue = row.Cell(colNum).Value;
+                    if (previousCellValues.TryGetValue(colNum, out var previousResult))
+                    {
+                        if (!previousResult.StartCellValue.Equals(cellValue))
+                        {
+                            range.Range(previousResult.StartRowNum, colNum, rowNum - 1, colNum).Merge();
+                            previousCellValues[colNum] = (cellValue, rowNum);
+                        }
+                        else if (rowNum == rowsCount)
+                        {
+                            range.Range(previousResult.StartRowNum, colNum, rowNum, colNum).Merge();
+                        }
+                    }
+                    else
+                    {
+                        previousCellValues[colNum] = (cellValue, rowNum);
+                    }
+                }
+            }
+        }
+
+        private void GroupCellsHorizontal(IXLRange range, int[] groupRowNumbers)
+        {
+            IDictionary<int, (object StartCellValue, int StartColNum)> previousCellValues = new Dictionary<int, (object, int)>();
+            int colsCount = range.Columns().Count();
+            for (int colNum = 1; colNum <= colsCount; colNum++)
+            {
+                IXLRangeColumn col = range.Column(colNum);
+                foreach (int rowNum in groupRowNumbers)
+                {
+                    object cellValue = col.Cell(rowNum).Value;
+                    if (previousCellValues.TryGetValue(rowNum, out var previousResult))
+                    {
+                        if (!previousResult.StartCellValue.Equals(cellValue))
+                        {
+                            range.Range(rowNum, previousResult.StartColNum, rowNum, colNum - 1).Merge();
+                            previousCellValues[rowNum] = (cellValue, colNum);
+                        }
+                        else if (colNum == colsCount)
+                        {
+                            range.Range(rowNum, previousResult.StartColNum, rowNum, colNum).Merge();
+                        }
+                    }
+                    else
+                    {
+                        previousCellValues[rowNum] = (cellValue, colNum);
+                    }
+                }
+            }
         }
 
         private ExcelDataItemPanel CreateTemplatePanel()

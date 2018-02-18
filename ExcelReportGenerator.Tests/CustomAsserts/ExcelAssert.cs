@@ -45,6 +45,7 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
                 AreCellsCommentEquals(expectedCell.Comment, actualCell.Comment, $"Cell {expectedCell.Address} Comment {{0}} failed.");
             }
 
+            AreMergedRangesEquals(expected.MergedRanges, actual.MergedRanges);
             AreNamedRangesEquals(expected.NamedRanges, actual.NamedRanges);
             ArePageSetupEquals(expected.PageSetup, actual.PageSetup, "PageSetup {0} failed.");
         }
@@ -124,6 +125,20 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
             Assert.AreEqual(expected.Text, actual.Text, string.Format(message, "Text"));
             Assert.AreEqual(expected.Author, actual.Author, string.Format(message, "Author"));
             Assert.AreEqual(expected.Count, actual.Count, string.Format(message, "Count"));
+        }
+
+        private static void AreMergedRangesEquals(IXLRanges expected, IXLRanges actual)
+        {
+            Assert.AreEqual(expected.Count(), actual.Count(), "Worksheet merged ranges count failed");
+            IXLRange[] expectedArray = expected.ToArray();
+            IXLRange[] actualArray = actual.ToArray();
+            for (int i = 0; i < expectedArray.Length; i++)
+            {
+                Assert.AreEqual(expectedArray[i].RangeAddress.FirstAddress.RowNumber, actualArray[i].RangeAddress.FirstAddress.RowNumber, "Merge range first address row number failed");
+                Assert.AreEqual(expectedArray[i].RangeAddress.FirstAddress.ColumnNumber, actualArray[i].RangeAddress.FirstAddress.ColumnNumber, "Merge range first address column number failed");
+                Assert.AreEqual(expectedArray[i].RangeAddress.LastAddress.RowNumber, actualArray[i].RangeAddress.LastAddress.RowNumber, "Merge range last address row number failed");
+                Assert.AreEqual(expectedArray[i].RangeAddress.LastAddress.ColumnNumber, actualArray[i].RangeAddress.LastAddress.ColumnNumber, "Merge range last address column number failed");
+            }
         }
 
         public static void AreNamedRangesEquals(IXLNamedRanges expected, IXLNamedRanges actual)
