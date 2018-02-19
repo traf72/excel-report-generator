@@ -168,6 +168,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Excel\CellCoords.cs" />
     <Compile Include="Excel\RangeCoords.cs" />
+    <Compile Include="Rendering\EventArgs\WorksheetRenderEventArgs.cs" />
+    <Compile Include="Rendering\EventArgs\ReportRenderEventArgs.cs" />
     <Compile Include="Rendering\EventArgs\DataSourceDynamicPanelEventArgs.cs" />
     <Compile Include="Rendering\EventArgs\DataSourceDynamicPanelBeforeRenderEventArgs.cs" />
     <Compile Include="Rendering\EventArgs\DataSourcePanelBeforeRenderEventArgs.cs" />

@@ -269,6 +269,41 @@ namespace ExcelReportGenerator.Tests.Rendering
         }
 
         [TestMethod]
+        public void TestRenderWithEvents()
+        {
+            var report = new TestReport();
+            XLWorkbook wb = report.Workbook;
+            IXLWorksheet sheet1 = wb.AddWorksheet("Sheet1");
+            var reprotGenerator = new TestReportGenerator(report);
+
+            reprotGenerator.BeforeReportRender += (sender, args) => args.Workbook.AddWorksheet("DynamicSheet");
+            reprotGenerator.BeforeWorksheetRender += (sender, args) =>
+            {
+                if (args.Worksheet.Name == "DynamicSheet")
+                {
+                    args.Worksheet.Cell(2, 2).Value = "{sv:SheetNumber}";
+                    args.Worksheet.Cell(2, 3).Value = "{sv:SheetName}";
+                }
+            };
+
+            reprotGenerator.AfterWorksheetRender += (sender, args) =>
+            {
+                if (args.Worksheet.Name == "Sheet1")
+                {
+                    args.Worksheet.Cell(1, 1).Value = "Sheet1";
+                }
+            };
+
+            sheet1.Cell(2, 2).Value = "{sv:SheetNumber}";
+
+            reprotGenerator.Render(wb);
+
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRenderWithEvents)), wb);
+
+            //wb.SaveAs("test.xlsx");
+        }
+
+        [TestMethod]
         public void TestRenderPartialWorksheets()
         {
             var report = new TestReport();

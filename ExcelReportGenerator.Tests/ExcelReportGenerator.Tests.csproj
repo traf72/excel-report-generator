@@ -346,6 +346,7 @@
     <None Include="TestData\DefaultReportGeneratorTest\TestRender.xlsx" />
     <None Include="TestData\DefaultReportGeneratorTest\TestRenderPartialWorksheets.xlsx" />
     <None Include="TestData\DefaultReportGeneratorTest\TestRenderWithCustomVariableAndFunctionProviders.xlsx" />
+    <None Include="TestData\DefaultReportGeneratorTest\TestRenderWithEvents.xlsx" />
     <None Include="TestData\ExcelDataSourcePanelTest\TestGroupResultHorizontal.xlsx" />
     <None Include="TestData\ExcelDataSourcePanelTest\TestGroupResultVertical.xlsx" />
     <None Include="TestData\ExcelDataSourcePanelTest\TestIfGroupByPropertyIsEmpty.xlsx" />

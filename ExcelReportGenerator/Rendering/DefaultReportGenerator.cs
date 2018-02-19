@@ -1,5 +1,7 @@
 ﻿using ClosedXML.Excel;
+using ExcelReportGenerator.Excel;
 using ExcelReportGenerator.Helpers;
+using ExcelReportGenerator.Rendering.EventArgs;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Rendering.Parsers;
 using ExcelReportGenerator.Rendering.Providers;
@@ -10,12 +12,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using ExcelReportGenerator.Excel;
 
 namespace ExcelReportGenerator.Rendering
 {
     public class DefaultReportGenerator
     {
+        public event EventHandler<ReportRenderEventArgs> BeforeReportRender;
+
+        public event EventHandler<WorksheetRenderEventArgs> BeforeWorksheetRender;
+
+        public event EventHandler<WorksheetRenderEventArgs> AfterWorksheetRender;
+
         protected readonly object _report;
 
         private ITypeProvider _typeProvider;
@@ -94,7 +101,7 @@ namespace ExcelReportGenerator.Rendering
 
             SystemVariableProvider.RenderDate = DateTime.Now;
 
-            // TODO Call BeforeRender event
+            OnBeforeReportRender(new ReportRenderEventArgs { Workbook = reportTemplate });
 
             if (worksheets == null || !worksheets.Any())
             {
@@ -112,7 +119,7 @@ namespace ExcelReportGenerator.Rendering
                 SystemVariableProvider.SheetName = ws.Name;
                 SystemVariableProvider.SheetNumber = ws.Position;
 
-                // TODO Call BeforeRenderSheet event
+                OnBeforeWorksheetRender(new WorksheetRenderEventArgs { Worksheet = ws });
 
                 if (!ws.CellsUsed().Any())
                 {
@@ -133,6 +140,8 @@ namespace ExcelReportGenerator.Rendering
                 IExcelPanel rootPanel = new ExcelPanel(GetRootRange(ws, worksheetPanels), _report, TemplateProcessor);
                 MakePanelsHierarchy(panelsFlatView, rootPanel);
                 rootPanel.Render();
+
+                OnAfterWorksheetRender(new WorksheetRenderEventArgs { Worksheet = ws });
             }
 
             return reportTemplate;
@@ -190,6 +199,21 @@ namespace ExcelReportGenerator.Rendering
                     throw new InvalidOperationException($"Cannot find parent panel with name \"{parentPanelName}\" for panel \"{panelFlat.Key}\"");
                 }
             }
+        }
+
+        protected virtual void OnBeforeReportRender(ReportRenderEventArgs e)
+        {
+            BeforeReportRender?.Invoke(this, e);
+        }
+
+        protected virtual void OnBeforeWorksheetRender(WorksheetRenderEventArgs e)
+        {
+            BeforeWorksheetRender?.Invoke(this, e);
+        }
+
+        protected virtual void OnAfterWorksheetRender(WorksheetRenderEventArgs e)
+        {
+            AfterWorksheetRender?.Invoke(this, e);
         }
     }
 }
