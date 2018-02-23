@@ -57,8 +57,6 @@ namespace ExcelReportGenerator.Rendering
         public virtual ITemplateProcessor TemplateProcessor => _templateProcessor ?? (_templateProcessor =
             new DefaultTemplateProcessor(PropertyValueProvider, SystemVariableProvider, MethodCallValueProvider, DataItemValueProvider) { SystemFunctionsType = SystemFunctionsType });
 
-        public virtual IPanelPropertiesParser PanelPropertiesParser => _panelPropertiesParser ?? (_panelPropertiesParser = new DefaultPanelPropertiesParser(PanelParsingSettings));
-
         public virtual PanelParsingSettings PanelParsingSettings => _panelParsingSettings ?? (_panelParsingSettings = new PanelParsingSettings
         {
             PanelPrefixSeparator = "_",
@@ -69,6 +67,8 @@ namespace ExcelReportGenerator.Rendering
             PanelPropertiesSeparators = new[] { Environment.NewLine, "\t", ";" },
             PanelPropertyNameValueSeparator = "=",
         });
+
+        private IPanelPropertiesParser PanelPropertiesParser => _panelPropertiesParser ?? (_panelPropertiesParser = new DefaultPanelPropertiesParser(PanelParsingSettings));
 
         private string PanelsRegexPattern
         {
