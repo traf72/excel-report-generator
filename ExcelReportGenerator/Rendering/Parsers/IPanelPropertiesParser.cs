@@ -2,7 +2,7 @@
 
 namespace ExcelReportGenerator.Rendering.Parsers
 {
-    public interface IPanelPropertiesParser
+    internal interface IPanelPropertiesParser
     {
         IDictionary<string, string> Parse(string input);
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ExcelReportGenerator.Rendering.Parsers
 {
-    public class DefaultPanelPropertiesParser : IPanelPropertiesParser
+    internal class DefaultPanelPropertiesParser : IPanelPropertiesParser
     {
         private readonly PanelParsingSettings _panelParsingSettings;
 
