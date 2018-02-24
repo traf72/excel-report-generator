@@ -135,7 +135,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         [TestMethod]
         public void TestDoAggregationWithIntData()
         {
-            int[] data = GetTestIntData();
+            int[] data = new DataProvider().GetIntData();
 
             var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), Substitute.For<object>(), new TestReport().TemplateProcessor);
             IEnumerator enumerator = EnumeratorFactory.Create(data);
@@ -378,11 +378,6 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
 
             ws.Cell(1, 1).Value = "<Sum(d-Val, fn1, fn2, fn3)>";
             ExceptionAssert.ThrowsBaseException<InvalidOperationException>(() => method.Invoke(panel, null), "Aggregation function must have at least one but no more than 3 parameters");
-        }
-
-        private int[] GetTestIntData()
-        {
-            return new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         }
 
         private IList<Test> GetTestData()

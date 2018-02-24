@@ -10,6 +10,7 @@ using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
 using ExcelReportGenerator.Rendering.Providers.VariableProviders;
 
 namespace ExcelReportGenerator.Tests.Rendering
@@ -247,6 +248,13 @@ namespace ExcelReportGenerator.Tests.Rendering
             IXLNamedRange totalsNamedRange = sheet2.NamedRange("t_Totals");
             totalsNamedRange.Comment = "DataSource = m:DataProvider:GetIEnumerable(); BeforeRenderMethodName = TestExcelTotalsPanelBeforeRender; AfterRenderMethodName = TestExcelTotalsPanelAfterRender";
 
+            IXLRange intRange = sheet2.Range(10, 2, 10, 2);
+            intRange.AddToNamed("d_IntData", XLScope.Worksheet);
+            IXLNamedRange intNamedRange = sheet2.NamedRange("d_IntData");
+            intNamedRange.Comment = "DataSource = m:DataProvider:GetIntData()";
+
+            sheet2.Cell(10, 2).Value = "{di:di}";
+
             sheet2.Cell(6, 2).Value = "Plain text";
             sheet2.Cell(6, 3).Value = "{Sum(di:Sum)}";
             sheet2.Cell(6, 4).Value = "{ Custom(DI:Sum, CustomAggregation, PostAggregation)  }";
@@ -310,7 +318,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             XLWorkbook wb = report.Workbook;
             IXLWorksheet sheet1 = wb.AddWorksheet("Sheet1");
             IXLWorksheet sheet2 = wb.AddWorksheet("Sheet2");
-            var reprotGenerator = new TestReportGenerator(report);
+            var reprotGenerator = new TestReportGenerator2(report);
 
             IXLRange parentRange = sheet1.Range(2, 2, 3, 5);
             parentRange.AddToNamed("d_Parent", XLScope.Worksheet);
@@ -333,6 +341,13 @@ namespace ExcelReportGenerator.Tests.Rendering
 
             sheet1.Cell(2, 7).Value = "{p:StrParam}";
             sheet1.Cell(3, 8).Value = "{p:IntParam}";
+
+            IXLRange intRange = sheet1.Range(2, 10, 2, 10);
+            intRange.AddToNamed("d_IntData", XLScope.Worksheet);
+            IXLNamedRange intNamedRange = sheet1.NamedRange("d_IntData");
+            intNamedRange.Comment = "DataSource = m:DataProvider:GetIntData()";
+
+            sheet1.Cell(2, 10).Value = "{di:self}";
 
             IXLRange dynamicRange = sheet2.Range(2, 2, 4, 2);
             dynamicRange.AddToNamed("dyn_Dynamic", XLScope.Workbook);
@@ -401,6 +416,18 @@ namespace ExcelReportGenerator.Tests.Rendering
             }
 
             public override ITypeProvider TypeProvider => _typeProvider ?? (_typeProvider = new DefaultTypeProvider(new[] { Assembly.GetExecutingAssembly() }, _report.GetType()));
+        }
+
+        private class TestReportGenerator2 : TestReportGenerator
+        {
+            private IGenericDataItemValueProvider<HierarchicalDataItem> _dataItemProvider;
+
+            public TestReportGenerator2(object report) : base(report)
+            {
+            }
+
+            public override IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider => _dataItemProvider
+                ?? (_dataItemProvider = new HierarchicalDataItemValueProvider() { DataItemSelfTemplate = "self" });
         }
 
         private class VariableProvider : SystemVariableProvider

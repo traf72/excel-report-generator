@@ -90,6 +90,11 @@ namespace ExcelReportGenerator.Tests.Rendering
             return Enumerable.Empty<TestItem>();
         }
 
+        public int[] GetIntData()
+        {
+            return new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        }
+
         public IDataReader GetAllCustomersDataReader()
         {
             IDbConnection connection = new SqlConnection(_conStr);
