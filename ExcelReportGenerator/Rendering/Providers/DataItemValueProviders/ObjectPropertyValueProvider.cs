@@ -19,8 +19,6 @@ namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
             _reflectionHelper = reflectionHelper;
         }
 
-        protected virtual string SelfObjectTemplate => "di";
-
         /// <summary>
         /// Returns property value from data item object
         /// </summary>
@@ -31,13 +29,7 @@ namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
                 throw new ArgumentException(ArgumentHelper.EmptyStringParamMessage, nameof(propTemplate));
             }
 
-            propTemplate = propTemplate.Trim();
-            if (propTemplate == SelfObjectTemplate)
-            {
-                return dataItem;
-            }
-
-            return _reflectionHelper.GetValueOfPropertiesChain(propTemplate, dataItem);
+            return _reflectionHelper.GetValueOfPropertiesChain(propTemplate.Trim(), dataItem);
         }
     }
 }

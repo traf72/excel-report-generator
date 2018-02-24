@@ -52,13 +52,13 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange parentRange = ws.Range(2, 2, 3, 4);
+            IXLRange parentRange = ws.Range(2, 2, 3, 5);
             parentRange.AddToNamed("ParentRange", XLScope.Worksheet);
 
-            IXLRange child1 = ws.Range(2, 2, 2, 4);
+            IXLRange child1 = ws.Range(2, 2, 2, 5);
             child1.AddToNamed("ChildRange1", XLScope.Worksheet);
 
-            IXLRange child2 = ws.Range(3, 2, 3, 4);
+            IXLRange child2 = ws.Range(3, 2, 3, 5);
             child2.AddToNamed("ChildRange2", XLScope.Worksheet);
 
             ws.Cell(2, 2).Value = "{di:Field1}";
@@ -66,7 +66,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             ws.Cell(3, 2).Value = "{Count(di:Field1)}";
             ws.Cell(3, 3).Value = "{Max(di:Field2)}";
-            ws.Cell(3, 4).Value = "{di:parent:Name}";
+            ws.Cell(3, 4).Value = "{Max(di:parent:Sum)}";
+            ws.Cell(3, 5).Value = "{di:parent:Name}";
 
             var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report, report.TemplateProcessor);
             var childPanel1 = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange1"), report, report.TemplateProcessor) { Parent = parentPanel };
@@ -74,7 +75,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             parentPanel.Children = new[] { childPanel1, childPanel2 };
             IXLRange resultRange = parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 9, 4), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 9, 5), resultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(TotalsPanelRenderTest),
                 nameof(TestPanelRenderWithParentContext)), ws.Workbook);

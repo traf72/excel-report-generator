@@ -18,10 +18,6 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.DataItemValueProviders
             IDataItemValueProvider dataItemValueProvider = new ObjectPropertyValueProvider(reflectionHelper);
             var date = DateTime.Now;
 
-            Assert.AreEqual(date, dataItemValueProvider.GetValue("di", date));
-            Assert.IsNull(dataItemValueProvider.GetValue(" di ", null));
-            reflectionHelper.DidNotReceiveWithAnyArgs().GetValueOfPropertiesChain(Arg.Any<string>(), Arg.Any<object>());
-
             dataItemValueProvider.GetValue("StrProp", date);
             reflectionHelper.Received(1).GetValueOfPropertiesChain("StrProp", date);
 
@@ -44,7 +40,6 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.DataItemValueProviders
         {
             IDataItemValueProvider dataItemValueProvider = new ObjectPropertyValueProvider();
             var dataItem = new KeyValuePair<string, string>("key", "val");
-            Assert.AreEqual(dataItem, dataItemValueProvider.GetValue("di", dataItem));
             Assert.AreEqual(dataItem.Key, dataItemValueProvider.GetValue("Key", dataItem));
             Assert.AreEqual(dataItem.Value, dataItemValueProvider.GetValue(" Value ", dataItem));
         }

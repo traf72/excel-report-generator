@@ -14,8 +14,6 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 {
     internal class ExcelDataSourcePanel : ExcelNamedPanel
     {
-        public static IDictionary<string, TimeSpan> Benchmark = new Dictionary<string, TimeSpan>();
-
         protected readonly string _dataSourceTemplate;
         protected readonly bool _isDataReceivedDirectly;
         protected object _data;

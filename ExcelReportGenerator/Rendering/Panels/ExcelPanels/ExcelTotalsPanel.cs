@@ -3,7 +3,6 @@ using ExcelReportGenerator.Enumerators;
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Extensions;
 using ExcelReportGenerator.Helpers;
-using ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using System;
 using System.Collections;
@@ -16,8 +15,6 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 {
     internal class ExcelTotalsPanel : ExcelDataSourcePanel
     {
-        private readonly IDataItemValueProviderFactory _dataItemValueProviderFactory = new DataItemValueProviderFactory();
-
         public ExcelTotalsPanel(string dataSourceTemplate, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor)
             : base(dataSourceTemplate, namedRange, report, templateProcessor)
         {
@@ -46,7 +43,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             {
                 enumerator = EnumeratorFactory.Create(_data) ?? new EnumerableEnumerator(new object[] { });
                 IDictionary<IXLCell, IList<ParsedAggregationFunc>> totalCells = ParseTotalCells();
-                DoAggregation(enumerator, totalCells.SelectMany(t => t.Value).ToArray());
+                DoAggregation(enumerator, totalCells.SelectMany(t => t.Value).ToArray(), parentDataItem);
                 IXLWorksheet ws = Range.Worksheet;
                 dynamic dataSource = new ExpandoObject();
                 var dataSourceAsDict = (IDictionary<string, object>)dataSource;
@@ -118,8 +115,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                             throw new InvalidOperationException("\"ColumnName\" parameter in aggregation function cannot be empty");
                         }
 
-                        columnName = _templateProcessor.TrimDataItemLabel(columnName).Trim();
-                        aggFuncs.Add(new ParsedAggregationFunc(aggFunc, columnName) { CustomFunc = allFuncParams[1], PostProcessFunction = allFuncParams[2], UniqueName = uniqueName });
+                        aggFuncs.Add(new ParsedAggregationFunc(aggFunc, columnName.Trim()) { CustomFunc = allFuncParams[1], PostProcessFunction = allFuncParams[2], UniqueName = uniqueName });
                     }
 
                     cellValue = cellValue.ReplaceFirst(match.Value, matchValue);
@@ -131,10 +127,9 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             return result;
         }
 
-        private void DoAggregation(IEnumerator enumerator, IList<ParsedAggregationFunc> aggFuncs)
+        private void DoAggregation(IEnumerator enumerator, IList<ParsedAggregationFunc> aggFuncs, HierarchicalDataItem parentDataItem)
         {
             int dataItemsCount = 0;
-            IDataItemValueProvider valueProvider = null;
             while (enumerator.MoveNext())
             {
                 dataItemsCount++;
@@ -147,8 +142,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                         continue;
                     }
 
-                    valueProvider = valueProvider ?? _dataItemValueProviderFactory.Create(item);
-                    dynamic value = valueProvider.GetValue(aggFunc.ColumnName, item);
+                    dynamic value = _templateProcessor.GetValue(aggFunc.ColumnName, new HierarchicalDataItem { Value = item, Parent = parentDataItem });
                     if (aggFunc.AggregateFunction == AggregateFunction.Custom)
                     {
                         if (string.IsNullOrWhiteSpace(aggFunc.CustomFunc))

@@ -21,6 +21,11 @@ namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
         }
 
         /// <summary>
+        /// Get or set the template if you want to return the data item itself
+        /// </summary>
+        public string DataItemSelfTemplate { get; set; }
+
+        /// <summary>
         /// Returns value from hierarchical data item based on template
         /// </summary>
         public virtual object GetValue(string template, HierarchicalDataItem hierarchicalDataItem)
@@ -35,6 +40,11 @@ namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
             }
 
             var (dataItem, dataItemTemplate) = GetDataItemGivenHierarchy(template, hierarchicalDataItem);
+            if (dataItemTemplate == DataItemSelfTemplate)
+            {
+                return dataItem;
+            }
+
             return _factory.Create(dataItem)?.GetValue(dataItemTemplate, dataItem);
         }
 

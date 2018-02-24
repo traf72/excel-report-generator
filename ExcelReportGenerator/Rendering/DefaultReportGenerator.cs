@@ -54,8 +54,25 @@ namespace ExcelReportGenerator.Rendering
 
         public virtual IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider => _dataItemValueProvider ?? (_dataItemValueProvider = new HierarchicalDataItemValueProvider());
 
-        public virtual ITemplateProcessor TemplateProcessor => _templateProcessor ?? (_templateProcessor =
-            new DefaultTemplateProcessor(PropertyValueProvider, SystemVariableProvider, MethodCallValueProvider, DataItemValueProvider) { SystemFunctionsType = SystemFunctionsType });
+        public virtual ITemplateProcessor TemplateProcessor
+        {
+            get
+            {
+                if (_templateProcessor == null)
+                {
+                    _templateProcessor = new DefaultTemplateProcessor(PropertyValueProvider, SystemVariableProvider, MethodCallValueProvider, DataItemValueProvider)
+                    {
+                        SystemFunctionsType = SystemFunctionsType
+                    };
+                    if (DataItemValueProvider is HierarchicalDataItemValueProvider p && string.IsNullOrWhiteSpace(p.DataItemSelfTemplate))
+                    {
+                        p.DataItemSelfTemplate = _templateProcessor.DataItemMemberLabel;
+                    }
+                }
+
+                return _templateProcessor;
+            }
+        }
 
         public virtual PanelParsingSettings PanelParsingSettings => _panelParsingSettings ?? (_panelParsingSettings = new PanelParsingSettings
         {

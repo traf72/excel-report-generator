@@ -292,7 +292,10 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             var instanceProvider = new DefaultInstanceProvider(this);
 
             TemplateProcessor = new DefaultTemplateProcessor(new DefaultPropertyValueProvider(typeProvider, instanceProvider), new SystemVariableProvider(),
-                new DefaultMethodCallValueProvider(typeProvider, instanceProvider), new HierarchicalDataItemValueProvider(new DataItemValueProviderFactory()));
+                new DefaultMethodCallValueProvider(typeProvider, instanceProvider), new HierarchicalDataItemValueProvider(new DataItemValueProviderFactory())
+                {
+                    DataItemSelfTemplate = "di"
+                });
         }
 
         public bool BoolParam { get; set; } = true;

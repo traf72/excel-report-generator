@@ -45,7 +45,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.DataItemValueProviders
             var objectPropertyValueProvider = Substitute.For<ObjectPropertyValueProvider>();
             var dataRowValueProvider = Substitute.For<DataRowValueProvider>();
             var dataReaderValueProvider = Substitute.For<DataReaderValueProvider>();
-            var dataItemValueProvider = new HierarchicalDataItemValueProvider(factory);
+            var dataItemValueProvider = new HierarchicalDataItemValueProvider(factory) { DataItemSelfTemplate = "di" };
 
             factory.Create(null).Returns(objectPropertyValueProvider);
             factory.Create(dataItem1).Returns(objectPropertyValueProvider);
@@ -62,12 +62,23 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.DataItemValueProviders
             ExceptionAssert.Throws<ArgumentNullException>(() => dataItemValueProvider.GetValue("Template", null));
 
             objectPropertyValueProvider.ClearReceivedCalls();
+            dataItemValueProvider.GetValue("di", hierarchicalDataItem);
+            objectPropertyValueProvider.DidNotReceiveWithAnyArgs().GetValue(null, null);
+            dataRowValueProvider.DidNotReceiveWithAnyArgs().GetValue(null, null);
+            dataReaderValueProvider.DidNotReceiveWithAnyArgs().GetValue(null, null);
+
             dataItemValueProvider.GetValue("Prop", hierarchicalDataItem);
             objectPropertyValueProvider.Received(1).GetValue("Prop", dataItem4);
             dataRowValueProvider.DidNotReceiveWithAnyArgs().GetValue(null, null);
             dataReaderValueProvider.DidNotReceiveWithAnyArgs().GetValue(null, null);
 
+            dataItemValueProvider.DataItemSelfTemplate = "dataItem";
             objectPropertyValueProvider.ClearReceivedCalls();
+            dataItemValueProvider.GetValue("parent:dataItem", hierarchicalDataItem);
+            objectPropertyValueProvider.DidNotReceiveWithAnyArgs().GetValue(null, null);
+            dataRowValueProvider.DidNotReceiveWithAnyArgs().GetValue(null, null);
+            dataReaderValueProvider.DidNotReceiveWithAnyArgs().GetValue(null, null);
+
             dataItemValueProvider.GetValue("parent:Prop", hierarchicalDataItem);
             objectPropertyValueProvider.Received(1).GetValue("Prop", dataItem1);
             dataRowValueProvider.DidNotReceiveWithAnyArgs().GetValue(null, null);
