@@ -5,3 +5,4 @@ bin
 obj
 *.suo
 /.vs
+/ExcelReportGenerator.Samples/Database

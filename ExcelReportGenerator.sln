@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelReportGenerator.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelReportGenerator.ConsoleTests", "ExcelReportGenerator.ConsoleTests\ExcelReportGenerator.ConsoleTests.csproj", "{82B50667-A02A-4667-83A9-42A1E370EE97}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelReportGenerator.Samples", "ExcelReportGenerator.Samples\ExcelReportGenerator.Samples.csproj", "{2A57B75F-4849-463B-A842-45D3BC30BDA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{82B50667-A02A-4667-83A9-42A1E370EE97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82B50667-A02A-4667-83A9-42A1E370EE97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82B50667-A02A-4667-83A9-42A1E370EE97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A57B75F-4849-463B-A842-45D3BC30BDA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A57B75F-4849-463B-A842-45D3BC30BDA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A57B75F-4849-463B-A842-45D3BC30BDA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A57B75F-4849-463B-A842-45D3BC30BDA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
