@@ -176,7 +176,7 @@ namespace ExcelReportGenerator.Tests.Excel
             range.LastCell().Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
 
             ws.Cell(11, 9).Value = DateTime.Now;
-            ws.Cell(11, 9).DataType = XLCellValues.DateTime;
+            ws.Cell(11, 9).DataType = XLDataType.DateTime;
 
             IXLRange newRange = ExcelHelper.CopyRange(range, ws.Cell(10, 8));
 
@@ -193,7 +193,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual("RangeEnd", newRange.LastCell().Value.ToString());
             Assert.AreEqual(XLBorderStyleValues.Thin, newRange.FirstCell().Style.Border.TopBorder);
             Assert.AreEqual(XLBorderStyleValues.Thin, newRange.LastCell().Style.Border.BottomBorder);
-            Assert.AreEqual(XLCellValues.Text, ws.Cell(11, 9).DataType);
+            Assert.AreEqual(XLDataType.Text, ws.Cell(11, 9).DataType);
 
             range.Clear();
             IXLRange newRange2 = ExcelHelper.CopyRange(newRange, ws.Cell(11, 8));
@@ -230,7 +230,7 @@ namespace ExcelReportGenerator.Tests.Excel
             range.LastCell().Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
 
             ws.Cell(11, 9).Value = DateTime.Now;
-            ws.Cell(11, 9).DataType = XLCellValues.DateTime;
+            ws.Cell(11, 9).DataType = XLDataType.DateTime;
 
             IXLNamedRange copiedNamedRange = ExcelHelper.CopyNamedRange(namedRange, ws.Cell(10, 8), "Copy");
             IXLRange newRange = copiedNamedRange.Ranges.ElementAt(0);
@@ -249,7 +249,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual("RangeEnd", newRange.LastCell().Value.ToString());
             Assert.AreEqual(XLBorderStyleValues.Thin, newRange.FirstCell().Style.Border.TopBorder);
             Assert.AreEqual(XLBorderStyleValues.Thin, newRange.LastCell().Style.Border.BottomBorder);
-            Assert.AreEqual(XLCellValues.Text, ws.Cell(11, 9).DataType);
+            Assert.AreEqual(XLDataType.Text, ws.Cell(11, 9).DataType);
 
             range.Clear();
             IXLNamedRange copiedNamedRange2 = ExcelHelper.CopyNamedRange(copiedNamedRange, ws.Cell(11, 8), "Copy2");
@@ -730,7 +730,7 @@ namespace ExcelReportGenerator.Tests.Excel
             range.LastCell().Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
 
             ws.Cell(11, 9).Value = DateTime.Now;
-            ws.Cell(11, 9).DataType = XLCellValues.DateTime;
+            ws.Cell(11, 9).DataType = XLDataType.DateTime;
 
             IXLRange movedRange = ExcelHelper.MoveRange(range, ws.Cell(10, 8));
 
@@ -747,7 +747,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual("RangeEnd", movedRange.LastCell().Value.ToString());
             Assert.AreEqual(XLBorderStyleValues.Thin, movedRange.FirstCell().Style.Border.TopBorder);
             Assert.AreEqual(XLBorderStyleValues.Thin, movedRange.LastCell().Style.Border.BottomBorder);
-            Assert.AreEqual(XLCellValues.Text, ws.Cell(11, 9).DataType);
+            Assert.AreEqual(XLDataType.Text, ws.Cell(11, 9).DataType);
 
             IXLRange movedRange2 = ExcelHelper.MoveRange(movedRange, ws.Cell(11, 8));
 
@@ -783,7 +783,7 @@ namespace ExcelReportGenerator.Tests.Excel
             range.LastCell().Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
 
             ws.Cell(11, 9).Value = DateTime.Now;
-            ws.Cell(11, 9).DataType = XLCellValues.DateTime;
+            ws.Cell(11, 9).DataType = XLDataType.DateTime;
 
             IXLNamedRange movedNamedRange = ExcelHelper.MoveNamedRange(namedRange, ws.Cell(10, 8));
             IXLRange movedRange = movedNamedRange.Ranges.ElementAt(0);
@@ -803,7 +803,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual("RangeEnd", movedRange.LastCell().Value.ToString());
             Assert.AreEqual(XLBorderStyleValues.Thin, movedRange.FirstCell().Style.Border.TopBorder);
             Assert.AreEqual(XLBorderStyleValues.Thin, movedRange.LastCell().Style.Border.BottomBorder);
-            Assert.AreEqual(XLCellValues.Text, ws.Cell(11, 9).DataType);
+            Assert.AreEqual(XLDataType.Text, ws.Cell(11, 9).DataType);
 
             IXLNamedRange movedNamedRange2 = ExcelHelper.MoveNamedRange(movedNamedRange, ws.Cell(11, 8));
             IXLRange movedRange2 = movedNamedRange2.Ranges.ElementAt(0);
