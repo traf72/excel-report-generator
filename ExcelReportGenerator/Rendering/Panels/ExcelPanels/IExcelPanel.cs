@@ -12,13 +12,15 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
         IXLRange Range { get; }
 
+        IXLRange ResultRange { get; }
+
         ShiftType ShiftType { get; set; }
 
         PanelType Type { get; set; }
 
         int RenderPriority { get; set; }
 
-        IXLRange Render();
+        void Render();
 
         IExcelPanel Copy(IXLCell cell, bool recursive = true);
 

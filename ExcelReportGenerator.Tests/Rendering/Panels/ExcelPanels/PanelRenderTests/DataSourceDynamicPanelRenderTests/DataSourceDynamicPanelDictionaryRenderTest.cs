@@ -31,16 +31,16 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             IDictionary<string, object> data1 = new DataProvider().GetDictionaryEnumerable().First();
             var panel1 = new ExcelDataSourceDynamicPanel(data1, ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            IXLRange resultRange1 = panel1.Render();
+            panel1.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 6, 3), resultRange1);
+            Assert.AreEqual(ws.Range(2, 2, 6, 3), panel1.ResultRange);
 
             IEnumerable<KeyValuePair<string, object>> data2 = new DataProvider().GetDictionaryEnumerable().First()
                 .Select(x => new KeyValuePair<string, object>(x.Key, x.Value));
             var panel2 = new ExcelDataSourceDynamicPanel(data2, ws.NamedRange("TestRange2"), report, report.TemplateProcessor);
-            IXLRange resultRange2 = panel2.Render();
+            panel2.Render();
 
-            Assert.AreEqual(ws.Range(9, 2, 13, 3), resultRange2);
+            Assert.AreEqual(ws.Range(9, 2, 13, 3), panel2.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDictionaryRenderTest),
                 nameof(TestRenderDictionary)), ws.Workbook);
@@ -69,15 +69,15 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             IDictionary<string, object> data1 = new Dictionary<string, object>();
             var panel1 = new ExcelDataSourceDynamicPanel(data1, ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            IXLRange resultRange1 = panel1.Render();
+            panel1.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 3, 3), resultRange1);
+            Assert.AreEqual(ws.Range(2, 2, 3, 3), panel1.ResultRange);
 
             IEnumerable<KeyValuePair<string, object>> data2 = new List<KeyValuePair<string, object>>();
             var panel2 = new ExcelDataSourceDynamicPanel(data2, ws.NamedRange("TestRange2"), report, report.TemplateProcessor);
-            IXLRange resultRange2 = panel2.Render();
+            panel2.Render();
 
-            Assert.AreEqual(ws.Range(6, 2, 7, 3), resultRange2);
+            Assert.AreEqual(ws.Range(6, 2, 7, 3), panel2.ResultRange);
 
             Assert.AreEqual(4, ws.CellsUsed().Count());
             Assert.AreEqual("Key", ws.Cell(2, 2).Value);
@@ -101,9 +101,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(4, 2).Value = "{Totals}";
 
             var panel1 = new ExcelDataSourceDynamicPanel("m:DataProvider:GetDictionaryEnumerable()", ws.NamedRange("TestRange1"), report, report.TemplateProcessor);
-            IXLRange resultRange1 = panel1.Render();
+            panel1.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 6, 4), resultRange1);
+            Assert.AreEqual(ws.Range(2, 2, 6, 4), panel1.ResultRange);
 
             var dictWihtDecimalValues = new List<IDictionary<string, decimal>>
             {
@@ -120,9 +120,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(9, 2).Value = "{Totals}";
 
             var panel2 = new ExcelDataSourceDynamicPanel(dictWihtDecimalValues, ws.NamedRange("TestRange2"), report, report.TemplateProcessor);
-            IXLRange resultRange2 = panel2.Render();
+            panel2.Render();
 
-            Assert.AreEqual(ws.Range(7, 2, 11, 2), resultRange2);
+            Assert.AreEqual(ws.Range(7, 2, 11, 2), panel2.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDictionaryRenderTest),
                 nameof(TestRenderDictionaryEnumerable)), ws.Workbook);
@@ -143,9 +143,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(4, 2).Value = "{Totals}";
 
             var panel = new ExcelDataSourceDynamicPanel(new List<IDictionary<string, decimal>>(), ws.NamedRange("TestRange1"), report, report.TemplateProcessor);
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.IsNull(resultRange);
+            Assert.IsNull(panel.ResultRange);
 
             Assert.AreEqual(0, ws.CellsUsed().Count());
 

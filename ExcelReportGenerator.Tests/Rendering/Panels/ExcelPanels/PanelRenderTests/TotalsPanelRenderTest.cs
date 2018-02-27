@@ -37,9 +37,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 BeforeRenderMethodName = "TestExcelTotalsPanelBeforeRender",
                 AfterRenderMethodName = "TestExcelTotalsPanelAfterRender",
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(range, resultRange);
+            Assert.AreEqual(range, panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(TotalsPanelRenderTest),
                 nameof(TestPanelRender)), ws.Workbook);
@@ -73,9 +73,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             var childPanel1 = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange1"), report, report.TemplateProcessor) { Parent = parentPanel };
             var childPanel2 = new ExcelTotalsPanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange2"), report, report.TemplateProcessor) { Parent = parentPanel };
             parentPanel.Children = new[] { childPanel1, childPanel2 };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 9, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 9, 5), parentPanel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(TotalsPanelRenderTest),
                 nameof(TestPanelRenderWithParentContext)), ws.Workbook);
@@ -99,9 +99,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(1, 5).Value = "Text1 {count(di:Name)} Text2 {avg(di:Sum, , PostAggregationRound)} Text3 {Max(di:Sum)}";
 
             var panel = new ExcelTotalsPanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("Test"), report, report.TemplateProcessor);
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(range, resultRange);
+            Assert.AreEqual(range, panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(TotalsPanelRenderTest),
                 nameof(TestPanelWithNoData)), ws.Workbook);
@@ -125,9 +125,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(1, 5).Value = "Text1 {count(di:Name)} Text2 {avg(di:Sum, , PostAggregationRound)} Text3 {Max(di:Sum)}";
 
             var panel = new ExcelTotalsPanel("m:DataProvider:GetNullItem()", ws.NamedRange("Test"), report, report.TemplateProcessor);
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(range, resultRange);
+            Assert.AreEqual(range, panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(TotalsPanelRenderTest),
                 nameof(TestPanelWithNullData)), ws.Workbook);

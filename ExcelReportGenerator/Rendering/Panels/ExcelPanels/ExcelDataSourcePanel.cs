@@ -43,7 +43,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         [ExternalProperty]
         public string AfterDataItemRenderMethodName { get; set; }
 
-        public override IXLRange Render()
+        public override void Render()
         {
             // Receieve parent data item context
             HierarchicalDataItem parentDataItem = GetDataContext();
@@ -53,11 +53,11 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             bool isCanceled = CallBeforeRenderMethod();
             if (isCanceled)
             {
-                return Range;
+                ResultRange = Range;
+                return;
             }
 
             ICustomEnumerator enumerator = null;
-            IXLRange resultRange = null;
             try
             {
                 enumerator = EnumeratorFactory.Create(_data);
@@ -65,7 +65,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 if (enumerator == null || enumerator.RowCount == 0)
                 {
                     DeletePanel(this);
-                    return null;
+                    return;
                 }
 
                 // Создаём шаблон панели, который дальше будет размножаться
@@ -99,8 +99,8 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                     currentPanel.DataItem = new HierarchicalDataItem { Value = currentItem, Parent = parentDataItem };
 
                     // Заполняем шаблон данными
-                    IXLRange dataItemResultRange = currentPanel.Render();
-                    resultRange = ExcelHelper.MergeRanges(resultRange, dataItemResultRange);
+                    currentPanel.Render();
+                    ResultRange = ExcelHelper.MergeRanges(ResultRange, currentPanel.ResultRange);
 
                     RemoveAllNamesRecursive(currentPanel);
                     rowNum++;
@@ -113,13 +113,11 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 (enumerator as IDisposable)?.Dispose();
             }
 
-            GroupResult(resultRange);
-
-            CallAfterRenderMethod(resultRange);
-            return resultRange;
+            GroupResult();
+            CallAfterRenderMethod();
         }
 
-        private void GroupResult(IXLRange resultRange)
+        private void GroupResult()
         {
             if (string.IsNullOrWhiteSpace(GroupBy))
             {
@@ -137,11 +135,11 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
             if (Type == PanelType.Vertical)
             {
-                GroupCellsVertical(resultRange, groupColOrRowNumbers);
+                GroupCellsVertical(ResultRange, groupColOrRowNumbers);
             }
             else
             {
-                GroupCellsHorizontal(resultRange, groupColOrRowNumbers);
+                GroupCellsHorizontal(ResultRange, groupColOrRowNumbers);
             }
         }
 
@@ -280,9 +278,9 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             return new DataSourcePanelBeforeRenderEventArgs { Range = Range, Data = _data };
         }
 
-        protected override PanelEventArgs GetAfterPanelRenderEventArgs(IXLRange resultRange)
+        protected override PanelEventArgs GetAfterPanelRenderEventArgs()
         {
-            return new DataSourcePanelEventArgs { Range = resultRange, Data = _data };
+            return new DataSourcePanelEventArgs { Range = ResultRange, Data = _data };
         }
 
         //TODO Проверить корректное копирование, если передан не шаблон, а сами данные

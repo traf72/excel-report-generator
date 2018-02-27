@@ -33,15 +33,15 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             IDictionary<string, object> data1 = new DataProvider().GetDictionaryEnumerable().First();
             var panel1 = new ExcelDataSourcePanel(data1, ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            IXLRange resultRange1 = panel1.Render();
+            panel1.Render();
 
             IEnumerable<KeyValuePair<string, object>> data2 = new DataProvider().GetDictionaryEnumerable().First()
                 .Select(x => new KeyValuePair<string, object>(x.Key, x.Value));
             var panel2 = new ExcelDataSourcePanel(data2, ws.NamedRange("TestRange2"), report, report.TemplateProcessor);
-            IXLRange resultRange2 = panel2.Render();
+            panel2.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 4, 3), resultRange1);
-            Assert.AreEqual(ws.Range(2, 5, 4, 6), resultRange2);
+            Assert.AreEqual(ws.Range(2, 2, 4, 3), panel1.ResultRange);
+            Assert.AreEqual(ws.Range(2, 5, 4, 6), panel2.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelDictionaryRenderTest),
                 nameof(TestRenderDictionary)), ws.Workbook);
@@ -62,7 +62,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(2, 4).Value = "{di:IsVip}";
 
             var panel1 = new ExcelDataSourcePanel("m:DataProvider:GetDictionaryEnumerable()", ws.NamedRange("TestRange1"), report, report.TemplateProcessor);
-            IXLRange resultRange1 = panel1.Render();
+            panel1.Render();
 
             var dictWihtDecimalValues = new List<IDictionary<string, decimal>>
             {
@@ -77,10 +77,10 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(2, 6).Value = "{di:Value}";
 
             var panel2 = new ExcelDataSourcePanel(dictWihtDecimalValues, ws.NamedRange("TestRange2"), report, report.TemplateProcessor);
-            IXLRange resultRange2 = panel2.Render();
+            panel2.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 4, 4), resultRange1);
-            Assert.AreEqual(ws.Range(2, 6, 4, 6), resultRange2);
+            Assert.AreEqual(ws.Range(2, 2, 4, 4), panel1.ResultRange);
+            Assert.AreEqual(ws.Range(2, 6, 4, 6), panel2.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelDictionaryRenderTest),
                 nameof(TestRenderDictionaryEnumerable)), ws.Workbook);

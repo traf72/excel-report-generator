@@ -29,9 +29,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 Parent = parentPanel,
             };
             parentPanel.Children = new[] { childPanel };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 6, 4), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 6, 4), parentPanel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelRender_WithGrouping_ChildEqualsParent_Test),
                 "Test_VerticalPanelsGrouping_ChildEqualsParent"), ws.Workbook);

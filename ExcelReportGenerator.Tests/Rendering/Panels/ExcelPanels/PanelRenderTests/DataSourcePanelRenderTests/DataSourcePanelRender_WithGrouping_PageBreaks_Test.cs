@@ -44,9 +44,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 Parent = parentPanel,
             };
             parentPanel.Children = new[] { childPanel1, childPanel2 };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 12, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 12, 5), parentPanel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelRender_WithGrouping_PageBreaks_Test),
                 "Test_HorizontalPageBreaks"), ws.Workbook);
@@ -82,9 +82,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 Parent = parentPanel,
             };
             parentPanel.Children = new[] { childPanel };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 12, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 12, 5), parentPanel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelRender_WithGrouping_PageBreaks_Test),
                 "Test_HorizontalPageBreaks"), ws.Workbook);
@@ -128,9 +128,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 ShiftType = ShiftType.Row,
             };
             parentPanel.Children = new[] { childPanel1, childPanel2 };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 12, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 12, 5), parentPanel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelRender_WithGrouping_PageBreaks_Test),
                 "Test_HorizontalPageBreaks"), ws.Workbook);
@@ -170,9 +170,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 ShiftType = ShiftType.Row,
             };
             parentPanel.Children = new[] { childPanel };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 12, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 12, 5), parentPanel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelRender_WithGrouping_PageBreaks_Test),
                 "Test_HorizontalPageBreaks"), ws.Workbook);
@@ -219,9 +219,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 Parent = parentPanel,
             };
             parentPanel.Children = new[] { childPanel1, childPanel2 };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 5, 12), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 5, 12), parentPanel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelRender_WithGrouping_PageBreaks_Test),
                 "Test_VerticalPageBreaks"), ws.Workbook);
@@ -261,9 +261,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 Type = PanelType.Horizontal,
             };
             parentPanel.Children = new[] { childPanel };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 5, 12), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 5, 12), parentPanel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelRender_WithGrouping_PageBreaks_Test),
                 "Test_VerticalPageBreaks"), ws.Workbook);
@@ -312,9 +312,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 Parent = parentPanel,
             };
             parentPanel.Children = new[] { childPanel1, childPanel2 };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 5, 12), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 5, 12), parentPanel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelRender_WithGrouping_PageBreaks_Test),
                 "Test_VerticalPageBreaks"), ws.Workbook);
@@ -355,9 +355,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 ShiftType = ShiftType.Row,
             };
             parentPanel.Children = new[] { childPanel };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 5, 12), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 5, 12), parentPanel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelRender_WithGrouping_PageBreaks_Test),
                 "Test_VerticalPageBreaks"), ws.Workbook);

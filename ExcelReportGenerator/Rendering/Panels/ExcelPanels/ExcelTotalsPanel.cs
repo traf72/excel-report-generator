@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ExcelReportGenerator.Excel;
 
 namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 {
@@ -25,7 +26,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         {
         }
 
-        public override IXLRange Render()
+        public override void Render()
         {
             // Receieve parent data item context
             HierarchicalDataItem parentDataItem = GetDataContext();
@@ -35,7 +36,8 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             bool isCanceled = CallBeforeRenderMethod();
             if (isCanceled)
             {
-                return Range;
+                ResultRange = Range;
+                return;
             }
 
             ICustomEnumerator enumerator = null;
@@ -61,6 +63,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
                 var dataPanel = new ExcelDataSourcePanel(new[] { dataSource }, ws.NamedRange(rangeName), _report, _templateProcessor) { Parent = Parent };
                 dataPanel.Render();
+                ResultRange = ExcelHelper.MergeRanges(Range, dataPanel.ResultRange);
             }
             finally
             {
@@ -68,8 +71,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             }
 
             RemoveName();
-            CallAfterRenderMethod(Range);
-            return Range;
+            CallAfterRenderMethod();
         }
 
         private IDictionary<IXLCell, IList<ParsedAggregationFunc>> ParseTotalCells()

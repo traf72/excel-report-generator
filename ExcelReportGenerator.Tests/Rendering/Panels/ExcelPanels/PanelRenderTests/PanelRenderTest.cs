@@ -43,9 +43,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(7, 1).Value = "Plain text outside range";
 
             var panel = new ExcelPanel(range, report, report.TemplateProcessor);
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(range, resultRange);
+            Assert.AreEqual(range, panel.ResultRange);
 
             Assert.AreEqual(24, ws.CellsUsed().Count());
             Assert.AreEqual("String parameter", ws.Cell(1, 1).Value);
@@ -97,9 +97,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(1, 2).Value = "{p:IntParam}";
 
             var panel = new ExcelPanel(range, report, report.TemplateProcessor) { BeforeRenderMethodName = "CancelPanelRender" };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(range, resultRange);
+            Assert.AreEqual(range, panel.ResultRange);
 
             Assert.AreEqual(2, ws.CellsUsed().Count());
             Assert.AreEqual("{p:StrParam}", ws.Cell(1, 1).Value);
@@ -123,9 +123,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 BeforeRenderMethodName = "TestExcelPanelBeforeRender",
                 AfterRenderMethodName = "TestExcelPanelAfterRender",
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(range, resultRange);
+            Assert.AreEqual(range, panel.ResultRange);
 
             Assert.AreEqual(2, ws.CellsUsed().Count());
             Assert.IsTrue((bool)ws.Cell(1, 1).Value);
@@ -165,9 +165,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(6, 1).Value = "Plain text outside range";
 
             var panel = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel"), report, report.TemplateProcessor);
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(range, resultRange);
+            Assert.AreEqual(range, panel.ResultRange);
 
             Assert.AreEqual(21, ws.CellsUsed().Count());
             Assert.AreEqual("String parameter", ws.Cell(1, 1).Value);
@@ -226,9 +226,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(13, 1).Value = "Plain text outside range";
 
             panel = new ExcelNamedPanel(ws.NamedRange("NamedPanel2"), report, report.TemplateProcessor);
-            resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(range2, resultRange);
+            Assert.AreEqual(range2, panel.ResultRange);
 
             Assert.AreEqual(42, ws.CellsUsed().Count());
             Assert.AreEqual("String parameter", ws.Cell(8, 1).Value);
@@ -334,9 +334,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             ws.Cell(11, 8).Value = "Outside panel: {p:IntParam}";
 
-            IXLRange resultRange1 = panel1.Render();
+            panel1.Render();
 
-            Assert.AreEqual(range1, resultRange1);
+            Assert.AreEqual(range1, panel1.ResultRange);
 
             Assert.AreEqual(14, ws.CellsUsed().Count());
             Assert.AreEqual("Panel1: 10", ws.Cell(1, 1).Value);

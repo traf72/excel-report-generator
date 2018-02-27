@@ -45,9 +45,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(4, 4).Value = "{di:Name}";
 
             var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 7, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 7, 5), panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelIEnumerableRenderTest),
                 nameof(TestRenderIEnumerableVerticalCellsShift)), ws.Workbook);
@@ -90,9 +90,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             {
                 ShiftType = ShiftType.Row,
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 7, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 7, 5), panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelIEnumerableRenderTest),
                 nameof(TestRenderIEnumerableVerticalRowsShift)), ws.Workbook);
@@ -148,9 +148,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             {
                 ShiftType = ShiftType.NoShift,
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 7, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 7, 5), panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelIEnumerableRenderTest),
                 nameof(TestRenderIEnumerableVerticalNoShift)), ws.Workbook);
@@ -193,9 +193,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             {
                 Type = PanelType.Horizontal,
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 3, 13), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 3, 13), panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelIEnumerableRenderTest),
                 nameof(TestRenderIEnumerableHorizontalCellsShift)), ws.Workbook);
@@ -239,9 +239,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 Type = PanelType.Horizontal,
                 ShiftType = ShiftType.Row,
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 3, 13), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 3, 13), panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelIEnumerableRenderTest),
                 nameof(TestRenderIEnumerableHorizontalRowsShift)), ws.Workbook);
@@ -286,9 +286,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 Type = PanelType.Horizontal,
                 ShiftType = ShiftType.NoShift,
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 3, 13), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 3, 13), panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelIEnumerableRenderTest),
                 nameof(TestRenderIEnumerableHorizontalNoShift)), ws.Workbook);
@@ -307,9 +307,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(2, 2).Value = "{di:di}";
 
             var panel = new ExcelDataSourcePanel(new[] {1, 2, 3, 4}, ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 5, 2), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 5, 2), panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelIEnumerableRenderTest),
                 nameof(TestRenderIEnumerableOfInt)), ws.Workbook);
@@ -328,9 +328,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(2, 2).Value = "{di:di}";
 
             var panel = new ExcelDataSourcePanel(new[] { "One", "Two", "Three", "Four" }, ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 5, 2), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 5, 2), panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelIEnumerableRenderTest),
                 nameof(TestRenderIEnumerableOfString)), ws.Workbook);
@@ -352,9 +352,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             {
                 BeforeRenderMethodName = "CancelPanelRender",
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(range, resultRange);
+            Assert.AreEqual(range, panel.ResultRange);
 
             Assert.AreEqual(1, ws.CellsUsed().Count());
             Assert.AreEqual("{di:di}", ws.Cell(2, 2).Value);
@@ -380,9 +380,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 BeforeDataItemRenderMethodName = "TestExcelDataItemPanelBeforeRender",
                 AfterDataItemRenderMethodName = "TestExcelDataItemPanelAfterRender",
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 4, 2), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 4, 2), panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelIEnumerableRenderTest),
                 nameof(TestPanelRenderEvents)), ws.Workbook);

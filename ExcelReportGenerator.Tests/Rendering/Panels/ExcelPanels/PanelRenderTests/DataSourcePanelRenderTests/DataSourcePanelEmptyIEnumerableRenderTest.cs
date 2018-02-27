@@ -44,9 +44,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(4, 4).Value = "{di:Name}";
 
             var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.IsNull(resultRange);
+            Assert.IsNull(panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelEmptyIEnumerableRenderTest),
                 nameof(TestRenderEmptyIEnumerableVerticalCellsShift)), ws.Workbook);
@@ -91,9 +91,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             {
                 ShiftType = ShiftType.Row,
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.IsNull(resultRange);
+            Assert.IsNull(panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelEmptyIEnumerableRenderTest),
                 nameof(TestRenderEmptyIEnumerableVerticalRowsShift)), ws.Workbook);
@@ -138,9 +138,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             {
                 ShiftType = ShiftType.NoShift,
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.IsNull(resultRange);
+            Assert.IsNull(panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelEmptyIEnumerableRenderTest),
                 nameof(TestRenderEmptyIEnumerableVerticalNoShift)), ws.Workbook);
@@ -185,9 +185,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             {
                 Type = PanelType.Horizontal,
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.IsNull(resultRange);
+            Assert.IsNull(panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelEmptyIEnumerableRenderTest),
                 nameof(TestRenderEmptyIEnumerableHorizontalCellsShift)), ws.Workbook);
@@ -233,9 +233,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 Type = PanelType.Horizontal,
                 ShiftType = ShiftType.Row,
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.IsNull(resultRange);
+            Assert.IsNull(panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelEmptyIEnumerableRenderTest),
                 nameof(TestRenderEmptyIEnumerableHorizontalRowsShift)), ws.Workbook);
@@ -281,9 +281,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 Type = PanelType.Horizontal,
                 ShiftType = ShiftType.NoShift,
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.IsNull(resultRange);
+            Assert.IsNull(panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelEmptyIEnumerableRenderTest),
                 nameof(TestRenderEmptyIEnumerableHorizontalNoShift)), ws.Workbook);

@@ -40,9 +40,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(7, 2).Style.Border.OutsideBorderColor = XLColor.Blue;
 
             var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataReader()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 9, 7), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 9, 7), panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataReaderRenderTest),
                 nameof(TestRenderDataReader)), ws.Workbook);
@@ -80,9 +80,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             {
                 Type = PanelType.Horizontal,
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 7, 7), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 7, 7), panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataReaderRenderTest),
                 nameof(TestRenderDataReader_HorizontalPanel)), ws.Workbook);
@@ -112,9 +112,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(4, 2).Style.Border.OutsideBorderColor = XLColor.Green;
 
             var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataReader()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 3, 7), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 3, 7), panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataReaderRenderTest),
                 nameof(TestRenderEmptyDataReader)), ws.Workbook);

@@ -41,9 +41,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 AfterTotalsRenderMethodName = "TestExcelDynamicPaneAfterTotalsRender",
                 GroupBy = "4",
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 7, 8), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 7, 8), panel.ResultRange);
 
             // Bug of ClosedXml - invalid determine of FirstCellUsed and LastCellUsed if merged ranges exist
             ws.Cell(1, 1).Value = "Stub";
@@ -86,9 +86,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 Type = PanelType.Horizontal,
                 GroupBy = "4",
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 8, 6), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 8, 6), panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataSetRenderTest),
                 nameof(TestRenderDataSetWithEvents_HorizontalPanel)), ws.Workbook);
@@ -112,9 +112,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             {
                 BeforeRenderMethodName = "TestExcelDynamicPaneBeforeRender",
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(range, resultRange);
+            Assert.AreEqual(range, panel.ResultRange);
 
             Assert.AreEqual(3, ws.CellsUsed().Count());
             Assert.AreEqual("CanceledHeaders", ws.Cell(2, 2).Value);
@@ -140,9 +140,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             {
                 AfterRenderMethodName = "TestExcelDynamicPaneAfterRender",
             };
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 6, 7), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 6, 7), panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataSetRenderTest),
                 nameof(TestDynamicPanelAfterRenderEvent)), ws.Workbook);
@@ -163,9 +163,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(4, 2).Value = "{Totals}";
 
             var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataSet()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 3, 7), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 3, 7), panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataSetRenderTest),
                 nameof(TestRenderEmptyDataSet)), ws.Workbook);

@@ -97,7 +97,7 @@ namespace ExcelReportGenerator.ConsoleTests
 
             //range.Worksheet.Row(1).InsertRowsAbove(3000);
 
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
             sw.Stop();
 

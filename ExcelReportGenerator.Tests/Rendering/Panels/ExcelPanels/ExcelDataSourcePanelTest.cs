@@ -72,7 +72,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             };
 
             var method = panel.GetType().GetMethod("GroupResult", BindingFlags.Instance | BindingFlags.NonPublic);
-            method.Invoke(panel, new[] { range });
+            SetResultRange(panel, range);
+            method.Invoke(panel, null);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(ExcelDataSourcePanelTest), nameof(TestGroupResultVertical)), wb);
 
@@ -139,7 +140,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             };
 
             var method = panel.GetType().GetMethod("GroupResult", BindingFlags.Instance | BindingFlags.NonPublic);
-            method.Invoke(panel, new[] { range });
+            SetResultRange(panel, range);
+            method.Invoke(panel, null);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(ExcelDataSourcePanelTest), nameof(TestGroupResultHorizontal)), wb);
 
@@ -173,17 +175,20 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(), Substitute.For<ITemplateProcessor>()) { GroupBy = null };
 
             var method = panel.GetType().GetMethod("GroupResult", BindingFlags.Instance | BindingFlags.NonPublic);
-            method.Invoke(panel, new[] { range });
+            SetResultRange(panel, range);
+            method.Invoke(panel, null);
 
             Assert.AreEqual(0, ws.MergedRanges.Count);
 
             panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(), Substitute.For<ITemplateProcessor>()) { GroupBy = string.Empty };
-            method.Invoke(panel, new[] { range });
+            SetResultRange(panel, range);
+            method.Invoke(panel, null);
 
             Assert.AreEqual(0, ws.MergedRanges.Count);
 
             panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(), Substitute.For<ITemplateProcessor>()) { GroupBy = "  " };
-            method.Invoke(panel, new[] { range });
+            SetResultRange(panel, range);
+            method.Invoke(panel, null);
 
             Assert.AreEqual(0, ws.MergedRanges.Count);
 
@@ -202,12 +207,20 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
 
             var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(), Substitute.For<ITemplateProcessor>()) { GroupBy = "str" };
             var method = panel.GetType().GetMethod("GroupResult", BindingFlags.Instance | BindingFlags.NonPublic);
+            SetResultRange(panel, range);
 
-            ExceptionAssert.ThrowsBaseException<InvalidCastException>(() => method.Invoke(panel, new[] { range }), $"Parse \"GroupBy\" property failed. Cannot convert value \"str\" to {nameof(Int32)}");
+            ExceptionAssert.ThrowsBaseException<InvalidCastException>(() => method.Invoke(panel, null), $"Parse \"GroupBy\" property failed. Cannot convert value \"str\" to {nameof(Int32)}");
 
             panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(), Substitute.For<ITemplateProcessor>()) { GroupBy = "1, 1.4" };
+            SetResultRange(panel, range);
 
-            ExceptionAssert.ThrowsBaseException<InvalidCastException>(() => method.Invoke(panel, new[] { range }), $"Parse \"GroupBy\" property failed. Cannot convert value \"1.4\" to {nameof(Int32)}");
+            ExceptionAssert.ThrowsBaseException<InvalidCastException>(() => method.Invoke(panel, null), $"Parse \"GroupBy\" property failed. Cannot convert value \"1.4\" to {nameof(Int32)}");
+        }
+
+        private void SetResultRange(IExcelPanel panel, IXLRange range)
+        {
+            PropertyInfo prop = panel.GetType().GetProperty(nameof(IExcelPanel.ResultRange));
+            prop.SetValue(panel, range);
         }
     }
 }

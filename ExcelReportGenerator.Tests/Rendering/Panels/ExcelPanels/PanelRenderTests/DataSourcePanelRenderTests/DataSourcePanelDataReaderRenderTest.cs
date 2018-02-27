@@ -27,9 +27,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(2, 9).FormulaA1 = "=SUM(B$2,F$2)";
 
             var panel = new ExcelDataSourcePanel("m:DataProvider:GetAllCustomersDataReader()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 4, 9), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 4, 9), panel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelDataReaderRenderTest),
                 nameof(TestRenderDataReader)), ws.Workbook);
@@ -52,9 +52,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(2, 6).Value = "{di:Type}";
 
             var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyDataReader()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            IXLRange resultRange = panel.Render();
+            panel.Render();
 
-            Assert.IsNull(resultRange);
+            Assert.IsNull(panel.ResultRange);
 
             Assert.AreEqual(0, ws.CellsUsed().Count());
 

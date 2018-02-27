@@ -45,9 +45,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 Parent = parentPanel,
             };
             parentPanel.Children = new[] { childPanel1, childPanel2 };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 21, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 21, 5), parentPanel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent),
                 nameof(Test_TwoChildren_Vertical)), ws.Workbook);
@@ -93,9 +93,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
                 Type = PanelType.Horizontal,
             };
             parentPanel.Children = new[] { childPanel1, childPanel2 };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 13, 8), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 13, 8), parentPanel.ResultRange);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent),
                 nameof(Test_TwoChildren_Horizontal)), ws.Workbook);

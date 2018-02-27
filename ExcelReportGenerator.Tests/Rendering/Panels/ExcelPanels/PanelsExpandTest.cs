@@ -41,9 +41,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
                 Parent = parentPanel,
             };
             parentPanel.Children = new[] { childPanel };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 6, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 6, 5), parentPanel.ResultRange);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -81,9 +81,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
                 ShiftType = ShiftType.Row,
             };
             parentPanel.Children = new[] { childPanel };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 6, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 6, 5), parentPanel.ResultRange);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -121,9 +121,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
                 ShiftType = ShiftType.NoShift,
             };
             parentPanel.Children = new[] { childPanel };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 5, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 5, 5), parentPanel.ResultRange);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -160,9 +160,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
                 Parent = parentPanel,
             };
             parentPanel.Children = new[] { childPanel };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 5, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 5, 5), parentPanel.ResultRange);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -200,9 +200,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
                 ShiftType = ShiftType.Row,
             };
             parentPanel.Children = new[] { childPanel };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 5, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 5, 5), parentPanel.ResultRange);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -240,9 +240,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
                 ShiftType = ShiftType.NoShift,
             };
             parentPanel.Children = new[] { childPanel };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 5, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 5, 5), parentPanel.ResultRange);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -279,9 +279,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
                 Parent = parentPanel,
             };
             parentPanel.Children = new[] { childPanel };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 5, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 5, 5), parentPanel.ResultRange);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -319,9 +319,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
                 ShiftType =  ShiftType.Row,
             };
             parentPanel.Children = new[] { childPanel };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 6, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 6, 5), parentPanel.ResultRange);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -359,9 +359,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
                 ShiftType = ShiftType.NoShift,
             };
             parentPanel.Children = new[] { childPanel };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 5, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 5, 5), parentPanel.ResultRange);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -398,9 +398,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
                 ShiftType = ShiftType.Row,
             };
             parentPanel.Children = new[] { childPanel };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 12, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 12, 5), parentPanel.ResultRange);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -437,9 +437,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
                 ShiftType = ShiftType.Row,
             };
             parentPanel.Children = new[] { childPanel };
-            IXLRange resultRange = parentPanel.Render();
+            parentPanel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 9, 5), resultRange);
+            Assert.AreEqual(ws.Range(2, 2, 9, 5), parentPanel.ResultRange);
 
             //report.Workbook.SaveAs("test.xlsx");
         }

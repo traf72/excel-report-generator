@@ -41,6 +41,8 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
         public virtual IXLRange Range { get; private set; }
 
+        public virtual IXLRange ResultRange { get; protected set; }
+
         public IExcelPanel Parent
         {
             get => _parent;
@@ -68,12 +70,14 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         [ExternalProperty]
         public string AfterRenderMethodName { get; set; }
 
-        public virtual IXLRange Render()
+        public virtual void Render()
         {
+            ResultRange = Range;
+
             bool isCanceled = CallBeforeRenderMethod();
             if (isCanceled)
             {
-                return Range;
+                return;
             }
 
             IList<IXLCell> childrenCells = Children.SelectMany(c => c.Range.CellsUsed()).ToList();
@@ -116,16 +120,13 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 cell.Value = cellValue;
             }
 
-            IXLRange resultRange = Range;
             foreach (IExcelPanel child in Children.OrderByDescending(p => p.RenderPriority))
             {
-                IXLRange childResultRange = child.Render();
-                resultRange = ExcelHelper.MergeRanges(resultRange, childResultRange);
+                child.Render();
+                ResultRange = ExcelHelper.MergeRanges(ResultRange, child.ResultRange);
             }
 
-            CallAfterRenderMethod(resultRange);
-
-            return resultRange;
+            CallAfterRenderMethod();
         }
 
         public virtual IExcelPanel Copy(IXLCell cell, bool recursive = true)
@@ -267,17 +268,17 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             return new PanelBeforeRenderEventArgs { Range = Range };
         }
 
-        protected void CallAfterRenderMethod(IXLRange resultRange)
+        protected void CallAfterRenderMethod()
         {
             if (!string.IsNullOrWhiteSpace(AfterRenderMethodName))
             {
-                CallReportMethod(AfterRenderMethodName, new object[] { GetAfterPanelRenderEventArgs(resultRange) });
+                CallReportMethod(AfterRenderMethodName, new object[] { GetAfterPanelRenderEventArgs() });
             }
         }
 
-        protected virtual PanelEventArgs GetAfterPanelRenderEventArgs(IXLRange resultRange)
+        protected virtual PanelEventArgs GetAfterPanelRenderEventArgs()
         {
-            return new PanelEventArgs { Range = resultRange };
+            return new PanelEventArgs { Range = ResultRange };
         }
 
         protected object CallReportMethod(string methodName, object[] parameters = null)
