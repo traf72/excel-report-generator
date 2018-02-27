@@ -15,7 +15,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [TestMethod]
         public void TestIsCellInsideRange()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
 
             IXLRange range = ws.Range(3, 3, 7, 7);
@@ -42,7 +42,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [TestMethod]
         public void TestIsRangeInsideAnotherRange()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
 
             IXLRange parent = ws.Range(3, 3, 7, 7);
@@ -65,7 +65,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [TestMethod]
         public void TestGetNearestParentRange()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
 
             IXLRange parentRange1 = ws.Range(1, 1, 7, 7);
@@ -93,7 +93,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [TestMethod]
         public void TestGetCellCoordsRelativeRange()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
 
             IXLRange range = ws.Range(3, 3, 6, 7);
@@ -120,7 +120,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [TestMethod]
         public void TestGetRangeCoordsRelativeParent()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
 
             IXLRange parentRange = ws.Range(3, 3, 6, 7);
@@ -157,7 +157,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [TestMethod]
         public void TestGetAddressShift()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
 
             IXLCell cell1 = ws.Cell(1, 1);
@@ -169,7 +169,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [TestMethod]
         public void TestShiftCell()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
 
             IXLCell cell = ws.Cell(1, 1);
@@ -185,7 +185,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [TestMethod]
         public void TestCopyRange()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
             IXLRange range = ws.Range(6, 5, 9, 7);
 
@@ -237,7 +237,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [TestMethod]
         public void TestCopyNamedRange()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
             IXLRange range = ws.Range(6, 5, 9, 7);
             range.AddToNamed("TestRange", XLScope.Worksheet);
@@ -298,7 +298,7 @@ namespace ExcelReportGenerator.Tests.Excel
         public void TestAllocateSpaceForNextRange()
         {
             // Добавление ячеек сверху
-            XLWorkbook wb = InitWorkBookForShiftTests();
+            var wb = InitWorkBookForShiftTests();
             IXLWorksheet ws = wb.Worksheet("Test");
             IXLRange range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
 
@@ -582,7 +582,7 @@ namespace ExcelReportGenerator.Tests.Excel
         public void TestDeleteRange()
         {
             // Удаление со сдвигом ячеек вверх
-            XLWorkbook wb = InitWorkBookForShiftTests();
+            var wb = InitWorkBookForShiftTests();
             IXLWorksheet ws = wb.Worksheet("Test");
             IXLRange range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
 
@@ -739,7 +739,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [TestMethod]
         public void TestMoveRange()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
             IXLRange range = ws.Range(6, 5, 9, 7);
 
@@ -790,7 +790,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [TestMethod]
         public void TestMoveNamedRange()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
             IXLRange range = ws.Range(6, 5, 9, 7);
             range.AddToNamed("TestRange", XLScope.Worksheet);
@@ -848,7 +848,7 @@ namespace ExcelReportGenerator.Tests.Excel
 
         private XLWorkbook InitWorkBookForShiftTests()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
 
             IXLRange range = ws.Range(6, 5, 9, 7);
@@ -873,7 +873,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [TestMethod]
         public void TestAddTempWorksheet()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             ExcelHelper.AddTempWorksheet(wb);
 
             Assert.AreEqual(1, wb.Worksheets.Count);
@@ -883,7 +883,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [TestMethod]
         public void TestMergeRanges()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
             IXLWorksheet ws2 = wb.AddWorksheet("Test2");
             IXLRange range1 = ws.Range(3, 3, 5, 5);
@@ -935,7 +935,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [TestMethod]
         public void TestIsRangeInvalid()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
 
             var range = ws.Range(3, 3, 5, 5);
@@ -954,7 +954,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [TestMethod]
         public void TestGetMaxCell()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
 
             IXLRange range = ws.Range(3, 3, 5, 5);
@@ -974,6 +974,20 @@ namespace ExcelReportGenerator.Tests.Excel
 
             Assert.IsNull(ExcelHelper.GetMaxCell(null));
             Assert.IsNull(ExcelHelper.GetMaxCell(Enumerable.Empty<IXLCell>().ToArray()));
+        }
+
+        [TestMethod]
+        public void TestCloneRange()
+        {
+            var wb = new XLWorkbook();
+            IXLWorksheet ws = wb.AddWorksheet("Test");
+
+            IXLRange range = ws.Range(3, 3, 5, 5);
+
+            Assert.AreEqual(range, ExcelHelper.CloneRange(range));
+            Assert.AreNotSame(range, ExcelHelper.CloneRange(range));
+
+            Assert.IsNull(ExcelHelper.CloneRange(null));
         }
     }
 }

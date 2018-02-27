@@ -53,7 +53,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             bool isCanceled = CallBeforeRenderMethod();
             if (isCanceled)
             {
-                ResultRange = Range;
+                ResultRange = ExcelHelper.CloneRange(Range);
                 return;
             }
 

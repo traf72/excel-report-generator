@@ -72,7 +72,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
         public virtual void Render()
         {
-            ResultRange = Range;
+            ResultRange = ExcelHelper.CloneRange(Range);
 
             bool isCanceled = CallBeforeRenderMethod();
             if (isCanceled)

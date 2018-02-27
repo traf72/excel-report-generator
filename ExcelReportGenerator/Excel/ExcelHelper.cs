@@ -305,6 +305,20 @@ namespace ExcelReportGenerator.Excel
             return maxCell;
         }
 
+        public static IXLRange CloneRange(IXLRange range)
+        {
+            if (range == null)
+            {
+                return null;
+            }
+
+            IXLAddress firstCellAddress = range.FirstCell().Address;
+            IXLAddress lastCellAddress = range.LastCell().Address;
+
+            return range.Worksheet.Range(firstCellAddress.RowNumber, firstCellAddress.ColumnNumber,
+                lastCellAddress.RowNumber, lastCellAddress.ColumnNumber);
+        }
+
         public static IXLWorksheet AddTempWorksheet(XLWorkbook wb)
         {
             // Отсекаем один символ от Guid'а, так как наименование листа не может быть больше 31 символа
