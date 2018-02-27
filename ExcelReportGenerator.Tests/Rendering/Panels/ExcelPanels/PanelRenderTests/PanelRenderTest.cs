@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
+using ExcelReportGenerator.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
@@ -96,7 +97,10 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(1, 1).Value = "{p:StrParam}";
             ws.Cell(1, 2).Value = "{p:IntParam}";
 
-            var panel = new ExcelPanel(range, report, report.TemplateProcessor) { BeforeRenderMethodName = "CancelPanelRender" };
+            var panel = new ExcelPanel(range, report, report.TemplateProcessor)
+            {
+                BeforeRenderMethodName = "CancelPanelRender"
+            };
             panel.Render();
 
             Assert.AreEqual(range, panel.ResultRange);
@@ -260,6 +264,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             Assert.AreEqual(0, ws.NamedRanges.Count());
             Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
             Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
+
             //report.Workbook.SaveAs("test.xlsx");
         }
 
@@ -281,12 +286,17 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             IXLRange range3 = ws.Range(1, 3, 6, 5);
             ws.Cell(1, 3).Value = "Panel3: {p:IntParam}";
             range3.AddToNamed("NamedPanel1");
-            var panel3 = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel1"), report, report.TemplateProcessor) { Parent = panel1 };
+            var panel3 =
+                new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel1"), report, report.TemplateProcessor)
+                {
+                    Parent = panel1
+                };
 
             IXLRange range4 = ws.Range(5, 6, 9, 8);
             ws.Cell(5, 6).Value = "Panel4: {p:IntParam}";
             range4.AddToNamed("NamedPanel2", XLScope.Worksheet);
-            var panel4 = new ExcelNamedPanel(ws.NamedRange("NamedPanel2"), report, report.TemplateProcessor) { Parent = panel1 };
+            var panel4 =
+                new ExcelNamedPanel(ws.NamedRange("NamedPanel2"), report, report.TemplateProcessor) { Parent = panel1 };
 
             IXLRange range5 = ws.Range(4, 1, 5, 2);
             ws.Cell(4, 1).Value = "Panel5: {p:IntParam}";
@@ -295,7 +305,11 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             IXLRange range6 = ws.Range(6, 1, 8, 2);
             ws.Cell(6, 1).Value = "Panel6: {p:IntParam}";
             range6.AddToNamed("NamedPanel3");
-            var panel6 = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel3"), report, report.TemplateProcessor) { Parent = panel2 };
+            var panel6 =
+                new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel3"), report, report.TemplateProcessor)
+                {
+                    Parent = panel2
+                };
 
             IXLRange range7 = ws.Range(6, 1, 6, 2);
             ws.Cell(6, 2).Value = "Panel7: {p:IntParam}";
@@ -304,12 +318,14 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             IXLRange range8 = ws.Range(7, 1, 7, 2);
             ws.Cell(7, 2).Value = "Panel8: {p:IntParam}";
             range8.AddToNamed("NamedPanel4", XLScope.Worksheet);
-            var panel8 = new ExcelNamedPanel(ws.NamedRange("NamedPanel4"), report, report.TemplateProcessor) { Parent = panel6 };
+            var panel8 =
+                new ExcelNamedPanel(ws.NamedRange("NamedPanel4"), report, report.TemplateProcessor) { Parent = panel6 };
 
             IXLRange range9 = ws.Range(1, 3, 6, 5);
             ws.Cell(6, 5).Value = "Panel9: {p:IntParam}";
             range9.AddToNamed("NamedPanel5", XLScope.Worksheet);
-            var panel9 = new ExcelNamedPanel(ws.NamedRange("NamedPanel5"), report, report.TemplateProcessor) { Parent = panel3 };
+            var panel9 =
+                new ExcelNamedPanel(ws.NamedRange("NamedPanel5"), report, report.TemplateProcessor) { Parent = panel3 };
 
             IXLRange range10 = ws.Range(3, 3, 4, 5);
             ws.Cell(4, 5).Value = "Panel10: {p:IntParam}";
@@ -322,7 +338,11 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             IXLRange range12 = ws.Range(8, 6, 9, 8);
             ws.Cell(9, 8).Value = "Panel12: {p:IntParam}";
             range12.AddToNamed("NamedPanel6");
-            var panel12 = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel6"), report, report.TemplateProcessor) { Parent = panel11 };
+            var panel12 =
+                new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel6"), report, report.TemplateProcessor)
+                {
+                    Parent = panel11
+                };
 
             panel1.Children = new[] { panel2, panel3, panel4 };
             panel2.Children = new[] { panel5, panel6 };
@@ -357,6 +377,53 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
             Assert.AreEqual(0, ws.NamedRanges.Count());
             Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
+
+            //report.Workbook.SaveAs("test.xlsx");
+        }
+
+        [TestMethod]
+        public void TestSimplePanelExpansion()
+        {
+            var report = new TestReport();
+            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
+
+            IXLRange simplePanelRange = ws.Range(1, 1, 3, 5);
+            var simplePanel = new ExcelPanel(simplePanelRange, report, report.TemplateProcessor);
+
+            IXLRange dataPanelRange = ws.Range(2, 2, 2, 5);
+            dataPanelRange.AddToNamed("d_Data", XLScope.Worksheet);
+
+            ws.Cell(2, 2).Value = "{di:Name}";
+            ws.Cell(2, 3).Value = "{di:Date}";
+            ws.Cell(2, 4).Value = "{di:Sex}";
+            ws.Cell(2, 5).Value = "{di:Sum}";
+
+            var dataPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("d_Data"), report, report.TemplateProcessor)
+            {
+                Parent = simplePanel,
+            };
+
+            IXLRange totalsPanelRange = ws.Range(3, 2, 3, 5);
+            totalsPanelRange.AddToNamed("t_Totals", XLScope.Worksheet);
+
+            ws.Cell(3, 2).Value = "{Max(di:Name)}";
+            ws.Cell(3, 3).Value = "{Min(di:Date)}";
+            ws.Cell(3, 4).Value = "{Max(di:Sex)}";
+            ws.Cell(3, 5).Value = "{Sum(di:Sum)}";
+
+            var totalsPanel = new ExcelTotalsPanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("t_Totals"), report, report.TemplateProcessor)
+            {
+                Parent = simplePanel,
+            };
+
+            simplePanel.Children = new[] { dataPanel, totalsPanel };
+            simplePanel.Render();
+
+            Assert.AreEqual(ws.Range(1, 1, 5, 5), simplePanel.ResultRange);
+
+            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(PanelRenderTest),
+                nameof(TestSimplePanelExpansion)), ws.Workbook);
+
             //report.Workbook.SaveAs("test.xlsx");
         }
     }

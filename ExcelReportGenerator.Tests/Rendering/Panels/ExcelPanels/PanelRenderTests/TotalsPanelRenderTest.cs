@@ -70,8 +70,14 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ws.Cell(3, 5).Value = "{di:parent:Name}";
 
             var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"), report, report.TemplateProcessor);
-            var childPanel1 = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange1"), report, report.TemplateProcessor) { Parent = parentPanel };
-            var childPanel2 = new ExcelTotalsPanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange2"), report, report.TemplateProcessor) { Parent = parentPanel };
+            var childPanel1 = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange1"), report, report.TemplateProcessor)
+            {
+                Parent = parentPanel,
+            };
+            var childPanel2 = new ExcelTotalsPanel("m:DataProvider:GetChildIEnumerable(di:Name)", ws.NamedRange("ChildRange2"), report, report.TemplateProcessor)
+            {
+                Parent = parentPanel
+            };
             parentPanel.Children = new[] { childPanel1, childPanel2 };
             parentPanel.Render();
 

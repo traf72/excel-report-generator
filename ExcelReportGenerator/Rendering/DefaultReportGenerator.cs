@@ -208,6 +208,7 @@ namespace ExcelReportGenerator.Rendering
                 if (panelsFlatView.ContainsKey(parentPanelName))
                 {
                     (IExcelPanel parentPanel, _) = panelsFlatView[parentPanelName];
+                    CheckParentChildPanelsCorrectness(parentPanel, panel);
                     parentPanel.Children.Add(panel);
                     panel.Parent = parentPanel;
                 }
@@ -215,6 +216,17 @@ namespace ExcelReportGenerator.Rendering
                 {
                     throw new InvalidOperationException($"Cannot find parent panel with name \"{parentPanelName}\" for panel \"{panelFlat.Key}\"");
                 }
+            }
+        }
+
+        private void CheckParentChildPanelsCorrectness(IExcelPanel parentPanel, IExcelPanel childPanel)
+        {
+            if (!ExcelHelper.IsRangeInsideAnotherRange(parentPanel.Range, childPanel.Range))
+            {
+                var parentNamedPanel = parentPanel as IExcelNamedPanel;
+                var childNamedPanel = childPanel as IExcelNamedPanel;
+                throw new InvalidOperationException(
+                    $"Panel \"{parentNamedPanel?.Name ?? parentPanel.Range.ToString()}\" is not a parent of the panel \"{childNamedPanel?.Name ?? childPanel.Range.ToString()}\". Child range is outside of the parent range.");
             }
         }
 

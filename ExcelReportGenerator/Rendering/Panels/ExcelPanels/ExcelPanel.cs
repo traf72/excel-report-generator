@@ -49,7 +49,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             set
             {
                 _parent = value;
-                _coordsRelativeParent = _parent != null ? ExcelHelper.GetRangeCoordsRelativeParent(_parent.Range, Range) : new RangeCoords();
+                _coordsRelativeParent = _parent != null ? ExcelHelper.GetRangeCoordsRelativeParent(_parent.Range, Range, false) : new RangeCoords();
             }
         }
 

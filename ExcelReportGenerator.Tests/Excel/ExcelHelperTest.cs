@@ -105,8 +105,16 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(new CellCoords(4, 3), ExcelHelper.GetCellCoordsRelativeRange(range, ws.Cell(6, 5)));
             Assert.AreEqual(new CellCoords(4, 5), ExcelHelper.GetCellCoordsRelativeRange(range, ws.Cell(6, 7)));
 
-            IXLCell cell = ws.Cell(1, 1);
-            ExceptionAssert.Throws<InvalidOperationException>(() => ExcelHelper.GetCellCoordsRelativeRange(range, cell), $"Cell {cell} is outside of the range {range}");
+            IXLCell cell1 = ws.Cell(1, 1);
+            IXLCell cell2 = ws.Cell(7, 8);
+            ExceptionAssert.Throws<InvalidOperationException>(() => ExcelHelper.GetCellCoordsRelativeRange(range, cell1), $"Cell {cell1} is outside of the range {range}");
+            ExceptionAssert.Throws<InvalidOperationException>(() => ExcelHelper.GetCellCoordsRelativeRange(range, cell2), $"Cell {cell2} is outside of the range {range}");
+
+            Assert.AreEqual(new CellCoords(-1, -1), ExcelHelper.GetCellCoordsRelativeRange(range, cell1, false));
+            Assert.AreEqual(new CellCoords(5, 6), ExcelHelper.GetCellCoordsRelativeRange(range, cell2, false));
+            Assert.AreEqual(new CellCoords(0, 0), ExcelHelper.GetCellCoordsRelativeRange(range, ws.Cell(2, 2), false));
+            Assert.AreEqual(new CellCoords(0, 2), ExcelHelper.GetCellCoordsRelativeRange(range, ws.Cell(2, 4), false));
+            Assert.AreEqual(new CellCoords(2, 0), ExcelHelper.GetCellCoordsRelativeRange(range, ws.Cell(4, 2), false));
         }
 
         [TestMethod]
@@ -133,6 +141,17 @@ namespace ExcelReportGenerator.Tests.Excel
 
             childRange = ws.Range(4, 4, 7, 5);
             ExceptionAssert.Throws<InvalidOperationException>(() => ExcelHelper.GetRangeCoordsRelativeParent(parentRange, childRange), $"Range {parentRange} is not a parent of the range {childRange}. Child range is outside of the parent range.");
+
+            Assert.AreEqual(new RangeCoords(new CellCoords(2, 2), new CellCoords(5, 3)), ExcelHelper.GetRangeCoordsRelativeParent(parentRange, childRange, false));
+
+            childRange = ws.Range(1, 1, 2, 1);
+            Assert.AreEqual(new RangeCoords(new CellCoords(-1, -1), new CellCoords(0, -1)), ExcelHelper.GetRangeCoordsRelativeParent(parentRange, childRange, false));
+
+            childRange = ws.Range(1, 1, 3, 3);
+            Assert.AreEqual(new RangeCoords(new CellCoords(-1, -1), new CellCoords(1, 1)), ExcelHelper.GetRangeCoordsRelativeParent(parentRange, childRange, false));
+
+            childRange = ws.Range(8, 6, 9, 7);
+            Assert.AreEqual(new RangeCoords(new CellCoords(6, 4), new CellCoords(7, 5)), ExcelHelper.GetRangeCoordsRelativeParent(parentRange, childRange, false));
         }
 
         [TestMethod]

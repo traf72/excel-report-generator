@@ -115,6 +115,20 @@ namespace ExcelReportGenerator.Tests.Rendering
             var rootPanel = new ExcelPanel(ws.Range(1, 1, 10, 10), new object(), Substitute.For<ITemplateProcessor>());
             ExceptionAssert.ThrowsBaseException<InvalidOperationException>(() => method.Invoke(reportGenerator, new object[] { panelsFlatView, rootPanel }),
                 "Cannot find parent panel with name \"panel1\" for panel \"Panel2\"");
+
+            IXLRange panel3Range = ws.Range(3, 1, 5, 4);
+            panel3Range.AddToNamed("Panel3", XLScope.Worksheet);
+
+            var panel3 = new ExcelDataSourcePanel("Stub", ws.NamedRange("Panel3"), new object(), Substitute.For<ITemplateProcessor>());
+
+            panelsFlatView = new Dictionary<string, (IExcelPanel, string)>
+            {
+                ["Panel1"] = (panel1, null),
+                ["Panel3"] = (panel3, "Panel1"),
+            };
+
+            ExceptionAssert.ThrowsBaseException<InvalidOperationException>(() => method.Invoke(reportGenerator, new object[] { panelsFlatView, rootPanel }),
+                $"Panel \"{panel1Range}\" is not a parent of the panel \"Panel3\". Child range is outside of the parent range.");
         }
 
         [TestMethod]
