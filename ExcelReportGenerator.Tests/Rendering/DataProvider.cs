@@ -1,11 +1,11 @@
-﻿using System;
+﻿using ExcelReportGenerator.Attributes;
+using ExcelReportGenerator.Enums;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using ExcelReportGenerator.Attributes;
-using ExcelReportGenerator.Enums;
 
 namespace ExcelReportGenerator.Tests.Rendering
 {
@@ -175,6 +175,31 @@ namespace ExcelReportGenerator.Tests.Rendering
         private string GetNoCustomersQuery()
         {
             return "SELECT Id, Name, IsVip, Type, Description, Revenue FROM Customers WHERE 1 <> 1";
+        }
+
+        public IList<ChildItem> GetChildrenProportionally(TestItem parent)
+        {
+            IList<ChildItem> childData = new List<ChildItem>();
+            int childItemsCount = (int)parent.Sum / 2;
+            childItemsCount = childItemsCount == 0 ? 1 : childItemsCount;
+            for (int i = 0; i < childItemsCount; i++)
+            {
+                childData.Add(new ChildItem($"Parent_{parent.Sum}", $"Child_{i}"));
+            }
+
+            return childData;
+        }
+
+        public IList<ChildItem> GetChildrenRandom(int min, int max)
+        {
+            IList<ChildItem> childData = new List<ChildItem>();
+            int childItemsCount = new Random((int)DateTime.Now.Ticks & 0x0000FFFF).Next(min, max);
+            for (int i = 0; i < childItemsCount; i++)
+            {
+                childData.Add(new ChildItem($"Field1_{i}", $"Field2_{i}"));
+            }
+
+            return childData;
         }
     }
 

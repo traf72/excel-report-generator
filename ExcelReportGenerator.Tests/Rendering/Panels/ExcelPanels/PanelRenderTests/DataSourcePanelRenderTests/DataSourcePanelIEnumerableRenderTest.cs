@@ -424,7 +424,153 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             sw.Stop();
 
+            //Stopwatch sw2 = Stopwatch.StartNew();
+
             //report.Workbook.SaveAs("test.xlsx");
+
+            //sw2.Stop();
+        }
+
+        // Тестирование скорости рендеринга
+        //[TestMethod]
+        public void TestPanelRenderSpeedWithHierarchy()
+        {
+            var report = new TestReport();
+            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
+            IXLRange range = ws.Range(2, 2, 4, 6);
+            range.AddToNamed("ParentRange", XLScope.Worksheet);
+
+            ws.Cell(2, 2).Value = "{di:Name}";
+            ws.Cell(2, 3).Value = "{di:Date}";
+            ws.Cell(2, 4).Value = "{di:Sum}";
+            ws.Cell(2, 5).Value = "{di:Contacts.Phone}";
+            ws.Cell(2, 6).Value = "{di:Contacts.Fax}";
+
+            IXLRange child = ws.Range(3, 2, 3, 6);
+            child.AddToNamed("ChildRange", XLScope.Worksheet);
+
+            ws.Cell(3, 2).Value = "{di:Field1}";
+            ws.Cell(3, 3).Value = "{di:Field2}";
+
+            IXLRange total = ws.Range(4, 2, 4, 6);
+            total.AddToNamed("TotalRange", XLScope.Worksheet);
+
+            ws.Cell(4, 5).Value = "{Max(di:Field1)}";
+            ws.Cell(4, 6).Value = "{Min(di:Field2)}";
+
+            const int dataCount = 100;
+            IList<TestItem> data = new List<TestItem>(dataCount);
+            for (int i = 0; i < dataCount; i++)
+            {
+                data.Add(new TestItem($"Name_{i}", DateTime.Now.AddHours(1), i + 1, new Contacts($"Phone_{i}", $"Fax_{i}")));
+            }
+
+            var parentPanel = new ExcelDataSourcePanel(data, ws.NamedRange("ParentRange"), report, report.TemplateProcessor)
+            {
+                //ShiftType = ShiftType.Row,
+                //ShiftType = ShiftType.NoShift,
+            };
+
+            //var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildrenProportionally(di:di)", ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildrenRandom(10, 20)", ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            {
+                //ShiftType = ShiftType.Row,
+                //ShiftType = ShiftType.NoShift,
+                Parent = parentPanel,
+            };
+
+            //var totalPanel = new ExcelTotalsPanel("m:DataProvider:GetChildrenProportionally(di:di)", ws.NamedRange("TotalRange"), report, report.TemplateProcessor)
+            var totalPanel = new ExcelTotalsPanel("m:DataProvider:GetChildrenRandom(10, 20)", ws.NamedRange("TotalRange"), report, report.TemplateProcessor)
+            {
+                //ShiftType = ShiftType.Row,
+                //ShiftType = ShiftType.NoShift,
+                Parent = parentPanel,
+            };
+
+            parentPanel.Children.Add(childPanel);
+            parentPanel.Children.Add(totalPanel);
+
+            Stopwatch sw = Stopwatch.StartNew();
+
+            parentPanel.Render();
+
+            sw.Stop();
+
+            //Stopwatch sw2 = Stopwatch.StartNew();
+
+            //report.Workbook.SaveAs("test.xlsx");
+
+            //sw2.Stop();
+        }
+
+        // Тестирование скорости рендеринга
+        //[TestMethod]
+        public void TestPanelRenderSpeedWithMultiHierarchy()
+        {
+            var report = new TestReport();
+            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
+            IXLRange range = ws.Range(2, 2, 4, 6);
+            range.AddToNamed("ParentRange", XLScope.Worksheet);
+
+            ws.Cell(2, 2).Value = "{di:Name}";
+            ws.Cell(2, 3).Value = "{di:Date}";
+            ws.Cell(2, 4).Value = "{di:Sum}";
+            ws.Cell(2, 5).Value = "{di:Contacts.Phone}";
+            ws.Cell(2, 6).Value = "{di:Contacts.Fax}";
+
+            IXLRange child1 = ws.Range(3, 2, 4, 6);
+            child1.AddToNamed("ChildRange1", XLScope.Worksheet);
+
+            ws.Cell(3, 2).Value = "{di:Field1}";
+            ws.Cell(3, 3).Value = "{di:Field2}";
+
+            IXLRange child2 = ws.Range(4, 2, 4, 6);
+            child2.AddToNamed("ChildRange2", XLScope.Worksheet);
+
+            ws.Cell(4, 5).Value = "{di:Field1}";
+            ws.Cell(4, 6).Value = "{di:Field2}";
+
+            const int dataCount = 50;
+            IList<TestItem> data = new List<TestItem>(dataCount);
+            for (int i = 0; i < dataCount; i++)
+            {
+                data.Add(new TestItem($"Name_{i}", DateTime.Now.AddHours(1), i + 1, new Contacts($"Phone_{i}", $"Fax_{i}")));
+            }
+
+            var parentPanel = new ExcelDataSourcePanel(data, ws.NamedRange("ParentRange"), report, report.TemplateProcessor)
+            {
+                //ShiftType = ShiftType.Row,
+                //ShiftType = ShiftType.NoShift,
+            };
+
+            var childPanel1 = new ExcelDataSourcePanel("m:DataProvider:GetChildrenRandom(4, 6)", ws.NamedRange("ChildRange1"), report, report.TemplateProcessor)
+            {
+                //ShiftType = ShiftType.Row,
+                //ShiftType = ShiftType.NoShift,
+                Parent = parentPanel,
+            };
+
+            var childPanel2 = new ExcelDataSourcePanel("m:DataProvider:GetChildrenRandom(10, 15)", ws.NamedRange("ChildRange2"), report, report.TemplateProcessor)
+            {
+                //ShiftType = ShiftType.Row,
+                //ShiftType = ShiftType.NoShift,
+                Parent = childPanel1,
+            };
+
+            parentPanel.Children.Add(childPanel1);
+            childPanel1.Children.Add(childPanel2);
+
+            Stopwatch sw = Stopwatch.StartNew();
+
+            parentPanel.Render();
+
+            sw.Stop();
+
+            //Stopwatch sw2 = Stopwatch.StartNew();
+
+            //report.Workbook.SaveAs("test.xlsx");
+
+            //sw2.Stop();
         }
     }
 }
