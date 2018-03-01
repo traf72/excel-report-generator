@@ -28,11 +28,22 @@ namespace ExcelReportGenerator.Samples
             Type reportType = GetSelectedReport();
             ReportBase report = GetReportInstance(reportType);
             var reportGenerator = new DefaultReportGenerator(report);
+
+            ToggleControlEnabled(true);
+
             await Task.Factory.StartNew(() =>
             {
                 XLWorkbook result = reportGenerator.Render(GetReportTemplateWorkbook(reportType));
-                result.SaveAs(Path.Combine(txtOutputFolder.Text, string.Format("{0}.xlsx", reportType.Name)));
+                result.SaveAs(Path.Combine(txtOutputFolder.Text, string.Format("{0}_Result.xlsx", reportType.Name)));
             });
+
+            ToggleControlEnabled(false);
+        }
+
+        private void ToggleControlEnabled(bool reportRunning)
+        {
+            btnRun.Enabled = !reportRunning;
+            progressBar.Visible = reportRunning;
         }
 
         private ReportBase GetReportInstance(Type reportType)
@@ -47,7 +58,7 @@ namespace ExcelReportGenerator.Samples
 
         private XLWorkbook GetReportTemplateWorkbook(Type reportType)
         {
-            return XLWorkbook.OpenFromTemplate(Path.Combine("Reports", "Templates", string.Format("{0}_Template.xlsx", reportType.Name)));
+            return XLWorkbook.OpenFromTemplate(Path.Combine("Reports", "Templates", string.Format("{0}.xlsx", reportType.Name)));
         }
     }
 }

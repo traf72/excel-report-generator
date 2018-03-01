@@ -11,6 +11,9 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -23,11 +26,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -140,6 +140,10 @@
     <Compile Include="ConnectionFactory.cs" />
     <Compile Include="DataProvider.cs" />
     <Compile Include="Extensions\DataReaderExtensions.cs" />
+    <Compile Include="Reports\DataSetConnect.cs" />
+    <Compile Include="Reports\EnumerableOfDictionaryConnect.cs" />
+    <Compile Include="Reports\EnumerableConnect.cs" />
+    <Compile Include="Reports\DataTableConnect.cs" />
     <Compile Include="SamplesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -148,7 +152,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reports\DataSourcePanelDataReaderConnect.cs" />
+    <Compile Include="Reports\DataReaderConnect.cs" />
     <Compile Include="Reports\ReportBase.cs" />
     <EmbeddedResource Include="SamplesForm.resx">
       <DependentUpon>SamplesForm.cs</DependentUpon>
@@ -172,16 +176,26 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Reports\Templates\DataSourcePanelDataReaderConnect_Template.xlsx">
+    <None Include="Reports\Templates\DataTableConnect.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Templates\DataSetConnect.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Templates\EnumerableOfDictionaryConnect.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Templates\EnumerableConnect.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Templates\DataReaderConnect.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Database\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\ExcelReportGenerator\ExcelReportGenerator.csproj">
       <Project>{64270919-ef05-443d-ae3d-2348c1f9c2b6}</Project>

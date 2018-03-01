@@ -1,12 +1,12 @@
 ﻿namespace ExcelReportGenerator.Samples.Reports
 {
-    public class DataSourcePanelDataReaderConnect : ReportBase
+    public class EnumerableOfDictionaryConnect : ReportBase
     {
         public override string ReportName
         {
             get
             {
-                return "Connect to IDataReader via Data Source Panel";
+                return "Connect to IEnumerable of Dictionary";
             }
         }
     }

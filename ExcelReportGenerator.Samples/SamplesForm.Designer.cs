@@ -33,6 +33,7 @@
             this.btnRun = new System.Windows.Forms.Button();
             this.txtOutputFolder = new System.Windows.Forms.TextBox();
             this.lblOutputFolder = new System.Windows.Forms.Label();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
             // lblReports
@@ -81,11 +82,21 @@
             this.lblOutputFolder.TabIndex = 4;
             this.lblOutputFolder.Text = "Output folder:";
             // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(12, 59);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(280, 23);
+            this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.progressBar.TabIndex = 5;
+            this.progressBar.Visible = false;
+            // 
             // SamplesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(385, 96);
+            this.ClientSize = new System.Drawing.Size(385, 90);
+            this.Controls.Add(this.progressBar);
             this.Controls.Add(this.lblOutputFolder);
             this.Controls.Add(this.txtOutputFolder);
             this.Controls.Add(this.btnRun);
@@ -95,6 +106,7 @@
             this.MaximizeBox = false;
             this.Name = "SamplesForm";
             this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Samples";
             this.Load += new System.EventHandler(this.SamplesForm_Load);
             this.ResumeLayout(false);
@@ -109,6 +121,7 @@
         private System.Windows.Forms.Button btnRun;
         private System.Windows.Forms.TextBox txtOutputFolder;
         private System.Windows.Forms.Label lblOutputFolder;
+        private System.Windows.Forms.ProgressBar progressBar;
     }
 }
 
