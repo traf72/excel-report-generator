@@ -141,6 +141,7 @@
     <Compile Include="DataProvider.cs" />
     <Compile Include="Extensions\DataReaderExtensions.cs" />
     <Compile Include="Reports\DataSetConnect.cs" />
+    <Compile Include="Reports\GroupingWithPanelHierarchy.cs" />
     <Compile Include="Reports\EnumerableOfDictionaryConnect.cs" />
     <Compile Include="Reports\EnumerableConnect.cs" />
     <Compile Include="Reports\DataTableConnect.cs" />
@@ -176,6 +177,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Reports\Templates\GroupingWithPanelHierarchy.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Reports\Templates\DataTableConnect.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -31,11 +31,18 @@ namespace ExcelReportGenerator.Samples
 
             ToggleControlEnabled(true);
 
-            await Task.Factory.StartNew(() =>
+            try
             {
-                XLWorkbook result = reportGenerator.Render(GetReportTemplateWorkbook(reportType));
-                result.SaveAs(Path.Combine(txtOutputFolder.Text, string.Format("{0}_Result.xlsx", reportType.Name)));
-            });
+                await Task.Factory.StartNew(() =>
+                {
+                    XLWorkbook result = reportGenerator.Render(GetReportTemplateWorkbook(reportType));
+                    result.SaveAs(Path.Combine(txtOutputFolder.Text, string.Format("{0}_Result.xlsx", reportType.Name)));
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("An error occurred while running report: {0}", ex.GetBaseException().Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             ToggleControlEnabled(false);
         }
