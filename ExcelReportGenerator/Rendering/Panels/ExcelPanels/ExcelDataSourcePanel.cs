@@ -18,6 +18,9 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         protected readonly bool _isDataReceivedDirectly;
         protected object _data;
 
+        private int _templatePanelRowCount;
+        private int _templatePanelColumnCount;
+
         public ExcelDataSourcePanel(string dataSourceTemplate, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor)
             : base(namedRange, report, templateProcessor)
         {
@@ -70,6 +73,8 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
                 // Создаём шаблон панели, который дальше будет размножаться
                 ExcelDataItemPanel templatePanel = CreateTemplatePanel();
+                _templatePanelRowCount = templatePanel.Range.RowCount();
+                _templatePanelColumnCount = templatePanel.Range.ColumnCount();
 
                 // Выделяем место под данные
                 if (enumerator.RowCount > 1)
@@ -261,8 +266,8 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         private void MoveTemplatePanel(IExcelPanel templatePanel)
         {
             AddressShift shift = Type == PanelType.Vertical
-                ? new AddressShift(templatePanel.Range.RowCount(), 0)
-                : new AddressShift(0, templatePanel.Range.ColumnCount());
+                ? new AddressShift(_templatePanelRowCount, 0)
+                : new AddressShift(0, _templatePanelColumnCount);
 
             templatePanel.Move(ExcelHelper.ShiftCell(templatePanel.Range.FirstCell(), shift));
         }
