@@ -19,7 +19,7 @@ namespace ExcelReportGenerator.Samples
         private void SamplesForm_Load(object sender, EventArgs e)
         {
             cmbReports.DataSource = typeof(ReportBase).Assembly.GetTypes()
-                .Where(t => t.BaseType == typeof(ReportBase) && !t.IsAbstract).ToArray();
+                .Where(t => typeof(ReportBase).IsAssignableFrom(t) && !t.IsAbstract).ToArray();
             txtOutputFolder.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         }
 

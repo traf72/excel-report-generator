@@ -1,10 +1,10 @@
 ﻿using ExcelReportGenerator.Attributes;
+using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ExcelReportGenerator.Enums;
 
 namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
 {
@@ -33,15 +33,15 @@ namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
                 var columnAttr = (ExcelColumnAttribute)probableColumnMember.GetCustomAttribute(typeof(ExcelColumnAttribute));
                 if (columnAttr != null)
                 {
-                    var excelColumn =
-                        new ExcelDynamicColumn(probableColumnMember.Name, memberType, columnAttr.Caption)
-                        {
-                            Width = columnAttr.Width > 0 ? columnAttr.Width : (double?)null,
-                            AggregateFunction = columnAttr.NoAggregate ? AggregateFunction.NoAggregation : columnAttr.AggregateFunction,
-                            DisplayFormat = columnAttr.IgnoreDisplayFormat ? null : columnAttr.DisplayFormat,
-                            AdjustToContent = columnAttr.AdjustToContent,
-                            Order = columnAttr.Order,
-                        };
+                    var excelColumn = new ExcelDynamicColumn(probableColumnMember.Name, memberType, columnAttr.Caption)
+                    {
+                        Width = columnAttr.Width > 0 ? columnAttr.Width : (double?)null,
+                        AdjustToContent = columnAttr.AdjustToContent,
+                        Order = columnAttr.Order,
+                    };
+                    SetAggregationFunction(columnAttr, excelColumn);
+                    SetDisplayFormat(columnAttr, excelColumn);
+
                     result.Add(excelColumn);
                 }
                 else if (memberType.IsExtendedPrimitive() || memberType.IsEnum)
@@ -51,6 +51,30 @@ namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
             }
 
             return result.OrderBy(c => c.Order).ToList();
+        }
+
+        private void SetAggregationFunction(ExcelColumnAttribute columnAttr, ExcelDynamicColumn column)
+        {
+            if (columnAttr.NoAggregate)
+            {
+                column.AggregateFunction = AggregateFunction.NoAggregation;
+            }
+            else if (columnAttr.AggregateFunction != AggregateFunction.NoAggregation)
+            {
+                column.AggregateFunction = columnAttr.AggregateFunction;
+            }
+        }
+
+        private void SetDisplayFormat(ExcelColumnAttribute columnAttr, ExcelDynamicColumn column)
+        {
+            if (columnAttr.IgnoreDisplayFormat)
+            {
+                column.DisplayFormat = null;
+            }
+            else if (!string.IsNullOrWhiteSpace(columnAttr.DisplayFormat))
+            {
+                column.DisplayFormat = columnAttr.DisplayFormat;
+            }
         }
 
         IList<ExcelDynamicColumn> IColumnsProvider.GetColumnsList(object type)

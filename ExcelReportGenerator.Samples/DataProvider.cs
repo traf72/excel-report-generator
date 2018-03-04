@@ -1,9 +1,10 @@
-﻿using ExcelReportGenerator.Samples.Extensions;
+﻿using ExcelReportGenerator.Attributes;
+using ExcelReportGenerator.Enums;
+using ExcelReportGenerator.Samples.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using ExcelReportGenerator.Attributes;
 
 namespace ExcelReportGenerator.Samples
 {
@@ -143,6 +144,8 @@ namespace ExcelReportGenerator.Samples
 
         public class Result
         {
+            public string DepartmentName { get; set; }
+
             public string LastName { get; set; }
 
             public string FirstName { get; set; }
@@ -152,15 +155,16 @@ namespace ExcelReportGenerator.Samples
 
             public string JobTitle { get; set; }
 
-            public DateTime BirthDate { get; set; }
-
             public string Gender { get; set; }
 
+            [ExcelColumn(AggregateFunction = AggregateFunction.Max)]
+            public DateTime BirthDate { get; set; }
+
+            [ExcelColumn(AggregateFunction = AggregateFunction.Min)]
             public DateTime HireDate { get; set; }
 
+            [ExcelColumn(DisplayFormat = "$#,0.00")]
             public decimal Rate { get; set; }
-
-            public string DepartmentName { get; set; }
         }
     }
 }
