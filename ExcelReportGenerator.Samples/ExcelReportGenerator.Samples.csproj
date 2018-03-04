@@ -207,7 +207,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="RestoreDbTemplate.sql" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExcelReportGenerator\ExcelReportGenerator.csproj">
       <Project>{64270919-ef05-443d-ae3d-2348c1f9c2b6}</Project>
