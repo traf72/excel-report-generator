@@ -60,7 +60,7 @@ namespace ExcelReportGenerator.Samples
                         MiddleName = reader.GetValueSafe<string>(reader.GetOrdinal("MiddleName")),
                         JobTitle = reader.GetString(reader.GetOrdinal("JobTitle")),
                         BirthDate = reader.GetDateTime(reader.GetOrdinal("BirthDate")),
-                        Gender = reader.GetString(reader.GetOrdinal("Gender")),
+                        Sex = reader.GetString(reader.GetOrdinal("Gender")),
                         HireDate = reader.GetDateTime(reader.GetOrdinal("HireDate")),
                         Rate = reader.GetDecimal(reader.GetOrdinal("Rate")),
                         DepartmentName = reader.GetString(reader.GetOrdinal("DepartmentName")),
@@ -153,9 +153,11 @@ namespace ExcelReportGenerator.Samples
             [NullValue("N/A")]
             public string MiddleName { get; set; }
 
+            [ExcelColumn(AdjustToContent = true)]
             public string JobTitle { get; set; }
 
-            public string Gender { get; set; }
+            [ExcelColumn(Caption = "Gender")]
+            public string Sex { get; set; }
 
             [ExcelColumn(AggregateFunction = AggregateFunction.Max)]
             public DateTime BirthDate { get; set; }
