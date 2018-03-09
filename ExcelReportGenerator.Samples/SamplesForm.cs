@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using ExcelReportGenerator.Rendering;
+using ExcelReportGenerator.Samples.Customizations;
 using ExcelReportGenerator.Samples.Reports;
 using System;
 using System.IO;
@@ -26,8 +27,7 @@ namespace ExcelReportGenerator.Samples
         private async void btnRun_Click(object sender, EventArgs e)
         {
             Type reportType = GetSelectedReport();
-            ReportBase report = GetReportInstance(reportType);
-            var reportGenerator = new DefaultReportGenerator(report);
+            DefaultReportGenerator reportGenerator = GetReportGenerator(reportType);
 
             ToggleControlEnabled(true);
 
@@ -66,6 +66,12 @@ namespace ExcelReportGenerator.Samples
         private XLWorkbook GetReportTemplateWorkbook(Type reportType)
         {
             return XLWorkbook.OpenFromTemplate(Path.Combine("Reports", "Templates", string.Format("{0}.xlsx", reportType.Name)));
+        }
+
+        private DefaultReportGenerator GetReportGenerator(Type reportType)
+        {
+            ReportBase report = GetReportInstance(reportType);
+            return reportType == typeof(CustomReportGeneratorSample) ? new CustomReportGenerator(report) : new DefaultReportGenerator(report);
         }
     }
 }

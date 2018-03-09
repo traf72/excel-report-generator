@@ -54,25 +54,7 @@ namespace ExcelReportGenerator.Rendering
 
         public virtual IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider => _dataItemValueProvider ?? (_dataItemValueProvider = new HierarchicalDataItemValueProvider());
 
-        public virtual ITemplateProcessor TemplateProcessor
-        {
-            get
-            {
-                if (_templateProcessor == null)
-                {
-                    _templateProcessor = new DefaultTemplateProcessor(PropertyValueProvider, SystemVariableProvider, MethodCallValueProvider, DataItemValueProvider)
-                    {
-                        SystemFunctionsType = SystemFunctionsType
-                    };
-                    if (DataItemValueProvider is HierarchicalDataItemValueProvider p && string.IsNullOrWhiteSpace(p.DataItemSelfTemplate))
-                    {
-                        p.DataItemSelfTemplate = _templateProcessor.DataItemMemberLabel;
-                    }
-                }
-
-                return _templateProcessor;
-            }
-        }
+        public virtual ITemplateProcessor TemplateProcessor => _templateProcessor ?? (_templateProcessor = new DefaultTemplateProcessor(PropertyValueProvider, SystemVariableProvider, MethodCallValueProvider, DataItemValueProvider));
 
         public virtual PanelParsingSettings PanelParsingSettings => _panelParsingSettings ?? (_panelParsingSettings = new PanelParsingSettings
         {
@@ -115,6 +97,8 @@ namespace ExcelReportGenerator.Rendering
             {
                 throw new Exception($"Property {nameof(SystemVariableProvider)} cannot be null");
             }
+
+            InitTemplateProcessor();
 
             SystemVariableProvider.RenderDate = DateTime.Now;
 
@@ -162,6 +146,18 @@ namespace ExcelReportGenerator.Rendering
             }
 
             return reportTemplate;
+        }
+
+        private void InitTemplateProcessor()
+        {
+            if (TemplateProcessor is DefaultTemplateProcessor tp && SystemFunctionsType != null)
+            {
+                tp.SystemFunctionsType = SystemFunctionsType;
+            }
+            if (DataItemValueProvider is HierarchicalDataItemValueProvider p)
+            {
+                p.DataItemSelfTemplate = TemplateProcessor.DataItemSelfTemplate;
+            }
         }
 
         private IXLRange GetRootRange(IXLWorksheet ws, IList<IXLNamedRange> worksheetPanels)

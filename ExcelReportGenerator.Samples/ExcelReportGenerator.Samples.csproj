@@ -63,6 +63,9 @@
     <Reference Include="FastMember.Signed, Version=1.0.0.9, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
       <HintPath>..\packages\FastMember.Signed.1.1.0\lib\net40\FastMember.Signed.dll</HintPath>
     </Reference>
+    <Reference Include="SimpleInjector, Version=4.0.12.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
+      <HintPath>..\packages\SimpleInjector.4.0.12\lib\net45\SimpleInjector.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -79,8 +82,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectionFactory.cs" />
+    <Compile Include="Customizations\CustomInstanceProvider.cs" />
+    <Compile Include="Customizations\CustomReportGenerator.cs" />
+    <Compile Include="Customizations\CustomSystemVariableProvider.cs" />
+    <Compile Include="Customizations\CustomTemplateProcessor.cs" />
     <Compile Include="DataProvider.cs" />
     <Compile Include="Extensions\DataReaderExtensions.cs" />
+    <Compile Include="Ioc.cs" />
+    <Compile Include="Reports\CustomReportGeneratorSample.cs" />
     <Compile Include="Reports\DataSetConnect.cs" />
     <Compile Include="Reports\DynamicPanelDataTableConnect.cs" />
     <Compile Include="Reports\DynamicPanelEnumerableConnect.cs" />
@@ -98,6 +107,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\DataReaderConnect.cs" />
     <Compile Include="Reports\ReportBase.cs" />
+    <Compile Include="Customizations\CustomSystemFunctions.cs" />
     <EmbeddedResource Include="SamplesForm.resx">
       <DependentUpon>SamplesForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -125,6 +135,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Reports\Templates\DynamicPanelEnumerableConnect.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Reports\Templates\CustomReportGeneratorSample.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Reports\Templates\GroupingWithPanelHierarchy.xlsx">

@@ -1,4 +1,6 @@
-﻿namespace ExcelReportGenerator.Samples.Reports
+﻿using ExcelReportGenerator.Samples.Customizations;
+
+namespace ExcelReportGenerator.Samples.Reports
 {
     public abstract class ReportBase
     {
@@ -6,7 +8,7 @@
 
         public string ConvertGender(string gender)
         {
-            return gender == "M" ? "Male" : "Female";
+            return CustomSystemFunctions.ConvertGender(gender);
         }
     }
 }

@@ -52,6 +52,8 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
 
         public virtual string VerticalPageBreakLabel => "VertPageBreak";
 
+        public virtual string DataItemSelfTemplate => DataItemMemberLabel;
+
         /// <summary>
         /// Get value based on template
         /// </summary>

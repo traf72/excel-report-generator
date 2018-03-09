@@ -2,6 +2,8 @@
 using ExcelReportGenerator.Rendering;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Rendering.Providers;
+using ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
+using ExcelReportGenerator.Rendering.Providers.VariableProviders;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using ExcelReportGenerator.Tests.CustomAsserts;
 using ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests;
@@ -10,8 +12,6 @@ using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
-using ExcelReportGenerator.Rendering.Providers.VariableProviders;
 
 namespace ExcelReportGenerator.Tests.Rendering
 {
@@ -38,13 +38,17 @@ namespace ExcelReportGenerator.Tests.Rendering
             panel8Range.AddToNamed("Panel8", XLScope.Worksheet);
 
             var panel1 = new ExcelPanel(panel1Range, new object(), Substitute.For<ITemplateProcessor>());
-            var panel2 = new ExcelDataSourcePanel("Stub", ws.NamedRange("Panel2"), new object(), Substitute.For<ITemplateProcessor>());
-            var panel3 = new ExcelDataSourcePanel("Stub", wb.NamedRange("Panel3"), new object(), Substitute.For<ITemplateProcessor>());
+            var panel2 = new ExcelDataSourcePanel("Stub", ws.NamedRange("Panel2"), new object(),
+                Substitute.For<ITemplateProcessor>());
+            var panel3 = new ExcelDataSourcePanel("Stub", wb.NamedRange("Panel3"), new object(),
+                Substitute.For<ITemplateProcessor>());
             var panel4 = new ExcelPanel(panel4Range, new object(), Substitute.For<ITemplateProcessor>());
-            var panel5 = new ExcelDataSourceDynamicPanel("Stub", ws.NamedRange("Panel5"), new object(), Substitute.For<ITemplateProcessor>());
+            var panel5 = new ExcelDataSourceDynamicPanel("Stub", ws.NamedRange("Panel5"), new object(),
+                Substitute.For<ITemplateProcessor>());
             var panel6 = new ExcelPanel(panel6Range, new object(), Substitute.For<ITemplateProcessor>());
             var panel7 = new ExcelPanel(panel7Range, new object(), Substitute.For<ITemplateProcessor>());
-            var panel8 = new ExcelTotalsPanel("Stub", ws.NamedRange("Panel8"), new object(), Substitute.For<ITemplateProcessor>());
+            var panel8 = new ExcelTotalsPanel("Stub", ws.NamedRange("Panel8"), new object(),
+                Substitute.For<ITemplateProcessor>());
 
             IDictionary<string, (IExcelPanel, string)> panelsFlatView = new Dictionary<string, (IExcelPanel, string)>
             {
@@ -59,10 +63,11 @@ namespace ExcelReportGenerator.Tests.Rendering
             };
 
             var reportGenerator = new DefaultReportGenerator(new object());
-            MethodInfo method = reportGenerator.GetType().GetMethod("MakePanelsHierarchy", BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo method = reportGenerator.GetType()
+                .GetMethod("MakePanelsHierarchy", BindingFlags.Instance | BindingFlags.NonPublic);
 
             var rootPanel = new ExcelPanel(ws.Range(1, 1, 10, 10), new object(), Substitute.For<ITemplateProcessor>());
-            method.Invoke(reportGenerator, new object[] { panelsFlatView, rootPanel });
+            method.Invoke(reportGenerator, new object[] {panelsFlatView, rootPanel});
 
             Assert.AreEqual(4, rootPanel.Children.Count);
             Assert.AreEqual(panel1Range, rootPanel.Children[0].Range);
@@ -101,7 +106,8 @@ namespace ExcelReportGenerator.Tests.Rendering
             panel2Range.AddToNamed("Panel2", XLScope.Worksheet);
 
             var panel1 = new ExcelPanel(panel1Range, new object(), Substitute.For<ITemplateProcessor>());
-            var panel2 = new ExcelDataSourcePanel("Stub", ws.NamedRange("Panel2"), new object(), Substitute.For<ITemplateProcessor>());
+            var panel2 = new ExcelDataSourcePanel("Stub", ws.NamedRange("Panel2"), new object(),
+                Substitute.For<ITemplateProcessor>());
 
             IDictionary<string, (IExcelPanel, string)> panelsFlatView = new Dictionary<string, (IExcelPanel, string)>
             {
@@ -110,16 +116,19 @@ namespace ExcelReportGenerator.Tests.Rendering
             };
 
             var reportGenerator = new DefaultReportGenerator(new object());
-            MethodInfo method = reportGenerator.GetType().GetMethod("MakePanelsHierarchy", BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo method = reportGenerator.GetType()
+                .GetMethod("MakePanelsHierarchy", BindingFlags.Instance | BindingFlags.NonPublic);
 
             var rootPanel = new ExcelPanel(ws.Range(1, 1, 10, 10), new object(), Substitute.For<ITemplateProcessor>());
-            ExceptionAssert.ThrowsBaseException<InvalidOperationException>(() => method.Invoke(reportGenerator, new object[] { panelsFlatView, rootPanel }),
+            ExceptionAssert.ThrowsBaseException<InvalidOperationException>(
+                () => method.Invoke(reportGenerator, new object[] {panelsFlatView, rootPanel}),
                 "Cannot find parent panel with name \"panel1\" for panel \"Panel2\"");
 
             IXLRange panel3Range = ws.Range(3, 1, 5, 4);
             panel3Range.AddToNamed("Panel3", XLScope.Worksheet);
 
-            var panel3 = new ExcelDataSourcePanel("Stub", ws.NamedRange("Panel3"), new object(), Substitute.For<ITemplateProcessor>());
+            var panel3 = new ExcelDataSourcePanel("Stub", ws.NamedRange("Panel3"), new object(),
+                Substitute.For<ITemplateProcessor>());
 
             panelsFlatView = new Dictionary<string, (IExcelPanel, string)>
             {
@@ -127,7 +136,8 @@ namespace ExcelReportGenerator.Tests.Rendering
                 ["Panel3"] = (panel3, "Panel1"),
             };
 
-            ExceptionAssert.ThrowsBaseException<InvalidOperationException>(() => method.Invoke(reportGenerator, new object[] { panelsFlatView, rootPanel }),
+            ExceptionAssert.ThrowsBaseException<InvalidOperationException>(
+                () => method.Invoke(reportGenerator, new object[] {panelsFlatView, rootPanel}),
                 $"Panel \"{panel1Range}\" is not a parent of the panel \"Panel3\". Child range is outside of the parent range.");
         }
 
@@ -157,9 +167,10 @@ namespace ExcelReportGenerator.Tests.Rendering
             panel9Range.AddToNamed(" d_Panel9 ", XLScope.Worksheet);
 
             var reportGenerator = new DefaultReportGenerator(new object());
-            MethodInfo method = reportGenerator.GetType().GetMethod("GetPanelsNamedRanges", BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo method = reportGenerator.GetType()
+                .GetMethod("GetPanelsNamedRanges", BindingFlags.Instance | BindingFlags.NonPublic);
 
-            var result = (IList<IXLNamedRange>)method.Invoke(reportGenerator, new object[] { ws.NamedRanges });
+            var result = (IList<IXLNamedRange>) method.Invoke(reportGenerator, new object[] {ws.NamedRanges});
 
             Assert.AreEqual(6, result.Count);
             Assert.AreEqual("s_Panel1", result[0].Name);
@@ -177,38 +188,46 @@ namespace ExcelReportGenerator.Tests.Rendering
             IXLWorksheet ws = wb.AddWorksheet("Test");
 
             var reportGenerator = new DefaultReportGenerator(new object());
-            MethodInfo method = reportGenerator.GetType().GetMethod("GetRootRange", BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo method = reportGenerator.GetType()
+                .GetMethod("GetRootRange", BindingFlags.Instance | BindingFlags.NonPublic);
 
             ws.Cell(10, 10).Value = "Val";
             ws.Cell(20, 20).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
 
-            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(10, 10)), method.Invoke(reportGenerator, new object[] { ws, null }));
+            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(10, 10)),
+                method.Invoke(reportGenerator, new object[] {ws, null}));
 
             var namedRanges = new List<IXLNamedRange>();
-            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(10, 10)), method.Invoke(reportGenerator, new object[] { ws, namedRanges }));
+            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(10, 10)),
+                method.Invoke(reportGenerator, new object[] {ws, namedRanges}));
 
             IXLRange range = ws.Range(ws.Cell(2, 2), ws.Cell(3, 3));
             range.AddToNamed("range1", XLScope.Worksheet);
             namedRanges.Add(ws.NamedRange("range1"));
-            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(10, 10)), method.Invoke(reportGenerator, new object[] { ws, namedRanges }));
+            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(10, 10)),
+                method.Invoke(reportGenerator, new object[] {ws, namedRanges}));
 
             range = ws.Range(ws.Cell(2, 2), ws.Cell(10, 11));
             range.AddToNamed("range2", XLScope.Worksheet);
             namedRanges.Add(ws.NamedRange("range2"));
-            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(10, 11)), method.Invoke(reportGenerator, new object[] { ws, namedRanges }));
+            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(10, 11)),
+                method.Invoke(reportGenerator, new object[] {ws, namedRanges}));
 
             range = ws.Range(ws.Cell(5, 5), ws.Cell(11, 10));
             range.AddToNamed("range3", XLScope.Worksheet);
             namedRanges.Add(ws.NamedRange("range3"));
-            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(11, 11)), method.Invoke(reportGenerator, new object[] { ws, namedRanges }));
+            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(11, 11)),
+                method.Invoke(reportGenerator, new object[] {ws, namedRanges}));
 
             range = ws.Range(ws.Cell(18, 18), ws.Cell(18, 18));
             range.AddToNamed("range4", XLScope.Worksheet);
             namedRanges.Add(ws.NamedRange("range4"));
-            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(18, 18)), method.Invoke(reportGenerator, new object[] { ws, namedRanges }));
+            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(18, 18)),
+                method.Invoke(reportGenerator, new object[] {ws, namedRanges}));
 
             ws.Cell(21, 21).Value = "Val2";
-            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(21, 21)), method.Invoke(reportGenerator, new object[] { ws, namedRanges }));
+            Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(21, 21)),
+                method.Invoke(reportGenerator, new object[] {ws, namedRanges}));
         }
 
         [TestMethod]
@@ -228,7 +247,8 @@ namespace ExcelReportGenerator.Tests.Rendering
             IXLRange childRange = sheet1.Range(3, 2, 3, 5);
             childRange.AddToNamed("d_Child", XLScope.Workbook);
             IXLNamedRange childNamedRange = wb.NamedRange("d_Child");
-            childNamedRange.Comment = $"ParentPanel = d_Parent{Environment.NewLine}DataSource = m:DataProvider:GetChildIEnumerable(di:Name);GroupBy=1,4";
+            childNamedRange.Comment =
+                $"ParentPanel = d_Parent{Environment.NewLine}DataSource = m:DataProvider:GetChildIEnumerable(di:Name);GroupBy=1,4";
 
             sheet1.Cell(2, 2).Value = "{di:Name}";
             sheet1.Cell(2, 3).Value = "{di:Date}";
@@ -260,7 +280,8 @@ namespace ExcelReportGenerator.Tests.Rendering
             IXLRange totalsRange = sheet2.Range(6, 2, 6, 7);
             totalsRange.AddToNamed("t_Totals", XLScope.Worksheet);
             IXLNamedRange totalsNamedRange = sheet2.NamedRange("t_Totals");
-            totalsNamedRange.Comment = "DataSource = m:DataProvider:GetIEnumerable(); BeforeRenderMethodName = TestExcelTotalsPanelBeforeRender; AfterRenderMethodName = TestExcelTotalsPanelAfterRender";
+            totalsNamedRange.Comment =
+                "DataSource = m:DataProvider:GetIEnumerable(); BeforeRenderMethodName = TestExcelTotalsPanelBeforeRender; AfterRenderMethodName = TestExcelTotalsPanelAfterRender";
 
             IXLRange intRange = sheet2.Range(10, 2, 10, 2);
             intRange.AddToNamed("d_IntData", XLScope.Worksheet);
@@ -273,7 +294,8 @@ namespace ExcelReportGenerator.Tests.Rendering
             sheet2.Cell(6, 3).Value = "{Sum(di:Sum)}";
             sheet2.Cell(6, 4).Value = "{ Custom(DI:Sum, CustomAggregation, PostAggregation)  }";
             sheet2.Cell(6, 5).Value = "{Min(di:Sum)}";
-            sheet2.Cell(6, 6).Value = "Text1 {count(di:Name)} Text2 {avg(di:Sum, , PostAggregationRound)} Text3 {Max(di:Sum)}";
+            sheet2.Cell(6, 6).Value =
+                "Text1 {count(di:Name)} Text2 {avg(di:Sum, , PostAggregationRound)} Text3 {Max(di:Sum)}";
             sheet2.Cell(6, 7).Value = "{Mix(di:Sum)}";
 
             sheet2.Cell(10, 10).Value = "Plain text";
@@ -285,7 +307,8 @@ namespace ExcelReportGenerator.Tests.Rendering
 
             reprotGenerator.Render(wb);
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRender)), wb);
+            ExcelAssert.AreWorkbooksContentEquals(
+                TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRender)), wb);
 
             //wb.SaveAs("test.xlsx");
         }
@@ -320,7 +343,8 @@ namespace ExcelReportGenerator.Tests.Rendering
 
             reprotGenerator.Render(wb);
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRenderWithEvents)), wb);
+            ExcelAssert.AreWorkbooksContentEquals(
+                TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRenderWithEvents)), wb);
 
             //wb.SaveAs("test.xlsx");
         }
@@ -342,7 +366,8 @@ namespace ExcelReportGenerator.Tests.Rendering
             IXLRange childRange = sheet1.Range(3, 2, 3, 5);
             childRange.AddToNamed("d_Child", XLScope.Workbook);
             IXLNamedRange childNamedRange = wb.NamedRange("d_Child");
-            childNamedRange.Comment = $"ParentPanel = d_Parent{Environment.NewLine}DataSource = m:DataProvider:GetChildIEnumerable(di:Name)";
+            childNamedRange.Comment =
+                $"ParentPanel = d_Parent{Environment.NewLine}DataSource = m:DataProvider:GetChildIEnumerable(di:Name)";
 
             sheet1.Cell(2, 2).Value = "{di:Name}";
             sheet1.Cell(2, 3).Value = "{di:Date}";
@@ -375,22 +400,26 @@ namespace ExcelReportGenerator.Tests.Rendering
             IXLRange totalsRange = sheet2.Range(6, 2, 6, 7);
             totalsRange.AddToNamed("t_Totals", XLScope.Worksheet);
             IXLNamedRange totalsNamedRange = sheet2.NamedRange("t_Totals");
-            totalsNamedRange.Comment = "DataSource = m:DataProvider:GetIEnumerable(); BeforeRenderMethodName = TestExcelTotalsPanelBeforeRender; AfterRenderMethodName = TestExcelTotalsPanelAfterRender";
+            totalsNamedRange.Comment =
+                "DataSource = m:DataProvider:GetIEnumerable(); BeforeRenderMethodName = TestExcelTotalsPanelBeforeRender; AfterRenderMethodName = TestExcelTotalsPanelAfterRender";
 
             sheet2.Cell(6, 2).Value = "Plain text";
             sheet2.Cell(6, 3).Value = "{Sum(di:Sum)}";
             sheet2.Cell(6, 4).Value = "{ Custom(DI:Sum, CustomAggregation, PostAggregation)  }";
             sheet2.Cell(6, 5).Value = "{Min(di:Sum)}";
-            sheet2.Cell(6, 6).Value = "Text1 {count(Name)} Text2 {avg(di:Sum, , PostAggregationRound)} Text3 {Max(Sum)}";
+            sheet2.Cell(6, 6).Value =
+                "Text1 {count(Name)} Text2 {avg(di:Sum, , PostAggregationRound)} Text3 {Max(Sum)}";
             sheet2.Cell(6, 7).Value = "{Mix(di:Sum)}";
 
             sheet2.Cell(10, 10).Value = "Plain text";
             sheet2.Cell(1, 1).Value = " { m:Format ( p:DateParam ) } ";
             sheet2.Cell(7, 1).Value = "{P:BoolParam}";
 
-            reprotGenerator.Render(wb, new[] { sheet1 });
+            reprotGenerator.Render(wb, new[] {sheet1});
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRenderPartialWorksheets)), wb);
+            ExcelAssert.AreWorkbooksContentEquals(
+                TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRenderPartialWorksheets)),
+                wb);
 
             //wb.SaveAs("test.xlsx");
         }
@@ -416,7 +445,9 @@ namespace ExcelReportGenerator.Tests.Rendering
 
             reprotGenerator.Render(wb);
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRenderWithCustomVariableAndFunctionProviders)), wb);
+            ExcelAssert.AreWorkbooksContentEquals(
+                TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest),
+                    nameof(TestRenderWithCustomVariableAndFunctionProviders)), wb);
 
             //wb.SaveAs("test.xlsx");
         }
@@ -429,19 +460,23 @@ namespace ExcelReportGenerator.Tests.Rendering
             {
             }
 
-            public override ITypeProvider TypeProvider => _typeProvider ?? (_typeProvider = new DefaultTypeProvider(new[] { Assembly.GetExecutingAssembly() }, _report.GetType()));
+            public override ITypeProvider TypeProvider => _typeProvider ?? (_typeProvider =
+                                                              new DefaultTypeProvider(
+                                                                  new[] {Assembly.GetExecutingAssembly()},
+                                                                  _report.GetType()));
         }
 
         private class TestReportGenerator2 : TestReportGenerator
         {
-            private IGenericDataItemValueProvider<HierarchicalDataItem> _dataItemProvider;
+            private ITemplateProcessor _templateProcessor;
 
             public TestReportGenerator2(object report) : base(report)
             {
             }
 
-            public override IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider => _dataItemProvider
-                ?? (_dataItemProvider = new HierarchicalDataItemValueProvider() { DataItemSelfTemplate = "self" });
+            public override ITemplateProcessor TemplateProcessor =>
+                _templateProcessor ?? (_templateProcessor = new TemplateProcessor(PropertyValueProvider,
+                    SystemVariableProvider, MethodCallValueProvider, DataItemValueProvider));
         }
 
         private class VariableProvider : SystemVariableProvider
@@ -460,6 +495,18 @@ namespace ExcelReportGenerator.Tests.Rendering
             {
                 return (param + 10).ToString();
             }
+        }
+
+        private class TemplateProcessor : DefaultTemplateProcessor
+        {
+            public TemplateProcessor(IPropertyValueProvider propertyValueProvider,
+                SystemVariableProvider systemVariableProvider, IMethodCallValueProvider methodCallValueProvider = null,
+                IGenericDataItemValueProvider<HierarchicalDataItem> dataItemValueProvider = null) : base(
+                propertyValueProvider, systemVariableProvider, methodCallValueProvider, dataItemValueProvider)
+            {
+            }
+
+            public override string DataItemSelfTemplate => "self";
         }
     }
 }
