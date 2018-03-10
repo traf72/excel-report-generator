@@ -30,7 +30,7 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
 
         protected IMethodCallValueProvider MethodCallValueProvider { get; }
 
-        public Type SystemFunctionsType { get; set; } = typeof(SystemFunctions);
+        internal Type SystemFunctionsType { get; set; } = typeof(SystemFunctions);
 
         public virtual string LeftTemplateBorder => "{";
 
