@@ -7,3 +7,4 @@ obj
 /.vs
 /ExcelReportGenerator.Samples/Database
 ~$*
+/Dotfuscated

@@ -49,6 +49,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>5</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ClosedXML, Version=0.91.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
@@ -59,6 +60,9 @@
     </Reference>
     <Reference Include="ExcelNumberFormat, Version=1.0.3.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelReportGenerator">
+      <HintPath>..\Dotfuscated\ExcelReportGenerator.dll</HintPath>
     </Reference>
     <Reference Include="FastMember.Signed, Version=1.0.0.9, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
       <HintPath>..\packages\FastMember.Signed.1.1.0\lib\net40\FastMember.Signed.dll</HintPath>
@@ -164,12 +168,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="RestoreDbTemplate.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ExcelReportGenerator\ExcelReportGenerator.csproj">
-      <Project>{64270919-ef05-443d-ae3d-2348c1f9c2b6}</Project>
-      <Name>ExcelReportGenerator</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

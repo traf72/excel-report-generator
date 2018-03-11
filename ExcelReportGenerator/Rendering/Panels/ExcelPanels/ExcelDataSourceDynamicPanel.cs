@@ -183,11 +183,11 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 startNumber = 1;
             }
 
-            cell.Value = _templateProcessor.BuildDataItemTemplate("Number");
+            cell.Value = _templateProcessor.BuildDataItemTemplate(nameof(ColumnNumbersHelper.Number));
             string rangeName = $"ColumnNumbers_{Guid.NewGuid():N}";
             range.AddToNamed(rangeName, XLScope.Worksheet);
 
-            var panel = new ExcelDataSourcePanel(columns.Select((c, i) => new { Number = i + startNumber }).ToList(),
+            var panel = new ExcelDataSourcePanel(columns.Select((c, i) => new ColumnNumbersHelper { Number = i + startNumber }).ToList(),
                 ws.NamedRange(rangeName), _report, _templateProcessor)
             {
                 ShiftType = ShiftType.Cells,
@@ -220,11 +220,11 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 return range;
             }
 
-            cell.Value = _templateProcessor.BuildDataItemTemplate("Template");
+            cell.Value = _templateProcessor.BuildDataItemTemplate(nameof(DataTemplatesHelper.Template));
             string rangeName = $"DataTemplates_{Guid.NewGuid():N}";
             range.AddToNamed(rangeName, XLScope.Worksheet);
 
-            var panel = new ExcelDataSourcePanel(columns.Select(c => new { Template = _templateProcessor.BuildDataItemTemplate(c.Name) }).ToList(),
+            var panel = new ExcelDataSourcePanel(columns.Select(c => new DataTemplatesHelper { Template = _templateProcessor.BuildDataItemTemplate(c.Name) }).ToList(),
                 ws.NamedRange(rangeName), _report, _templateProcessor)
             {
                 ShiftType = ShiftType.Cells,
@@ -278,7 +278,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 return range;
             }
 
-            cell.Value = _templateProcessor.BuildDataItemTemplate("Totals");
+            cell.Value = _templateProcessor.BuildDataItemTemplate(nameof(TotalsTemplatesHelper.Totals));
             string rangeName = $"Totals_{Guid.NewGuid():N}";
             range.AddToNamed(rangeName, XLScope.Worksheet);
 
@@ -290,7 +290,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                     : null);
             }
 
-            var panel = new ExcelDataSourcePanel(totalsTemplates.Select(t => new { Totals = t }), ws.NamedRange(rangeName), _report, _templateProcessor)
+            var panel = new ExcelDataSourcePanel(totalsTemplates.Select(t => new TotalsTemplatesHelper { Totals = t }), ws.NamedRange(rangeName), _report, _templateProcessor)
             {
                 ShiftType = ShiftType.Cells,
                 Type = Type == PanelType.Vertical ? PanelType.Horizontal : PanelType.Vertical,
@@ -431,6 +431,24 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             var panel = new ExcelDataSourceDynamicPanel(_dataSourceTemplate, CopyNamedRange(cell), _report, _templateProcessor);
             FillCopyProperties(panel);
             return panel;
+        }
+
+        private class ColumnNumbersHelper
+        {
+            [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
+            public int Number { get; set; }
+        }
+
+        private class DataTemplatesHelper
+        {
+            [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
+            public string Template { get; set; }
+        }
+
+        private class TotalsTemplatesHelper
+        {
+            [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
+            public string Totals { get; set; }
         }
     }
 }
