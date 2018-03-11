@@ -99,6 +99,7 @@ namespace ExcelReportGenerator.Rendering
             }
 
             InitTemplateProcessor();
+            InitDataItemValueProvider();
 
             SystemVariableProvider.RenderDate = DateTime.Now;
 
@@ -154,6 +155,10 @@ namespace ExcelReportGenerator.Rendering
             {
                 tp.SystemFunctionsType = SystemFunctionsType;
             }
+        }
+
+        private void InitDataItemValueProvider()
+        {
             if (DataItemValueProvider is HierarchicalDataItemValueProvider p)
             {
                 p.DataItemSelfTemplate = TemplateProcessor.DataItemSelfTemplate;

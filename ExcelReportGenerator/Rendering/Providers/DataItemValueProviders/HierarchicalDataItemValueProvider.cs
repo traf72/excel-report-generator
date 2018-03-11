@@ -1,12 +1,14 @@
 ﻿using ExcelReportGenerator.Exceptions;
 using ExcelReportGenerator.Helpers;
 using System;
+using ExcelReportGenerator.Attributes;
 
 namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
 {
     /// <summary>
     /// Provides values from hierarchical data item
     /// </summary>
+    [LicenceKeyPart(U = true)]
     public class HierarchicalDataItemValueProvider : IGenericDataItemValueProvider<HierarchicalDataItem>
     {
         private readonly IDataItemValueProviderFactory _factory;

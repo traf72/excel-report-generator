@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExcelReportGenerator.Attributes;
+using System;
 using System.Collections.Generic;
 
 namespace ExcelReportGenerator.Rendering.Providers
@@ -6,6 +7,7 @@ namespace ExcelReportGenerator.Rendering.Providers
     /// <summary>
     /// Reflection type instance provider
     /// </summary>
+    [LicenceKeyPart(L = true)]
     public class DefaultInstanceProvider : IInstanceProvider
     {
         private readonly IDictionary<Type, object> _instanceCache = new Dictionary<Type, object>();

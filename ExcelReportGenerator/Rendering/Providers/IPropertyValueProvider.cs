@@ -1,5 +1,8 @@
-﻿namespace ExcelReportGenerator.Rendering.Providers
+﻿using ExcelReportGenerator.Attributes;
+
+namespace ExcelReportGenerator.Rendering.Providers
 {
+    [LicenceKeyPart(U = true)]
     public interface IPropertyValueProvider
     {
         /// <summary>

@@ -3,9 +3,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using ExcelReportGenerator.Attributes;
 
 namespace ExcelReportGenerator.Rendering
 {
+    [LicenceKeyPart(L = true)]
     public class SystemFunctions
     {
         public static object GetDictVal(object dictionary, object key)

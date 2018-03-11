@@ -3,6 +3,7 @@ using System;
 
 namespace ExcelReportGenerator.Attributes
 {
+    [LicenceKeyPart]
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class ExcelColumnAttribute : Attribute
     {

@@ -1,5 +1,8 @@
-﻿namespace ExcelReportGenerator.Enums
+﻿using ExcelReportGenerator.Attributes;
+
+namespace ExcelReportGenerator.Enums
 {
+    [LicenceKeyPart(L = true)]
     public enum AggregateFunction
     {
         Sum,

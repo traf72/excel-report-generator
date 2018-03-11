@@ -1,8 +1,11 @@
-﻿namespace ExcelReportGenerator.Rendering.TemplateProcessors
+﻿using ExcelReportGenerator.Attributes;
+
+namespace ExcelReportGenerator.Rendering.TemplateProcessors
 {
     /// <summary>
     /// Handles report templates
     /// </summary>
+    [LicenceKeyPart]
     public interface ITemplateProcessor
     {
         /// <summary>

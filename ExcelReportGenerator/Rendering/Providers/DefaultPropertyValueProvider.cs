@@ -4,12 +4,14 @@ using ExcelReportGenerator.Rendering.TemplateParts;
 using System;
 using System.Linq;
 using System.Reflection;
+using ExcelReportGenerator.Attributes;
 
 namespace ExcelReportGenerator.Rendering.Providers
 {
     /// <summary>
     /// Provides public properties or fields values via reflection
     /// </summary>
+    [LicenceKeyPart]
     public class DefaultPropertyValueProvider : IPropertyValueProvider
     {
         private const char PropertiesSeparator = '.';

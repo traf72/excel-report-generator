@@ -1,5 +1,8 @@
-﻿namespace ExcelReportGenerator.Rendering
+﻿using ExcelReportGenerator.Attributes;
+
+namespace ExcelReportGenerator.Rendering
 {
+    [LicenceKeyPart(R = true)]
     public class PanelParsingSettings
     {
         public string PanelPrefixSeparator { get; set; }

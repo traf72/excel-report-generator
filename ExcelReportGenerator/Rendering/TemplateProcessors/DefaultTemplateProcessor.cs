@@ -5,12 +5,14 @@ using ExcelReportGenerator.Rendering.Providers;
 using ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
 using ExcelReportGenerator.Rendering.Providers.VariableProviders;
 using System;
+using ExcelReportGenerator.Attributes;
 
 namespace ExcelReportGenerator.Rendering.TemplateProcessors
 {
     /// <summary>
     /// Handles report templates
     /// </summary>
+    [LicenceKeyPart(U = true)]
     public class DefaultTemplateProcessor : ITemplateProcessor
     {
         public DefaultTemplateProcessor(IPropertyValueProvider propertyValueProvider, SystemVariableProvider systemVariableProvider,
