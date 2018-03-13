@@ -16,5 +16,13 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual("HeLLlo World", input.ReplaceFirst("l", "LL"));
             Assert.IsNull(StringExtensions.ReplaceFirst(null, "a", "A"));
         }
+
+        [TestMethod]
+        public void TestReverse()
+        {
+            Assert.AreEqual("!dlroW olleH", "Hello World!".Reverse());
+            Assert.AreEqual(string.Empty, string.Empty.Reverse());
+            Assert.IsNull(StringExtensions.Reverse(null));
+        }
     }
 }
