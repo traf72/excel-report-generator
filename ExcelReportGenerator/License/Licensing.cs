@@ -5,13 +5,17 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 
 namespace ExcelReportGenerator.License
 {
     internal class Licensing
     {
-        public static DateTime LicenseExpirationDate;
+        public static string LicenseViolationMessage;
+
+        private static long _licenseExpirationDateTicks;
 
         private readonly string _encryptionKey;
 
@@ -24,7 +28,10 @@ namespace ExcelReportGenerator.License
             _encryptionKey = GetEncryptionKey();
             _licenseFileName = GetLicenseFileName();
             _licenseExpirationDateByteNumber = GetLicenseExpirationDateByteNumber();
+            LicenseViolationMessage = LicenseViolationMessage ?? GetLicenseViolationMessage();
         }
+
+        public static DateTime LicenseExpirationDate => DateTime.FromBinary(_licenseExpirationDateTicks);
 
         private string GetEncryptionKey()
         {
@@ -65,16 +72,21 @@ namespace ExcelReportGenerator.License
             return int.Parse(Encryptor.Decrypt("jtwfeAvEGgNNST/cuNJyWA==", _encryptionKey));
         }
 
-        public void LoadLicenseInfo()
+        private string GetLicenseViolationMessage()
         {
-            // TODO Сделать Safe-Thread
-            LicenseExpirationDate = GetExpirationDateFromLicenseFile();
+            return Encryptor.Decrypt("4BlFflydyzyduXfzPQVm9+adf2dNEC9ydZZRieFmkfg=", _encryptionKey);
         }
 
-        private DateTime GetExpirationDateFromLicenseFile()
+        public void LoadLicenseInfo()
+        {
+            Interlocked.Exchange(ref _licenseExpirationDateTicks, GetExpirationDateTicksFromLicenseFile());
+        }
+
+        private long GetExpirationDateTicksFromLicenseFile()
         {
             byte[] licenseFileContent = GetLicenseFileContent();
-            return new DateTime(BitConverter.ToInt64(licenseFileContent.Skip(_licenseExpirationDateByteNumber).Take(sizeof(long)).ToArray(), 0));
+            CheckHashSum(licenseFileContent);
+            return BitConverter.ToInt64(licenseFileContent.Skip(_licenseExpirationDateByteNumber).Take(sizeof(long)).ToArray(), 0);
         }
 
         private byte[] GetLicenseFileContent()
@@ -89,9 +101,22 @@ namespace ExcelReportGenerator.License
             return Encryptor.Decrypt(File.ReadAllBytes(filePath), _encryptionKey);
         }
 
-        //public void ThrowLicenseException()
-        //{
-        //    throw new Exception(Encryptor.Decrypt("4BlFflydyzyduXfzPQVm9+adf2dNEC9ydZZRieFmkfg=", _encryptionKey));
-        //}
+        private void CheckHashSum(byte[] data)
+        {
+            string computedHash;
+            int hashSizeInBytes;
+            using (MD5 hashAlg = MD5.Create())
+            {
+                hashSizeInBytes = hashAlg.HashSize / 8;
+                byte[] payload = data.Take(data.Length - hashSizeInBytes).ToArray();
+                computedHash = Convert.ToBase64String(hashAlg.ComputeHash(payload));
+            }
+
+            string originalHash = Convert.ToBase64String(data.Skip(data.Length - hashSizeInBytes).ToArray());
+            if (computedHash != originalHash)
+            {
+                throw new Exception(LicenseViolationMessage);
+            }
+        }
     }
 }
