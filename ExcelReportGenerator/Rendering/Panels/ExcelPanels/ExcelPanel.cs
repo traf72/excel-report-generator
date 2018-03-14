@@ -55,23 +55,23 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
         public IList<IExcelPanel> Children { get; set; } = new List<IExcelPanel>();
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
+        [Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty(Converter = typeof(ShiftTypeConverter))]
         public ShiftType ShiftType { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
+        [Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty(Converter = typeof(PanelTypeConverter))]
         public PanelType Type { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
+        [Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty(Converter = typeof(RenderPriorityConverter))]
         public int RenderPriority { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
+        [Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string BeforeRenderMethodName { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
+        [Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string AfterRenderMethodName { get; set; }
 
@@ -97,7 +97,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                     continue;
                 }
                 if (_templateProcessor.IsVerticalPageBreak(cellValue))
-                    {
+                {
                     cell.Worksheet.PageSetup.AddVerticalPageBreak(cell.WorksheetColumn().ColumnNumber());
                     cell.Value = null;
                     continue;
