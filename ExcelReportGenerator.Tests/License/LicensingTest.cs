@@ -28,6 +28,10 @@ namespace ExcelReportGenerator.Tests.License
         [TestMethod]
         public void TestLoadLicenseInfo()
         {
+            var licensing = new Licensing();
+            File.Delete(LicenseFileName);
+            ExceptionAssert.Throws<Exception>(() => licensing.LoadLicenseInfo(), "License file was not found");
+
             var rnd = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
             byte[] fictitiousBytes = new byte[369];
             rnd.NextBytes(fictitiousBytes);
@@ -46,7 +50,6 @@ namespace ExcelReportGenerator.Tests.License
             byte[] encryptedBytes = Encryptor.Encrypt(allBytes, EncryptionKey);
             File.WriteAllBytes(LicenseFileName, encryptedBytes);
 
-            var licensing = new Licensing();
             licensing.LoadLicenseInfo();
             Assert.AreEqual(date, Licensing.LicenseExpirationDate);
 
@@ -56,9 +59,6 @@ namespace ExcelReportGenerator.Tests.License
             }
 
             ExceptionAssert.Throws<Exception>(() => licensing.LoadLicenseInfo(), LicenseViolationMessage);
-
-            File.Delete(LicenseFileName);
-            ExceptionAssert.Throws<Exception>(() => licensing.LoadLicenseInfo(), "License file was not found");
         }
 
         [TestMethod]
