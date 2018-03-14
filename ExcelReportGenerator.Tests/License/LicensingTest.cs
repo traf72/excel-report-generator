@@ -15,6 +15,7 @@ namespace ExcelReportGenerator.Tests.License
         private const string EncryptionKey = "ccimLPARStcnulttempplattalpmeERTErPecnatMethodCtProperstancertyvhicaldatRPEULAVMElenaPctemPanTNEcxEelbdnotfocnuFlColuRTTAEULAVmnAttretagerundexcairaVdiVELEelEveimanyDecrETIATADCaitemvaluealuepreProvtyValuePallValuePtsnItlMPLATEtllacdeProclateproFmetINGSETanydl";
         private const string LicenseFileName = "ExcelReportGenerator.lic";
         private const string LicenseViolationMessage = "License violation";
+        private const string LicenseExpiredMessage = "License expired";
         private const int LicenseExpirationDateByteNumber = 217;
 
         [TestMethod]
@@ -82,6 +83,13 @@ namespace ExcelReportGenerator.Tests.License
         }
 
         [TestMethod]
+        public void TestGetLicenseExpiredMessage()
+        {
+            MethodInfo method = typeof(Licensing).GetMethod("GetLicenseExpiredMessage", BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.AreEqual(LicenseExpiredMessage, method.Invoke(new Licensing(), null));
+        }
+
+        [TestMethod]
         public void TestCreateLicensing()
         {
             var licensing = new Licensing();
@@ -89,6 +97,7 @@ namespace ExcelReportGenerator.Tests.License
             Assert.AreEqual(LicenseFileName, licensing.GetType().GetField("_licenseFileName", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(licensing));
             Assert.AreEqual(LicenseExpirationDateByteNumber, licensing.GetType().GetField("_licenseExpirationDateByteNumber", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(licensing));
             Assert.AreEqual(LicenseViolationMessage, Licensing.LicenseViolationMessage);
+            Assert.AreEqual(LicenseExpiredMessage, Licensing.LicenseExpiredMessage);
         }
 
         [TestMethod]

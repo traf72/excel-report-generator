@@ -227,7 +227,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 // Check license
                 if (Licensing.LicenseExpirationDate.Date < DateTime.Now.Date)
                 {
-                    throw new Exception(Licensing.LicenseViolationMessage);
+                    throw new Exception(Licensing.LicenseExpiredMessage);
                 }
             }
 

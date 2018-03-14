@@ -15,6 +15,8 @@ namespace ExcelReportGenerator.License
     {
         public static string LicenseViolationMessage;
 
+        public static string LicenseExpiredMessage;
+
         private static long _licenseExpirationDateTicks;
 
         private readonly string _encryptionKey;
@@ -29,6 +31,7 @@ namespace ExcelReportGenerator.License
             _licenseFileName = GetLicenseFileName();
             _licenseExpirationDateByteNumber = GetLicenseExpirationDateByteNumber();
             LicenseViolationMessage = LicenseViolationMessage ?? GetLicenseViolationMessage();
+            LicenseExpiredMessage = LicenseExpiredMessage ?? GetLicenseExpiredMessage();
         }
 
         public static DateTime LicenseExpirationDate => DateTime.FromBinary(_licenseExpirationDateTicks);
@@ -75,6 +78,11 @@ namespace ExcelReportGenerator.License
         private string GetLicenseViolationMessage()
         {
             return Encryptor.Decrypt("4BlFflydyzyduXfzPQVm9+adf2dNEC9ydZZRieFmkfg=", _encryptionKey);
+        }
+
+        private string GetLicenseExpiredMessage()
+        {
+            return Encryptor.Decrypt("m74KEXaawAtFrqrYmv1zlA==", _encryptionKey);
         }
 
         public void LoadLicenseInfo()
