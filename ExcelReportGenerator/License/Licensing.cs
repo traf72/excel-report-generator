@@ -38,7 +38,11 @@ namespace ExcelReportGenerator.License
 
         private string GetEncryptionKey()
         {
-            Type[] keyPartTypes = typeof(IPanel).Assembly.GetExportedTypes().Where(t => t.IsDefined(typeof(LicenceKeyPartAttribute), false)).ToArray();
+            Type[] keyPartTypes = typeof(IPanel).Assembly.GetExportedTypes()
+                .Where(t => t.IsDefined(typeof(LicenceKeyPartAttribute), false))
+                .OrderBy(t => t.Name[t.Name.Length > 5 ? 5 : t.Name.Length - 1])
+                .ToArray();
+
             var key = new StringBuilder();
             foreach (Type keyPartType in keyPartTypes)
             {
@@ -67,22 +71,22 @@ namespace ExcelReportGenerator.License
 
         private string GetLicenseFileName()
         {
-            return Encryptor.Decrypt("Fy3q6kJ5kZHGRWrQwgwavTCZrkaGgPNkXH7k0hny6rE=", _encryptionKey);
+            return Encryptor.Decrypt("3HF77NC5DKNQO+Kv2rfpwx4S7CxuakwhBXapKhU0IR4=", _encryptionKey);
         }
 
         private int GetLicenseExpirationDateByteNumber()
         {
-            return int.Parse(Encryptor.Decrypt("jtwfeAvEGgNNST/cuNJyWA==", _encryptionKey));
+            return int.Parse(Encryptor.Decrypt("/4NlP0sVqYkW9AG6XQi4Xw==", _encryptionKey));
         }
 
         private string GetLicenseViolationMessage()
         {
-            return Encryptor.Decrypt("4BlFflydyzyduXfzPQVm9+adf2dNEC9ydZZRieFmkfg=", _encryptionKey);
+            return Encryptor.Decrypt("w80JIp9MK9ceWyG5DcwOlwfrROWwGfuB+C34i2O338I=", _encryptionKey);
         }
 
         private string GetLicenseExpiredMessage()
         {
-            return Encryptor.Decrypt("m74KEXaawAtFrqrYmv1zlA==", _encryptionKey);
+            return Encryptor.Decrypt("KlpKonqwyuZqUqT3RJjE0g==", _encryptionKey);
         }
 
         public void LoadLicenseInfo()
@@ -103,7 +107,7 @@ namespace ExcelReportGenerator.License
             string filePath = $"{licenseFileLocation.Directory}\\{_licenseFileName}";
             if (!File.Exists(filePath))
             {
-                throw new Exception(Encryptor.Decrypt("+j2CNbC4fKTeeHt/ESaW/kP5nCCJn/MaDTmeAytwyu8=", _encryptionKey));
+                throw new Exception(Encryptor.Decrypt("MH/CuyOut3XMmHUTNF5odQvR9Z9RXhGlFNupz5zas/4=", _encryptionKey));
             }
 
             return Encryptor.Decrypt(File.ReadAllBytes(filePath), _encryptionKey);

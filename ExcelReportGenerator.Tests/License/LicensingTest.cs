@@ -12,8 +12,9 @@ namespace ExcelReportGenerator.Tests.License
     [TestClass]
     public class LicensingTest
     {
-        private const string EncryptionKey = "ccimLPARStcnulttempplattalpmeERTErPecnatMethodCtProperstancertyvhicaldatRPEULAVMElenaPctemPanTNEcxEelbdnotfocnuFlColuRTTAEULAVmnAttretagerundexcairaVdiVELEelEveimanyDecrETIATADCaitemvaluealuepreProvtyValuePallValuePtsnItlMPLATEtllacdeProclateproFmetINGSETanydl";
+        private const string EncryptionKey = "lColuccimTNERPEULLPARSIstanRTTAtalpmednotfoertyvcnuFecxEelblttempplatrPecnatMethodCtPropertcnuElenaPcERTEMhicaldattemPanelEveaitemvaluePLATEimanyDecrFmettyValuePallValuePtsnItleProclateproairaVditageralueprundexctllacdEULAVceProvNGSETAVMETIVELEanydlmnAttr";
         private const string LicenseFileName = "ExcelReportGenerator.lic";
+        private const string LicenseNotFoundMessage = "License file was not found";
         private const string LicenseViolationMessage = "License violation";
         private const string LicenseExpiredMessage = "License expired";
         private const int LicenseExpirationDateByteNumber = 217;
@@ -29,8 +30,16 @@ namespace ExcelReportGenerator.Tests.License
         public void TestLoadLicenseInfo()
         {
             var licensing = new Licensing();
+
+            using (var fs = File.Open(LicenseFileName, FileMode.Open))
+            {
+                fs.WriteByte(100);
+            }
+
+            ExceptionAssert.Throws<Exception>(() => licensing.LoadLicenseInfo(), LicenseViolationMessage);
+
             File.Delete(LicenseFileName);
-            ExceptionAssert.Throws<Exception>(() => licensing.LoadLicenseInfo(), "License file was not found");
+            ExceptionAssert.Throws<Exception>(() => licensing.LoadLicenseInfo(), LicenseNotFoundMessage);
 
             var rnd = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
             byte[] fictitiousBytes = new byte[369];
@@ -52,13 +61,6 @@ namespace ExcelReportGenerator.Tests.License
 
             licensing.LoadLicenseInfo();
             Assert.AreEqual(date, Licensing.LicenseExpirationDate);
-
-            using (var fs = File.Open(LicenseFileName, FileMode.Open))
-            {
-                fs.WriteByte(100);
-            }
-
-            ExceptionAssert.Throws<Exception>(() => licensing.LoadLicenseInfo(), LicenseViolationMessage);
         }
 
         [TestMethod]
@@ -103,7 +105,11 @@ namespace ExcelReportGenerator.Tests.License
         [TestMethod]
         public void EncryptMessage()
         {
-            string encryptedMessage = Encryptor.Encrypt("", EncryptionKey);
+            string encryptedLicenseFileName = Encryptor.Encrypt(LicenseFileName, EncryptionKey);
+            string encryptedLicenseViolationMessage = Encryptor.Encrypt(LicenseViolationMessage, EncryptionKey);
+            string encryptedLicenseExpiredMessage = Encryptor.Encrypt(LicenseExpiredMessage, EncryptionKey);
+            string encryptedLicenseExpirationDateByteNumber = Encryptor.Encrypt(LicenseExpirationDateByteNumber.ToString(), EncryptionKey);
+            string encryptedLicenseNotFoundMessage = Encryptor.Encrypt(LicenseNotFoundMessage, EncryptionKey);
         }
     }
 }
