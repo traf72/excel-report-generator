@@ -37,19 +37,19 @@ namespace ExcelReportGenerator.Tests.License
             File.Delete(LicenseFileName);
             DeleteLicenseInfoFromRegistry();
 
-            DateTime expectedDate = DateTime.Now.AddDays(TrialLicenseExpirationDaysCount);
+            DateTime expirationDate = DateTime.Now.AddDays(TrialLicenseExpirationDaysCount);
 
             var licensing = new Licensing();
             licensing.LoadLicenseInfo();
-            Assert.AreEqual(expectedDate.Date, Licensing.LicenseExpirationDate.Date);
-            CheckLicenseExpirationDateInRegistry(expectedDate);
+            Assert.AreEqual(expirationDate.Date, Licensing.LicenseExpirationDate.Date);
+            CheckLicenseExpirationDateInRegistry(expirationDate);
 
             // If trial expiration date already exists in registry
-            expectedDate = DateTime.Now.AddDays(1);
-            SetLicenseInfoToRegistry(expectedDate);
+            expirationDate = DateTime.Now.AddDays(1);
+            SetLicenseInfoToRegistry(expirationDate);
             licensing.LoadLicenseInfo();
-            Assert.AreEqual(expectedDate.Date, Licensing.LicenseExpirationDate.Date);
-            CheckLicenseExpirationDateInRegistry(expectedDate);
+            Assert.AreEqual(expirationDate.Date, Licensing.LicenseExpirationDate.Date);
+            CheckLicenseExpirationDateInRegistry(expirationDate);
 
             DeleteLicenseInfoFromRegistry();
 
@@ -58,8 +58,8 @@ namespace ExcelReportGenerator.Tests.License
             byte[] fictitiousBytes = new byte[369];
             rnd.NextBytes(fictitiousBytes);
 
-            var date = new DateTime(2100, 12, 20);
-            byte[] ticksBytes = BitConverter.GetBytes(date.Ticks);
+            expirationDate = new DateTime(2100, 12, 20);
+            byte[] ticksBytes = BitConverter.GetBytes(expirationDate.Ticks);
 
             byte[] payload = fictitiousBytes.Take(LicenseExpirationDateByteNumber).Concat(ticksBytes).Concat(fictitiousBytes.Skip(LicenseExpirationDateByteNumber).Take(fictitiousBytes.Length)).ToArray();
             byte[] hash;
@@ -73,7 +73,7 @@ namespace ExcelReportGenerator.Tests.License
             File.WriteAllBytes(LicenseFileName, encryptedBytes);
 
             licensing.LoadLicenseInfo();
-            Assert.AreEqual(date, Licensing.LicenseExpirationDate);
+            Assert.AreEqual(expirationDate, Licensing.LicenseExpirationDate);
             Assert.IsNull(Registry.GetValue(RegistryPath, RegistryKey, null));
 
             // License file changed

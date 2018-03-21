@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelReportGenerator.Consol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelReportGenerator.Samples", "ExcelReportGenerator.Samples\ExcelReportGenerator.Samples.csproj", "{2A57B75F-4849-463B-A842-45D3BC30BDA2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelReportGenerator.LicenseManager", "ExcelReportGenerator.LicenseManager\ExcelReportGenerator.LicenseManager.csproj", "{5726DFDF-041F-40CC-A11A-F9C1FCADEBAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{2A57B75F-4849-463B-A842-45D3BC30BDA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A57B75F-4849-463B-A842-45D3BC30BDA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A57B75F-4849-463B-A842-45D3BC30BDA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5726DFDF-041F-40CC-A11A-F9C1FCADEBAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5726DFDF-041F-40CC-A11A-F9C1FCADEBAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5726DFDF-041F-40CC-A11A-F9C1FCADEBAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5726DFDF-041F-40CC-A11A-F9C1FCADEBAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
