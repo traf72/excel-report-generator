@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using ExcelReportGenerator.Rendering.Panels;
 using ExcelReportGenerator.Tests.CustomAsserts;
+using Microsoft.Win32;
 
 namespace ExcelReportGenerator.Tests.License
 {
@@ -14,10 +16,12 @@ namespace ExcelReportGenerator.Tests.License
     {
         private const string EncryptionKey = "lColuccimTNERPEULLPARSIstanRTTAtalpmednotfoertyvcnuFecxEelblttempplatrPecnatMethodCtPropertcnuElenaPcERTEMhicaldattemPanelEveaitemvaluePLATEimanyDecrFmettyValuePallValuePtsnItleProclateproairaVditageralueprundexctllacdEULAVceProvNGSETAVMETIVELEanydlmnAttr";
         private const string LicenseFileName = "ExcelReportGenerator.lic";
-        private const string LicenseNotFoundMessage = "License file was not found";
+        private const string RegistryPath = @"HKEY_CURRENT_USER\SOFTWARE\ProtectedStorage";
+        private const string RegistryKey = @"vcim";
+        private const int LicenseExpirationDateByteNumber = 217;
+        private const int TrialLicenseExpirationDaysCount = 30;
         private const string LicenseViolationMessage = "License violation";
         private const string LicenseExpiredMessage = "License expired";
-        private const int LicenseExpirationDateByteNumber = 217;
 
         [TestMethod]
         public void TestGetEncryptionKey()
@@ -29,18 +33,27 @@ namespace ExcelReportGenerator.Tests.License
         [TestMethod]
         public void TestLoadLicenseInfo()
         {
-            var licensing = new Licensing();
-
-            using (var fs = File.Open(LicenseFileName, FileMode.Open))
-            {
-                fs.WriteByte(100);
-            }
-
-            ExceptionAssert.Throws<Exception>(() => licensing.LoadLicenseInfo(), LicenseViolationMessage);
-
+            // Trial license from scratch
             File.Delete(LicenseFileName);
-            ExceptionAssert.Throws<Exception>(() => licensing.LoadLicenseInfo(), LicenseNotFoundMessage);
+            DeleteLicenseInfoFromRegistry();
 
+            DateTime expectedDate = DateTime.Now.AddDays(TrialLicenseExpirationDaysCount);
+
+            var licensing = new Licensing();
+            licensing.LoadLicenseInfo();
+            Assert.AreEqual(expectedDate.Date, Licensing.LicenseExpirationDate.Date);
+            CheckLicenseExpirationDateInRegistry(expectedDate);
+
+            // If trial expiration date already exists in registry
+            expectedDate = DateTime.Now.AddDays(1);
+            SetLicenseInfoToRegistry(expectedDate);
+            licensing.LoadLicenseInfo();
+            Assert.AreEqual(expectedDate.Date, Licensing.LicenseExpirationDate.Date);
+            CheckLicenseExpirationDateInRegistry(expectedDate);
+
+            DeleteLicenseInfoFromRegistry();
+
+            // License from file
             var rnd = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
             byte[] fictitiousBytes = new byte[369];
             rnd.NextBytes(fictitiousBytes);
@@ -61,6 +74,18 @@ namespace ExcelReportGenerator.Tests.License
 
             licensing.LoadLicenseInfo();
             Assert.AreEqual(date, Licensing.LicenseExpirationDate);
+            Assert.IsNull(Registry.GetValue(RegistryPath, RegistryKey, null));
+
+            // License file changed
+            using (var fs = File.Open(LicenseFileName, FileMode.Open))
+            {
+                fs.WriteByte(100);
+            }
+
+            ExceptionAssert.Throws<Exception>(() => licensing.LoadLicenseInfo(), LicenseViolationMessage);
+            Assert.IsNull(Registry.GetValue(RegistryPath, RegistryKey, null));
+
+            File.Delete(LicenseFileName);
         }
 
         [TestMethod]
@@ -74,7 +99,28 @@ namespace ExcelReportGenerator.Tests.License
         public void TestGetLicenseExpirationDateByteNumber()
         {
             MethodInfo method = typeof(Licensing).GetMethod("GetLicenseExpirationDateByteNumber", BindingFlags.Instance | BindingFlags.NonPublic);
-            Assert.AreEqual(217, method.Invoke(new Licensing(), null));
+            Assert.AreEqual(LicenseExpirationDateByteNumber, method.Invoke(new Licensing(), null));
+        }
+
+        [TestMethod]
+        public void TestGetTrialLicenseExpirationDaysCount()
+        {
+            MethodInfo method = typeof(Licensing).GetMethod("GetTrialLicenseExpirationDaysCount", BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.AreEqual(TrialLicenseExpirationDaysCount, method.Invoke(new Licensing(), null));
+        }
+
+        [TestMethod]
+        public void TestGetRegistryPath()
+        {
+            MethodInfo method = typeof(Licensing).GetMethod("GetRegistryPath", BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.AreEqual(RegistryPath, method.Invoke(new Licensing(), null));
+        }
+
+        [TestMethod]
+        public void TestGetRegistryKey()
+        {
+            MethodInfo method = typeof(Licensing).GetMethod("GetRegistryKey", BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.AreEqual(RegistryKey, method.Invoke(new Licensing(), null));
         }
 
         [TestMethod]
@@ -92,12 +138,37 @@ namespace ExcelReportGenerator.Tests.License
         }
 
         [TestMethod]
+        public void TestGetTrialExpirationDateFromRegistry()
+        {
+            DateTime expirationDate = DateTime.Now.AddDays(1);
+            SetLicenseInfoToRegistry(expirationDate);
+
+            long result = GetLicenseInfoFromRegistry();
+            Assert.AreEqual(expirationDate.Ticks, result);
+        }
+
+        [TestMethod]
+        public void TestSetTrialExpirationDateToRegistry()
+        {
+            DeleteLicenseInfoFromRegistry();
+            DateTime expectedDate = DateTime.Now.AddDays(TrialLicenseExpirationDaysCount).Date;
+
+            long result = GetLicenseInfoFromRegistry();
+            Assert.AreEqual(expectedDate, DateTime.FromBinary(result).Date);
+
+            CheckLicenseExpirationDateInRegistry(expectedDate);
+        }
+
+        [TestMethod]
         public void TestCreateLicensing()
         {
             var licensing = new Licensing();
             Assert.AreEqual(EncryptionKey, licensing.GetType().GetField("_encryptionKey", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(licensing));
             Assert.AreEqual(LicenseFileName, licensing.GetType().GetField("_licenseFileName", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(licensing));
             Assert.AreEqual(LicenseExpirationDateByteNumber, licensing.GetType().GetField("_licenseExpirationDateByteNumber", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(licensing));
+            Assert.AreEqual(TrialLicenseExpirationDaysCount, licensing.GetType().GetField("_trialLicenseExpirationDaysCount", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(licensing));
+            Assert.AreEqual(RegistryPath, licensing.GetType().GetField("_registryPath", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(licensing));
+            Assert.AreEqual(RegistryKey, licensing.GetType().GetField("_registryKey", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(licensing));
             Assert.AreEqual(LicenseViolationMessage, Licensing.LicenseViolationMessage);
             Assert.AreEqual(LicenseExpiredMessage, Licensing.LicenseExpiredMessage);
         }
@@ -106,10 +177,41 @@ namespace ExcelReportGenerator.Tests.License
         public void EncryptMessage()
         {
             string encryptedLicenseFileName = Encryptor.Encrypt(LicenseFileName, EncryptionKey);
+            string encryptedLicenseExpirationDateByteNumber = Encryptor.Encrypt(LicenseExpirationDateByteNumber.ToString(), EncryptionKey);
+            string encryptedTrialLicenseExpirationDaysCount = Encryptor.Encrypt(TrialLicenseExpirationDaysCount.ToString(), EncryptionKey);
             string encryptedLicenseViolationMessage = Encryptor.Encrypt(LicenseViolationMessage, EncryptionKey);
             string encryptedLicenseExpiredMessage = Encryptor.Encrypt(LicenseExpiredMessage, EncryptionKey);
-            string encryptedLicenseExpirationDateByteNumber = Encryptor.Encrypt(LicenseExpirationDateByteNumber.ToString(), EncryptionKey);
-            string encryptedLicenseNotFoundMessage = Encryptor.Encrypt(LicenseNotFoundMessage, EncryptionKey);
+            string encryptedRegistryPath = Encryptor.Encrypt(RegistryPath, EncryptionKey);
+            string encryptedRegistryKey = Encryptor.Encrypt(RegistryKey, EncryptionKey);
+        }
+
+        private void CheckLicenseExpirationDateInRegistry(DateTime expectedDate)
+        {
+            byte[] dateTicksFromRegistry = (byte[])Registry.GetValue(RegistryPath, RegistryKey, null);
+            byte[] decryptedBytes = Encryptor.Decrypt(dateTicksFromRegistry, EncryptionKey);
+            Assert.AreEqual(expectedDate.Date, DateTime.FromBinary(BitConverter.ToInt64(decryptedBytes, 0)).Date);
+        }
+
+        private void DeleteLicenseInfoFromRegistry()
+        {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\ProtectedStorage", true))
+            {
+                key?.DeleteValue(RegistryKey, false);
+            }
+        }
+
+        private void SetLicenseInfoToRegistry(DateTime date)
+        {
+            var licensing = new Licensing();
+            MethodInfo setMethod = licensing.GetType().GetMethod("SetTrialExpirationDateInRegistry", BindingFlags.Instance | BindingFlags.NonPublic);
+            setMethod.Invoke(licensing, new object[] { date.Ticks });
+        }
+
+        private long GetLicenseInfoFromRegistry()
+        {
+            var licensing = new Licensing();
+            MethodInfo getMethod = licensing.GetType().GetMethod("GetTrialExpirationDate", BindingFlags.Instance | BindingFlags.NonPublic);
+            return (long)getMethod.Invoke(licensing, new object[] { new FileInfo(typeof(IPanel).Assembly.Location) });
         }
     }
 }

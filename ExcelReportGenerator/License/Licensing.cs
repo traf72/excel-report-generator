@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using Microsoft.Win32;
 
 namespace ExcelReportGenerator.License
 {
@@ -25,11 +26,20 @@ namespace ExcelReportGenerator.License
 
         private readonly int _licenseExpirationDateByteNumber;
 
+        private readonly int _trialLicenseExpirationDaysCount;
+
+        private readonly string _registryPath;
+
+        private readonly string _registryKey;
+
         public Licensing()
         {
             _encryptionKey = GetEncryptionKey();
             _licenseFileName = GetLicenseFileName();
             _licenseExpirationDateByteNumber = GetLicenseExpirationDateByteNumber();
+            _trialLicenseExpirationDaysCount = GetTrialLicenseExpirationDaysCount();
+            _registryPath = GetRegistryPath();
+            _registryKey = GetRegistryKey();
             LicenseViolationMessage = LicenseViolationMessage ?? GetLicenseViolationMessage();
             LicenseExpiredMessage = LicenseExpiredMessage ?? GetLicenseExpiredMessage();
         }
@@ -79,6 +89,21 @@ namespace ExcelReportGenerator.License
             return int.Parse(Encryptor.Decrypt("/4NlP0sVqYkW9AG6XQi4Xw==", _encryptionKey));
         }
 
+        private int GetTrialLicenseExpirationDaysCount()
+        {
+            return int.Parse(Encryptor.Decrypt("+6W6bZ9IuGZp+cfHGOizUA==", _encryptionKey));
+        }
+
+        private string GetRegistryPath()
+        {
+            return Encryptor.Decrypt("jVVGjmihDaGr9uKiHisIh2a0WLthDrrSswWWPQscc4uKzso+FoLMzCT0n8of5KLU", _encryptionKey);
+        }
+
+        private string GetRegistryKey()
+        {
+            return Encryptor.Decrypt("riSx7jPt6NFuCZmnJwSzqQ==", _encryptionKey);
+        }
+
         private string GetLicenseViolationMessage()
         {
             return Encryptor.Decrypt("w80JIp9MK9ceWyG5DcwOlwfrROWwGfuB+C34i2O338I=", _encryptionKey);
@@ -91,26 +116,47 @@ namespace ExcelReportGenerator.License
 
         public void LoadLicenseInfo()
         {
-            Interlocked.Exchange(ref _licenseExpirationDateTicks, GetExpirationDateTicksFromLicenseFile());
+            Interlocked.Exchange(ref _licenseExpirationDateTicks, GetExpirationDateTicks());
         }
 
-        private long GetExpirationDateTicksFromLicenseFile()
+        private long GetExpirationDateTicks()
         {
-            byte[] licenseFileContent = GetLicenseFileContent();
+            var assemblyFile = new FileInfo(typeof(IPanel).Assembly.Location);
+            string licenseFilePath = $"{assemblyFile.Directory}\\{_licenseFileName}";
+            return !File.Exists(licenseFilePath) ? GetTrialExpirationDate(assemblyFile) : GetExpirationDateFromLicenseFile(licenseFilePath);
+        }
+
+        private long GetExpirationDateFromLicenseFile(string licenseFilePath)
+        {
+            byte[] licenseFileContent = Encryptor.Decrypt(File.ReadAllBytes(licenseFilePath), _encryptionKey);
             CheckHashSum(licenseFileContent);
             return BitConverter.ToInt64(licenseFileContent.Skip(_licenseExpirationDateByteNumber).Take(sizeof(long)).ToArray(), 0);
         }
 
-        private byte[] GetLicenseFileContent()
+        private long GetTrialExpirationDate(FileInfo assemblyFile)
         {
-            var licenseFileLocation = new FileInfo(typeof(IPanel).Assembly.Location);
-            string filePath = $"{licenseFileLocation.Directory}\\{_licenseFileName}";
-            if (!File.Exists(filePath))
+            if ((DateTime.Now - assemblyFile.CreationTime).TotalDays > _trialLicenseExpirationDaysCount)
             {
-                throw new Exception(Encryptor.Decrypt("MH/CuyOut3XMmHUTNF5odQvR9Z9RXhGlFNupz5zas/4=", _encryptionKey));
+                return assemblyFile.CreationTime.Ticks;
             }
 
-            return Encryptor.Decrypt(File.ReadAllBytes(filePath), _encryptionKey);
+            byte[] registryValue = (byte[])Registry.GetValue(_registryPath, _registryKey, null);
+            if (registryValue != null)
+            {
+                byte[] decryptedBytes = Encryptor.Decrypt(registryValue, _encryptionKey);
+                return BitConverter.ToInt64(decryptedBytes, 0);
+            }
+
+            long trialExpirationDate = DateTime.Now.AddDays(_trialLicenseExpirationDaysCount).Ticks;
+            SetTrialExpirationDateInRegistry(trialExpirationDate);
+            return trialExpirationDate;
+        }
+
+        private void SetTrialExpirationDateInRegistry(long trialExpirationDate)
+        {
+            byte[] bytes = BitConverter.GetBytes(trialExpirationDate);
+            byte[] encryptedBytes = Encryptor.Encrypt(bytes, _encryptionKey);
+            Registry.SetValue(_registryPath, _registryKey, encryptedBytes, RegistryValueKind.Binary);
         }
 
         private void CheckHashSum(byte[] data)
