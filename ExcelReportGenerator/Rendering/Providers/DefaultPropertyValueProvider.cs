@@ -9,6 +9,7 @@ using ExcelReportGenerator.Attributes;
 namespace ExcelReportGenerator.Rendering.Providers
 {
     /// <summary>
+    /// Default implementation of <see cref="IPropertyValueProvider" /> 
     /// Provides public properties or fields values via reflection
     /// </summary>
     [LicenceKeyPart]
@@ -31,10 +32,21 @@ namespace ExcelReportGenerator.Rendering.Providers
             _reflectionHelper = reflectionHelper;
         }
 
+        /// <summary>
+        /// Type provider used for type search
+        /// </summary>
         protected ITypeProvider TypeProvider { get; }
 
+        /// <summary>
+        /// Instance provider used to get instance of specified type
+        /// </summary>
         protected IInstanceProvider InstanceProvider { get; }
 
+        /// <inheritdoc />
+        /// <exception cref="ArgumentException">Thrown when <paramref name="propertyTemplate" /> is null, empty string or whitespace</exception>
+        /// <exception cref="InvalidTemplateException"></exception>
+        /// <exception cref="MemberNotFoundException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public virtual object GetValue(string propertyTemplate)
         {
             if (string.IsNullOrWhiteSpace(propertyTemplate))
@@ -112,6 +124,9 @@ namespace ExcelReportGenerator.Rendering.Providers
             throw new ArgumentException($"Parameter must have the type of \"{nameof(PropertyInfo)}\" or {nameof(FieldInfo)}", nameof(member));
         }
 
+        /// <summary>
+        /// Parse string <paramref name="template"/> into <see cref="MemberTemplateParts"/>
+        /// </summary>
         protected virtual MemberTemplateParts ParseTemplate(string template)
         {
             int typeSeparatorIndex = template.LastIndexOf(':');

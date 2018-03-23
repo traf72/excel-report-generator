@@ -1,16 +1,22 @@
-﻿using System;
-using ExcelReportGenerator.Attributes;
+﻿using ExcelReportGenerator.Attributes;
+using System;
 
 namespace ExcelReportGenerator.Rendering.Providers
 {
     /// <summary>
-    /// Provides instance of specified type
+    /// Provides instances for templates
     /// </summary>
     [LicenceKeyPart]
     public interface IInstanceProvider
     {
+        /// <summary>
+        /// Provides instance of specified <paramref name="type" />
+        /// </summary>
         object GetInstance(Type type);
 
+        /// <summary>
+        /// Provides instance of specified <typeparamref name="T" />
+        /// </summary>
         T GetInstance<T>();
     }
 }

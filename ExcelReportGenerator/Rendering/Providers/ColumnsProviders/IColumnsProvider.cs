@@ -4,9 +4,7 @@ namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
 {
     internal interface IColumnsProvider
     {
-        /// <summary>
-        /// Provides columns info based on data
-        /// </summary>
+        // Provides columns info based on data
         IList<ExcelDynamicColumn> GetColumnsList(object data);
     }
 }

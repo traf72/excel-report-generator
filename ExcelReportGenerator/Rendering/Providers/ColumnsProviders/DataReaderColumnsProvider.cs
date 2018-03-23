@@ -5,9 +5,7 @@ using System.Linq;
 
 namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
 {
-    /// <summary>
-    /// Provides columns info from IDataReader
-    /// </summary>
+    // Provides columns info from IDataReader
     internal class DataReaderColumnsProvider : IGenericColumnsProvider<IDataReader>
     {
         public IList<ExcelDynamicColumn> GetColumnsList(IDataReader reader)

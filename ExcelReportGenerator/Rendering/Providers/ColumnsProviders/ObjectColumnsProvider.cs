@@ -4,9 +4,7 @@ using ExcelReportGenerator.Helpers;
 
 namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
 {
-    /// <summary>
-    /// Provides columns info from any object
-    /// </summary>
+    // Provides columns info from any object
     internal class ObjectColumnsProvider : IColumnsProvider
     {
         private readonly IGenericColumnsProvider<Type> _typeColumnsProvider;

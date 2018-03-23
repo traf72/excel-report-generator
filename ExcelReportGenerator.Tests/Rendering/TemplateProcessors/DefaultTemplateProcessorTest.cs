@@ -30,7 +30,7 @@ namespace ExcelReportGenerator.Tests.Rendering.TemplateProcessors
 
             var templateProcessor = new DefaultTemplateProcessor(propertyValueProvider, variableValueProvider, methodCallValueProvider, dataItemValueProvider);
 
-            ExceptionAssert.Throws<ArgumentNullException>(() => templateProcessor.GetValue(null, dataItem));
+            ExceptionAssert.Throws<ArgumentException>(() => templateProcessor.GetValue(null, dataItem));
             ExceptionAssert.Throws<InvalidTemplateException>(() => templateProcessor.GetValue("{p-Name}"), "Invalid template \"{p-Name}\". Cannot find separator \":\" between member label and member template");
             ExceptionAssert.Throws<InvalidTemplateException>(() => templateProcessor.GetValue("{bad:Name}"), "Invalid template \"{bad:Name}\". Unknown member label \"bad\"");
 

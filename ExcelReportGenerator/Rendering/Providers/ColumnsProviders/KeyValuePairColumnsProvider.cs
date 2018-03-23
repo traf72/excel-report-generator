@@ -4,9 +4,7 @@ using System.Collections.Generic;
 
 namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
 {
-    /// <summary>
-    /// Provides columns info from KeyValuePair
-    /// </summary>
+    // Provides columns info from KeyValuePair
     internal class KeyValuePairColumnsProvider : IColumnsProvider
     {
         public IList<ExcelDynamicColumn> GetColumnsList(object data)

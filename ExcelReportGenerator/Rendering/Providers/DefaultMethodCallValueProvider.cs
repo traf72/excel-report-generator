@@ -14,7 +14,7 @@ using ExcelReportGenerator.Attributes;
 namespace ExcelReportGenerator.Rendering.Providers
 {
     /// <summary>
-    /// Provides result of method call
+    /// Default implementation of <see cref="IMethodCallValueProvider" /> 
     /// </summary>
     [LicenceKeyPart]
     public class DefaultMethodCallValueProvider : IMethodCallValueProvider
@@ -29,17 +29,31 @@ namespace ExcelReportGenerator.Rendering.Providers
             InstanceProvider = instanceProvider ?? throw new ArgumentNullException(nameof(instanceProvider), ArgumentHelper.NullParamMessage);
         }
 
+        /// <summary>
+        /// Type provider used for type search
+        /// </summary>
         protected ITypeProvider TypeProvider { get; }
 
+        /// <summary>
+        /// Instance provider used to get instance of specified type
+        /// </summary>
         protected IInstanceProvider InstanceProvider { get; }
 
         private string MethodCallTemplate => TemplateStack.Peek();
 
+        /// <inheritdoc />
+        /// <seealso cref="CallMethod(string, Type, ITemplateProcessor, HierarchicalDataItem)"/>
         public virtual object CallMethod(string methodCallTemplate, ITemplateProcessor templateProcessor, HierarchicalDataItem dataItem)
         {
             return CallMethod(methodCallTemplate, null, templateProcessor, dataItem);
         }
 
+        /// <inheritdoc />
+        /// <exception cref="ArgumentException">Thrown when <paramref name="methodCallTemplate" /> is null, empty string or whitespace</exception>
+        /// <exception cref="InvalidTemplateException"></exception>
+        /// <exception cref="MethodNotFoundException"></exception>
+        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public object CallMethod(string methodCallTemplate, Type concreteType, ITemplateProcessor templateProcessor, HierarchicalDataItem dataItem)
         {
             if (string.IsNullOrWhiteSpace(methodCallTemplate))
@@ -63,8 +77,6 @@ namespace ExcelReportGenerator.Rendering.Providers
             }
         }
 
-        /// <param name="instance">Instance on which method will be called</param>
-        /// <param name="inputParameters">Parameters with which method will be called</param>
         private object CallMethod(object instance, MethodInfo method, IList<InputParameter> inputParameters)
         {
             ParameterInfo[] methodParameters = method.GetParameters();
@@ -96,6 +108,9 @@ namespace ExcelReportGenerator.Rendering.Providers
             return method.Invoke(instance, callParams);
         }
 
+        /// <summary>
+        /// Parse method call <paramref name="template"/> into <see cref="MethodCallTemplateParts"/>
+        /// </summary>
         protected virtual MethodCallTemplateParts ParseTemplate(string template)
         {
             string invalidTemplateMessage = string.Format(Constants.InvalidTemplateMessage, template);
@@ -129,10 +144,7 @@ namespace ExcelReportGenerator.Rendering.Providers
             return new MethodCallTemplateParts(typeName?.Trim(), methodName.Trim(), methodParams.Trim());
         }
 
-        /// <summary>
-        /// Provides instance on which method will be called
-        /// </summary>
-        /// <param name="type">Instance type</param>
+        // Provides instance of type on which method will be called
         private object GetInstance(Type type, bool isMethodStatic)
         {
             return isMethodStatic ? null : InstanceProvider.GetInstance(type);
@@ -307,9 +319,7 @@ namespace ExcelReportGenerator.Rendering.Providers
             return method;
         }
 
-        /// <summary>
-        /// Parse input parameters string into array
-        /// </summary>
+        // Parse input parameters string into array
         private string[] ParseInputParams(string inputParamsAsString)
         {
             if (string.IsNullOrWhiteSpace(inputParamsAsString))

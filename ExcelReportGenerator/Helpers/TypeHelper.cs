@@ -17,9 +17,7 @@ namespace ExcelReportGenerator.Helpers
             return genericEnumerable != null && IsKeyValuePair(genericEnumerable.GetGenericArguments()[0]);
         }
 
-        /// <summary>
-        /// Check if the type is dictionary with string keys and values of any type
-        /// </summary>
+        // Check if the type is dictionary with string keys and values of any type
         public static bool IsDictionaryStringObject(Type type)
         {
             if (type == null)
@@ -35,9 +33,7 @@ namespace ExcelReportGenerator.Helpers
             return dictionary != null && dictionary.GetGenericArguments()[0] == typeof(string);
         }
 
-        /// <summary>
-        /// If the type implements IEnumerable<T> returns it otherwise returns null
-        /// </summary>
+        // If the type implements IEnumerable<T> returns it otherwise returns null
         public static Type TryGetGenericEnumerableInterface(Type type)
         {
             if (type == null)
@@ -52,9 +48,7 @@ namespace ExcelReportGenerator.Helpers
             return type.GetInterfaces().SingleOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
         }
 
-        /// <summary>
-        /// If the type implements IDictionary<TKey, TValue> returns it otherwise returns null
-        /// </summary>
+        // If the type implements IDictionary<TKey, TValue> returns it otherwise returns null
         public static Type TryGetGenericDictionaryInterface(Type type)
         {
             if (type == null)

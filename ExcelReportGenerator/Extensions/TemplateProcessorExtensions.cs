@@ -11,9 +11,7 @@ namespace ExcelReportGenerator.Extensions
     {
         private static readonly string[] AllAggregationFuncs = Enum.GetNames(typeof(AggregateFunction)).Where(n => n != AggregateFunction.NoAggregation.ToString()).ToArray();
 
-        /// <summary>
-        /// Remove template borders
-        /// </summary>
+        // Remove template borders
         public static string UnwrapTemplate(this ITemplateProcessor processor, string template, bool isRegex = false)
         {
             if (template == null)
@@ -35,9 +33,7 @@ namespace ExcelReportGenerator.Extensions
             return template;
         }
 
-        /// <summary>
-        /// Wrap template with borders
-        /// </summary>
+        // Wrap template with borders
         public static string WrapTemplate(this ITemplateProcessor processor, string template, bool isRegex = false)
         {
             string leftBorder = isRegex ? Regex.Escape(processor.LeftTemplateBorder) : processor.LeftTemplateBorder;
@@ -131,9 +127,7 @@ namespace ExcelReportGenerator.Extensions
             return input != null && Regex.IsMatch(input, $@"^\s*{Regex.Escape(processor.LeftTemplateBorder)}\s*{Regex.Escape(pageBreakLabel)}\s*{Regex.Escape(processor.RightTemplateBorder)}\s*$", RegexOptions.IgnoreCase);
         }
 
-        /// <summary>
-        /// Regex pattern that includes all member types
-        /// </summary>
+        // Regex pattern that includes all member types
         public static string GetFullRegexPattern(this ITemplateProcessor processor)
         {
             return GetRegexPattern(processor, $"({Regex.Escape(processor.PropertyMemberLabel)}" +

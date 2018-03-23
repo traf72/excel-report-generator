@@ -10,11 +10,15 @@ using ExcelReportGenerator.Attributes;
 namespace ExcelReportGenerator.Rendering.TemplateProcessors
 {
     /// <summary>
-    /// Handles report templates
+    /// Default implementation of <see cref="ITemplateProcessor" /> 
     /// </summary>
     [LicenceKeyPart(U = true)]
     public class DefaultTemplateProcessor : ITemplateProcessor
     {
+        /// <param name="propertyValueProvider">See <see cref="IPropertyValueProvider" /></param>
+        /// <param name="systemVariableProvider">See <see cref="Providers.VariableProviders.SystemVariableProvider" /></param>
+        /// <param name="methodCallValueProvider">See <see cref="IMethodCallValueProvider" /></param>
+        /// <param name="dataItemValueProvider">See <see cref="IGenericDataItemValueProvider{T}" /></param>
         public DefaultTemplateProcessor(IPropertyValueProvider propertyValueProvider, SystemVariableProvider systemVariableProvider,
             IMethodCallValueProvider methodCallValueProvider = null, IGenericDataItemValueProvider<HierarchicalDataItem> dataItemValueProvider = null)
         {
@@ -24,47 +28,70 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
             DataItemValueProvider = dataItemValueProvider;
         }
 
+        /// <summary>
+        /// See <see cref="IPropertyValueProvider" /> 
+        /// </summary>
         protected IPropertyValueProvider PropertyValueProvider { get; }
 
+        /// <summary>
+        /// See <see cref="Providers.VariableProviders.SystemVariableProvider" /> 
+        /// </summary>
         protected SystemVariableProvider SystemVariableProvider { get; }
 
+        /// <summary>
+        /// See <see cref="IGenericDataItemValueProvider{T}" /> 
+        /// </summary>
         protected IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider { get; }
 
+        /// <summary>
+        /// See <see cref="IMethodCallValueProvider" /> 
+        /// </summary>
         protected IMethodCallValueProvider MethodCallValueProvider { get; }
 
         internal Type SystemFunctionsType { get; set; } = typeof(SystemFunctions);
 
+        /// <inheritdoc />
         public virtual string LeftTemplateBorder => "{";
 
+        /// <inheritdoc />
         public virtual string RightTemplateBorder => "}";
 
+        /// <inheritdoc />
         public virtual string MemberLabelSeparator => ":";
 
+        /// <inheritdoc />
         public virtual string PropertyMemberLabel => "p";
 
+        /// <inheritdoc />
         public virtual string MethodCallMemberLabel => "m";
 
+        /// <inheritdoc />
         public virtual string DataItemMemberLabel => "di";
 
+        /// <inheritdoc />
         public virtual string SystemVariableMemberLabel => "sv";
 
+        /// <inheritdoc />
         public virtual string SystemFunctionMemberLabel => "sf";
 
+        /// <inheritdoc />
         public virtual string HorizontalPageBreakLabel => "HorizPageBreak";
 
+        /// <inheritdoc />
         public virtual string VerticalPageBreakLabel => "VertPageBreak";
 
+        /// <inheritdoc />
         public virtual string DataItemSelfTemplate => DataItemMemberLabel;
 
-        /// <summary>
-        /// Get value based on template
-        /// </summary>
-        /// <param name="dataItem">Data item that will be used if template is data item template</param>
+        /// <inheritdoc />
+        /// <exception cref="ArgumentException">Thrown when <paramref name="template" /> is null, empty string or whitespace</exception>
+        /// <exception cref="InvalidTemplateException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public virtual object GetValue(string template, HierarchicalDataItem dataItem = null)
         {
             if (string.IsNullOrWhiteSpace(template))
             {
-                throw new ArgumentNullException(nameof(template), ArgumentHelper.EmptyStringParamMessage);
+                throw new ArgumentException(ArgumentHelper.EmptyStringParamMessage, nameof(template));
             }
 
             string unwrappedTemplate = this.UnwrapTemplate(template.Trim()).Trim();

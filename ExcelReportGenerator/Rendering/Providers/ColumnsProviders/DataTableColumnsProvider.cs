@@ -4,9 +4,7 @@ using System.Linq;
 
 namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
 {
-    /// <summary>
-    /// Provides columns info from DataTable
-    /// </summary>
+    // Provides columns info from DataTable
     internal class DataTableColumnsProvider : IGenericColumnsProvider<DataTable>
     {
         public IList<ExcelDynamicColumn> GetColumnsList(DataTable dataTable)

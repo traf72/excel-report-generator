@@ -6,9 +6,7 @@ using ExcelReportGenerator.Helpers;
 
 namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
 {
-    /// <summary>
-    /// Provides columns info from not generic enumerable
-    /// </summary>
+    // Provides columns info from not generic enumerable
     internal class EnumerableColumnsProvider : IGenericColumnsProvider<IEnumerable>
     {
         private readonly IGenericColumnsProvider<Type> _typeColumnsProvider;

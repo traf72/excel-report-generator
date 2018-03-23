@@ -3,9 +3,7 @@ using System.Linq;
 
 namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
 {
-    /// <summary>
-    /// Provides columns info from collection of IDictionary
-    /// </summary>
+    // Provides columns info from collection of IDictionary
     internal class DictionaryColumnsProvider<TValue> : IGenericColumnsProvider<IEnumerable<IDictionary<string, TValue>>>
     {
         public IList<ExcelDynamicColumn> GetColumnsList(IEnumerable<IDictionary<string, TValue>> data)

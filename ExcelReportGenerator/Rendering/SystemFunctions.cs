@@ -7,9 +7,18 @@ using ExcelReportGenerator.Attributes;
 
 namespace ExcelReportGenerator.Rendering
 {
+    /// <summary>
+    /// System functions that can be called from Excel-template
+    /// </summary>
     [LicenceKeyPart(L = true)]
     public class SystemFunctions
     {
+        /// <summary>
+        /// Returns value from dictionary
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="dictionary"/> or <paramref name="key"/> is null</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="dictionary"/> is not implement <see cref="IDictionary"/> interface</exception>
+        /// <exception cref="KeyNotFoundException">Thrown when <paramref name="key"/> is not found in the dictionary</exception>
         public static object GetDictVal(object dictionary, object key)
         {
             if (dictionary == null)
@@ -34,6 +43,9 @@ namespace ExcelReportGenerator.Rendering
             return realDict[key];
         }
 
+        /// <summary>
+        /// Try to return value from dictionary. If key is not found or any exception occurs then returns null
+        /// </summary>
         public static object TryGetDictVal(object dictionary, object key)
         {
             if (key == null || !(dictionary is IDictionary realDict))
@@ -44,6 +56,12 @@ namespace ExcelReportGenerator.Rendering
             return realDict.Contains(key) ? realDict[key] : null;
         }
 
+        /// <summary>
+        /// Returns element from list by index
+        /// </summary>
+        /// <param name="list">List must implement <see cref="IList"/> interface</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="list"/> is null</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="list"/> is not implement <see cref="IList"/> interface</exception>
         public static object GetByIndex(object list, int index)
         {
             if (list == null)
@@ -58,6 +76,9 @@ namespace ExcelReportGenerator.Rendering
             return realList[index];
         }
 
+        /// <summary>
+        /// Try to return element from list by index. Returns null if any exception occurs.
+        /// </summary>
         public static object TryGetByIndex(object list, int index)
         {
             if (list == null || !(list is IList realList))
@@ -75,6 +96,12 @@ namespace ExcelReportGenerator.Rendering
             }
         }
 
+        /// <summary>
+        /// Returns formatted value
+        /// </summary>
+        /// <param name="input">Input must implement <see cref="IFormattable"/> interface</param>
+        /// <param name="formatProvider">Can implement <see cref="IFormatProvider"/>, be a <see cref="string"/>, <see cref="int"/> or null</param>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="input"/> is not implement <see cref="IFormattable"/> interface or <paramref name="formatProvider"/> is invalid</exception>
         public static string Format(object input, string format, object formatProvider = null)
         {
             if (input == null)

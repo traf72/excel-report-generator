@@ -5,9 +5,7 @@ using ExcelReportGenerator.Helpers;
 
 namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
 {
-    /// <summary>
-    /// Provides columns info from DataSet
-    /// </summary>
+    // Provides columns info from DataSet
     internal class DataSetColumnsProvider : IGenericColumnsProvider<DataSet>
     {
         private readonly IGenericColumnsProvider<DataTable> _dataTableColumnsProvider;

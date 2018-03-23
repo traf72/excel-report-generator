@@ -5,17 +5,13 @@ using ExcelReportGenerator.Helpers;
 
 namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
 {
-    /// <summary>
-    /// Provides values from data row
-    /// </summary>
+    // Provides values from data row
     internal class DataRowValueProvider : IGenericDataItemValueProvider<DataRow>
     {
         private string _columnName;
         private DataRow _dataRow;
 
-        /// <summary>
-        /// Returns value from specified column of data row
-        /// </summary>
+        // Returns value from specified column of data row
         public virtual object GetValue(string columnName, DataRow dataRow)
         {
             if (string.IsNullOrWhiteSpace(columnName))

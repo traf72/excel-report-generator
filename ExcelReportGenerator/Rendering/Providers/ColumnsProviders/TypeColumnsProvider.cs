@@ -8,9 +8,7 @@ using System.Reflection;
 
 namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
 {
-    /// <summary>
-    /// Provides columns info from Type
-    /// </summary>
+    // Provides columns info from Type
     internal class TypeColumnsProvider : IGenericColumnsProvider<Type>
     {
         public IList<ExcelDynamicColumn> GetColumnsList(Type type)

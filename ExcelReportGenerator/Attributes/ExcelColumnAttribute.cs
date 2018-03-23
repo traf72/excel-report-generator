@@ -3,6 +3,9 @@ using System;
 
 namespace ExcelReportGenerator.Attributes
 {
+    /// <summary>
+    /// An attribute that allows you to configure excel column output more flexibly
+    /// </summary>
     [LicenceKeyPart]
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class ExcelColumnAttribute : Attribute

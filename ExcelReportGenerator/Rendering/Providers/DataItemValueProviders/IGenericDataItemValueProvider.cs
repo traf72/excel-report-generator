@@ -1,13 +1,10 @@
 ﻿namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
 {
-    /// <summary>
-    /// Provides values from data item
-    /// </summary>
+    /// See <see cref="IDataItemValueProvider"/>
+    /// <typeparam name="T">Type of data item</typeparam>
     public interface IGenericDataItemValueProvider<in T> : IDataItemValueProvider
     {
-        /// <summary>
-        /// Get value from data item based on template
-        /// </summary>
+        /// See <see cref="IDataItemValueProvider.GetValue(string, object)"/>
         object GetValue(string template, T dataItem);
     }
 }

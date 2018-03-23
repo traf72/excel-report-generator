@@ -9,10 +9,8 @@ namespace ExcelReportGenerator.Helpers
 {
     internal class ReflectionHelper : IReflectionHelper
     {
-        /// <summary>
-        /// Returns value of last property or field in the chain. Static properties and fields are not supported.
-        /// </summary>
-        /// <param name="propertiesChain">Properties chain. Properties or fields names must separate with ".". Example - Employee.Contact.Phone</param>
+        // Returns value of last property or field in the chain. Static properties and fields are not supported.
+        /// <param name="propertiesChain">The chain where properties or fields names should be separated with ".". Example - Employee.Contact.Phone</param>
         public object GetValueOfPropertiesChain(string propertiesChain, object instance, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public)
         {
             if (string.IsNullOrWhiteSpace(propertiesChain))

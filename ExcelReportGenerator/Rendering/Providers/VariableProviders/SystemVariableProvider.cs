@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace ExcelReportGenerator.Rendering.Providers.VariableProviders
 {
+    /// <summary>
+    /// Provides values for system variable templates
+    /// </summary>
     public class SystemVariableProvider
     {
         private readonly IReflectionHelper _reflectionHelper;
@@ -18,12 +21,26 @@ namespace ExcelReportGenerator.Rendering.Providers.VariableProviders
             _reflectionHelper = reflectionHelper;
         }
 
+        /// <summary>
+        /// Report render date
+        /// </summary>
         public DateTime RenderDate { get; set; }
 
+        /// <summary>
+        /// Name of worksheet that is currently render 
+        /// </summary>
         public string SheetName { get; set; }
 
+        /// <summary>
+        /// Number of worksheet that is currently render 
+        /// </summary>
         public int SheetNumber { get; set; }
 
+        /// <summary>
+        /// Get variable value by its <paramref name="name"/>
+        /// </summary>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="name" /> is null, empty string or whitespace</exception>
+        /// <exception cref="InvalidVariableException"></exception>
         public virtual object GetVariable(string name)
         {
             if (string.IsNullOrWhiteSpace(name))

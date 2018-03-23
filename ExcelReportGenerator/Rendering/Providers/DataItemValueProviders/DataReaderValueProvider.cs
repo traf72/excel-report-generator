@@ -6,17 +6,13 @@ using ExcelReportGenerator.Helpers;
 
 namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
 {
-    /// <summary>
-    /// Provides values from data reader
-    /// </summary>
+    // Provides values from data reader
     internal class DataReaderValueProvider : IGenericDataItemValueProvider<IDataReader>
     {
         private string _columnName;
         private IDataReader _dataReader;
 
-        /// <summary>
-        /// Returns value from specified column of data reader
-        /// </summary>
+        // Returns value from specified column of data reader
         public virtual object GetValue(string columnName, IDataReader dataReader)
         {
             if (string.IsNullOrWhiteSpace(columnName))

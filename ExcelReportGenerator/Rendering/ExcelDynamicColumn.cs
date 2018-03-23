@@ -64,9 +64,7 @@ namespace ExcelReportGenerator.Rendering
         /// </summary>
         public bool AdjustToContent { get; set; }
 
-        /// <summary>
-        /// Order in which the column appears in Excel (for internal use)
-        /// </summary>
+        // Order in which the column appears in Excel (for internal use)
         internal int Order { get; set; }
     }
 }

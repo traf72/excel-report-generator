@@ -2,9 +2,7 @@
 
 namespace ExcelReportGenerator.Attributes
 {
-    /// <summary>
-    /// Mark panel property which can be populated from excel
-    /// </summary>
+    // Marks panel property which can be populated from excel
     [AttributeUsage(AttributeTargets.Property)]
     internal class ExternalPropertyAttribute : Attribute
     {

@@ -69,15 +69,15 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
         string VerticalPageBreakLabel { get; }
 
         /// <summary>
-        ///  The template if you want to return the data item itself
+        ///  This template used if you want to return the data item itself
         ///  Cannot be null, empty or whitespace
         /// </summary>
         string DataItemSelfTemplate { get; }
 
         /// <summary>
-        /// Get value based on template
+        /// Get value based on <paramref name="template"/>
         /// </summary>
-        /// <param name="dataItem">Data item that will be used if template is data item template</param>
+        /// <param name="dataItem">Data item that will be used if template is the data item template</param>
         object GetValue(string template, HierarchicalDataItem dataItem = null);
     }
 }

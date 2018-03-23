@@ -15,14 +15,29 @@ using System.Text.RegularExpressions;
 
 namespace ExcelReportGenerator.Rendering
 {
+    /// <summary>
+    /// Report generator with default configurations
+    /// </summary>
     public class DefaultReportGenerator
     {
+        /// <summary>
+        /// Event raised before render report 
+        /// </summary>
         public event EventHandler<ReportRenderEventArgs> BeforeReportRender;
 
+        /// <summary>
+        /// Event raised before render each worksheet
+        /// </summary>
         public event EventHandler<WorksheetRenderEventArgs> BeforeWorksheetRender;
 
+        /// <summary>
+        /// Event raised after render each worksheet
+        /// </summary>
         public event EventHandler<WorksheetRenderEventArgs> AfterWorksheetRender;
 
+        /// <summary>
+        /// Report object
+        /// </summary>
         protected readonly object _report;
 
         private ITypeProvider _typeProvider;
@@ -35,27 +50,56 @@ namespace ExcelReportGenerator.Rendering
         private PanelParsingSettings _panelParsingSettings;
         private string _panelsRegexPattern;
 
+        /// <param name="report">Report object</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="report"/> is null</exception>
         public DefaultReportGenerator(object report)
         {
             _report = report ?? throw new ArgumentNullException(nameof(report), ArgumentHelper.NullParamMessage);
         }
 
+        /// <summary>
+        /// Type of system functions. Default value is <see cref="SystemFunctions"/>
+        /// </summary>
         public virtual Type SystemFunctionsType { get; set; } = typeof(SystemFunctions);
 
+        /// <summary>
+        /// System variable provider. Default value is instance of <see cref="Providers.VariableProviders.SystemVariableProvider"/>
+        /// </summary>
         public virtual SystemVariableProvider SystemVariableProvider { get; set; } = new SystemVariableProvider();
 
+        /// <summary>
+        /// Type provider. Default value is instance of <see cref="DefaultTypeProvider"/>
+        /// </summary>
         public virtual ITypeProvider TypeProvider => _typeProvider ?? (_typeProvider = new DefaultTypeProvider(defaultType: _report.GetType()));
 
+        /// <summary>
+        /// Instance provider. Default value is instance of <see cref="DefaultInstanceProvider"/>
+        /// </summary>
         public virtual IInstanceProvider InstanceProvider => _instanceProvider ?? (_instanceProvider = new DefaultInstanceProvider(_report));
 
+        /// <summary>
+        /// Property value provider. Default value is instance of <see cref="DefaultPropertyValueProvider"/>
+        /// </summary>
         public virtual IPropertyValueProvider PropertyValueProvider => _propertyValueProvider ?? (_propertyValueProvider = new DefaultPropertyValueProvider(TypeProvider, InstanceProvider));
 
+        /// <summary>
+        /// Method call value provider. Default value is instance of <see cref="DefaultMethodCallValueProvider"/>
+        /// </summary>
         public virtual IMethodCallValueProvider MethodCallValueProvider => _methodCallValueProvider ?? (_methodCallValueProvider = new DefaultMethodCallValueProvider(TypeProvider, InstanceProvider));
 
+        /// <summary>
+        /// Data item value provider. Default value is instance of <see cref="HierarchicalDataItemValueProvider"/>
+        /// </summary>
         public virtual IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider => _dataItemValueProvider ?? (_dataItemValueProvider = new HierarchicalDataItemValueProvider());
 
+        /// <summary>
+        /// Template processor. Default value is instance of <see cref="DefaultTemplateProcessor"/>
+        /// </summary>
         public virtual ITemplateProcessor TemplateProcessor => _templateProcessor ?? (_templateProcessor = new DefaultTemplateProcessor(PropertyValueProvider, SystemVariableProvider, MethodCallValueProvider, DataItemValueProvider));
 
+        /// <summary>
+        /// See <see cref="Rendering.PanelParsingSettings"/>
+        /// </summary>
         public virtual PanelParsingSettings PanelParsingSettings => _panelParsingSettings ?? (_panelParsingSettings = new PanelParsingSettings
         {
             PanelPrefixSeparator = "_",
@@ -87,6 +131,13 @@ namespace ExcelReportGenerator.Rendering
             }
         }
 
+        /// <summary>
+        /// Render report based on <paramref name="reportTemplate"/> and report object passed in the constructor
+        /// </summary>
+        /// <param name="reportTemplate">Excel report template</param>
+        /// <param name="worksheets">List of worksheets that must be rendered</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="reportTemplate"/> is null</exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public XLWorkbook Render(XLWorkbook reportTemplate, IXLWorksheet[] worksheets = null)
         {
             if (reportTemplate == null)
@@ -231,16 +282,25 @@ namespace ExcelReportGenerator.Rendering
             }
         }
 
+        /// <summary>
+        /// Raise BeforeReportRender event
+        /// </summary>
         protected virtual void OnBeforeReportRender(ReportRenderEventArgs e)
         {
             BeforeReportRender?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Raise BeforeWorksheetRender event
+        /// </summary>
         protected virtual void OnBeforeWorksheetRender(WorksheetRenderEventArgs e)
         {
             BeforeWorksheetRender?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Raise AfterWorksheetRender event
+        /// </summary>
         protected virtual void OnAfterWorksheetRender(WorksheetRenderEventArgs e)
         {
             AfterWorksheetRender?.Invoke(this, e);

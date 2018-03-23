@@ -6,6 +6,7 @@ using ExcelReportGenerator.Attributes;
 namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
 {
     /// <summary>
+    /// Default implementation of <see cref="IGenericDataItemValueProvider{T}" /> 
     /// Provides values from hierarchical data item
     /// </summary>
     [LicenceKeyPart(U = true)]
@@ -22,14 +23,14 @@ namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
             _factory = dataItemValueProviderFactory;
         }
 
-        /// <summary>
-        /// Get or set the template if you want to return the data item itself
-        /// </summary>
+        // Get or set the template if you want to return the data item itself
         internal string DataItemSelfTemplate { get; set; }
 
-        /// <summary>
-        /// Returns value from hierarchical data item based on template
-        /// </summary>
+
+        /// <inheritdoc />
+        /// <exception cref="ArgumentException">Thrown when <paramref name="template" /> is null, empty string or whitespace</exception>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="hierarchicalDataItem"/> is null</exception>
+        /// <exception cref="InvalidTemplateException"></exception>
         public virtual object GetValue(string template, HierarchicalDataItem hierarchicalDataItem)
         {
             if (string.IsNullOrWhiteSpace(template))
@@ -50,9 +51,7 @@ namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
             return _factory.Create(dataItem)?.GetValue(dataItemTemplate, dataItem);
         }
 
-        /// <summary>
-        /// Returns real data item object given hierarchy and template for this data item based on input template
-        /// </summary>
+        // Returns real data item object given hierarchy and template for this data item based on input template
         private (object dataItem, string dataItemTemplate) GetDataItemGivenHierarchy(string template, HierarchicalDataItem hierarchicalDataItem)
         {
             int lastColonIndex = template.LastIndexOf(":", StringComparison.Ordinal);

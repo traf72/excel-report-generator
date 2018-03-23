@@ -2,9 +2,7 @@
 {
     internal interface IColumnsProviderFactory
     {
-        /// <summary>
-        /// Create appropriate column provider based on data 
-        /// </summary>
+        // Create appropriate column provider based on data 
         IColumnsProvider Create(object data);
     }
 }

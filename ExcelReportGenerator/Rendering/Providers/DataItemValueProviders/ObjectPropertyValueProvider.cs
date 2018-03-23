@@ -3,9 +3,7 @@ using System;
 
 namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
 {
-    /// <summary>
-    /// Provides properties values from object instance
-    /// </summary>
+    // Provides properties values from object instance
     internal class ObjectPropertyValueProvider : IDataItemValueProvider
     {
         private readonly IReflectionHelper _reflectionHelper;
@@ -19,9 +17,7 @@ namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
             _reflectionHelper = reflectionHelper;
         }
 
-        /// <summary>
-        /// Returns property value from data item object
-        /// </summary>
+        // Returns property value from data item object
         public virtual object GetValue(string propTemplate, object dataItem)
         {
             if (string.IsNullOrWhiteSpace(propTemplate))

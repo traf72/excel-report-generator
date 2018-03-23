@@ -251,21 +251,15 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
             public string ColumnName { get; }
 
-            /// <summary>
-            /// Call if AggregateFunction = AggregateFunction.Custom
-            /// </summary>
+            // Call if AggregateFunction = AggregateFunction.Custom
             public string CustomFunc { get; set; }
 
-            /// <summary>
-            /// Call when aggregation completed
-            /// </summary>
+            // Call when aggregation completed
             public string PostProcessFunction { get; set; }
 
             public dynamic Result { get; set; }
 
-            /// <summary>
-            /// Auxiliary property
-            /// </summary>
+            // Auxiliary property
             public string UniqueName { get; set; }
         }
     }

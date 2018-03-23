@@ -6,6 +6,9 @@ using System.Reflection;
 
 namespace ExcelReportGenerator.Rendering.Providers
 {
+    /// <summary>
+    /// Default implementation of <see cref="ITypeProvider" /> 
+    /// </summary>
     public class DefaultTypeProvider : ITypeProvider
     {
         private const char NamespaceSeparator = ':';
@@ -13,7 +16,7 @@ namespace ExcelReportGenerator.Rendering.Providers
         private readonly IDictionary<string, Type> _typesCache = new Dictionary<string, Type>();
 
         /// <param name="assemblies">Collection of assemblies where types will be searched. If null or empty than current execution assembly will be used</param>
-        /// <param name="defaultType">Type which will be returned if the template is not specified explicitly</param>
+        /// <param name="defaultType">The type that will be returned if the template is not specified explicitly</param>
         public DefaultTypeProvider(ICollection<Assembly> assemblies = null, Type defaultType = null)
         {
             if (assemblies == null || !assemblies.Any())
@@ -33,13 +36,19 @@ namespace ExcelReportGenerator.Rendering.Providers
             DefaultType = defaultType;
         }
 
+        /// <summary>
+        /// Collection of assemblies where types are searched
+        /// </summary>
         protected ICollection<Assembly> Assemblies { get; }
 
-        protected Type DefaultType { get; }
-
         /// <summary>
-        /// Provides type based on template
+        /// Return type if the template is not specified explicitly
         /// </summary>
+        protected Type DefaultType { get; }
+        
+        /// <inheritdoc />
+        /// <exception cref="InvalidTemplateException"></exception>
+        /// <exception cref="TypeNotFoundException"></exception>
         public virtual Type GetType(string typeTemplate)
         {
             if (string.IsNullOrWhiteSpace(typeTemplate))

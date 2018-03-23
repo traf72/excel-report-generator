@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace ExcelReportGenerator.Rendering.Providers
 {
     /// <summary>
-    /// Reflection type instance provider
+    /// Default implementation of <see cref="IInstanceProvider" /> 
     /// </summary>
     [LicenceKeyPart(L = true)]
     public class DefaultInstanceProvider : IInstanceProvider
@@ -22,11 +22,16 @@ namespace ExcelReportGenerator.Rendering.Providers
             }
         }
 
+        /// <summary>
+        /// Return instance if the type is not specified explicitly
+        /// </summary>
         protected object DefaultInstance { get; }
 
+        /// <inheritdoc />
         /// <summary>
-        /// Provides instance of specified type as singleton. Type must have a default constructor.
+        /// Provides instance of specified <paramref name="type"/> as singleton. Type must have a default constructor.
         /// </summary>
+        /// <exception cref="InvalidOperationException"></exception>
         public virtual object GetInstance(Type type)
         {
             if (type == null)
@@ -44,9 +49,11 @@ namespace ExcelReportGenerator.Rendering.Providers
             return instance;
         }
 
+        /// <inheritdoc />
         /// <summary>
-        /// Provides instance of specified type as singleton. Type must have a default constructor.
+        /// Provides instance of type <typeparamref name="T"/> as singleton. Type must have a default constructor.
         /// </summary>
+        /// <exception cref="InvalidOperationException"></exception>
         public virtual T GetInstance<T>()
         {
             return (T)GetInstance(typeof(T));
