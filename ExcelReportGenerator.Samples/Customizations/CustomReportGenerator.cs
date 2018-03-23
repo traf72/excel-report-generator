@@ -28,7 +28,7 @@ namespace ExcelReportGenerator.Samples.Customizations
 
         public override IInstanceProvider InstanceProvider
         {
-            get { return _instanceProvider ?? (_instanceProvider = new CustomInstanceProvider(_report)); }
+            get { return _instanceProvider ?? (_instanceProvider = new CustomInstanceProvider(Report)); }
         }
 
         public override ITemplateProcessor TemplateProcessor

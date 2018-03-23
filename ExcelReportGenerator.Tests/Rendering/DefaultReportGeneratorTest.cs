@@ -463,7 +463,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             public override ITypeProvider TypeProvider => _typeProvider ?? (_typeProvider =
                                                               new DefaultTypeProvider(
                                                                   new[] {Assembly.GetExecutingAssembly()},
-                                                                  _report.GetType()));
+                                                                  Report.GetType()));
         }
 
         private class TestReportGenerator2 : TestReportGenerator

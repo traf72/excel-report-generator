@@ -38,7 +38,7 @@ namespace ExcelReportGenerator.Rendering
         /// <summary>
         /// Report object
         /// </summary>
-        protected readonly object _report;
+        protected readonly object Report;
 
         private ITypeProvider _typeProvider;
         private IInstanceProvider _instanceProvider;
@@ -54,7 +54,7 @@ namespace ExcelReportGenerator.Rendering
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="report"/> is null</exception>
         public DefaultReportGenerator(object report)
         {
-            _report = report ?? throw new ArgumentNullException(nameof(report), ArgumentHelper.NullParamMessage);
+            Report = report ?? throw new ArgumentNullException(nameof(report), ArgumentHelper.NullParamMessage);
         }
 
         /// <summary>
@@ -70,12 +70,12 @@ namespace ExcelReportGenerator.Rendering
         /// <summary>
         /// Type provider. Default value is instance of <see cref="DefaultTypeProvider"/>
         /// </summary>
-        public virtual ITypeProvider TypeProvider => _typeProvider ?? (_typeProvider = new DefaultTypeProvider(defaultType: _report.GetType()));
+        public virtual ITypeProvider TypeProvider => _typeProvider ?? (_typeProvider = new DefaultTypeProvider(defaultType: Report.GetType()));
 
         /// <summary>
         /// Instance provider. Default value is instance of <see cref="DefaultInstanceProvider"/>
         /// </summary>
-        public virtual IInstanceProvider InstanceProvider => _instanceProvider ?? (_instanceProvider = new DefaultInstanceProvider(_report));
+        public virtual IInstanceProvider InstanceProvider => _instanceProvider ?? (_instanceProvider = new DefaultInstanceProvider(Report));
 
         /// <summary>
         /// Property value provider. Default value is instance of <see cref="DefaultPropertyValueProvider"/>
@@ -190,7 +190,7 @@ namespace ExcelReportGenerator.Rendering
                 }
 
                 IDictionary<string, (IExcelPanel, string)> panelsFlatView = GetPanelsFlatView(worksheetPanels);
-                IExcelPanel rootPanel = new ExcelPanel(GetRootRange(ws, worksheetPanels), _report, TemplateProcessor);
+                IExcelPanel rootPanel = new ExcelPanel(GetRootRange(ws, worksheetPanels), Report, TemplateProcessor);
                 MakePanelsHierarchy(panelsFlatView, rootPanel);
                 rootPanel.Render();
 
@@ -233,7 +233,7 @@ namespace ExcelReportGenerator.Rendering
 
         private IDictionary<string, (IExcelPanel, string)> GetPanelsFlatView(IEnumerable<IXLNamedRange> panelsNamedRanges)
         {
-            var panelFactory = new ExcelPanelFactory(_report, TemplateProcessor, PanelParsingSettings);
+            var panelFactory = new ExcelPanelFactory(Report, TemplateProcessor, PanelParsingSettings);
             IDictionary<string, (IExcelPanel, string)> panels = new Dictionary<string, (IExcelPanel, string)>();
             foreach (IXLNamedRange namedRange in panelsNamedRanges)
             {
