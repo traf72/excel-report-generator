@@ -45,7 +45,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.DataItemValueProviders
             var objectPropertyValueProvider = Substitute.For<ObjectPropertyValueProvider>();
             var dataRowValueProvider = Substitute.For<DataRowValueProvider>();
             var dataReaderValueProvider = Substitute.For<DataReaderValueProvider>();
-            var dataItemValueProvider = new HierarchicalDataItemValueProvider(factory) { DataItemSelfTemplate = "di" };
+            var dataItemValueProvider = new DefaultDataItemValueProvider(factory) { DataItemSelfTemplate = "di" };
 
             factory.Create(null).Returns(objectPropertyValueProvider);
             factory.Create(dataItem1).Returns(objectPropertyValueProvider);

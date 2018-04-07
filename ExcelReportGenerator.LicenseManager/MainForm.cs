@@ -10,13 +10,14 @@ namespace ExcelReportGenerator.LicenseManager
     public partial class MainForm : Form
     {
         private const int LicenseExpirationDateByteNumber = 217;
-        private const string EncryptionKey = "lColuccimTNERPEULLPARSIstanRTTAtalpmednotfoertyvcnuFecxEelblttempplatrPecnatMethodCtPropertcnuElenaPcERTEMhicaldattemPanelEveaitemvaluePLATEimanyDecrFmettyValuePallValuePtsnItleProclateproairaVditageralueprundexctllacdEULAVceProvNGSETAVMETIVELEanydlmnAttr";
+        private const string EncryptionKey = "lColuccimTNERPEULLPARSIstanRTTAtalpmednotfoertyvcnuFecxEelblttempplatrPecnatMethodCtPropertdataittcnuElenaPcERTEMtemPanelEvePLATEimanyDecrFmetemvalueptyValuePallValuePtsnItleProclateproairaVditageralueprundexctllacdEULAVceProvNGSETAVMETIVELEanydlmnAttr";
         private const string LicenseFileName = "ExcelReportGenerator.lic";
 
         public MainForm()
         {
             InitializeComponent();
             dtpExpirationDate.Value = DateTime.Now.AddYears(2);
+            //dtpExpirationDate.Value = new DateTime(2200, 1, 1);
         }
 
         private void btnGenerate_Click(object sender, EventArgs e)

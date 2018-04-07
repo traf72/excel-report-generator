@@ -161,7 +161,7 @@
     <Compile Include="Rendering\Providers\DataItemValueProviders\DataReaderValueProvider.cs" />
     <Compile Include="Rendering\Providers\DataItemValueProviders\DataRowValueProvider.cs" />
     <Compile Include="Rendering\Providers\DataItemValueProviders\DictionaryValueProvider.cs" />
-    <Compile Include="Rendering\Providers\DataItemValueProviders\HierarchicalDataItemValueProvider.cs" />
+    <Compile Include="Rendering\Providers\DataItemValueProviders\DefaultDataItemValueProvider.cs" />
     <Compile Include="Rendering\Providers\DataItemValueProviders\IDataItemValueProvider.cs" />
     <Compile Include="Rendering\Providers\DataItemValueProviders\IDataItemValueProviderFactory.cs" />
     <Compile Include="Rendering\Providers\DataItemValueProviders\IGenericDataItemValueProvider.cs" />

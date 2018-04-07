@@ -88,9 +88,9 @@ namespace ExcelReportGenerator.Rendering
         public virtual IMethodCallValueProvider MethodCallValueProvider => _methodCallValueProvider ?? (_methodCallValueProvider = new DefaultMethodCallValueProvider(TypeProvider, InstanceProvider));
 
         /// <summary>
-        /// Data item value provider. Default value is instance of <see cref="HierarchicalDataItemValueProvider"/>
+        /// Data item value provider. Default value is instance of <see cref="DefaultDataItemValueProvider"/>
         /// </summary>
-        public virtual IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider => _dataItemValueProvider ?? (_dataItemValueProvider = new HierarchicalDataItemValueProvider());
+        public virtual IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider => _dataItemValueProvider ?? (_dataItemValueProvider = new DefaultDataItemValueProvider());
 
         /// <summary>
         /// Template processor. Default value is instance of <see cref="DefaultTemplateProcessor"/>
@@ -210,7 +210,7 @@ namespace ExcelReportGenerator.Rendering
 
         private void InitDataItemValueProvider()
         {
-            if (DataItemValueProvider is HierarchicalDataItemValueProvider p)
+            if (DataItemValueProvider is DefaultDataItemValueProvider p)
             {
                 p.DataItemSelfTemplate = TemplateProcessor.DataItemSelfTemplate;
             }

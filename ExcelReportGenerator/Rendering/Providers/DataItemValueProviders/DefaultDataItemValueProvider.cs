@@ -6,19 +6,19 @@ using ExcelReportGenerator.Attributes;
 namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
 {
     /// <summary>
-    /// Default implementation of <see cref="IGenericDataItemValueProvider{T}" /> 
+    /// Default implementation of <see cref="IGenericDataItemValueProvider{T}" />
     /// Provides values from hierarchical data item
     /// </summary>
     [LicenceKeyPart(U = true)]
-    public class HierarchicalDataItemValueProvider : IGenericDataItemValueProvider<HierarchicalDataItem>
+    public class DefaultDataItemValueProvider : IGenericDataItemValueProvider<HierarchicalDataItem>
     {
         private readonly IDataItemValueProviderFactory _factory;
 
-        public HierarchicalDataItemValueProvider() : this(new DataItemValueProviderFactory())
+        public DefaultDataItemValueProvider() : this(new DataItemValueProviderFactory())
         {
         }
 
-        internal HierarchicalDataItemValueProvider(IDataItemValueProviderFactory dataItemValueProviderFactory)
+        internal DefaultDataItemValueProvider(IDataItemValueProviderFactory dataItemValueProviderFactory)
         {
             _factory = dataItemValueProviderFactory;
         }

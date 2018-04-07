@@ -1,20 +1,20 @@
 ﻿using ExcelReportGenerator.License;
+using ExcelReportGenerator.Rendering.Panels;
+using ExcelReportGenerator.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
-using ExcelReportGenerator.Rendering.Panels;
-using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.Win32;
 
 namespace ExcelReportGenerator.Tests.License
 {
     [TestClass]
     public class LicensingTest
     {
-        private const string EncryptionKey = "lColuccimTNERPEULLPARSIstanRTTAtalpmednotfoertyvcnuFecxEelblttempplatrPecnatMethodCtPropertcnuElenaPcERTEMhicaldattemPanelEveaitemvaluePLATEimanyDecrFmettyValuePallValuePtsnItleProclateproairaVditageralueprundexctllacdEULAVceProvNGSETAVMETIVELEanydlmnAttr";
+        private const string EncryptionKey = "lColuccimTNERPEULLPARSIstanRTTAtalpmednotfoertyvcnuFecxEelblttempplatrPecnatMethodCtPropertdataittcnuElenaPcERTEMtemPanelEvePLATEimanyDecrFmetemvalueptyValuePallValuePtsnItleProclateproairaVditageralueprundexctllacdEULAVceProvNGSETAVMETIVELEanydlmnAttr";
         private const string LicenseFileName = "ExcelReportGenerator.lic";
         private const string RegistryPath = @"HKEY_CURRENT_USER\SOFTWARE\ProtectedStorage";
         private const string RegistryKey = @"vcim";
@@ -179,10 +179,10 @@ namespace ExcelReportGenerator.Tests.License
             string encryptedLicenseFileName = Encryptor.Encrypt(LicenseFileName, EncryptionKey);
             string encryptedLicenseExpirationDateByteNumber = Encryptor.Encrypt(LicenseExpirationDateByteNumber.ToString(), EncryptionKey);
             string encryptedTrialLicenseExpirationDaysCount = Encryptor.Encrypt(TrialLicenseExpirationDaysCount.ToString(), EncryptionKey);
-            string encryptedLicenseViolationMessage = Encryptor.Encrypt(LicenseViolationMessage, EncryptionKey);
-            string encryptedLicenseExpiredMessage = Encryptor.Encrypt(LicenseExpiredMessage, EncryptionKey);
             string encryptedRegistryPath = Encryptor.Encrypt(RegistryPath, EncryptionKey);
             string encryptedRegistryKey = Encryptor.Encrypt(RegistryKey, EncryptionKey);
+            string encryptedLicenseViolationMessage = Encryptor.Encrypt(LicenseViolationMessage, EncryptionKey);
+            string encryptedLicenseExpiredMessage = Encryptor.Encrypt(LicenseExpiredMessage, EncryptionKey);
         }
 
         private void CheckLicenseExpirationDateInRegistry(DateTime expectedDate)

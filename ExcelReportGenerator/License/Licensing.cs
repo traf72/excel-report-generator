@@ -81,37 +81,37 @@ namespace ExcelReportGenerator.License
 
         private string GetLicenseFileName()
         {
-            return Encryptor.Decrypt("3HF77NC5DKNQO+Kv2rfpwx4S7CxuakwhBXapKhU0IR4=", _encryptionKey);
+            return Encryptor.Decrypt("QQMwvi3YaowQykjGKE3C4tB4R6V+K8QsvWWLPsw++m0=", _encryptionKey);
         }
 
         private int GetLicenseExpirationDateByteNumber()
         {
-            return int.Parse(Encryptor.Decrypt("/4NlP0sVqYkW9AG6XQi4Xw==", _encryptionKey));
+            return int.Parse(Encryptor.Decrypt("4yIXZMhFBqIQi8GVjXwC/w==", _encryptionKey));
         }
 
         private int GetTrialLicenseExpirationDaysCount()
         {
-            return int.Parse(Encryptor.Decrypt("+6W6bZ9IuGZp+cfHGOizUA==", _encryptionKey));
+            return int.Parse(Encryptor.Decrypt("xgJ6Jyafg1PcACSE052gWg==", _encryptionKey));
         }
 
         private string GetRegistryPath()
         {
-            return Encryptor.Decrypt("jVVGjmihDaGr9uKiHisIh2a0WLthDrrSswWWPQscc4uKzso+FoLMzCT0n8of5KLU", _encryptionKey);
+            return Encryptor.Decrypt("hc0znFR+v6ivevi7FyTukaLhUrVL1wGgVeSMlg6Hhr/itV8mOIWifcwbX4qGhCUO", _encryptionKey);
         }
 
         private string GetRegistryKey()
         {
-            return Encryptor.Decrypt("riSx7jPt6NFuCZmnJwSzqQ==", _encryptionKey);
+            return Encryptor.Decrypt("r4tm9TgtIw3el1bmx4zpDA==", _encryptionKey);
         }
 
         private string GetLicenseViolationMessage()
         {
-            return Encryptor.Decrypt("w80JIp9MK9ceWyG5DcwOlwfrROWwGfuB+C34i2O338I=", _encryptionKey);
+            return Encryptor.Decrypt("ThMkguVsYPwzsRkWlvnT4Pxb141vrk9WQMhfkMKBVAk=", _encryptionKey);
         }
 
         private string GetLicenseExpiredMessage()
         {
-            return Encryptor.Decrypt("KlpKonqwyuZqUqT3RJjE0g==", _encryptionKey);
+            return Encryptor.Decrypt("IO07IiZ1altX8ijLJI2nAw==", _encryptionKey);
         }
 
         public void LoadLicenseInfo()
