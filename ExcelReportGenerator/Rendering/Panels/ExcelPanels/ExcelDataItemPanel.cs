@@ -29,7 +29,6 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             return new DataItemPanelEventArgs { Range = ResultRange, DataItem = DataItem };
         }
 
-        // TODO Покрыть Unit-тестами
         protected override IExcelPanel CopyPanel(IXLCell cell)
         {
             IXLRange newRange = ExcelHelper.CopyRange(Range, cell);
