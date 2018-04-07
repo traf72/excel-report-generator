@@ -302,17 +302,24 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             return new DataSourcePanelEventArgs { Range = ResultRange, Data = _data };
         }
 
-        //TODO Проверить корректное копирование, если передан не шаблон, а сами данные
         protected override IExcelPanel CopyPanel(IXLCell cell)
         {
-            var panel = new ExcelDataSourcePanel(_dataSourceTemplate, CopyNamedRange(cell), _report, _templateProcessor)
-            {
-                GroupBy = GroupBy,
-                BeforeDataItemRenderMethodName = BeforeDataItemRenderMethodName,
-                AfterDataItemRenderMethodName = AfterDataItemRenderMethodName,
-            };
+            var panel = _isDataReceivedDirectly
+                ? new ExcelDataSourcePanel(_data, CopyNamedRange(cell), _report, _templateProcessor)
+                : new ExcelDataSourcePanel(_dataSourceTemplate, CopyNamedRange(cell), _report, _templateProcessor);
+
             FillCopyProperties(panel);
             return panel;
+        }
+
+        protected override void FillCopyProperties(IExcelPanel panel)
+        {
+            var dataSourcePanel = panel as ExcelDataSourcePanel;
+            dataSourcePanel.GroupBy = GroupBy;
+            dataSourcePanel.BeforeDataItemRenderMethodName = BeforeDataItemRenderMethodName;
+            dataSourcePanel.AfterDataItemRenderMethodName = AfterDataItemRenderMethodName;
+
+            base.FillCopyProperties(panel);
         }
     }
 }

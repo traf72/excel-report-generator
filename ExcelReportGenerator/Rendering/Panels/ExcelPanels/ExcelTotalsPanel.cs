@@ -231,10 +231,12 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             }
         }
 
-        //TODO Проверить корректное копирование, если передан не шаблон, а сами данные
         protected override IExcelPanel CopyPanel(IXLCell cell)
         {
-            var panel = new ExcelTotalsPanel(_dataSourceTemplate, CopyNamedRange(cell), _report, _templateProcessor);
+            var panel = _isDataReceivedDirectly
+                ? new ExcelTotalsPanel(_data, CopyNamedRange(cell), _report, _templateProcessor)
+                : new ExcelTotalsPanel(_dataSourceTemplate, CopyNamedRange(cell), _report, _templateProcessor);
+
             FillCopyProperties(panel);
             return panel;
         }

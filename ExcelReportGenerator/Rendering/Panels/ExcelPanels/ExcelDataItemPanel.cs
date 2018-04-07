@@ -32,9 +32,16 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         protected override IExcelPanel CopyPanel(IXLCell cell)
         {
             IXLRange newRange = ExcelHelper.CopyRange(Range, cell);
-            var panel = new ExcelDataItemPanel(newRange, _report, _templateProcessor) { DataItem = DataItem };
+            var panel = new ExcelDataItemPanel(newRange, _report, _templateProcessor);
             FillCopyProperties(panel);
             return panel;
+        }
+
+        protected override void FillCopyProperties(IExcelPanel panel)
+        {
+            var dataItemPanel = panel as ExcelDataItemPanel;
+            dataItemPanel.DataItem = DataItem;
+            base.FillCopyProperties(panel);
         }
     }
 }

@@ -436,12 +436,33 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             }
         }
 
-        //TODO Проверить корректное копирование, если передан не шаблон, а сами данные
         protected override IExcelPanel CopyPanel(IXLCell cell)
         {
-            var panel = new ExcelDataSourceDynamicPanel(_dataSourceTemplate, CopyNamedRange(cell), _report, _templateProcessor);
+            var panel = _isDataReceivedDirectly
+                ? new ExcelDataSourceDynamicPanel(_data, CopyNamedRange(cell), _report, _templateProcessor)
+                : new ExcelDataSourceDynamicPanel(_dataSourceTemplate, CopyNamedRange(cell), _report, _templateProcessor);
+
             FillCopyProperties(panel);
             return panel;
+        }
+
+        protected override void FillCopyProperties(IExcelPanel panel)
+        {
+            var dataSourceDynamicPanel = panel as ExcelDataSourceDynamicPanel;
+            dataSourceDynamicPanel.BeforeHeadersRenderMethodName = BeforeHeadersRenderMethodName;
+            dataSourceDynamicPanel.AfterHeadersRenderMethodName = AfterHeadersRenderMethodName;
+            dataSourceDynamicPanel.BeforeNumbersRenderMethodName = BeforeNumbersRenderMethodName;
+            dataSourceDynamicPanel.AfterNumbersRenderMethodName = AfterNumbersRenderMethodName;
+            dataSourceDynamicPanel.BeforeDataTemplatesRenderMethodName = BeforeDataTemplatesRenderMethodName;
+            dataSourceDynamicPanel.AfterDataTemplatesRenderMethodName = AfterDataTemplatesRenderMethodName;
+            dataSourceDynamicPanel.BeforeDataRenderMethodName = BeforeDataRenderMethodName;
+            dataSourceDynamicPanel.AfterDataRenderMethodName = AfterDataRenderMethodName;
+            dataSourceDynamicPanel.BeforeTotalsTemplatesRenderMethodName = BeforeTotalsTemplatesRenderMethodName;
+            dataSourceDynamicPanel.AfterTotalsTemplatesRenderMethodName = AfterTotalsTemplatesRenderMethodName;
+            dataSourceDynamicPanel.BeforeTotalsRenderMethodName = BeforeTotalsRenderMethodName;
+            dataSourceDynamicPanel.AfterTotalsRenderMethodName = AfterTotalsRenderMethodName;
+
+            base.FillCopyProperties(panel);
         }
 
         private class ColumnNumbersHelper

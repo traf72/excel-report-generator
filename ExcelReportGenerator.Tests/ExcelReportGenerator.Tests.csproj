@@ -112,6 +112,7 @@
     <Compile Include="Rendering\DataProvider.cs" />
     <Compile Include="Rendering\DefaultReportGeneratorTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataItemPanelTest.cs" />
+    <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataSourceDynamicPanelTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelNamedPanelTest.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelPanelFactoryTests.cs" />
     <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataSourcePanelTest.cs" />
