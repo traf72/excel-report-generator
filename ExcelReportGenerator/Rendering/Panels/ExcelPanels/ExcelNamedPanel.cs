@@ -34,7 +34,6 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             return Copy(cell, name, recursive);
         }
 
-        // TODO Корректно протестировать
         public IExcelNamedPanel Copy(IXLCell cell, string name, bool recursive = true)
         {
             if (cell == null)

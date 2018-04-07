@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -6,6 +7,7 @@ using ClosedXML.Excel;
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
+using ExcelReportGenerator.Tests.CustomAsserts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 
@@ -17,7 +19,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         [TestMethod]
         public void TestCopy()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
             var excelReport = Substitute.For<object>();
             var templateProcessor = Substitute.For<ITemplateProcessor>();
@@ -43,9 +45,28 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
                         Children = new List<IExcelPanel>
                         {
                             new ExcelDataSourcePanel("fn:DataSource:Method()", namedChildOfChildRange, excelReport, templateProcessor)
-                        }
+                            {
+                                RenderPriority = 30,
+                                Type = PanelType.Horizontal,
+                                ShiftType = ShiftType.Row,
+                                BeforeRenderMethodName = "BeforeRenderMethod3",
+                                AfterRenderMethodName = "AfterRenderMethod3",
+                                BeforeDataItemRenderMethodName = "BeforeDataItemRenderMethodName",
+                                AfterDataItemRenderMethodName = "AfterDataItemRenderMethodName",
+                                GroupBy = "2,4",
+                            }
+                        },
+                        RenderPriority = 20,
+                        ShiftType = ShiftType.Row,
+                        BeforeRenderMethodName = "BeforeRenderMethod2",
+                        AfterRenderMethodName = "AfterRenderMethod2",
                     }
-                }
+                },
+                RenderPriority = 10,
+                Type = PanelType.Horizontal,
+                ShiftType = ShiftType.NoShift,
+                BeforeRenderMethodName = "BeforeRenderMethod1",
+                AfterRenderMethodName = "AfterRenderMethod1",
             };
 
             IExcelNamedPanel copiedPanel = (IExcelNamedPanel)panel.Copy(ws.Cell(5, 5));
@@ -55,23 +76,41 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.IsTrue(Regex.IsMatch(copiedPanel.Name, @"Parent_[0-9a-f]{32}"));
             Assert.AreEqual(ws.Cell(5, 5), copiedPanel.Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Range.LastCell());
+            Assert.AreEqual(10, copiedPanel.RenderPriority);
+            Assert.AreEqual(PanelType.Horizontal, copiedPanel.Type);
+            Assert.AreEqual(ShiftType.NoShift, copiedPanel.ShiftType);
+            Assert.AreEqual("BeforeRenderMethod1", copiedPanel.BeforeRenderMethodName);
+            Assert.AreEqual("AfterRenderMethod1", copiedPanel.AfterRenderMethodName);
             Assert.IsNull(copiedPanel.Parent);
 
-            Assert.AreEqual(1, copiedPanel.Children.Count());
+            Assert.AreEqual(1, copiedPanel.Children.Count);
             Assert.AreSame(excelReport, copiedPanel.Children.First().GetType().GetField("_report", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(copiedPanel.Children.First()));
             Assert.AreSame(templateProcessor, copiedPanel.Children.First().GetType().GetField("_templateProcessor", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(copiedPanel.Children.First()));
             Assert.IsTrue(Regex.IsMatch(((IExcelNamedPanel)copiedPanel.Children.First()).Name, @"Parent_[0-9a-f]{32}_Child"));
             Assert.AreEqual(ws.Cell(6, 5), copiedPanel.Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Children.First().Range.LastCell());
+            Assert.AreEqual(20, copiedPanel.Children.First().RenderPriority);
+            Assert.AreEqual(PanelType.Vertical, copiedPanel.Children.First().Type);
+            Assert.AreEqual(ShiftType.Row, copiedPanel.Children.First().ShiftType);
+            Assert.AreEqual("BeforeRenderMethod2", copiedPanel.Children.First().BeforeRenderMethodName);
+            Assert.AreEqual("AfterRenderMethod2", copiedPanel.Children.First().AfterRenderMethodName);
             Assert.AreSame(copiedPanel, copiedPanel.Children.First().Parent);
 
-            Assert.AreEqual(1, copiedPanel.Children.First().Children.Count());
+            Assert.AreEqual(1, copiedPanel.Children.First().Children.Count);
             Assert.AreSame(excelReport, copiedPanel.Children.First().Children.First().GetType().GetField("_report", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(copiedPanel.Children.First().Children.First()));
             Assert.AreSame(templateProcessor, copiedPanel.Children.First().Children.First().GetType().GetField("_templateProcessor", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(copiedPanel.Children.First().Children.First()));
             Assert.IsTrue(Regex.IsMatch(((IExcelNamedPanel)copiedPanel.Children.First().Children.First()).Name, @"Parent_[0-9a-f]{32}_Child_ChildOfChild"));
             Assert.IsInstanceOfType(copiedPanel.Children.First().Children.First(), typeof(ExcelDataSourcePanel));
             Assert.AreEqual(ws.Cell(7, 5), copiedPanel.Children.First().Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Children.First().Children.First().Range.LastCell());
+            Assert.AreEqual(30, copiedPanel.Children.First().Children.First().RenderPriority);
+            Assert.AreEqual(PanelType.Horizontal, copiedPanel.Children.First().Children.First().Type);
+            Assert.AreEqual(ShiftType.Row, copiedPanel.Children.First().Children.First().ShiftType);
+            Assert.AreEqual("BeforeRenderMethod3", copiedPanel.Children.First().Children.First().BeforeRenderMethodName);
+            Assert.AreEqual("AfterRenderMethod3", copiedPanel.Children.First().Children.First().AfterRenderMethodName);
+            Assert.AreEqual("BeforeDataItemRenderMethodName", ((ExcelDataSourcePanel)copiedPanel.Children.First().Children.First()).BeforeDataItemRenderMethodName);
+            Assert.AreEqual("AfterDataItemRenderMethodName", ((ExcelDataSourcePanel)copiedPanel.Children.First().Children.First()).AfterDataItemRenderMethodName);
+            Assert.AreEqual("2,4", ((ExcelDataSourcePanel)copiedPanel.Children.First().Children.First()).GroupBy);
             Assert.AreSame(copiedPanel.Children.First(), copiedPanel.Children.First().Children.First().Parent);
 
             namedRange.Delete();
@@ -105,7 +144,12 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
                         Children = new List<IExcelPanel>
                         {
                             new ExcelNamedPanel(namedChildOfChildRange, excelReport, templateProcessor)
-                        }
+                        },
+                        RenderPriority = 10,
+                        Type = PanelType.Horizontal,
+                        ShiftType = ShiftType.NoShift,
+                        BeforeRenderMethodName = "BeforeRenderMethod",
+                        AfterRenderMethodName = "AfterRenderMethod",
                     },
                 },
             };
@@ -116,7 +160,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Range.LastCell());
             Assert.AreSame(globalParent, copiedPanel.Parent);
 
-            Assert.AreEqual(2, copiedPanel.Children.Count());
+            Assert.AreEqual(2, copiedPanel.Children.Count);
             Assert.IsTrue(Regex.IsMatch(((IExcelNamedPanel)copiedPanel.Children.First()).Name, @"Parent_[0-9a-f]{32}_Child"));
             Assert.AreEqual(ws.Cell(5, 5), copiedPanel.Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(5, 8), copiedPanel.Children.First().Range.LastCell());
@@ -125,9 +169,15 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.IsNotInstanceOfType(copiedPanel.Children.Last(), typeof(ExcelNamedPanel));
             Assert.AreEqual(ws.Cell(6, 5), copiedPanel.Children.Last().Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Children.Last().Range.LastCell());
+            Assert.AreEqual(10, copiedPanel.Children.Last().RenderPriority);
+            Assert.AreEqual(PanelType.Horizontal, copiedPanel.Children.Last().Type);
+            Assert.AreEqual(ShiftType.NoShift, copiedPanel.Children.Last().ShiftType);
+            Assert.AreEqual("BeforeRenderMethod", copiedPanel.Children.Last().BeforeRenderMethodName);
+            Assert.AreEqual("AfterRenderMethod", copiedPanel.Children.Last().AfterRenderMethodName);
+
             Assert.AreSame(copiedPanel, copiedPanel.Children.Last().Parent);
 
-            Assert.AreEqual(1, copiedPanel.Children.Last().Children.Count());
+            Assert.AreEqual(1, copiedPanel.Children.Last().Children.Count);
             Assert.IsTrue(Regex.IsMatch(((IExcelNamedPanel)copiedPanel.Children.Last().Children.First()).Name, @"ChildOfChild_[0-9a-f]{32}"));
             Assert.AreEqual(ws.Cell(7, 5), copiedPanel.Children.Last().Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Children.Last().Children.First().Range.LastCell());
@@ -161,7 +211,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Range.LastCell());
             Assert.IsNull(copiedPanel.Parent);
 
-            Assert.AreEqual(1, copiedPanel.Children.Count());
+            Assert.AreEqual(1, copiedPanel.Children.Count);
             Assert.IsTrue(Regex.IsMatch(((IExcelNamedPanel)copiedPanel.Children.First()).Name, @"Parent_[0-9a-f]{32}_Child"));
             Assert.AreEqual(ws.Cell(5, 5), copiedPanel.Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(5, 8), copiedPanel.Children.First().Range.LastCell());
@@ -172,7 +222,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(ws.Cell(5, 5), copiedPanel.Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Range.LastCell());
             Assert.IsNull(copiedPanel.Parent);
-            Assert.AreEqual(0, copiedPanel.Children.Count());
+            Assert.AreEqual(0, copiedPanel.Children.Count);
+
+            ExceptionAssert.Throws<ArgumentNullException>(() => panel.Copy(null));
 
             //wb.SaveAs("test.xlsx");
         }
@@ -180,7 +232,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         [TestMethod]
         public void TestCopyWithName()
         {
-            XLWorkbook wb = new XLWorkbook();
+            var wb = new XLWorkbook();
             IXLWorksheet ws = wb.AddWorksheet("Test");
             var excelReport = Substitute.For<object>();
             var templateProcessor = Substitute.For<ITemplateProcessor>();
@@ -230,7 +282,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Range.LastCell());
             Assert.IsNull(copiedPanel.Parent);
 
-            Assert.AreEqual(2, copiedPanel.Children.Count());
+            Assert.AreEqual(2, copiedPanel.Children.Count);
             Assert.IsTrue(Regex.IsMatch(((IExcelNamedPanel)copiedPanel.Children.First()).Name, "Copied_Child"));
             Assert.AreEqual(ws.Cell(5, 5), copiedPanel.Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(6, 8), copiedPanel.Children.First().Range.LastCell());
@@ -241,13 +293,13 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Children.Last().Range.LastCell());
             Assert.AreSame(copiedPanel, copiedPanel.Children.Last().Parent);
 
-            Assert.AreEqual(1, copiedPanel.Children.First().Children.Count());
+            Assert.AreEqual(1, copiedPanel.Children.First().Children.Count);
             Assert.IsTrue(Regex.IsMatch(((IExcelNamedPanel)copiedPanel.Children.First().Children.First()).Name, "Copied_Child_ChildOfChild1"));
             Assert.AreEqual(ws.Cell(5, 5), copiedPanel.Children.First().Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(5, 8), copiedPanel.Children.First().Children.First().Range.LastCell());
             Assert.AreSame(copiedPanel.Children.First(), copiedPanel.Children.First().Children.First().Parent);
 
-            Assert.AreEqual(1, copiedPanel.Children.Last().Children.Count());
+            Assert.AreEqual(1, copiedPanel.Children.Last().Children.Count);
             Assert.IsTrue(Regex.IsMatch(((IExcelNamedPanel)copiedPanel.Children.Last().Children.First()).Name, "ChildOfChild2_[0-9a-f]{32}"));
             Assert.AreEqual(ws.Cell(7, 5), copiedPanel.Children.Last().Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Children.Last().Children.First().Range.LastCell());
@@ -258,7 +310,12 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(ws.Cell(5, 5), copiedPanel.Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 8), copiedPanel.Range.LastCell());
             Assert.IsNull(copiedPanel.Parent);
-            Assert.AreEqual(0, copiedPanel.Children.Count());
+            Assert.AreEqual(0, copiedPanel.Children.Count);
+
+            ExceptionAssert.Throws<ArgumentNullException>(() => panel.Copy(null, "Copied"));
+            ExceptionAssert.Throws<ArgumentException>(() => panel.Copy(ws.Cell(5, 5), null));
+            ExceptionAssert.Throws<ArgumentException>(() => panel.Copy(ws.Cell(5, 5), string.Empty));
+            ExceptionAssert.Throws<ArgumentException>(() => panel.Copy(ws.Cell(5, 5), " "));
 
             //wb.SaveAs("test.xlsx");
         }
