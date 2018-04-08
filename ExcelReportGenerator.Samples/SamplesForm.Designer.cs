@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblReports = new System.Windows.Forms.Label();
+            this.lblReport = new System.Windows.Forms.Label();
             this.cmbReports = new System.Windows.Forms.ComboBox();
             this.btnRun = new System.Windows.Forms.Button();
             this.txtOutputFolder = new System.Windows.Forms.TextBox();
@@ -36,14 +36,14 @@
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
-            // lblReports
+            // lblReport
             // 
-            this.lblReports.AutoSize = true;
-            this.lblReports.Location = new System.Drawing.Point(12, 9);
-            this.lblReports.Name = "lblReports";
-            this.lblReports.Size = new System.Drawing.Size(47, 13);
-            this.lblReports.TabIndex = 0;
-            this.lblReports.Text = "Reports:";
+            this.lblReport.AutoSize = true;
+            this.lblReport.Location = new System.Drawing.Point(12, 9);
+            this.lblReport.Name = "lblReport";
+            this.lblReport.Size = new System.Drawing.Size(42, 13);
+            this.lblReport.TabIndex = 0;
+            this.lblReport.Text = "Report:";
             // 
             // cmbReports
             // 
@@ -101,7 +101,7 @@
             this.Controls.Add(this.txtOutputFolder);
             this.Controls.Add(this.btnRun);
             this.Controls.Add(this.cmbReports);
-            this.Controls.Add(this.lblReports);
+            this.Controls.Add(this.lblReport);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "SamplesForm";
@@ -116,7 +116,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblReports;
+        private System.Windows.Forms.Label lblReport;
         private System.Windows.Forms.ComboBox cmbReports;
         private System.Windows.Forms.Button btnRun;
         private System.Windows.Forms.TextBox txtOutputFolder;

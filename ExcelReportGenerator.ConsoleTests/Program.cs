@@ -1,7 +1,4 @@
-﻿using ClosedXML.Excel;
-using ExcelReportGenerator.Enums;
-using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
-using System;
+﻿using System;
 using System.Data;
 using System.Diagnostics;
 

@@ -65,7 +65,7 @@ namespace ExcelReportGenerator.Samples
 
         private XLWorkbook GetReportTemplateWorkbook(Type reportType)
         {
-            return XLWorkbook.OpenFromTemplate(Path.Combine("Reports", "Templates", string.Format("{0}.xlsx", reportType.Name)));
+            return new XLWorkbook(Path.Combine("Reports", "Templates", string.Format("{0}.xlsx", reportType.Name)));
         }
 
         private DefaultReportGenerator GetReportGenerator(Type reportType)

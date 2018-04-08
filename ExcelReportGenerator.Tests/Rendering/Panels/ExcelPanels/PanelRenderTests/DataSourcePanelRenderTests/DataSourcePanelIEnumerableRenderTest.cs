@@ -25,7 +25,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             range.FirstCell().Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
             range.FirstCell().Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
 
-            ws.Cell(2, 4).DataType = XLDataType.Number;
+            //ws.Cell(2, 4).DataType = XLDataType.Number;
+            ws.Cell(2, 4).DataType = XLCellValues.Number;
 
             ws.Cell(2, 2).Value = "{m:Concat(di:Name, m:Format(di:Date, dd.MM.yyyy))}";
             ws.Cell(2, 3).Value = "{di:Date}";
@@ -67,7 +68,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             range.FirstCell().Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
             range.FirstCell().Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
 
-            ws.Cell(2, 4).DataType = XLDataType.Number;
+            //ws.Cell(2, 4).DataType = XLDataType.Number;
+            ws.Cell(2, 4).DataType = XLCellValues.Number;
 
             ws.Cell(2, 2).Value = "{di:Name}";
             ws.Cell(2, 3).Value = "{di:Date}";
@@ -114,7 +116,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             ws.Cell(3, 5).Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
 
-            ws.Cell(2, 4).DataType = XLDataType.Number;
+            //ws.Cell(2, 4).DataType = XLDataType.Number;
+            ws.Cell(2, 4).DataType = XLCellValues.Number;
 
             ws.Cell(2, 2).Value = "{di:Name}";
             ws.Cell(2, 3).Value = "{di:Date}";
@@ -170,7 +173,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             range.FirstCell().Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
             range.FirstCell().Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
 
-            ws.Cell(2, 4).DataType = XLDataType.Number;
+            //ws.Cell(2, 4).DataType = XLDataType.Number;
+            ws.Cell(2, 4).DataType = XLCellValues.Number;
 
             ws.Cell(2, 2).Value = "{di:Name}";
             ws.Cell(2, 3).Value = "{di:Date}";
@@ -215,7 +219,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             range.FirstCell().Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
             range.FirstCell().Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
 
-            ws.Cell(2, 4).DataType = XLDataType.Number;
+            //ws.Cell(2, 4).DataType = XLDataType.Number;
+            ws.Cell(2, 4).DataType = XLCellValues.Number;
 
             ws.Cell(2, 2).Value = "{di:Name}";
             ws.Cell(2, 3).Value = "{di:Date}";
@@ -261,7 +266,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             range.FirstCell().Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
             range.FirstCell().Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
 
-            ws.Cell(2, 4).DataType = XLDataType.Number;
+            //ws.Cell(2, 4).DataType = XLDataType.Number;
+            ws.Cell(2, 4).DataType = XLCellValues.Number;
 
             ws.Cell(2, 2).Value = "{di:Name}";
             ws.Cell(2, 3).Value = "{di:Date}";
