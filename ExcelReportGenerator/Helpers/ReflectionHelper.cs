@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Reflection;
+using ExcelReportGenerator.Extensions;
 
 namespace ExcelReportGenerator.Helpers
 {
@@ -51,7 +52,7 @@ namespace ExcelReportGenerator.Helpers
                 PropertyInfo prop = TryGetProperty(instance.GetType(), propOrFieldName, flags);
                 if (prop != null)
                 {
-                    instance = prop.GetValue(instance);
+                    instance = prop.GetValue(instance, null);
                     if (instance == null && currentPropNumber == propsCount)
                     {
                         instance = GetNullValueAttributeValue(prop);

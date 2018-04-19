@@ -54,7 +54,7 @@ namespace ExcelReportGenerator.Rendering.Providers.VariableProviders
                 throw new InvalidVariableException($"Cannot find variable with name \"{name}\" in class {GetType().Name} and all its parents. Variable must be public instance property.");
             }
 
-            return prop.GetValue(this);
+            return prop.GetValue(this, null);
         }
     }
 }

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ExcelReportGenerator.Extensions;
 using ExcelReportGenerator.License;
 
 namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
@@ -117,7 +118,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 if (externalProp != null)
                 {
                     var externalPropAttr = (ExternalPropertyAttribute)externalProp.GetCustomAttribute(typeof(ExternalPropertyAttribute));
-                    externalProp.SetValue(panel, ConvertProperty(prop.Value, externalPropAttr.Converter));
+                    externalProp.SetValue(panel, ConvertProperty(prop.Value, externalPropAttr.Converter), null);
                 }
             }
         }

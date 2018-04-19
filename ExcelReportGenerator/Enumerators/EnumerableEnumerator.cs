@@ -49,7 +49,7 @@ namespace ExcelReportGenerator.Enumerators
                         Type genericCollectionInterface = TypeHelper.TryGetGenericCollectionInterface(enumerableType);
                         if (genericCollectionInterface != null)
                         {
-                            _rowCount = (int)enumerableType.GetProperty(nameof(ICollection.Count)).GetValue(_enumerable);
+                            _rowCount = (int)enumerableType.GetProperty(nameof(ICollection.Count)).GetValue(_enumerable, null);
                         }
                         else
                         {

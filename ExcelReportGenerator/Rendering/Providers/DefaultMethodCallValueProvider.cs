@@ -91,7 +91,7 @@ namespace ExcelReportGenerator.Rendering.Providers
                 throw new InvalidOperationException($"Mismatch parameters count. Input pararameters count: {inputParameters.Count}. Method required parameters count: {requiredParams.Length}. MethodCallTemplate: {MethodCallTemplate}");
             }
 
-            object[] callParams = methodParameters.Select(p => p.HasDefaultValue ? p.DefaultValue : null).ToArray();
+            object[] callParams = methodParameters.Select(p => p.HasDefaultValue() ? p.DefaultValue : null).ToArray();
             for (int i = 0; i < inputParameters.Count; i++)
             {
                 InputParameter param = inputParameters[i];

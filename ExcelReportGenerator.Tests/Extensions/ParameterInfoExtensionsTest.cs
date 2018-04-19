@@ -1,6 +1,7 @@
-﻿using System.Reflection;
-using ExcelReportGenerator.Extensions;
+﻿using ExcelReportGenerator.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Reflection;
 
 namespace ExcelReportGenerator.Tests.Extensions
 {
@@ -17,9 +18,24 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.IsTrue(parameters[2].IsParams());
         }
 
+        [TestMethod]
+        public void TestHasDefaultValue()
+        {
+            MethodInfo method = typeof(TestClass).GetMethod("Meth2");
+            ParameterInfo[] methodParams = method.GetParameters();
+            Assert.IsFalse(methodParams[0].HasDefaultValue());
+            Assert.IsTrue(methodParams[1].HasDefaultValue());
+            Assert.IsTrue(methodParams[2].HasDefaultValue());
+            Assert.IsTrue(methodParams[3].HasDefaultValue());
+        }
+
         private class TestClass
         {
             public void Meth1(int arg1, string arg2, params string[] arg3)
+            {
+            }
+
+            public void Meth2(int arg1, int arg2 = 0, DateTime? arg3 = null, object arg4 = null)
             {
             }
         }

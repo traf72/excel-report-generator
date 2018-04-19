@@ -9,5 +9,11 @@ namespace ExcelReportGenerator.Extensions
         {
             return parameter.IsDefined(typeof(ParamArrayAttribute), false);
         }
+
+        // Support .NET 4.0
+        public static bool HasDefaultValue(this ParameterInfo parameter)
+        {
+            return parameter.DefaultValue != DBNull.Value;
+        }
     }
 }

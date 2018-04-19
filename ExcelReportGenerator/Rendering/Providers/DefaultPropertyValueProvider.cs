@@ -107,7 +107,7 @@ namespace ExcelReportGenerator.Rendering.Providers
                     instance = InstanceProvider.GetInstance(type);
                 }
 
-                return prop.GetValue(instance);
+                return prop.GetValue(instance, null);
             }
 
             FieldInfo field = member as FieldInfo;
