@@ -267,7 +267,7 @@ namespace ExcelReportGenerator.Excel
 
         public static bool IsRangeInvalid(IXLRange range)
         {
-            if (range.RangeAddress.IsInvalid)
+            if (!range.RangeAddress.IsValid)
             {
                 return true;
             }
