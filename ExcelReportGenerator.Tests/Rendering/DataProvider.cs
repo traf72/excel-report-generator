@@ -2,7 +2,6 @@
 using ExcelReportGenerator.Enums;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -61,8 +60,7 @@ namespace ExcelReportGenerator.Tests.Rendering
 
         static DataProvider()
         {
-            TestHelper.InitDataDirectory();
-            _conStr = ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString;
+            _conStr = Configuration.TestDbConectionString;
         }
 
         public TestItem GetSingleItem()

@@ -28,7 +28,7 @@ namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
             foreach (MemberInfo probableColumnMember in probableExcelColumns)
             {
                 Type memberType = probableColumnMember is PropertyInfo p ? p.PropertyType : ((FieldInfo)probableColumnMember).FieldType;
-                var columnAttr = (ExcelColumnAttribute)probableColumnMember.GetCustomAttribute(typeof(ExcelColumnAttribute));
+                var columnAttr = Extensions.CustomAttributeExtensions.GetCustomAttribute<ExcelColumnAttribute>(probableColumnMember);
                 if (columnAttr != null)
                 {
                     var excelColumn = new ExcelDynamicColumn(probableColumnMember.Name, memberType, columnAttr.Caption)

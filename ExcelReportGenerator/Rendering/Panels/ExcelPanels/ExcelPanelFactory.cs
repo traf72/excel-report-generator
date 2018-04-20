@@ -2,13 +2,12 @@
 using ExcelReportGenerator.Attributes;
 using ExcelReportGenerator.Converters;
 using ExcelReportGenerator.Helpers;
+using ExcelReportGenerator.License;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ExcelReportGenerator.Extensions;
-using ExcelReportGenerator.License;
 
 namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 {
@@ -117,7 +116,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 PropertyInfo externalProp = externalProperties.SingleOrDefault(p => p.Name == prop.Key);
                 if (externalProp != null)
                 {
-                    var externalPropAttr = (ExternalPropertyAttribute)externalProp.GetCustomAttribute(typeof(ExternalPropertyAttribute));
+                    var externalPropAttr = Extensions.CustomAttributeExtensions.GetCustomAttribute<ExternalPropertyAttribute>(externalProp);
                     externalProp.SetValue(panel, ConvertProperty(prop.Value, externalPropAttr.Converter), null);
                 }
             }

@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Reflection;
-using ExcelReportGenerator.Extensions;
 
 namespace ExcelReportGenerator.Helpers
 {
@@ -143,7 +142,7 @@ namespace ExcelReportGenerator.Helpers
 
         public object GetNullValueAttributeValue(MemberInfo member)
         {
-            var nullValueAttr = (NullValueAttribute)member.GetCustomAttribute(typeof(NullValueAttribute));
+            var nullValueAttr = Extensions.CustomAttributeExtensions.GetCustomAttribute<NullValueAttribute>(member);
             return nullValueAttr?.Value;
         }
     }

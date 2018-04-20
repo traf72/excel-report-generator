@@ -1,14 +1,13 @@
 ﻿using ExcelReportGenerator.Attributes;
 using ExcelReportGenerator.Extensions;
 using ExcelReportGenerator.Rendering.Panels;
+using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
-using Microsoft.Win32;
 
 namespace ExcelReportGenerator.License
 {

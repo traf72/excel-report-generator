@@ -1,20 +1,14 @@
-﻿using System.Configuration;
+﻿using ExcelReportGenerator.Extensions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data;
 using System.Data.SqlClient;
-using ExcelReportGenerator.Extensions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ExcelReportGenerator.Tests.Extensions
 {
     [TestClass]
     public class DataReaderExtensionsTest
     {
-        private readonly string _conStr = ConfigurationManager.ConnectionStrings["TestDb"].ConnectionString;
-
-        public DataReaderExtensionsTest()
-        {
-            TestHelper.InitDataDirectory();
-        }
+        private readonly string _conStr = Configuration.TestDbConectionString;
 
         [TestMethod]
         public void TestSafeGetValue()

@@ -1,322 +1,348 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2632C242-3378-4FE0-8F49-098782B75433}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExcelReportGenerator.Tests</RootNamespace>
-    <AssemblyName>ExcelReportGenerator.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>7.1</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ClosedXML, Version=0.92.1.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
-      <HintPath>..\packages\ClosedXML.0.92.1\lib\net40\ClosedXML.dll</HintPath>
-    </Reference>
-    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
-      <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
-    </Reference>
-    <Reference Include="ExcelNumberFormat, Version=1.0.3.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
-      <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
-    </Reference>
-    <Reference Include="FastMember.Signed, Version=1.3.0.0, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
-      <HintPath>..\packages\FastMember.Signed.1.3.0\lib\net45\FastMember.Signed.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="NSubstitute, Version=3.1.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\packages\NSubstitute.3.1.0\lib\net45\NSubstitute.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.4.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.2.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.2.1" />
+    <PackageReference Include="NSubstitute" Version="3.1.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.4.3" />
   </ItemGroup>
-  <Choose>
-    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-      </ItemGroup>
-    </When>
-    <Otherwise>
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
+
   <ItemGroup>
-    <Compile Include="Converters\ExternalPropertiesConverters\PanelTypeConverterTest.cs" />
-    <Compile Include="Converters\ExternalPropertiesConverters\RenderPriorityConverterTest.cs" />
-    <Compile Include="Converters\ExternalPropertiesConverters\ShiftTypeConverterTest.cs" />
-    <Compile Include="CustomAsserts\ExcelAssert.cs" />
-    <Compile Include="Enumerators\DataTableEnumeratorTest.cs" />
-    <Compile Include="Enumerators\EnumerableEnumeratorTest.cs" />
-    <Compile Include="Enumerators\EnumeratorFactoryTest.cs" />
-    <Compile Include="Extensions\DataReaderExtensionsTest.cs" />
-    <Compile Include="Extensions\StringExtensionsTest.cs" />
-    <Compile Include="Extensions\TemplateProcessorExtensionsTest.cs" />
-    <Compile Include="Extensions\ParameterInfoExtensionsTest.cs" />
-    <Compile Include="Extensions\TypeExtensionsTest.cs" />
-    <Compile Include="Extensions\XLRangeBaseExtensionsTest.cs" />
-    <Compile Include="Helpers\ReflectionHelperTest.cs" />
-    <Compile Include="Helpers\EnumHelperTest.cs" />
-    <Compile Include="Helpers\RegexHelperTest.cs" />
-    <Compile Include="Helpers\TypeHelperTest.cs" />
-    <Compile Include="Excel\ExcelHelperTest.cs" />
-    <Compile Include="Enumerators\DataReaderEnumeratorTest.cs" />
-    <Compile Include="Enumerators\DataSetEnumeratorTest.cs" />
-    <Compile Include="CustomAsserts\ExceptionAssert.cs" />
-    <Compile Include="License\EncryptorTest.cs" />
-    <Compile Include="License\LicensingTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rendering\DataProvider.cs" />
-    <Compile Include="Rendering\DefaultReportGeneratorTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataItemPanelTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataSourceDynamicPanelTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\ExcelNamedPanelTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\ExcelPanelFactoryTests.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\ExcelDataSourcePanelTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\ExcelTotalsPanelTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\ExcelPanelTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDataSetRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDataTableRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanel_InsideDataSourcePanel_Test.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelSingleItemRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelEnumerableRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDictionaryRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataReaderRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataSetRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDataTableRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelDictionaryRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelEmptyIEnumerableRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelIEnumerableRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelNullItemRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_ChildEqualsParent_Test.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_MixedPanels_Test.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_PageBreaks_Test.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourceDynamicPanelRenderTests\DataSourceDynamicPanelDataReaderRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\DataSourcePanelRenderTests\DataSourcePanelSingleItemRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\TotalsPanelRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\PanelRenderTest.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelRenderTests\TestReport.cs" />
-    <Compile Include="Rendering\Panels\ExcelPanels\PanelsExpandTest.cs" />
-    <Compile Include="Rendering\Parsers\DefaultPanelPropertiesParserTest.cs" />
-    <Compile Include="Rendering\Providers\ColumnsProvider\ColumnsProviderFactoryTest.cs" />
-    <Compile Include="Rendering\Providers\ColumnsProvider\DataReaderColumnsProviderTest.cs" />
-    <Compile Include="Rendering\Providers\ColumnsProvider\DataSetColumnsProviderTest.cs" />
-    <Compile Include="Rendering\Providers\ColumnsProvider\DataTableColumnsProviderTest.cs" />
-    <Compile Include="Rendering\Providers\ColumnsProvider\DictionaryColumnsProviderTest.cs" />
-    <Compile Include="Rendering\Providers\ColumnsProvider\EnumerableColumnsProviderTest.cs" />
-    <Compile Include="Rendering\Providers\ColumnsProvider\GenericEnumerableColumnsProviderTest.cs" />
-    <Compile Include="Rendering\Providers\ColumnsProvider\KeyValuePairColumnsProviderTest.cs" />
-    <Compile Include="Rendering\Providers\ColumnsProvider\ObjectColumnsProviderTest.cs" />
-    <Compile Include="Rendering\Providers\ColumnsProvider\TypeColumnsProviderTest.cs" />
-    <Compile Include="Rendering\Providers\DataItemValueProviders\DataItemValueProviderFactoryTest.cs" />
-    <Compile Include="Rendering\Providers\DataItemValueProviders\DataReaderValueProviderTest.cs" />
-    <Compile Include="Rendering\Providers\DataItemValueProviders\DataRowValueProviderTest.cs" />
-    <Compile Include="Rendering\Providers\DataItemValueProviders\DictionaryValueProviderTest.cs" />
-    <Compile Include="Rendering\Providers\DataItemValueProviders\HierarchicalDataItemValueProviderTest.cs" />
-    <Compile Include="Rendering\Providers\DataItemValueProviders\ObjectPropertyValueProviderTest.cs" />
-    <Compile Include="Rendering\Providers\DefaultMethodCallValueProviderTest.cs" />
-    <Compile Include="Rendering\Providers\DefaultPropertyValueProviderTest.cs" />
-    <Compile Include="Rendering\Providers\DefaultInstanceProviderTest.cs" />
-    <Compile Include="Rendering\Providers\DefaultTypeProviderTest.cs" />
-    <Compile Include="Rendering\Providers\VariableProviders\DefaultVariableProviderTest.cs" />
-    <Compile Include="Rendering\SystemFunctionsTest.cs" />
-    <Compile Include="Rendering\TemplateProcessors\DefaultTemplateProcessorTest.cs" />
-    <Compile Include="TestHelper.cs" />
+    <ProjectReference Include="..\ExcelReportGenerator\ExcelReportGenerator.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\ExcelReportGenerator\ExcelReportGenerator.csproj">
-      <Project>{64270919-ef05-443d-ae3d-2348c1f9c2b6}</Project>
-      <Name>ExcelReportGenerator</Name>
-    </ProjectReference>
+    <Reference Include="System">
+      <HintPath>System</HintPath>
+    </Reference>
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-    <None Include="TestData\DataSourceDynamicPanelDataReaderRenderTest\TestRenderDataReader.xlsx" />
-    <None Include="TestData\DataSourceDynamicPanelDataReaderRenderTest\TestRenderDataReader_HorizontalPanel.xlsx" />
-    <None Include="TestData\DataSourceDynamicPanelDataReaderRenderTest\TestRenderEmptyDataReader.xlsx" />
-    <None Include="TestData\DataSourceDynamicPanelDataSetRenderTest\TestDynamicPanelAfterRenderEvent.xlsx" />
-    <None Include="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderDataSetWithEvents.xlsx" />
-    <None Include="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderDataSetWithEvents_HorizontalPanel.xlsx" />
-    <None Include="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderEmptyDataSet.xlsx" />
-    <None Include="TestData\DataSourceDynamicPanelDataTableRenderTest\TestRenderDataTable.xlsx" />
-    <None Include="TestData\DataSourceDynamicPanelDataTableRenderTest\TestRenderEmptyDataTable.xlsx" />
-    <None Include="TestData\DataSourceDynamicPanelDictionaryRenderTest\TestRenderDictionary.xlsx" />
-    <None Include="TestData\DataSourceDynamicPanelDictionaryRenderTest\TestRenderDictionaryEnumerable.xlsx" />
-    <None Include="TestData\DataSourceDynamicPanelEnumerableRenderTest\TestRenderEmptyEnumerable.xlsx" />
-    <None Include="TestData\DataSourceDynamicPanelEnumerableRenderTest\TestRenderEnumerable.xlsx" />
-    <None Include="TestData\DataSourceDynamicPanelSingleItemRenderTest\TestRenderSingleItem.xlsx" />
-    <None Include="TestData\DataSourceDynamicPanel_InsideDataSourcePanel_Test\TestRender_DynamicPanel_In_DataSourcePanel_Horizontal.xlsx" />
-    <None Include="TestData\DataSourceDynamicPanel_InsideDataSourcePanel_Test\TestRender_DynamicPanel_In_DataSourcePanel_Vertical.xlsx" />
-    <None Include="TestData\DataSourcePanelDataReaderRenderTest\TestRenderDataReader.xlsx" />
-    <None Include="TestData\DataSourcePanelDataSetRenderTest\TestRenderDataSet.xlsx" />
-    <None Include="TestData\DataSourcePanelDataTableRenderTest\TestRenderDataTable.xlsx" />
-    <None Include="TestData\DataSourcePanelDictionaryRenderTest\TestRenderDictionary.xlsx" />
-    <None Include="TestData\DataSourcePanelDictionaryRenderTest\TestRenderDictionaryEnumerable.xlsx" />
-    <None Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableHorizontalCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableHorizontalNoShift.xlsx" />
-    <None Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableHorizontalRowsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalNoShift.xlsx" />
-    <None Include="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalRowsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestPanelRenderEvents.xlsx" />
-    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalNoShift.xlsx" />
-    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalRowsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableOfInt.xlsx" />
-    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableOfString.xlsx" />
-    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalNoShift.xlsx" />
-    <None Include="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalRowsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemHorizontalCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemHorizontalNoShift.xlsx" />
-    <None Include="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemHorizontalRowShift.xlsx" />
-    <None Include="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalNoShift.xlsx" />
-    <None Include="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalRowShift.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_ChildEqualsParent_Test\Test_VerticalPanelsGrouping_ChildEqualsParent.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentCellsShiftChildCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumn.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumnWhichDeleteAfterRender.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentNoShiftChildCellsShift_WithFictitiousColumn.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentNoShiftChildRowShift.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentRowShiftChildCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentRowShiftChildCellsShift_WithFictitiousColumn.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentRowShiftChildRowShift.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentRowShiftChildRowShift_WithFictitiousColumn.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentCellsShiftChildCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumn.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumnWhichDeleteAfterRender.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentNoShiftChildCellsShift_WithFictitiousColumn.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentNoShiftChildRowShift.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentRowShiftChildCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentRowShiftChildCellsShift_WithFictitiousColumn.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentRowShiftChildRowShift.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentRowShiftChildRowShift_WithFictitiousColumn.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestHorizontalInVerticalPanelsGrouping.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestMultipleHorizontalPanelsGrouping.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestMultipleVerticalPanelsGrouping.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestVerticalInHorizontalPanelsGrouping.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent\Test_TwoChildren_Horizontal.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent\Test_TwoChildren_Vertical.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_PageBreaks_Test\Test_HorizontalPageBreaks.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_PageBreaks_Test\Test_VerticalPageBreaks.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentCellsShiftChildCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentCellsShiftChildCellsShift_WithFictitiousRow.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentCellsShiftChildCellsShift_WithFictitiousRowWhichDeleteAfterRender.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentNoShiftChildCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentNoShiftChildRowShift_WithFictitiousRow.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentRowShiftChildCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentRowShiftChildCellsShift_WithFictitiousRow.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentRowShiftChildRowShift.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentRowShiftChildRowShift_WithFictitiousRow.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentCellsShiftChildCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentCellsShiftChildCellsShift_WithFictitiousRow.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentCellsShiftChildRowShift_WithFictitiousRow.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentNoShiftChildCellsShift_WithFictitiousRowWhichDeleteAfterRender.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentNoShiftChildRowShift.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentRowShiftChildCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentRowShiftChildRowShift.xlsx" />
-    <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemHorizontalCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemHorizontalNoShift.xlsx" />
-    <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemHorizontalRowShift.xlsx" />
-    <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalCellsShift.xlsx" />
-    <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalNoShift.xlsx" />
-    <None Include="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalRowShift.xlsx" />
-    <None Include="TestData\DefaultReportGeneratorTest\TestRender.xlsx" />
-    <None Include="TestData\DefaultReportGeneratorTest\TestRenderPartialWorksheets.xlsx" />
-    <None Include="TestData\DefaultReportGeneratorTest\TestRenderWithCustomVariableAndFunctionProviders.xlsx" />
-    <None Include="TestData\DefaultReportGeneratorTest\TestRenderWithEvents.xlsx" />
-    <None Include="TestData\ExcelDataSourcePanelTest\TestGroupResultHorizontal.xlsx" />
-    <None Include="TestData\ExcelDataSourcePanelTest\TestGroupResultVertical.xlsx" />
-    <None Include="TestData\ExcelDataSourcePanelTest\TestIfGroupByPropertyIsEmpty.xlsx" />
-    <None Include="TestData\PanelRenderTest\PanelRenderTest.xlsx" />
-    <None Include="TestData\SystemFunctionsTest\TestFormatOnRender.xlsx" />
-    <None Include="TestData\TotalsPanelRenderTest\TestPanelRender.xlsx" />
-    <None Include="TestData\TotalsPanelRenderTest\TestPanelRenderWithParentContext.xlsx" />
-    <None Include="TestData\TotalsPanelRenderTest\TestPanelWithNoData.xlsx" />
-    <None Include="TestData\TotalsPanelRenderTest\TestPanelWithNullData.xlsx" />
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourceDynamicPanelDataReaderRenderTest\TestRenderDataReader.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourceDynamicPanelDataReaderRenderTest\TestRenderDataReader_HorizontalPanel.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourceDynamicPanelDataReaderRenderTest\TestRenderEmptyDataReader.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourceDynamicPanelDataSetRenderTest\TestDynamicPanelAfterRenderEvent.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderDataSetWithEvents.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderDataSetWithEvents_HorizontalPanel.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderEmptyDataSet.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourceDynamicPanelDataTableRenderTest\TestRenderDataTable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourceDynamicPanelDataTableRenderTest\TestRenderEmptyDataTable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourceDynamicPanelDictionaryRenderTest\TestRenderDictionary.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourceDynamicPanelDictionaryRenderTest\TestRenderDictionaryEnumerable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourceDynamicPanelEnumerableRenderTest\TestRenderEmptyEnumerable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourceDynamicPanelEnumerableRenderTest\TestRenderEnumerable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourceDynamicPanelSingleItemRenderTest\TestRenderSingleItem.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourceDynamicPanel_InsideDataSourcePanel_Test\TestRender_DynamicPanel_In_DataSourcePanel_Horizontal.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourceDynamicPanel_InsideDataSourcePanel_Test\TestRender_DynamicPanel_In_DataSourcePanel_Vertical.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelDataReaderRenderTest\TestRenderDataReader.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelDataSetRenderTest\TestRenderDataSet.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelDataTableRenderTest\TestRenderDataTable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelDictionaryRenderTest\TestRenderDictionary.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelDictionaryRenderTest\TestRenderDictionaryEnumerable.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableHorizontalCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableHorizontalNoShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableHorizontalRowsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalNoShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalRowsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestPanelRenderEvents.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalNoShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalRowsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableOfInt.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableOfString.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalNoShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalRowsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemHorizontalCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemHorizontalNoShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemHorizontalRowShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalNoShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalRowShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_ChildEqualsParent_Test\Test_VerticalPanelsGrouping_ChildEqualsParent.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentCellsShiftChildCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumn.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumnWhichDeleteAfterRender.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentNoShiftChildCellsShift_WithFictitiousColumn.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentNoShiftChildRowShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentRowShiftChildCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentRowShiftChildCellsShift_WithFictitiousColumn.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentRowShiftChildRowShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentRowShiftChildRowShift_WithFictitiousColumn.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentCellsShiftChildCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumn.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumnWhichDeleteAfterRender.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentNoShiftChildCellsShift_WithFictitiousColumn.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentNoShiftChildRowShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentRowShiftChildCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentRowShiftChildCellsShift_WithFictitiousColumn.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentRowShiftChildRowShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentRowShiftChildRowShift_WithFictitiousColumn.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestHorizontalInVerticalPanelsGrouping.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestMultipleHorizontalPanelsGrouping.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestMultipleVerticalPanelsGrouping.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestVerticalInHorizontalPanelsGrouping.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent\Test_TwoChildren_Horizontal.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent\Test_TwoChildren_Vertical.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_PageBreaks_Test\Test_HorizontalPageBreaks.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_PageBreaks_Test\Test_VerticalPageBreaks.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentCellsShiftChildCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentCellsShiftChildCellsShift_WithFictitiousRow.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentCellsShiftChildCellsShift_WithFictitiousRowWhichDeleteAfterRender.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentNoShiftChildCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentNoShiftChildRowShift_WithFictitiousRow.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentRowShiftChildCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentRowShiftChildCellsShift_WithFictitiousRow.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentRowShiftChildRowShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentRowShiftChildRowShift_WithFictitiousRow.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentCellsShiftChildCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentCellsShiftChildCellsShift_WithFictitiousRow.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentCellsShiftChildRowShift_WithFictitiousRow.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentNoShiftChildCellsShift_WithFictitiousRowWhichDeleteAfterRender.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentNoShiftChildRowShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentRowShiftChildCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentRowShiftChildRowShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemHorizontalCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemHorizontalNoShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemHorizontalRowShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalCellsShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalNoShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalRowShift.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DefaultReportGeneratorTest\TestRender.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DefaultReportGeneratorTest\TestRenderPartialWorksheets.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DefaultReportGeneratorTest\TestRenderWithCustomVariableAndFunctionProviders.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DefaultReportGeneratorTest\TestRenderWithEvents.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\ExcelDataSourcePanelTest\TestGroupResultHorizontal.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\ExcelDataSourcePanelTest\TestGroupResultVertical.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\ExcelDataSourcePanelTest\TestIfGroupByPropertyIsEmpty.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\PanelRenderTest\TestSimplePanelExpansion.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\SystemFunctionsTest\TestFormatOnRender.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\TotalsPanelRenderTest\TestPanelRender.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\TotalsPanelRenderTest\TestPanelRenderWithParentContext.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\TotalsPanelRenderTest\TestPanelWithNoData.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\TotalsPanelRenderTest\TestPanelWithNullData.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="TestDb.mdf" />
-  </ItemGroup>
-  <ItemGroup />
-  <Choose>
-    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)TestData" "$(TargetDir)TestData\" /S /Y</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
