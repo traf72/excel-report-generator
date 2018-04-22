@@ -4,23 +4,23 @@
   <input>
     <loadpaths />
     <asmlist>
-      <inputassembly refid="07f31b70-ee33-4d91-a058-e308031663a3">
+      <inputassembly refid="27067a2e-3ab4-46ce-8835-73a8f4ca4e9f">
         <option>honoroas</option>
         <option>stripoa</option>
         <option>library</option>
         <option>transformxaml</option>
-        <file dir="D:\ALEX\Projects\ExcelReporter\ExcelReportGenerator\bin\Release" name="ExcelReportGenerator.dll" />
+        <file dir="D:\ALEX\Projects\ExcelReporter\ExcelReportGenerator\bin\Release\net46" name="ExcelReportGenerator.dll" />
       </inputassembly>
     </asmlist>
   </input>
   <output>
-    <file dir="${configdir}\Dotfuscated" />
+    <file dir="${configdir}\Result\net46" />
   </output>
   <renaming>
     <option>xmlserialization</option>
     <mapping>
       <mapoutput overwrite="false">
-        <file dir="${configdir}\Dotfuscated" name="Map.xml" />
+        <file dir="${configdir}\Result\net46" name="Map.xml" />
       </mapoutput>
     </mapping>
     <referencerulelist>

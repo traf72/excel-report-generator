@@ -8,3 +8,4 @@ obj
 /ExcelReportGenerator.Samples/Database
 ~$*
 /Dotfuscated
+/Dotfuscator/Result

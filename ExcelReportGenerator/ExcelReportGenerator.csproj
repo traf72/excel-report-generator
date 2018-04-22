@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <!--XML-Docs-->
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DocumentationFile>bin\ExcelReportGenerator.xml</DocumentationFile>
   </PropertyGroup>
 
@@ -54,5 +54,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Release' ">
+    <Exec Command="&quot;C:\Program Files (x86)\Microsoft Visual Studio 14.0\PreEmptive Solutions\Dotfuscator and Analytics Community Edition\DotfuscatorCLI.exe&quot; $(ProjectDir)Dotfuscator\Dotfuscator_net40.xml" />
+    <Exec Command="&quot;C:\Program Files (x86)\Microsoft Visual Studio 14.0\PreEmptive Solutions\Dotfuscator and Analytics Community Edition\DotfuscatorCLI.exe&quot; $(ProjectDir)Dotfuscator\Dotfuscator_net46.xml" />
+    <Exec Command="&quot;C:\Program Files (x86)\Microsoft Visual Studio 14.0\PreEmptive Solutions\Dotfuscator and Analytics Community Edition\DotfuscatorCLI.exe&quot; $(ProjectDir)Dotfuscator\Dotfuscator_netstandard2.0.xml" />
+  </Target>-->
 
 </Project>
