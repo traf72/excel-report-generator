@@ -14,13 +14,13 @@
     </asmlist>
   </input>
   <output>
-    <file dir="${configdir}\Result\netstandard2.0" />
+    <file dir="${configdir}\..\NugetPackage\lib\netstandard2.0" />
   </output>
   <renaming>
     <option>xmlserialization</option>
     <mapping>
       <mapoutput overwrite="false">
-        <file dir="${configdir}\Result\netstandard2.0" name="Map.xml" />
+        <file dir="${configdir}\Map\netstandard2.0" name="Map.xml" />
       </mapoutput>
     </mapping>
     <referencerulelist>

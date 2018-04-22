@@ -8,4 +8,7 @@ obj
 /ExcelReportGenerator.Samples/Database
 ~$*
 /Dotfuscated
-/Dotfuscator/Result
+/Dotfuscator/Map
+/NugetPackage/lib
+/NugetPackage/ExcelReportGenerator.Samples.zip
+/NugetPackage/Tutorial.pdf

@@ -14,13 +14,13 @@
     </asmlist>
   </input>
   <output>
-    <file dir="${configdir}\Result\net40" />
+    <file dir="${configdir}\..\NugetPackage\lib\net40" />
   </output>
   <renaming>
     <option>xmlserialization</option>
     <mapping>
       <mapoutput overwrite="false">
-        <file dir="${configdir}\Result\net40" name="Map.xml" />
+        <file dir="${configdir}\Map\net40" name="Map.xml" />
       </mapoutput>
     </mapping>
     <referencerulelist>
