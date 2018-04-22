@@ -9,6 +9,9 @@
     <AssemblyVersion>1.1.0</AssemblyVersion>
     <FileVersion>1.1.0</FileVersion>
     <PackageTags>Excel Report Reports Reporting xlsx ClosedXml Spreadsheet Workbook Worksheet Generator</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.1.0</Version>
+    <PackageReleaseNotes>Support for ClosedXml 0.92.1 and .NET Standard 2.0</PackageReleaseNotes>
   </PropertyGroup>
 
   <!--XML-Docs-->
@@ -21,7 +24,7 @@
     <PackageReference Include="ClosedXML" Version="0.92.1" />
   </ItemGroup>
 
-  <!-- .NET Standard 2.0 references, compilation flags and build options -->
+  <!-- .NET Standard 2.0 -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
     <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
