@@ -19,7 +19,7 @@ namespace ExcelReportGenerator.Rendering.Providers
     [LicenceKeyPart]
     public class DefaultMethodCallValueProvider : IMethodCallValueProvider
     {
-        private static readonly Stack<string> TemplateStack = new Stack<string>();
+        private readonly Stack<string> _templateStack = new Stack<string>();
 
         /// <param name="typeProvider">Type provider which will be used for type search</param>
         /// <param name="instanceProvider">Instance provider which will be used to get instance of specified type</param>
@@ -39,7 +39,7 @@ namespace ExcelReportGenerator.Rendering.Providers
         /// </summary>
         protected IInstanceProvider InstanceProvider { get; }
 
-        private string MethodCallTemplate => TemplateStack.Peek();
+        private string MethodCallTemplate => _templateStack.Peek();
 
         /// <inheritdoc />
         /// <seealso cref="CallMethod(string, Type, ITemplateProcessor, HierarchicalDataItem)"/>
@@ -61,7 +61,7 @@ namespace ExcelReportGenerator.Rendering.Providers
                 throw new ArgumentException(ArgumentHelper.EmptyStringParamMessage, nameof(methodCallTemplate));
             }
 
-            TemplateStack.Push(methodCallTemplate.Trim());
+            _templateStack.Push(methodCallTemplate.Trim());
             try
             {
                 MethodCallTemplateParts templateParts = ParseTemplate(MethodCallTemplate);
@@ -73,7 +73,7 @@ namespace ExcelReportGenerator.Rendering.Providers
             }
             finally
             {
-                TemplateStack.Pop();
+                _templateStack.Pop();
             }
         }
 
