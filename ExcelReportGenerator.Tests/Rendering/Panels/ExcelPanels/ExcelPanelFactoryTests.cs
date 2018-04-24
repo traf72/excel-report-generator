@@ -4,7 +4,7 @@ using ExcelReportGenerator.Rendering;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -12,10 +12,10 @@ using System.Reflection;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
 {
-    [TestClass]
+    
     public class ExcelPanelFactoryTests
     {
-        [TestMethod]
+        [Test]
         public void TestCreateSimplePanel()
         {
             XLWorkbook wb = new XLWorkbook();
@@ -62,7 +62,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             factory = new ExcelPanelFactory(report, templateProcessor, parseSettings);
             panel = (ExcelPanel)factory.Create(namedRange, null);
 
-            Assert.IsInstanceOfType(panel, typeof(ExcelPanel));
+            Assert.IsInstanceOf<ExcelPanel>(panel);
             Assert.AreEqual(PanelType.Vertical, panel.Type);
             Assert.AreEqual(ShiftType.Cells, panel.ShiftType);
             Assert.AreEqual(0, panel.RenderPriority);
@@ -75,7 +75,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreSame(templateProcessor, panel.GetType().GetField("_templateProcessor", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(panel));
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateDataSourcePanel()
         {
             XLWorkbook wb = new XLWorkbook();
@@ -122,7 +122,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             ExceptionAssert.Throws<InvalidOperationException>(() => factory.Create(namedRange, null), "Data source panel must have the property \"DataSource\"");
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateDataSourceDynamicPanel()
         {
             XLWorkbook wb = new XLWorkbook();
@@ -189,7 +189,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             ExceptionAssert.Throws<InvalidOperationException>(() => factory.Create(namedRange, null), "Dynamic data source panel must have the property \"DataSource\"");
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateTotalsPanel()
         {
             XLWorkbook wb = new XLWorkbook();
@@ -236,7 +236,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             ExceptionAssert.Throws<InvalidOperationException>(() => factory.Create(namedRange, null), "Totals panel must have the property \"DataSource\"");
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreatePanelWithBadName()
         {
             XLWorkbook wb = new XLWorkbook();
@@ -253,7 +253,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             ExceptionAssert.Throws<InvalidOperationException>(() => factory.Create(namedRange, null), "Panel name \"b_Test\" does not contain prefix separator \"-\"");
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateUnsupportedPanelType()
         {
             XLWorkbook wb = new XLWorkbook();
@@ -270,7 +270,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             ExceptionAssert.Throws<NotSupportedException>(() => factory.Create(namedRange, null), "Panel type with prefix \"b\" is not supported");
         }
 
-        [TestMethod]
+        [Test]
         public void TestExcelPanelFactoryArgumentsCheck()
         {
             var report = new object();

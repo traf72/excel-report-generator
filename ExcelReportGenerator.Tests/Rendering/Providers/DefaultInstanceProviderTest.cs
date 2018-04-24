@@ -1,15 +1,15 @@
 ﻿using ExcelReportGenerator.Rendering.Providers;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.IO;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers
 {
-    [TestClass]
+    
     public class DefaultInstanceProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetInstance()
         {
             IInstanceProvider instanceProvider = new DefaultInstanceProvider();
@@ -22,8 +22,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
             Assert.AreSame(instance1, instance3);
             Assert.AreSame(instance2, instance3);
 
-            Assert.IsInstanceOfType(instanceProvider.GetInstance(typeof(TestType_5)), typeof(TestType_5));
-            Assert.IsInstanceOfType(instanceProvider.GetInstance(typeof(DateTime)), typeof(DateTime));
+            Assert.IsInstanceOf<TestType_5>(instanceProvider.GetInstance(typeof(TestType_5)));
+            Assert.IsInstanceOf<DateTime>(instanceProvider.GetInstance(typeof(DateTime)));
 
             ExceptionAssert.Throws<MissingMethodException>(() => instanceProvider.GetInstance(typeof(FileInfo)));
             ExceptionAssert.Throws<MissingMethodException>(() => instanceProvider.GetInstance(typeof(Math)));

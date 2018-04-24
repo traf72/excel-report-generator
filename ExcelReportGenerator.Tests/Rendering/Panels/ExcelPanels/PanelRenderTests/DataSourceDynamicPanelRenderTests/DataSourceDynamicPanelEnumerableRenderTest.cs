@@ -1,14 +1,14 @@
 ﻿using ClosedXML.Excel;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourceDynamicPanelRenderTests
 {
-    [TestClass]
+    
     public class DataSourceDynamicPanelEnumerableRenderTest
     {
-        [TestMethod]
+        [Test]
         public void TestRenderEnumerable()
         {
             var report = new TestReport();
@@ -31,7 +31,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderEmptyEnumerable()
         {
             var report = new TestReport();

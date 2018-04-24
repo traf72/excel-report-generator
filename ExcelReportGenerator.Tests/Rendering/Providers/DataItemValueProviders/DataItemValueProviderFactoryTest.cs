@@ -1,33 +1,33 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.DataItemValueProviders
 {
-    [TestClass]
+    
     public class DataItemValueProviderFactoryTest
     {
-        [TestMethod]
+        [Test]
         public void TestCreate()
         {
             var factory = new DataItemValueProviderFactory();
-            Assert.IsInstanceOfType(factory.Create(null), typeof(ObjectPropertyValueProvider));
-            Assert.IsInstanceOfType(factory.Create(new Dictionary<string, object>()), typeof(DictionaryValueProvider<object>));
-            Assert.IsInstanceOfType(factory.Create(new Dictionary<string, int>()), typeof(DictionaryValueProvider<int>));
-            Assert.IsInstanceOfType(factory.Create(new Dictionary<string, string>()), typeof(DictionaryValueProvider<string>));
+            Assert.IsInstanceOf<ObjectPropertyValueProvider>(factory.Create(null));
+            Assert.IsInstanceOf<DictionaryValueProvider<object>>(factory.Create(new Dictionary<string, object>()));
+            Assert.IsInstanceOf<DictionaryValueProvider<int>>(factory.Create(new Dictionary<string, int>()));
+            Assert.IsInstanceOf<DictionaryValueProvider<string>>(factory.Create(new Dictionary<string, string>()));
 
             var dataTable = new DataTable();
             dataTable.Columns.Add("Column", typeof(int));
             dataTable.Rows.Add(1);
-            Assert.IsInstanceOfType(factory.Create(dataTable.Rows[0]), typeof(DataRowValueProvider));
+            Assert.IsInstanceOf<DataRowValueProvider>(factory.Create(dataTable.Rows[0]));
 
-            Assert.IsInstanceOfType(factory.Create(Substitute.For<IDataReader>()), typeof(DataReaderValueProvider));
+            Assert.IsInstanceOf<DataReaderValueProvider>(factory.Create(Substitute.For<IDataReader>()));
 
-            Assert.IsInstanceOfType(factory.Create(new int()), typeof(ObjectPropertyValueProvider));
-            Assert.IsInstanceOfType(factory.Create(new object()), typeof(ObjectPropertyValueProvider));
-            Assert.IsInstanceOfType(factory.Create(new Dictionary<object, string>()), typeof(ObjectPropertyValueProvider));
+            Assert.IsInstanceOf<ObjectPropertyValueProvider>(factory.Create(new int()));
+            Assert.IsInstanceOf<ObjectPropertyValueProvider>(factory.Create(new object()));
+            Assert.IsInstanceOf<ObjectPropertyValueProvider>(factory.Create(new Dictionary<object, string>()));
         }
     }
 }

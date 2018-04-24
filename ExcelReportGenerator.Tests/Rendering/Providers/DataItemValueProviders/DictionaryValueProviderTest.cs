@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.DataItemValueProviders
 {
-    [TestClass]
+    
     public class DictionaryValueProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetValue()
         {
             var dict = new Dictionary<string, object>
@@ -33,7 +33,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.DataItemValueProviders
             ExceptionAssert.Throws<KeyNotFoundException>(() => provider.GetValue("BadParam", dict), "Key \"BadParam\" was not found in dictionary");
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetValueIfDictionaryHasDecimalValues()
         {
             var dict = new Dictionary<string, decimal>

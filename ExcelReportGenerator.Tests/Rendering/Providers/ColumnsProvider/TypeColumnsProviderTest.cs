@@ -2,15 +2,15 @@
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Rendering;
 using ExcelReportGenerator.Rendering.Providers.ColumnsProviders;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System.Collections.Generic;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
 {
-    [TestClass]
+    
     public class TypeColumnsProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetColumnsList()
         {
             IColumnsProvider columnsProvider = new TypeColumnsProvider();
@@ -118,7 +118,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual(100, columns[10].Order);
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetColumnsListIfTypeIsNull()
         {
             IColumnsProvider columnsProvider = new TypeColumnsProvider();

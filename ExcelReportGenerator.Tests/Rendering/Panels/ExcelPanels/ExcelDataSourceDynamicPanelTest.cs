@@ -2,16 +2,16 @@
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 using System.Reflection;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
 {
-    [TestClass]
+    
     public class ExcelDataSourceDynamicPanelTest
     {
-        [TestMethod]
+        [Test]
         public void TestCopyIfDataSourceTemplateIsSet()
         {
             var wb = new XLWorkbook();
@@ -80,7 +80,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestCopyIfDataIsSet()
         {
             var wb = new XLWorkbook();

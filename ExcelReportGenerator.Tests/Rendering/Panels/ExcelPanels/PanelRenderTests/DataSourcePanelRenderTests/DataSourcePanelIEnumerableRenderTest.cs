@@ -6,14 +6,14 @@ using ClosedXML.Excel;
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourcePanelRenderTests
 {
-    [TestClass]
+    
     public class DataSourcePanelIEnumerableRenderTest
     {
-        [TestMethod]
+        [Test]
         public void TestRenderIEnumerableVerticalCellsShift()
         {
             var report = new TestReport();
@@ -56,7 +56,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderIEnumerableVerticalRowsShift()
         {
             var report = new TestReport();
@@ -102,7 +102,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderIEnumerableVerticalNoShift()
         {
             var report = new TestReport();
@@ -161,7 +161,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderIEnumerableHorizontalCellsShift()
         {
             var report = new TestReport();
@@ -207,7 +207,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderIEnumerableHorizontalRowsShift()
         {
             var report = new TestReport();
@@ -254,7 +254,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderIEnumerableHorizontalNoShift()
         {
             var report = new TestReport();
@@ -302,7 +302,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderIEnumerableOfInt()
         {
             var report = new TestReport();
@@ -323,7 +323,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderIEnumerableOfString()
         {
             var report = new TestReport();
@@ -344,7 +344,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestCancelPanelRender()
         {
             var report = new TestReport();
@@ -368,7 +368,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestPanelRenderEvents()
         {
             var report = new TestReport();
@@ -397,7 +397,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
         }
 
         // Тестирование скорости рендеринга
-        //[TestMethod]
+        //[Test]
         public void TestPanelRenderSpeed()
         {
             var report = new TestReport();
@@ -438,7 +438,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
         }
 
         // Тестирование скорости рендеринга
-        //[TestMethod]
+        //[Test]
         public void TestPanelRenderSpeedWithHierarchy()
         {
             var report = new TestReport();
@@ -510,7 +510,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
         }
 
         // Тестирование скорости рендеринга
-        //[TestMethod]
+        //[Test]
         public void TestPanelRenderSpeedWithMultiHierarchy()
         {
             var report = new TestReport();

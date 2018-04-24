@@ -4,14 +4,14 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ExcelReportGenerator.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Helpers
 {
-    [TestClass]
+    
     public class TypeHelperTest
     {
-        [TestMethod]
+        [Test]
         public void TestIsKeyValuePair()
         {
             Assert.IsTrue(TypeHelper.IsKeyValuePair(typeof(KeyValuePair<object, object>)));
@@ -25,7 +25,7 @@ namespace ExcelReportGenerator.Tests.Helpers
             Assert.IsFalse(TypeHelper.IsKeyValuePair(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestIsEnumerableOfKeyValuePair()
         {
             Assert.IsTrue(TypeHelper.IsEnumerableOfKeyValuePair(typeof(IEnumerable<KeyValuePair<object, object>>)));
@@ -39,7 +39,7 @@ namespace ExcelReportGenerator.Tests.Helpers
             Assert.IsFalse(TypeHelper.IsEnumerableOfKeyValuePair(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestIsDictionaryStringObject()
         {
             Assert.IsTrue(TypeHelper.IsDictionaryStringObject(typeof(IDictionary<string, object>)));
@@ -54,7 +54,7 @@ namespace ExcelReportGenerator.Tests.Helpers
             Assert.IsFalse(TypeHelper.IsDictionaryStringObject(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTryGetGenericEnumerableInterface()
         {
             var @interface = TypeHelper.TryGetGenericEnumerableInterface(typeof(IEnumerable<string>));
@@ -81,7 +81,7 @@ namespace ExcelReportGenerator.Tests.Helpers
             Assert.IsNull(TypeHelper.TryGetGenericEnumerableInterface(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTryGetGenericDictionaryInterface()
         {
             var @interface = TypeHelper.TryGetGenericDictionaryInterface(typeof(IDictionary<string, int>));
@@ -102,7 +102,7 @@ namespace ExcelReportGenerator.Tests.Helpers
             Assert.IsNull(TypeHelper.TryGetGenericDictionaryInterface(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestIsGenericEnumerable()
         {
             Assert.IsTrue(TypeHelper.IsGenericEnumerable(typeof(IEnumerable<string>)));
@@ -116,7 +116,7 @@ namespace ExcelReportGenerator.Tests.Helpers
             Assert.IsFalse(TypeHelper.IsGenericEnumerable(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTryGetGenericCollectionInterface()
         {
             var @interface = TypeHelper.TryGetGenericCollectionInterface(typeof(ICollection<string>));

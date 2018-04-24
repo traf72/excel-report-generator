@@ -3,14 +3,14 @@ using System.Data;
 using ExcelReportGenerator.Exceptions;
 using ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.DataItemValueProviders
 {
-    [TestClass]
+    
     public class DataRowValueProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetValue()
         {
             IGenericDataItemValueProvider<DataRow> provider = new DataRowValueProvider();

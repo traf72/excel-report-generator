@@ -5,15 +5,14 @@ using ExcelReportGenerator.Rendering;
 using ExcelReportGenerator.Rendering.Providers;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers
 {
-    [TestClass]
     public class DefaultMethodCallValueProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestParseTemplate()
         {
             var typeProvider = Substitute.For<ITypeProvider>();
@@ -151,7 +150,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
             ExceptionAssert.ThrowsBaseException<InvalidTemplateException>(() => method.Invoke(methodCallValueProvider, new[] { "Method1)" }), "Template \"Method1)\" is invalid");
         }
 
-        [TestMethod]
+        [Test]
         public void TestParseParams()
         {
             var typeProvider = Substitute.For<ITypeProvider>();
@@ -239,7 +238,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
             Assert.AreEqual("m:Method((Test3), \"(Test4)\", (), (Test5))", result[3]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestCallMethod()
         {
             ExceptionAssert.Throws<ArgumentNullException>(() => new DefaultMethodCallValueProvider(null, Substitute.For<IInstanceProvider>()));
@@ -382,7 +381,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
             templateProcessor.DidNotReceiveWithAnyArgs().GetValue(Arg.Any<string>());
         }
 
-        [TestMethod]
+        [Test]
         public void TestCallMethodWithOverloading()
         {
             var typeProvider = Substitute.For<ITypeProvider>();

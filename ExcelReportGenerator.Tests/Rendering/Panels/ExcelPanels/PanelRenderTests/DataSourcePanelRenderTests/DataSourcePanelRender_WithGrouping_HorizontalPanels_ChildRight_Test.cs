@@ -2,14 +2,14 @@
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourcePanelRenderTests
 {
-    [TestClass]
+    
     public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test
     {
-        [TestMethod]
+        [Test]
         public void Test_HorizontalPanelsGrouping_ChildRight_ParentCellsShiftChildCellsShift()
         {
             var report = new TestReport();
@@ -62,7 +62,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_HorizontalPanelsGrouping_ChildRight_ParentRowShiftChildCellsShift()
         {
             var report = new TestReport();
@@ -116,7 +116,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_HorizontalPanelsGrouping_ChildRight_ParentRowShiftChildRowShift()
         {
             var report = new TestReport();
@@ -170,7 +170,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_HorizontalPanelsGrouping_ChildRight_ParentNoShiftChildRowShift()
         {
             var report = new TestReport();
@@ -225,7 +225,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_HorizontalPanelsGrouping_ChildRight_ParentCellsShiftChildCellsShift_WithFictitiousColumn()
         {
             var report = new TestReport();
@@ -278,7 +278,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_HorizontalPanelsGrouping_ChildRight_ParentRowShiftChildCellsShift_WithFictitiousColumn()
         {
             var report = new TestReport();
@@ -332,7 +332,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_HorizontalPanelsGrouping_ChildRight_ParentRowShiftChildRowShift_WithFictitiousColumn()
         {
             var report = new TestReport();
@@ -387,7 +387,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_HorizontalPanelsGrouping_ChildRight_ParentNoShiftChildCellsShift_WithFictitiousColumn()
         {
             var report = new TestReport();
@@ -441,7 +441,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_HorizontalPanelsGrouping_ChildRight_ParentCellsShiftChildCellsShift_WithFictitiousColumnWhichDeleteAfterRender()
         {
             var report = new TestReport();

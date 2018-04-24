@@ -1,7 +1,7 @@
 ﻿using ExcelReportGenerator.Exceptions;
 using ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using System;
@@ -9,10 +9,10 @@ using System.Data;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.DataItemValueProviders
 {
-    [TestClass]
+    
     public class DataReaderValueProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetValue()
         {
             IGenericDataItemValueProvider<IDataReader> provider = new DataReaderValueProvider();
@@ -43,7 +43,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.DataItemValueProviders
             ExceptionAssert.Throws<InvalidOperationException>(() => provider.GetValue("Column1", dataReader), "DataReader is closed");
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetValueWithRealSqlReader()
         {
             IGenericDataItemValueProvider<IDataReader> provider = new DataReaderValueProvider();

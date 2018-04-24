@@ -1,14 +1,14 @@
 ﻿using ClosedXML.Excel;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourcePanelRenderTests
 {
-    [TestClass]
+    
     public class DataSourcePanelRender_WithGrouping_ChildEqualsParent_Test
     {
-        [TestMethod]
+        [Test]
         public void Test_VerticalPanelsGrouping_ChildEqualsParent()
         {
             var report = new TestReport();

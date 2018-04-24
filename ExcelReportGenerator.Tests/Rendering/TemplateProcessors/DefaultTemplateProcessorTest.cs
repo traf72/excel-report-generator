@@ -6,15 +6,15 @@ using ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
 using ExcelReportGenerator.Rendering.Providers.VariableProviders;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 
 namespace ExcelReportGenerator.Tests.Rendering.TemplateProcessors
 {
-    [TestClass]
+    
     public class DefaultTemplateProcessorTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetValue()
         {
             var propertyValueProvider = Substitute.For<IPropertyValueProvider>();

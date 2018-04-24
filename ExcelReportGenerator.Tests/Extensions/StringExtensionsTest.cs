@@ -1,12 +1,12 @@
 ﻿using ExcelReportGenerator.Extensions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Extensions
 {
-    [TestClass]
+    
     public class StringExtensionsTest
     {
-        [TestMethod]
+        [Test]
         public void TestReplaceFirst()
         {
             string input = "Hello World";
@@ -17,7 +17,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.IsNull(StringExtensions.ReplaceFirst(null, "a", "A"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestReverse()
         {
             Assert.AreEqual("!dlroW olleH", "Hello World!".Reverse());

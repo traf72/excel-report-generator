@@ -3,14 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ExcelReportGenerator.Enumerators;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Enumerators
 {
-    [TestClass]
     public class EnumerableEnumeratorTest
     {
-        [TestMethod]
+        [Test]
         public void TestEnumerator()
         {
             int[] array = {1, 2, 3};

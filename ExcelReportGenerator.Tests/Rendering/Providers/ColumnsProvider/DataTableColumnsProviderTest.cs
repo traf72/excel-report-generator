@@ -2,14 +2,14 @@
 using System.Data;
 using ExcelReportGenerator.Rendering;
 using ExcelReportGenerator.Rendering.Providers.ColumnsProviders;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
 {
-    [TestClass]
+    
     public class DataTableColumnsProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetColumnsList()
         {
             DataTable dataTable = GetDataTable();
@@ -38,7 +38,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
             Assert.IsNull(columns[2].Width);
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetColumnsListIfDataTableIsEmpty()
         {
             DataTable dataTable = GetDataTable();
@@ -64,7 +64,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
             Assert.IsNull(columns[2].Width);
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetColumnsListIfDataTableIsNull()
         {
             IColumnsProvider columnsProvider = new DataTableColumnsProvider();

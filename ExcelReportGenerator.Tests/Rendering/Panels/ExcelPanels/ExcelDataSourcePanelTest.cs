@@ -3,17 +3,17 @@ using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 using System;
 using System.Reflection;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
 {
-    [TestClass]
+    
     public class ExcelDataSourcePanelTest
     {
-        [TestMethod]
+        [Test]
         public void TestCopyIfDataSourceTemplateIsSet()
         {
             var wb = new XLWorkbook();
@@ -57,7 +57,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestCopyIfDataIsSet()
         {
             var wb = new XLWorkbook();
@@ -103,7 +103,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestGroupResultVertical()
         {
             var wb = new XLWorkbook();
@@ -170,7 +170,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestGroupResultHorizontal()
         {
             var wb = new XLWorkbook();
@@ -238,7 +238,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestIfGroupByPropertyIsEmpty()
         {
             var wb = new XLWorkbook();
@@ -285,7 +285,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestIfGroupByPropertyIsInvalid()
         {
             var wb = new XLWorkbook();

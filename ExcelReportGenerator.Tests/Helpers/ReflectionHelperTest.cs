@@ -1,7 +1,7 @@
 ﻿using ExcelReportGenerator.Exceptions;
 using ExcelReportGenerator.Helpers;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Dynamic;
 using System.Reflection;
@@ -12,10 +12,10 @@ using ExcelReportGenerator.Attributes;
 
 namespace ExcelReportGenerator.Tests.Helpers
 {
-    [TestClass]
+    
     public class ReflectionHelperTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetProperty()
         {
             IReflectionHelper reflectionHelper = new ReflectionHelper();
@@ -36,7 +36,7 @@ namespace ExcelReportGenerator.Tests.Helpers
             Assert.AreEqual("ChildSameNameStaticProp", prop.GetValue(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTryGetProperty()
         {
             IReflectionHelper reflectionHelper = new ReflectionHelper();
@@ -57,7 +57,7 @@ namespace ExcelReportGenerator.Tests.Helpers
             Assert.AreEqual("ChildSameNameStaticProp", prop.GetValue(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetField()
         {
             IReflectionHelper reflectionHelper = new ReflectionHelper();
@@ -77,7 +77,7 @@ namespace ExcelReportGenerator.Tests.Helpers
             Assert.AreEqual("ChildSameNameStaticField", prop.GetValue(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTryGetField()
         {
             IReflectionHelper reflectionHelper = new ReflectionHelper();
@@ -97,7 +97,7 @@ namespace ExcelReportGenerator.Tests.Helpers
             Assert.AreEqual("ChildSameNameStaticField", prop.GetValue(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetValueOfPropertiesChain()
         {
             IReflectionHelper reflectionHelper = new ReflectionHelper();
@@ -159,7 +159,7 @@ namespace ExcelReportGenerator.Tests.Helpers
                 "BindingFlags.Static is specified but static properties and fields are not supported");
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetNullValueAttributeValue()
         {
             IReflectionHelper reflectionHelper = new ReflectionHelper();

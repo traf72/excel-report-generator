@@ -2,14 +2,14 @@
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourcePanelRenderTests
 {
-    [TestClass]
+    
     public class DataSourcePanelRender_WithGrouping_MixedPanels_Test
     {
-        [TestMethod]
+        [Test]
         public void TestMultipleVerticalPanelsGrouping()
         {
             var report = new TestReport();
@@ -104,7 +104,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestMultipleHorizontalPanelsGrouping()
         {
             var report = new TestReport();
@@ -196,7 +196,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestHorizontalInVerticalPanelsGrouping()
         {
             var report = new TestReport();
@@ -229,7 +229,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestVerticalInHorizontalPanelsGrouping()
         {
             var report = new TestReport();

@@ -1,17 +1,17 @@
 ﻿using ExcelReportGenerator.Helpers;
 using ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.DataItemValueProviders
 {
-    [TestClass]
+    
     public class ObjectPropertyValueProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetValue()
         {
             var reflectionHelper = Substitute.For<IReflectionHelper>();
@@ -35,7 +35,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.DataItemValueProviders
             ExceptionAssert.Throws<ArgumentException>(() => dataItemValueProvider.GetValue(" ", date));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetValueFromKeyValuePair()
         {
             IDataItemValueProvider dataItemValueProvider = new ObjectPropertyValueProvider();

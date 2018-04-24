@@ -1,14 +1,14 @@
 ﻿using System;
 using ExcelReportGenerator.License;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.License
 {
-    [TestClass]
+    
     public class EncryptorTest
     {
-        [TestMethod]
+        [Test]
         public void TestEncryptDecrypt()
         {
             string key = "Key_1";

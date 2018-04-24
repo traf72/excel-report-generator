@@ -6,15 +6,15 @@ using ExcelReportGenerator.Exceptions;
 using ExcelReportGenerator.Helpers;
 using ExcelReportGenerator.Rendering.Providers;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers
 {
-    [TestClass]
+    
     public class DefaultPropertyValueProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestParseTemplate()
         {
             var typeProvider = Substitute.For<ITypeProvider>();
@@ -55,7 +55,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
             Assert.AreEqual("ExcelReportGenerator.Tests.Implementations.Providers:T", typeNameProp.GetValue(result));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetValue()
         {
             ExceptionAssert.Throws<ArgumentNullException>(() => new DefaultPropertyValueProvider(null, Substitute.For<IInstanceProvider>()));

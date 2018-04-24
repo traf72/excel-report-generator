@@ -2,7 +2,7 @@
 using ExcelReportGenerator.Extensions;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 using System;
 using System.Linq;
@@ -10,10 +10,10 @@ using System.Text.RegularExpressions;
 
 namespace ExcelReportGenerator.Tests.Extensions
 {
-    [TestClass]
+    
     public class TemplateProcessorExtensionsTest
     {
-        [TestMethod]
+        [Test]
         public void TestUnwrapTemplate()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -78,7 +78,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual(Regex.Escape("p*Name"), processor.UnwrapTemplate(Regex.Escape(" p*Name "), true));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWrapTemplate()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -116,7 +116,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             ExceptionAssert.Throws<ArgumentNullException>(() => processor.WrapTemplate("p:Name", true));
         }
 
-        [TestMethod]
+        [Test]
         public void TestBuildPropertyTemplate()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -143,7 +143,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual(string.Empty, processor.BuildPropertyTemplate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestBuildMethodCallTemplate()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -170,7 +170,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual(string.Empty, processor.BuildMethodCallTemplate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestBuildDataItemTemplate()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -197,7 +197,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual(string.Empty, processor.BuildDataItemTemplate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestBuildVariableTemplate()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -222,7 +222,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual(string.Empty, processor.BuildVariableTemplate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestBuildSystemFunctionTemplate()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -247,7 +247,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual(string.Empty, processor.BuildSystemFunctionTemplate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTrimPropertyLabel()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -273,7 +273,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual("p:Name", processor.TrimPropertyLabel("p:Name"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTrimDataItemLabel()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -298,7 +298,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual("di:Name", processor.TrimDataItemLabel("di:Name"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTrimMethodCallLabel()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -322,7 +322,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual("m:Meth()", processor.TrimMethodCallLabel("m:Meth()"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTrimVariableLabel()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -342,7 +342,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual("sv:Now", processor.TrimVariableLabel("sv:Now"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTrimSystemFunctionLabel()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -361,7 +361,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual("sf:Format(p:Prop, 0)", processor.TrimSystemFunctionLabel("sf:Format(p:Prop, 0)"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetFullRegexPattern()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -545,7 +545,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual(1, matches.Count);
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetFullRegexPatternWithNullProps()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -623,7 +623,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual("\\{\\s*(p|di|m|sv|\\ ):.+?\\s*}", processor.GetFullRegexPattern());
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetPropertyRegexPattern()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -669,7 +669,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual("\\{\\s*\\ :.+?\\s*}", processor.GetPropertyRegexPattern());
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetDataItemRegexPattern()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -715,7 +715,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual("\\{\\s*\\ :.+?\\s*}", processor.GetDataItemRegexPattern());
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetMethodCallRegexPattern()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -761,7 +761,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual("\\{\\s*\\ :.+?\\s*}", processor.GetMethodCallRegexPattern());
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetVariableRegexPattern()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -799,7 +799,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual("\\{\\s*\\ :.+?\\s*}", processor.GetVariableRegexPattern());
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetSystemFunctionRegexPattern()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -837,7 +837,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual("\\{\\s*\\ :.+?\\s*}", processor.GetSystemFunctionRegexPattern());
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetAggregationRegexPatterns()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -983,7 +983,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual($@"({string.Join("|", allAggFuncs)})\((\s*d\s*-.+?)\)", aggregationFuncPattern);
         }
 
-        [TestMethod]
+        [Test]
         public void TestBuildAggregationFuncTemplate()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -999,7 +999,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual("{Max(di:)}", processor.BuildAggregationFuncTemplate(AggregateFunction.Max, string.Empty));
         }
 
-        [TestMethod]
+        [Test]
         public void TestIsHorizontalPageBreak()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();
@@ -1022,7 +1022,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.IsFalse(processor.IsHorizontalPageBreak(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestIsVerticalPageBreak()
         {
             ITemplateProcessor processor = Substitute.For<ITemplateProcessor>();

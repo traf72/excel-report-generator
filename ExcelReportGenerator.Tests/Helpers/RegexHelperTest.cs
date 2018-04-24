@@ -1,12 +1,12 @@
 ﻿using ExcelReportGenerator.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Helpers
 {
-    [TestClass]
+    
     public class RegexHelperTest
     {
-        [TestMethod]
+        [Test]
         public void TestSafeEscape()
         {
             Assert.IsNull(RegexHelper.SafeEscape(null));

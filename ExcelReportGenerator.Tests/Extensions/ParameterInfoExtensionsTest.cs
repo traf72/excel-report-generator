@@ -1,14 +1,13 @@
 ﻿using ExcelReportGenerator.Extensions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Reflection;
 
 namespace ExcelReportGenerator.Tests.Extensions
 {
-    [TestClass]
     public class ParameterInfoExtensionsTest
     {
-        [TestMethod]
+        [Test]
         public void TestIsParams()
         {
             MethodInfo method = typeof(TestClass).GetMethod("Meth1");
@@ -18,7 +17,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.IsTrue(parameters[2].IsParams());
         }
 
-        [TestMethod]
+        [Test]
         public void TestHasDefaultValue()
         {
             MethodInfo method = typeof(TestClass).GetMethod("Meth2");

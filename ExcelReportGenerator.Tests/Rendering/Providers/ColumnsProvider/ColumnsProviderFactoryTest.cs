@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Data;
 using ExcelReportGenerator.Rendering.Providers.ColumnsProviders;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
 {
-    [TestClass]
+    
     public class ColumnsProviderFactoryTest
     {
-        [TestMethod]
+        [Test]
         public void TestCreate()
         {
             IColumnsProviderFactory factory = new ColumnsProviderFactory();

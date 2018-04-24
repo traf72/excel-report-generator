@@ -1,15 +1,15 @@
 ﻿using ExcelReportGenerator.Exceptions;
 using ExcelReportGenerator.Rendering.Providers.VariableProviders;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.VariableProviders
 {
-    [TestClass]
+    
     public class DefaultVariableProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetVariable()
         {
             SystemVariableProvider variableProvider = new CustomVariableProvider

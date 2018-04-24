@@ -1,16 +1,15 @@
 ﻿using ExcelReportGenerator.Extensions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System.Data;
 using System.Data.SqlClient;
 
 namespace ExcelReportGenerator.Tests.Extensions
 {
-    [TestClass]
     public class DataReaderExtensionsTest
     {
         private readonly string _conStr = Configuration.TestDbConectionString;
 
-        [TestMethod]
+        [Test]
         public void TestSafeGetValue()
         {
             IDataReader reader = GetTestBoolData();

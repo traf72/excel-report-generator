@@ -1,16 +1,16 @@
 ﻿using ClosedXML.Excel;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourceDynamicPanelRenderTests
 {
-    [TestClass]
+    
     public class DataSourceDynamicPanelDictionaryRenderTest
     {
-        [TestMethod]
+        [Test]
         public void TestRenderDictionary()
         {
             var report = new TestReport();
@@ -48,7 +48,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderEmptyDictionary()
         {
             var report = new TestReport();
@@ -88,7 +88,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderDictionaryEnumerable()
         {
             var report = new TestReport();
@@ -130,7 +130,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderEmptyDictionaryEnumerable()
         {
             var report = new TestReport();

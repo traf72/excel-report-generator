@@ -2,15 +2,15 @@
 using System.Data;
 using ExcelReportGenerator.Rendering.Providers.ColumnsProviders;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
 {
-    [TestClass]
+    
     public class DataSetColumnsProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetColumnsList()
         {
             IGenericColumnsProvider<DataTable> dataTableColumsProvider = Substitute.For<IGenericColumnsProvider<DataTable>>();
@@ -39,7 +39,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
             dataTableColumsProvider.DidNotReceiveWithAnyArgs().GetColumnsList(Arg.Any<DataTable>());
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetColumnsListIfDataSetIsNullOrEmpty()
         {
             IColumnsProvider columnsProvider = new DataSetColumnsProvider(new DataTableColumnsProvider());
@@ -47,7 +47,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
             Assert.AreEqual(0, columnsProvider.GetColumnsList(new DataSet()).Count);
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetColumnsListIfDataTableColumnsProviderIsNull()
         {
             ExceptionAssert.Throws<ArgumentNullException>(() => new DataSetColumnsProvider(null));

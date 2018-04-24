@@ -3,7 +3,7 @@ using ExcelReportGenerator.Rendering;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
 using ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,10 +11,10 @@ using System.Globalization;
 
 namespace ExcelReportGenerator.Tests.Rendering
 {
-    [TestClass]
+    
     public class SystemFunctionsTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetDictVal()
         {
             var dict = new Dictionary<string, int>
@@ -45,7 +45,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             Assert.AreSame(objValue, SystemFunctions.GetDictVal(dict2, objKey));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTryGetDictVal()
         {
             var dict = new Dictionary<string, int>
@@ -76,7 +76,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             Assert.AreSame(objValue, SystemFunctions.TryGetDictVal(dict2, objKey));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetByIndex()
         {
             int[] intArray = { 100, 200 };
@@ -111,7 +111,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             ExceptionAssert.Throws<IndexOutOfRangeException>(() => SystemFunctions.GetByIndex(mixedArray, 3));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTryGetByIndex()
         {
             int[] intArray = { 100, 200 };
@@ -146,7 +146,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             Assert.IsNull(SystemFunctions.TryGetByIndex(mixedArray, 3));
         }
 
-        [TestMethod]
+        [Test]
         public void TestFormat()
         {
             Assert.AreEqual("31.01.2018", SystemFunctions.Format(new DateTime(2018, 1, 31), "dd.MM.yyyy"));
@@ -176,7 +176,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             ExceptionAssert.Throws<ArgumentException>(() => SystemFunctions.Format(new DateTime(2018, 1, 31), "dd.MM.yyyy", new Random()), "Invalid type \"Random\" of formatProvider");
         }
 
-        [TestMethod]
+        [Test]
         public void TestFormatOnRender()
         {
             var report = new TestReport();

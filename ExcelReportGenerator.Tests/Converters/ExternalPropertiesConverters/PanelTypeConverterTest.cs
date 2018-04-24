@@ -1,15 +1,14 @@
 ﻿using ExcelReportGenerator.Converters.ExternalPropertiesConverters;
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Converters.ExternalPropertiesConverters
 {
-    [TestClass]
     public class PanelTypeConverterTest
     {
-        [TestMethod]
+        [Test]
         public void TestConvert()
         {
             var converter = new PanelTypeConverter();

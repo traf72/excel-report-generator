@@ -1,16 +1,15 @@
 ﻿using ExcelReportGenerator.Enumerators;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
 namespace ExcelReportGenerator.Tests.Enumerators
 {
-    [TestClass]
     public class DataSetEnumeratorTest
     {
-        [TestMethod]
+        [Test]
         public void TestEnumerator()
         {
             ExceptionAssert.Throws<ArgumentNullException>(() => new DataSetEnumerator(null));

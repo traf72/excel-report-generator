@@ -1,16 +1,15 @@
 ﻿using ExcelReportGenerator.Enumerators;
 using ExcelReportGenerator.Tests.Rendering;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
 namespace ExcelReportGenerator.Tests.Enumerators
 {
-    [TestClass]
     public class DataReaderEnumeratorTest
     {
-        [TestMethod]
+        [Test]
         public void TestEnumerator()
         {
             IDataReader reader = new DataProvider().GetAllCustomersDataReader();
@@ -65,7 +64,7 @@ namespace ExcelReportGenerator.Tests.Enumerators
             Assert.AreEqual(3, enumerator.RowCount);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEmptyEnumeratorWithRealSqlReader()
         {
             IDataReader reader = new DataProvider().GetEmptyDataReader();

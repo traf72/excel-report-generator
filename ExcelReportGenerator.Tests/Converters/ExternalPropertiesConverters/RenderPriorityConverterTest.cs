@@ -1,15 +1,13 @@
 ﻿using ExcelReportGenerator.Converters.ExternalPropertiesConverters;
-using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 
 namespace ExcelReportGenerator.Tests.Converters.ExternalPropertiesConverters
 {
-    [TestClass]
     public class RenderPriorityConverterTest
     {
-        [TestMethod]
+        [Test]
         public void TestConvert()
         {
             var converter = new RenderPriorityConverter();

@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using ExcelReportGenerator.Rendering.Providers.ColumnsProviders;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
 {
-    [TestClass]
+    
     public class GenericEnumerableColumnsProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetColumnsList()
         {
             IGenericColumnsProvider<Type> typeColumsProvider = Substitute.For<IGenericColumnsProvider<Type>>();
@@ -26,14 +26,14 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
             typeColumsProvider.Received(1).GetColumnsList(typeof(string));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetColumnsListIfEnumerableIsNull()
         {
             IColumnsProvider columnsProvider = new GenericEnumerableColumnsProvider(new TypeColumnsProvider());
             Assert.AreEqual(0, columnsProvider.GetColumnsList(null).Count);
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetColumnsListIfTypeColumnsProviderIsNull()
         {
             ExceptionAssert.Throws<ArgumentNullException>(() => new GenericEnumerableColumnsProvider(null));

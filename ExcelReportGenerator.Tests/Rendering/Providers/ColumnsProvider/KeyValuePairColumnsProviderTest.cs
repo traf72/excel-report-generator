@@ -1,17 +1,17 @@
 ﻿using ExcelReportGenerator.Rendering;
 using ExcelReportGenerator.Rendering.Providers.ColumnsProviders;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
 {
-    [TestClass]
+    
     public class KeyValuePairColumnsProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetColumnsList()
         {
             IColumnsProvider columnsProvider = new KeyValuePairColumnsProvider();

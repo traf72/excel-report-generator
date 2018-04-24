@@ -4,15 +4,15 @@ using ExcelReportGenerator.Exceptions;
 using ExcelReportGenerator.Rendering;
 using ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.DataItemValueProviders
 {
-    [TestClass]
+    
     public class HierarchicalDataItemValueProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetValue()
         {
             var dataTable = new DataTable();

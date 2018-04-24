@@ -2,16 +2,16 @@
 using ExcelReportGenerator.Exceptions;
 using ExcelReportGenerator.Rendering.Providers;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Reflection;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers
 {
-    [TestClass]
+    
     public class DefaulTypeProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetType()
         {
             //// Тесты не проходят, так как после перехода на NET Core входная сбока существует

@@ -7,7 +7,7 @@ using ExcelReportGenerator.Rendering.TemplateProcessors;
 using ExcelReportGenerator.Tests.CustomAsserts;
 using ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests;
 using Microsoft.CSharp.RuntimeBinder;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 using System;
 using System.Collections;
@@ -20,10 +20,10 @@ using DataTable = System.Data.DataTable;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
 {
-    [TestClass]
+    
     public class ExcelTotalsPanelTest
     {
-        [TestMethod]
+        [Test]
         public void TestCopyIfDataSourceTemplateIsSet()
         {
             var wb = new XLWorkbook();
@@ -67,7 +67,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestCopyIfDataIsSet()
         {
             var wb = new XLWorkbook();
@@ -113,7 +113,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestDoAggregation()
         {
             var dataTable = new DataTable();
@@ -197,7 +197,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(410.59m, totalCells[15].Result);
         }
 
-        [TestMethod]
+        [Test]
         public void TestDoAggregationWithEmptyData()
         {
             var data = new List<Test>();
@@ -222,7 +222,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.IsNull(totalCells[4].Result);
         }
 
-        [TestMethod]
+        [Test]
         public void TestDoAggregationWithIntData()
         {
             int[] data = new DataProvider().GetIntData();
@@ -242,7 +242,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(5.5, totalCells[1].Result);
         }
 
-        [TestMethod]
+        [Test]
         public void TestDoAggregationWithBadData()
         {
             IList<Test> data = GetTestData();
@@ -274,7 +274,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
                 "Unsupportable aggregation function");
         }
 
-        [TestMethod]
+        [Test]
         public void TestCustomAggregation()
         {
             IList<Test> data = GetTestData();
@@ -314,7 +314,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
                 $"Cannot find public instance method \"BadMethod\" in type \"{nameof(TestReportForAggregation)}\"");
         }
 
-        [TestMethod]
+        [Test]
         public void TestAggregationPostOperation()
         {
             IList<Test> data = GetTestData();
@@ -339,7 +339,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(24, totalCells[2].Result);
         }
 
-        [TestMethod]
+        [Test]
         public void TestParseTotalCells()
         {
             var report = new TestReport();
@@ -442,7 +442,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.IsTrue(Guid.TryParse(result[ws.Cell(1, 7)][3].UniqueName, out _));
         }
 
-        [TestMethod]
+        [Test]
         public void TestParseTotalCellsErrors()
         {
             XLWorkbook wb = new XLWorkbook();

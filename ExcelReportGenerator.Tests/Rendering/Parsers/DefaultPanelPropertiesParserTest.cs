@@ -1,15 +1,15 @@
 ﻿using ExcelReportGenerator.Rendering;
 using ExcelReportGenerator.Rendering.Parsers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
 namespace ExcelReportGenerator.Tests.Rendering.Parsers
 {
-    [TestClass]
+    
     public class DefaultPanelPropertiesParserTest
     {
-        [TestMethod]
+        [Test]
         public void TestParse()
         {
             string input = $"Prop1=Val1;Prop2 = Val2 {Environment.NewLine} Prop6 \t\t \t Prop4=Val4; Prop5<Val5{Environment.NewLine}Prop3=Val3";
@@ -41,7 +41,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Parsers
             Assert.AreEqual(result["prop1"], "val1");
         }
 
-        [TestMethod]
+        [Test]
         public void TestParseIfInputEmpty()
         {
             string input = null;

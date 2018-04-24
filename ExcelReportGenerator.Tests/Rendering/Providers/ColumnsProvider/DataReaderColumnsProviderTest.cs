@@ -1,15 +1,15 @@
 ﻿using ExcelReportGenerator.Rendering;
 using ExcelReportGenerator.Rendering.Providers.ColumnsProviders;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Data;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
 {
-    [TestClass]
+    
     public class DataReaderColumnsProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetColumnsList()
         {
             IDataReader dataReader = new DataProvider().GetAllCustomersDataReader();
@@ -51,7 +51,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
             dataReader.Close();
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetColumnsListIfDataReaderIsEmpty()
         {
             IDataReader dataReader = new DataProvider().GetEmptyDataReader();
@@ -93,7 +93,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
             dataReader.Close();
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetColumnsListIfDataReaderIsNull()
         {
             IColumnsProvider columnsProvider = new DataReaderColumnsProvider();

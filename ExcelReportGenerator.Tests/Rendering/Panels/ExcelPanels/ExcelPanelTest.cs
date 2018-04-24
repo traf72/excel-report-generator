@@ -5,7 +5,7 @@ using ExcelReportGenerator.Rendering.EventArgs;
 using ExcelReportGenerator.Rendering.Panels;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -15,10 +15,10 @@ using ExcelReportGenerator.Rendering.TemplateProcessors;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
 {
-    [TestClass]
+    
     public class PanelTest
     {
-        [TestMethod]
+        [Test]
         public void TestCopy()
         {
             XLWorkbook wb = new XLWorkbook();
@@ -168,7 +168,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestMove()
         {
             XLWorkbook wb = new XLWorkbook();
@@ -225,8 +225,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(2, panel.Children.Count());
             Assert.AreEqual(ws.Cell(5, 6), panel.Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(6, 10), panel.Children.First().Range.LastCell());
-            Assert.IsInstanceOfType(panel.Children.First(), typeof(ExcelPanel));
-            Assert.IsNotInstanceOfType(panel.Children.First(), typeof(INamedPanel));
+            Assert.IsInstanceOf<ExcelPanel>(panel.Children.First());
+            Assert.IsNotInstanceOf<INamedPanel>(panel.Children.First());
             Assert.AreSame(panel, panel.Children.First().Parent);
 
             Assert.AreEqual(ws.Cell(7, 6), panel.Children.Last().Range.FirstCell());
@@ -237,15 +237,15 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(1, panel.Children.First().Children.Count());
             Assert.AreEqual(ws.Cell(6, 6), panel.Children.First().Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(6, 10), panel.Children.First().Children.First().Range.LastCell());
-            Assert.IsInstanceOfType(panel.Children.First().Children.First(), typeof(ExcelDataSourcePanel));
+            Assert.IsInstanceOf<ExcelDataSourcePanel>(panel.Children.First().Children.First());
             Assert.AreEqual("childOfChildRange1", ((INamedPanel)panel.Children.First().Children.First()).Name);
             Assert.AreSame(panel.Children.First(), panel.Children.First().Children.First().Parent);
 
             Assert.AreEqual(1, panel.Children.Last().Children.Count());
             Assert.AreEqual(ws.Cell(8, 6), panel.Children.Last().Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(8, 10), panel.Children.Last().Children.First().Range.LastCell());
-            Assert.IsInstanceOfType(panel.Children.Last().Children.First(), typeof(ExcelPanel));
-            Assert.IsNotInstanceOfType(panel.Children.Last().Children.First(), typeof(INamedPanel));
+            Assert.IsInstanceOf<ExcelPanel>(panel.Children.Last().Children.First());
+            Assert.IsNotInstanceOf<INamedPanel>(panel.Children.Last().Children.First());
             Assert.AreSame(panel.Children.Last(), panel.Children.Last().Children.First().Parent);
 
             Assert.AreEqual(2, ws.NamedRanges.Count());
@@ -259,8 +259,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(2, panel.Children.Count());
             Assert.AreEqual(ws.Cell(6, 6), panel.Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 10), panel.Children.First().Range.LastCell());
-            Assert.IsInstanceOfType(panel.Children.First(), typeof(ExcelPanel));
-            Assert.IsNotInstanceOfType(panel.Children.First(), typeof(INamedPanel));
+            Assert.IsInstanceOf<ExcelPanel>(panel.Children.First());
+            Assert.IsNotInstanceOf<INamedPanel>(panel.Children.First());
             Assert.AreSame(panel, panel.Children.First().Parent);
 
             Assert.AreEqual(ws.Cell(8, 6), panel.Children.Last().Range.FirstCell());
@@ -271,15 +271,15 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(1, panel.Children.First().Children.Count());
             Assert.AreEqual(ws.Cell(7, 6), panel.Children.First().Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(7, 10), panel.Children.First().Children.First().Range.LastCell());
-            Assert.IsInstanceOfType(panel.Children.First().Children.First(), typeof(ExcelDataSourcePanel));
+            Assert.IsInstanceOf<ExcelDataSourcePanel>(panel.Children.First().Children.First());
             Assert.AreEqual("childOfChildRange1", ((INamedPanel)panel.Children.First().Children.First()).Name);
             Assert.AreSame(panel.Children.First(), panel.Children.First().Children.First().Parent);
 
             Assert.AreEqual(1, panel.Children.Last().Children.Count());
             Assert.AreEqual(ws.Cell(9, 6), panel.Children.Last().Children.First().Range.FirstCell());
             Assert.AreEqual(ws.Cell(9, 10), panel.Children.Last().Children.First().Range.LastCell());
-            Assert.IsInstanceOfType(panel.Children.Last().Children.First(), typeof(ExcelPanel));
-            Assert.IsNotInstanceOfType(panel.Children.Last().Children.First(), typeof(INamedPanel));
+            Assert.IsInstanceOf<ExcelPanel>(panel.Children.Last().Children.First());
+            Assert.IsNotInstanceOf<INamedPanel>(panel.Children.Last().Children.First());
             Assert.AreSame(panel.Children.Last(), panel.Children.Last().Children.First().Parent);
 
             Assert.AreEqual(2, ws.NamedRanges.Count());
@@ -287,7 +287,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestDelete()
         {
             // Удаление со сдвигом ячеек вверх
@@ -452,7 +452,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestCallReportMethod()
         {
             var report = new TestRep();

@@ -1,14 +1,14 @@
 ﻿using System.Linq;
 using ClosedXML.Excel;
 using ExcelReportGenerator.Extensions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Extensions
 {
-    [TestClass]
+    
     public class XLRangeBaseExtensionsTest
     {
-        [TestMethod]
+        [Test]
         public void TestCellsUsedWithoutFormulas()
         {
             var wb = new XLWorkbook();
@@ -32,7 +32,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.AreEqual(2, ws.CellsUsedWithoutFormulas(true, c => c.Active || c.Style.Border.TopBorder == XLBorderStyleValues.Thin).Count());
         }
 
-        [TestMethod]
+        [Test]
         public void TestCellsWithoutFormulas()
         {
             var wb = new XLWorkbook();

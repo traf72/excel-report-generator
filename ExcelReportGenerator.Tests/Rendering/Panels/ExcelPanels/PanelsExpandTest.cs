@@ -2,17 +2,17 @@
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
 {
-    [TestClass]
+    
     public class PanelsExpandTest
     {
         /// <summary>
         /// Дочерняя панель занимает всю ширину родителя (сдвигаются ячейки)
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestExpandSimplePanel_ChildAcrossWidth_ChildCenter_CellsShift()
         {
             var report = new TestReport();
@@ -51,7 +51,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         /// <summary>
         /// Дочерняя панель занимает всю ширину родителя (сдвигается вся строка)
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestExpandSimplePanel_ChildAcrossWidth_ChildCenter_RowShift()
         {
             var report = new TestReport();
@@ -91,7 +91,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         /// <summary>
         /// Дочерняя панель занимает всю ширину родителя (без сдвига)
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestExpandSimplePanel_ChildAcrossWidth_ChildCenter_NoShift()
         {
             var report = new TestReport();
@@ -131,7 +131,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         /// <summary>
         /// Дочерняя панель занимает всю ширину родителя (сдвигаются ячейки)
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestExpandSimplePanel_ChildAcrossWidth_ChildBottom_CellsShift()
         {
             var report = new TestReport();
@@ -170,7 +170,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         /// <summary>
         /// Дочерняя панель занимает всю ширину родителя (сдвигается вся строка)
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestExpandSimplePanel_ChildAcrossWidth_ChildBottom_RowShift()
         {
             var report = new TestReport();
@@ -210,7 +210,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         /// <summary>
         /// Дочерняя панель занимает всю ширину родителя (без сдвига)
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestExpandSimplePanel_ChildAcrossWidth_ChildBottom_NoShift()
         {
             var report = new TestReport();
@@ -250,7 +250,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         /// <summary>
         /// Дочерняя панель занимает не всю ширину родителя (сдвигаются ячейки)
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestExpandSimplePanel_ChildNotAcrossWidth_CellsShift()
         {
             var report = new TestReport();
@@ -289,7 +289,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         /// <summary>
         /// Дочерняя панель занимает не всю ширину родителя (сдвигается вся строка)
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestExpandSimplePanel_ChildNotAcrossWidth_RowShift()
         {
             var report = new TestReport();
@@ -329,7 +329,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         /// <summary>
         /// Дочерняя панель занимает не всю ширину родителя (без сдвига)
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestExpandSimplePanel_ChildNotAcrossWidth_NoShift()
         {
             var report = new TestReport();
@@ -369,7 +369,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         /// <summary>
         /// Дочерняя панель занимает не всю ширину родителя (сдвигается вся строка)
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestExpandDataPanel_ChildNotAcrossWidth_ChildCenter_RowShift()
         {
             var report = new TestReport();
@@ -408,7 +408,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         /// <summary>
         /// Дочерняя панель занимает не всю ширину родителя (сдвигается вся строка)
         /// </summary>
-        [TestMethod]
+        [Test]
         public void TestExpandDataPanel_ChildNotAcrossWidth_ChildBottom_RowShift()
         {
             var report = new TestReport();

@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using ExcelReportGenerator.Rendering;
 using ExcelReportGenerator.Rendering.Providers.ColumnsProviders;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
 {
-    [TestClass]
+    
     public class DictionaryColumnsProviderTest
     {
-        [TestMethod]
+        [Test]
         public void TestGetColumnsList()
         {
             IColumnsProvider columnsProvider = new DictionaryColumnsProvider<object>();
@@ -59,7 +59,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
             Assert.IsNull(columns[1].Width);
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetColumnsListIfDictionaryIsNullOrEmpty()
         {
             IColumnsProvider columnsProvider = new DictionaryColumnsProvider<object>();

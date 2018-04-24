@@ -7,7 +7,7 @@ using ExcelReportGenerator.Rendering.Providers.VariableProviders;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using ExcelReportGenerator.Tests.CustomAsserts;
 using ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -15,10 +15,10 @@ using System.Reflection;
 
 namespace ExcelReportGenerator.Tests.Rendering
 {
-    [TestClass]
+    
     public class DefaultReportGeneratorTest
     {
-        [TestMethod]
+        [Test]
         public void TestMakePanelsHierarchy()
         {
             var wb = new XLWorkbook();
@@ -95,7 +95,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             Assert.AreEqual(panel4, panel5.Parent);
         }
 
-        [TestMethod]
+        [Test]
         public void TestMakePanelsHierarchyWithBadParent()
         {
             var wb = new XLWorkbook();
@@ -141,7 +141,7 @@ namespace ExcelReportGenerator.Tests.Rendering
                 $"Panel \"{panel1Range}\" is not a parent of the panel \"Panel3\". Child range is outside of the parent range.");
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetPanelsNamedRanges()
         {
             var wb = new XLWorkbook();
@@ -181,7 +181,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             Assert.AreEqual("d_Panel8", result[5].Name);
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetRootRange()
         {
             var wb = new XLWorkbook();
@@ -230,7 +230,7 @@ namespace ExcelReportGenerator.Tests.Rendering
                 method.Invoke(reportGenerator, new object[] {ws, namedRanges}));
         }
 
-        [TestMethod]
+        [Test]
         public void TestRender()
         {
             var report = new TestReport();
@@ -313,7 +313,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderWithEvents()
         {
             var report = new TestReport();
@@ -349,7 +349,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderPartialWorksheets()
         {
             var report = new TestReport();
@@ -424,7 +424,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderWithCustomVariableAndFunctionProviders()
         {
             var report = new TestReport();

@@ -2,15 +2,15 @@
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourcePanelRenderTests
 {
-    [TestClass]
+    
     public class DataSourcePanelEmptyIEnumerableRenderTest
     {
 
-        [TestMethod]
+        [Test]
         public void TestRenderEmptyIEnumerableVerticalCellsShift()
         {
             var report = new TestReport();
@@ -55,7 +55,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderEmptyIEnumerableVerticalRowsShift()
         {
             var report = new TestReport();
@@ -103,7 +103,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderEmptyIEnumerableVerticalNoShift()
         {
             var report = new TestReport();
@@ -151,7 +151,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderEmptyIEnumerableHorizontalCellsShift()
         {
             var report = new TestReport();
@@ -199,7 +199,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderEmptyIEnumerableHorizontalRowsShift()
         {
             var report = new TestReport();
@@ -248,7 +248,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestRenderEmptyIEnumerableHorizontalNoShift()
         {
             var report = new TestReport();

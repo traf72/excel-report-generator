@@ -1,5 +1,5 @@
 ﻿using ClosedXML.Excel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System.Linq;
 
 namespace ExcelReportGenerator.Tests.CustomAsserts

@@ -2,17 +2,16 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using ClosedXML.Excel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Excel;
 using ExcelReportGenerator.Tests.CustomAsserts;
 
 namespace ExcelReportGenerator.Tests.Excel
 {
-    [TestClass]
     public class ExcelHelperTest
     {
-        [TestMethod]
+        [Test]
         public void TestIsCellInsideRange()
         {
             var wb = new XLWorkbook();
@@ -39,7 +38,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.IsFalse(ExcelHelper.IsCellInsideRange(ws.Cell(3, 4), range));
         }
 
-        [TestMethod]
+        [Test]
         public void TestIsRangeInsideAnotherRange()
         {
             var wb = new XLWorkbook();
@@ -62,7 +61,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.IsFalse(ExcelHelper.IsRangeInsideAnotherRange(parent, ws.Range(2, 3, 7, 7)));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetNearestParentRange()
         {
             var wb = new XLWorkbook();
@@ -90,7 +89,7 @@ namespace ExcelReportGenerator.Tests.Excel
                 "Nearest parent range was not found");
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetCellCoordsRelativeRange()
         {
             var wb = new XLWorkbook();
@@ -117,7 +116,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(new CellCoords(2, 0), ExcelHelper.GetCellCoordsRelativeRange(range, ws.Cell(4, 2), false));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetRangeCoordsRelativeParent()
         {
             var wb = new XLWorkbook();
@@ -154,7 +153,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(new RangeCoords(new CellCoords(6, 4), new CellCoords(7, 5)), ExcelHelper.GetRangeCoordsRelativeParent(parentRange, childRange, false));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetAddressShift()
         {
             var wb = new XLWorkbook();
@@ -166,7 +165,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(new AddressShift(-4, -3), ExcelHelper.GetAddressShift(cell1.Address, cell2.Address));
         }
 
-        [TestMethod]
+        [Test]
         public void TestShiftCell()
         {
             var wb = new XLWorkbook();
@@ -182,7 +181,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(ws.Cell(1, 1), ExcelHelper.ShiftCell(cell, shift));
         }
 
-        [TestMethod]
+        [Test]
         public void TestCopyRange()
         {
             var wb = new XLWorkbook();
@@ -236,7 +235,7 @@ namespace ExcelReportGenerator.Tests.Excel
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestCopyNamedRange()
         {
             var wb = new XLWorkbook();
@@ -298,7 +297,7 @@ namespace ExcelReportGenerator.Tests.Excel
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestAllocateSpaceForNextRange()
         {
             // Добавление ячеек сверху
@@ -582,7 +581,7 @@ namespace ExcelReportGenerator.Tests.Excel
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestDeleteRange()
         {
             // Удаление со сдвигом ячеек вверх
@@ -740,7 +739,7 @@ namespace ExcelReportGenerator.Tests.Excel
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestMoveRange()
         {
             var wb = new XLWorkbook();
@@ -793,7 +792,7 @@ namespace ExcelReportGenerator.Tests.Excel
             //wb.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestMoveNamedRange()
         {
             var wb = new XLWorkbook();
@@ -878,7 +877,7 @@ namespace ExcelReportGenerator.Tests.Excel
             return wb;
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddTempWorksheet()
         {
             var wb = new XLWorkbook();
@@ -888,7 +887,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.IsTrue(Regex.IsMatch(wb.Worksheets.First().Name, "[0-9a-f]{31}"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestMergeRanges()
         {
             var wb = new XLWorkbook();
@@ -940,7 +939,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.IsNull(ExcelHelper.MergeRanges(range1, range2));
         }
 
-        [TestMethod]
+        [Test]
         public void TestIsRangeInvalid()
         {
             var wb = new XLWorkbook();
@@ -959,7 +958,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.IsTrue(ExcelHelper.IsRangeInvalid(ws.Range(2, 3, 1, 2)));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetMaxCell()
         {
             var wb = new XLWorkbook();
@@ -984,7 +983,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.IsNull(ExcelHelper.GetMaxCell(Enumerable.Empty<IXLCell>().ToArray()));
         }
 
-        [TestMethod]
+        [Test]
         public void TestCloneRange()
         {
             var wb = new XLWorkbook();

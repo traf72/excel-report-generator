@@ -1,14 +1,14 @@
 ﻿using ExcelReportGenerator.Helpers;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 
 namespace ExcelReportGenerator.Tests.Helpers
 {
-    [TestClass]
+    
     public class EnumHelperTest
     {
-        [TestMethod]
+        [Test]
         public void TestParse()
         {
             Assert.AreEqual(TestEnum.One, EnumHelper.Parse<TestEnum>("One"));

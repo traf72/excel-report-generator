@@ -2,14 +2,14 @@
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourcePanelRenderTests
 {
-    [TestClass]
+    
     public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
     {
-        [TestMethod]
+        [Test]
         public void Test_HorizontalPageBreaks_WithSimplePanel_CellsShift()
         {
             var report = new TestReport();
@@ -54,7 +54,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_HorizontalPageBreaks_WithoutSimplePanel_CellsShift()
         {
             var report = new TestReport();
@@ -92,7 +92,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_HorizontalPageBreaks_WithSimplePanel_RowShift()
         {
             var report = new TestReport();
@@ -138,7 +138,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_HorizontalPageBreaks_WithoutSimplePanel_RowShift()
         {
             var report = new TestReport();
@@ -180,7 +180,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_VerticalPageBreaks_WithSimplePanel_CellsShift()
         {
             var report = new TestReport();
@@ -229,7 +229,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_VerticalPageBreaks_WithoutSimplePanel_CellsShift()
         {
             var report = new TestReport();
@@ -271,7 +271,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_VerticalPageBreaks_WithSimplePanel_RowShift()
         {
             var report = new TestReport();
@@ -322,7 +322,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void Test_VerticalPageBreaks_WithoutSimplePanel_RowsShift()
         {
             var report = new TestReport();

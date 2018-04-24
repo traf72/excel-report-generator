@@ -1,14 +1,14 @@
 ﻿using ExcelReportGenerator.Extensions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Text.RegularExpressions;
 
 namespace ExcelReportGenerator.Tests.Extensions
 {
-    [TestClass]
+    
     public class TypeExtensionsTest
     {
-        [TestMethod]
+        [Test]
         public void TestIsNumeric()
         {
             Assert.IsTrue(typeof(byte).IsNumeric());
@@ -41,7 +41,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             Assert.IsFalse(typeof(Regex).IsNumeric());
         }
 
-        [TestMethod]
+        [Test]
         public void TestIsExtendedPrimitive()
         {
             Assert.IsTrue(typeof(byte).IsExtendedPrimitive());

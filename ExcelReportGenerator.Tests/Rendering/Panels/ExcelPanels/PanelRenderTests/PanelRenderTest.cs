@@ -1,47 +1,47 @@
 ﻿using ClosedXML.Excel;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Linq;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests
 {
-    [TestClass]
+    
     public class PanelRenderTest
     {
-        [TestMethod]
+        [Test]
         public void TestPanelRender()
         {
             var report = new TestReport();
             IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
             IXLRange range = ws.Range(1, 1, 5, 5);
 
-            ws.Cell(1, 1).Value = "{p:StrParam}";
-            ws.Cell(1, 2).Value = "{p:IntParam}";
-            ws.Cell(1, 3).Value = "{p:DateParam}";
-            ws.Cell(1, 4).Value = "{P:BoolParam}";
-            ws.Cell(1, 5).Value = "{p:TimeSpanParam}";
-            ws.Cell(2, 1).Value = " { p:StrParam } ";
-            ws.Cell(2, 2).Value = "Plain text";
-            ws.Cell(2, 3).Value = "{Plain text}";
-            ws.Cell(2, 4).Value = " { m:Format ( p:DateParam ) } ";
-            ws.Cell(2, 5).Value = "''{m:Format(p:DateParam)}";
-            ws.Cell(3, 1).Value = "Int: { p:IntParam }. Str: {p:ComplexTypeParam.StrParam}. FormattedDate: {M:Format(p:DateParam)}. NullProp: {p:NullProp}";
+            //ws.Cell(1, 1).Value = "{p:StrParam}";
+            //ws.Cell(1, 2).Value = "{p:IntParam}";
+            //ws.Cell(1, 3).Value = "{p:DateParam}";
+            //ws.Cell(1, 4).Value = "{P:BoolParam}";
+            //ws.Cell(1, 5).Value = "{p:TimeSpanParam}";
+            //ws.Cell(2, 1).Value = " { p:StrParam } ";
+            //ws.Cell(2, 2).Value = "Plain text";
+            //ws.Cell(2, 3).Value = "{Plain text}";
+            //ws.Cell(2, 4).Value = " { m:Format ( p:DateParam ) } ";
+            //ws.Cell(2, 5).Value = "''{m:Format(p:DateParam)}";
+            //ws.Cell(3, 1).Value = "Int: { p:IntParam }. Str: {p:ComplexTypeParam.StrParam}. FormattedDate: {M:Format(p:DateParam)}. NullProp: {p:NullProp}";
             ws.Cell(3, 2).Value = "''{m:Format(m:DateTime:AddDays(p:ComplexTypeParam.IntParam), \"yyyy-MM-dd\")}";
-            ws.Cell(3, 3).Value = "''{sf:Format(m:AddDays(p:DateParam, 5), ddMMyyyy)}";
-            ws.Cell(3, 4).Value = "''{m:Format(m:AddDays(p:DateParam, -2), dd.MM.yyyy)}";
-            ws.Cell(3, 5).Value = "''{sf:Format(m:AddDays(p:DateParam, [int]-3), \"dd.MM.yyyy HH:mm:ss\")}";
-            ws.Cell(4, 1).Value = "{m:TestReport:Counter()}";
-            ws.Cell(4, 2).Value = "{ m:TestReport : Counter ( ) }";
-            ws.Cell(4, 3).Value = "{m:Counter()}";
-            ws.Cell(4, 4).FormulaA1 = "=$B$1+A$4";
-            ws.Cell(5, 1).Value = "{p:ExpandoObj.StrProp}";
-            ws.Cell(5, 2).Value = "{p:ExpandoObj.DecimalProp}";
-            ws.Cell(5, 3).Value = "{p:NullProp}";
-            ws.Cell(6, 1).Value = "{p:StrParam}";
-            ws.Cell(6, 2).Value = "{m:Counter()}";
-            ws.Cell(7, 1).Value = "Plain text outside range";
+            //ws.Cell(3, 3).Value = "''{sf:Format(m:AddDays(p:DateParam, 5), ddMMyyyy)}";
+            //ws.Cell(3, 4).Value = "''{m:Format(m:AddDays(p:DateParam, -2), dd.MM.yyyy)}";
+            //ws.Cell(3, 5).Value = "''{sf:Format(m:AddDays(p:DateParam, [int]-3), \"dd.MM.yyyy HH:mm:ss\")}";
+            //ws.Cell(4, 1).Value = "{m:TestReport:Counter()}";
+            //ws.Cell(4, 2).Value = "{ m:TestReport : Counter ( ) }";
+            //ws.Cell(4, 3).Value = "{m:Counter()}";
+            //ws.Cell(4, 4).FormulaA1 = "=$B$1+A$4";
+            //ws.Cell(5, 1).Value = "{p:ExpandoObj.StrProp}";
+            //ws.Cell(5, 2).Value = "{p:ExpandoObj.DecimalProp}";
+            //ws.Cell(5, 3).Value = "{p:NullProp}";
+            //ws.Cell(6, 1).Value = "{p:StrParam}";
+            //ws.Cell(6, 2).Value = "{m:Counter()}";
+            //ws.Cell(7, 1).Value = "Plain text outside range";
 
             var panel = new ExcelPanel(range, report, report.TemplateProcessor);
             panel.Render();
@@ -87,7 +87,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestCancelPanelRender()
         {
             var report = new TestReport();
@@ -112,7 +112,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestPanelRenderEvents()
         {
             var report = new TestReport();
@@ -138,7 +138,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestNamedPanelRender()
         {
             var report = new TestReport();
@@ -268,7 +268,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestHierarchicalPanelRender()
         {
             var report = new TestReport();
@@ -381,7 +381,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        [TestMethod]
+        [Test]
         public void TestSimplePanelExpansion()
         {
             var report = new TestReport();

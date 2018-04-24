@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ExcelReportGenerator.Tests.CustomAsserts
 {
@@ -21,7 +21,7 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
             }
             catch (Exception e)
             {
-                Assert.IsInstanceOfType(e, typeof(T), "Wrong type of exception was thrown");
+                Assert.IsInstanceOf<T>(e, "Wrong type of exception was thrown");
                 return;
             }
 
@@ -37,7 +37,7 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
             catch (Exception e)
             {
                 Exception baseException = e.GetBaseException();
-                Assert.IsInstanceOfType(baseException, typeof(T), "Wrong type of exception was thrown");
+                Assert.IsInstanceOf<T>(baseException, "Wrong type of exception was thrown");
                 if (expectedMessage != null)
                 {
                     Assert.AreEqual(expectedMessage, baseException.Message, "Wrong exception message was returned");

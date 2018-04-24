@@ -3,16 +3,16 @@ using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Rendering;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using NSubstitute;
 using System.Reflection;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
 {
-    [TestClass]
+    
     public class ExcelDataItemPanelTest
     {
-        [TestMethod]
+        [Test]
         public void TestCopy()
         {
             var wb = new XLWorkbook();
