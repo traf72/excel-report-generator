@@ -6,8 +6,8 @@
     <Company />
     <Description>The library ExcelReportGenerator allows you to render data to Microsoft Excel by marking Excel sheets using panels and templates. It allows you easily connecting to various data sources like IDataReader, DataSet, DataTable, IEnumerable&lt;T&gt;, etc, and render data from them to Excel. You can also apply to the data an aggregation, different types of grouping, formatting, etc. More detailed documentation is attached inside the package. Before using the library be sure to read the Readme file.</Description>
     <Copyright>Copyright © Traf 2018</Copyright>
-    <AssemblyVersion>1.1.1</AssemblyVersion>
-    <FileVersion>1.1.1</FileVersion>
+    <AssemblyVersion>1.1.2</AssemblyVersion>
+    <FileVersion>1.1.2</FileVersion>
     <PackageTags>Excel Report Reports Reporting xlsx ClosedXml Spreadsheet Workbook Worksheet Generator</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.1.2</Version>
