@@ -10,8 +10,8 @@
     <FileVersion>1.1.1</FileVersion>
     <PackageTags>Excel Report Reports Reporting xlsx ClosedXml Spreadsheet Workbook Worksheet Generator</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.1</Version>
-    <PackageReleaseNotes>Small bugfix</PackageReleaseNotes>
+    <Version>1.1.2</Version>
+    <PackageReleaseNotes>Switching to release version of System.Data.DataSetExtensions</PackageReleaseNotes>
   </PropertyGroup>
 
   <!--XML-Docs-->
@@ -30,7 +30,7 @@
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.Win32.Registry" Version="4.4.0" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0-preview1-26216-02" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
 
   <!-- .NET 4.6 -->
