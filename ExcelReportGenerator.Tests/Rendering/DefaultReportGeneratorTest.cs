@@ -11,6 +11,7 @@ using NUnit.Framework;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace ExcelReportGenerator.Tests.Rendering
@@ -73,7 +74,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             Assert.AreEqual(panel1Range, rootPanel.Children[0].Range);
             Assert.AreEqual(panel4Range, rootPanel.Children[1].Range);
             Assert.AreEqual(panel7Range, rootPanel.Children[2].Range);
-            Assert.AreEqual(panel8Range, rootPanel.Children[3].Range);
+            Assert.AreEqual(ws.NamedRange("Panel8").Ranges.First(), rootPanel.Children[3].Range);
             Assert.AreEqual(rootPanel, panel1.Parent);
             Assert.AreEqual(rootPanel, panel4.Parent);
             Assert.AreEqual(rootPanel, panel7.Parent);
@@ -81,17 +82,17 @@ namespace ExcelReportGenerator.Tests.Rendering
             Assert.IsNull(rootPanel.Parent);
 
             Assert.AreEqual(2, panel1.Children.Count);
-            Assert.AreEqual(panel2Range, panel1.Children[0].Range);
+            Assert.AreEqual(ws.NamedRange("Panel2").Ranges.First(), panel1.Children[0].Range);
             Assert.AreEqual(panel6Range, panel1.Children[1].Range);
             Assert.AreEqual(panel1, panel2.Parent);
             Assert.AreEqual(panel1, panel6.Parent);
 
             Assert.AreEqual(1, panel2.Children.Count);
-            Assert.AreEqual(panel3Range, panel2.Children[0].Range);
+            Assert.AreEqual(wb.NamedRange("Panel3").Ranges.First(), panel2.Children[0].Range);
             Assert.AreEqual(panel2, panel3.Parent);
 
             Assert.AreEqual(1, panel4.Children.Count);
-            Assert.AreEqual(panel5Range, panel4.Children[0].Range);
+            Assert.AreEqual(ws.NamedRange("Panel5").Ranges.First(), panel4.Children[0].Range);
             Assert.AreEqual(panel4, panel5.Parent);
         }
 
@@ -164,7 +165,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             IXLRange panel8Range = ws.Range(8, 9, 9, 10);
             panel8Range.AddToNamed("d_Panel8", XLScope.Worksheet);
             IXLRange panel9Range = ws.Range(11, 11, 11, 11);
-            panel9Range.AddToNamed(" d_Panel9 ", XLScope.Worksheet);
+            panel9Range.AddToNamed("_d_Panel9 ", XLScope.Worksheet);
 
             var reportGenerator = new DefaultReportGenerator(new object());
             MethodInfo method = reportGenerator.GetType()

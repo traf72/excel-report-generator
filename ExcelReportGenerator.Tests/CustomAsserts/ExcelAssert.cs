@@ -130,8 +130,14 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
         private static void AreMergedRangesEquals(IXLRanges expected, IXLRanges actual)
         {
             Assert.AreEqual(expected.Count(), actual.Count(), "Worksheet merged ranges count failed");
-            IXLRange[] expectedArray = expected.ToArray();
-            IXLRange[] actualArray = actual.ToArray();
+            IXLRange[] expectedArray = expected
+                .OrderBy(r => r.RangeAddress.FirstAddress.RowNumber)
+                .ThenBy(r => r.RangeAddress.FirstAddress.ColumnNumber)
+                .ToArray();
+            IXLRange[] actualArray = actual
+                .OrderBy(r => r.RangeAddress.FirstAddress.RowNumber)
+                .ThenBy(r => r.RangeAddress.FirstAddress.ColumnNumber)
+                .ToArray();
             for (int i = 0; i < expectedArray.Length; i++)
             {
                 Assert.AreEqual(expectedArray[i].RangeAddress.FirstAddress.RowNumber, actualArray[i].RangeAddress.FirstAddress.RowNumber, "Merge range first address row number failed");

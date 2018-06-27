@@ -8,6 +8,7 @@ using NUnit.Framework;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
@@ -49,7 +50,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual("AfterRenderMethodName", panel.AfterRenderMethodName);
             Assert.AreEqual(0, panel.Children.Count);
             Assert.IsNull(panel.Parent);
-            Assert.AreEqual(range, panel.Range);
+            Assert.AreEqual(namedRange.Ranges.First(), panel.Range);
             Assert.AreSame(report, panel.GetType().GetField("_report", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(panel));
             Assert.AreSame(templateProcessor, panel.GetType().GetField("_templateProcessor", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(panel));
 
@@ -70,7 +71,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.IsNull(panel.BeforeRenderMethodName);
             Assert.IsNull(panel.AfterRenderMethodName);
             Assert.IsNull(panel.Parent);
-            Assert.AreEqual(range, panel.Range);
+            Assert.AreEqual(namedRange.Ranges.First(), panel.Range);
             Assert.AreSame(report, panel.GetType().GetField("_report", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(panel));
             Assert.AreSame(templateProcessor, panel.GetType().GetField("_templateProcessor", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(panel));
         }
@@ -114,7 +115,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual("AfterDataItemRenderMethodName", panel.AfterDataItemRenderMethodName);
             Assert.AreEqual(0, panel.Children.Count);
             Assert.IsNull(panel.Parent);
-            Assert.AreEqual(range, panel.Range);
+            Assert.AreEqual(namedRange.Ranges.First(), panel.Range);
             Assert.AreSame("DS", panel.GetType().GetField("_dataSourceTemplate", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(panel));
             Assert.AreSame(report, panel.GetType().GetField("_report", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(panel));
             Assert.AreSame(templateProcessor, panel.GetType().GetField("_templateProcessor", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(panel));
@@ -181,7 +182,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual("AfterTotalsRenderMethodName", panel.AfterTotalsRenderMethodName);
             Assert.AreEqual(0, panel.Children.Count);
             Assert.IsNull(panel.Parent);
-            Assert.AreEqual(range, panel.Range);
+            Assert.AreEqual(namedRange.Ranges.First(), panel.Range);
             Assert.AreSame("DS", panel.GetType().GetField("_dataSourceTemplate", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(panel));
             Assert.AreSame(report, panel.GetType().GetField("_report", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(panel));
             Assert.AreSame(templateProcessor, panel.GetType().GetField("_templateProcessor", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(panel));
@@ -228,7 +229,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual("AfterDataItemRenderMethodName", panel.AfterDataItemRenderMethodName);
             Assert.AreEqual(0, panel.Children.Count);
             Assert.IsNull(panel.Parent);
-            Assert.AreEqual(range, panel.Range);
+            Assert.AreEqual(namedRange.Ranges.First(), panel.Range);
             Assert.AreSame("DS", panel.GetType().GetField("_dataSourceTemplate", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(panel));
             Assert.AreSame(report, panel.GetType().GetField("_report", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(panel));
             Assert.AreSame(templateProcessor, panel.GetType().GetField("_templateProcessor", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(panel));

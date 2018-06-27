@@ -213,7 +213,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
 
             panel.Children.First().Children.First().Parent = panel.Children.First();
             panel.Children.Last().Children.First().Parent = panel.Children.Last();
-            panel.Children.ForEach(c => c.Parent = panel);
+            panel.Children.ToList().ForEach(c => c.Parent = panel);
             panel.Parent = globalParent;
 
             panel.Move(ws.Cell(5, 6));

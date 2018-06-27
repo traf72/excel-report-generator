@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using ExcelReportGenerator.Enums;
+using ExcelReportGenerator.License;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
 using NUnit.Framework;
@@ -9,6 +10,12 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
     
     public class DataSourcePanelRender_WithGrouping_MixedPanels_Test
     {
+        public DataSourcePanelRender_WithGrouping_MixedPanels_Test()
+        {
+            new Licensing().LoadLicenseInfo();
+        }
+
+        // ClosedXml 0.93.0 испортил присвоение InsideBorder, тест не проходит
         [Test]
         public void TestMultipleVerticalPanelsGrouping()
         {

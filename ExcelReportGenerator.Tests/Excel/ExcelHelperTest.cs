@@ -992,6 +992,7 @@ namespace ExcelReportGenerator.Tests.Excel
             IXLRange range = ws.Range(3, 3, 5, 5);
 
             Assert.AreEqual(range, ExcelHelper.CloneRange(range));
+            // С версии ClosedXml 0.93.0 эта строка не проходит
             Assert.AreNotSame(range, ExcelHelper.CloneRange(range));
 
             Assert.IsNull(ExcelHelper.CloneRange(null));
