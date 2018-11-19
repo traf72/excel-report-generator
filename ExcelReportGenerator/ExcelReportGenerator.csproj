@@ -21,7 +21,7 @@
 
   <!-- Common NuGet package refs that affect all projects -->
   <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.93.0" />
+    <PackageReference Include="ClosedXML" Version="0.93.1" />
   </ItemGroup>
 
   <!-- .NET Standard 2.0 -->
