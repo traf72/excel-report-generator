@@ -14,7 +14,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
         [Test]
         public void TestGetType()
         {
-            //// Тесты не проходят, так как после перехода на NET Core входная сбока существует
+            //// These tests do not pass because the entry assembly exists after migration to .NET Core
             //ExceptionAssert.Throws<InvalidOperationException>(() => new DefaultTypeProvider(), "Assemblies are not provided but entry assembly is null. Provide assemblies and try again.");
             //ExceptionAssert.Throws<InvalidOperationException>(() => new DefaultTypeProvider(new Assembly[0]), "Assemblies are not provided but entry assembly is null. Provide assemblies and try again.");
 

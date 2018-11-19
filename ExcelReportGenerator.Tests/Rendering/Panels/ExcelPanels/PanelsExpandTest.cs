@@ -10,7 +10,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
     public class PanelsExpandTest
     {
         /// <summary>
-        /// Дочерняя панель занимает всю ширину родителя (сдвигаются ячейки)
+        /// The child panel occupies the entire width of the parent (cells are moved)
         /// </summary>
         [Test]
         public void TestExpandSimplePanel_ChildAcrossWidth_ChildCenter_CellsShift()
@@ -49,7 +49,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         }
 
         /// <summary>
-        /// Дочерняя панель занимает всю ширину родителя (сдвигается вся строка)
+        /// The child panel occupies the entire width of the parent (the whole row is moved)
         /// </summary>
         [Test]
         public void TestExpandSimplePanel_ChildAcrossWidth_ChildCenter_RowShift()
@@ -89,7 +89,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         }
 
         /// <summary>
-        /// Дочерняя панель занимает всю ширину родителя (без сдвига)
+        /// The child panel occupies the entire width of the parent (without any shift)
         /// </summary>
         [Test]
         public void TestExpandSimplePanel_ChildAcrossWidth_ChildCenter_NoShift()
@@ -129,7 +129,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         }
 
         /// <summary>
-        /// Дочерняя панель занимает всю ширину родителя (сдвигаются ячейки)
+        /// The child panel occupies the entire width of the parent (cells are moved)
         /// </summary>
         [Test]
         public void TestExpandSimplePanel_ChildAcrossWidth_ChildBottom_CellsShift()
@@ -168,7 +168,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         }
 
         /// <summary>
-        /// Дочерняя панель занимает всю ширину родителя (сдвигается вся строка)
+        /// The child panel occupies the entire width of the parent (the whole row is moved)
         /// </summary>
         [Test]
         public void TestExpandSimplePanel_ChildAcrossWidth_ChildBottom_RowShift()
@@ -208,7 +208,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         }
 
         /// <summary>
-        /// Дочерняя панель занимает всю ширину родителя (без сдвига)
+        /// The child panel occupies the entire width of the parent (without any shift)
         /// </summary>
         [Test]
         public void TestExpandSimplePanel_ChildAcrossWidth_ChildBottom_NoShift()
@@ -248,7 +248,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         }
 
         /// <summary>
-        /// Дочерняя панель занимает не всю ширину родителя (сдвигаются ячейки)
+        /// he child panel occupies the entire width of the parent (cells are moved)
         /// </summary>
         [Test]
         public void TestExpandSimplePanel_ChildNotAcrossWidth_CellsShift()
@@ -287,7 +287,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         }
 
         /// <summary>
-        /// Дочерняя панель занимает не всю ширину родителя (сдвигается вся строка)
+        /// The child panel occupies the entire width of the parent (the whole row is moved)
         /// </summary>
         [Test]
         public void TestExpandSimplePanel_ChildNotAcrossWidth_RowShift()
@@ -327,7 +327,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         }
 
         /// <summary>
-        /// Дочерняя панель занимает не всю ширину родителя (без сдвига)
+        /// The child panel occupies the entire width of the parent (without any shift)
         /// </summary>
         [Test]
         public void TestExpandSimplePanel_ChildNotAcrossWidth_NoShift()
@@ -367,7 +367,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         }
 
         /// <summary>
-        /// Дочерняя панель занимает не всю ширину родителя (сдвигается вся строка)
+        /// The child panel occupies the entire width of the parent (the whole row is moved)
         /// </summary>
         [Test]
         public void TestExpandDataPanel_ChildNotAcrossWidth_ChildCenter_RowShift()
@@ -406,7 +406,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         }
 
         /// <summary>
-        /// Дочерняя панель занимает не всю ширину родителя (сдвигается вся строка)
+        /// The child panel occupies the entire width of the parent (the whole row is moved)
         /// </summary>
         [Test]
         public void TestExpandDataPanel_ChildNotAcrossWidth_ChildBottom_RowShift()

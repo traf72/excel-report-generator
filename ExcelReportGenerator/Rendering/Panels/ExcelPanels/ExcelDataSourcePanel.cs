@@ -67,19 +67,19 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             try
             {
                 enumerator = EnumeratorFactory.Create(_data);
-                // Если данных нет, то просто удаляем сам шаблон
+                // Removing the template if there are no data
                 if (enumerator == null || enumerator.RowCount == 0)
                 {
                     DeletePanel(this);
                     return;
                 }
 
-                // Создаём шаблон панели, который дальше будет размножаться
+                // Creating the panel template which will be replicated then
                 ExcelDataItemPanel templatePanel = CreateTemplatePanel();
                 _templatePanelRowCount = templatePanel.Range.RowCount();
                 _templatePanelColumnCount = templatePanel.Range.ColumnCount();
 
-                // Выделяем место под данные
+                // Allocating space for data
                 if (enumerator.RowCount > 1)
                 {
                     AllocateSpaceForData(templatePanel, enumerator.RowCount);
@@ -93,20 +93,20 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                     if (rowNum != enumerator.RowCount - 1)
                     {
                         IXLCell templateFirstCell = templatePanel.Range.FirstCell();
-                        // Сам шаблон перемещаем вниз или вправо в зависимости от типа панели
+                        // The template itself is moved down or right, depending on the type of panel
                         MoveTemplatePanel(templatePanel);
-                        // Копируем шаблон на его предыдущее место для панели, в которую будем ренедрить текущий элемент данных
+                        // Copying the template on its previous place for the panel which the current data item will be rendered in
                         currentPanel = (ExcelDataItemPanel)templatePanel.Copy(templateFirstCell);
                     }
                     else
                     {
-                        // Если это последний элемент данных, то уже на размножаем шаблон, а рендерим данные напрямую в него
+                        // Rendering data directly in the template if there is the last data item
                         currentPanel = templatePanel;
                     }
 
                     currentPanel.DataItem = new HierarchicalDataItem { Value = currentItem, Parent = parentDataItem };
 
-                    // Заполняем шаблон данными
+                    // Fill template with data
                     currentPanel.Render();
                     ResultRange = ExcelHelper.MergeRanges(ResultRange, currentPanel.ResultRange);
 

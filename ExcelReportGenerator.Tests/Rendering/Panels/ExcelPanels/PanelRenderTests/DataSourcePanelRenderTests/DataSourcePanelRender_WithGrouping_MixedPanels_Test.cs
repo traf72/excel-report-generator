@@ -9,7 +9,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
     
     public class DataSourcePanelRender_WithGrouping_MixedPanels_Test
     {
-        // ClosedXml 0.93.0 испортил присвоение InsideBorder, тест не проходит
+        // Since ClosedXml 0.93.0 this test does not pass. InsideBorder is assigned incorrectly
         [Test]
         public void TestMultipleVerticalPanelsGrouping()
         {

@@ -87,7 +87,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
         public void AfterRenderParentDataSourcePanelChildLeft(PanelEventArgs args)
         {
-            //// Стандартный способ не работает, Range почему-то становится Invalid (возможно баг ClosedXml)
+            //// The standard way does not work. The range becomes Invalid (possible ClosedXml bug)
             //args.Range.FirstColumn().Delete(XLShiftDeletedCells.ShiftCellsLeft);
             //args.Range.FirstColumn().Style.Border.LeftBorder = XLBorderStyleValues.Thin;
             //args.Range.FirstColumn().Style.Border.LeftBorderColor = XLColor.Black;

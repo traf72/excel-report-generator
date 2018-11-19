@@ -99,9 +99,9 @@ namespace ExcelReportGenerator.Excel
             }
             else
             {
-                // Если ячейка, в которую производится копирование, находится внутри диапазона, то копирование происходит неверно
-                // (копирование происходит по ячейкам, скопированные ячейки сразу же появляются в первом диапазоне и начинают копироваться поновой)
-                // Поэтому копируем через вспомогательный лист
+                // If the cell which the copy occurs to is inside the range then the copy will be wrong (copying is performed by cells,
+                // copied cells appear in the first range immediately and start copying again)
+                // That's why, copy through the auxiliary sheet
                 IXLWorksheet tempWs = null;
                 try
                 {
@@ -213,8 +213,9 @@ namespace ExcelReportGenerator.Excel
                 return newRange;
             }
 
-            // Если ячейка, в которую производится перемещение, находится внутри диапазона, то верхний способ не подойдёт
-            // Поэтому перемещаем через вспомогательный лист
+
+            // If the cell which the movement occurs to is inside the range then the way above will not work properly,
+            // That's why, copy through the auxiliary sheet
             IXLWorksheet tempWs = null;
             try
             {
@@ -321,7 +322,7 @@ namespace ExcelReportGenerator.Excel
 
         public static IXLWorksheet AddTempWorksheet(XLWorkbook wb)
         {
-            // Отсекаем один символ от Guid'а, так как наименование листа не может быть больше 31 символа
+            // Trim one character from Guid because the name of a sheet can't be more than 31 symbols
             return wb.AddWorksheet(Guid.NewGuid().ToString("N").Substring(1));
         }
     }

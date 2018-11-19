@@ -396,7 +396,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //report.Workbook.SaveAs("test.xlsx");
         }
 
-        // Тестирование скорости рендеринга
+        // Rendering speed test
         //[Test]
         public void TestPanelRenderSpeed()
         {
@@ -437,7 +437,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //sw2.Stop();
         }
 
-        // Тестирование скорости рендеринга
+        // Rendering speed test
         //[Test]
         public void TestPanelRenderSpeedWithHierarchy()
         {
@@ -509,7 +509,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             //sw2.Stop();
         }
 
-        // Тестирование скорости рендеринга
+        // Rendering speed test
         //[Test]
         public void TestPanelRenderSpeedWithMultiHierarchy()
         {

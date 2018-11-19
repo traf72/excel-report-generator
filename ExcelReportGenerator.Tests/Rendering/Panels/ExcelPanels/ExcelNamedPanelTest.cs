@@ -576,7 +576,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
         [Test]
         public void TestDelete()
         {
-            // Удаление со сдвигом ячеек вверх
+            // Deleting with moving cells up
             XLWorkbook wb = InitWorkBookForDeleteRangeTest();
             IXLWorksheet ws = wb.Worksheet("Test");
             IXLNamedRange parentRange = ws.NamedRange("Parent");
@@ -615,7 +615,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(leftCell2, ws.Cell(10, 4));
             Assert.AreEqual(0, ws.NamedRanges.Count());
 
-            // Удаление со сдвигом строки вверх
+            // Deleting with moving the row up
             wb = InitWorkBookForDeleteRangeTest();
             ws = wb.Worksheet("Test");
             parentRange = ws.NamedRange("Parent");
@@ -653,7 +653,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(leftCell2, ws.Cell(6, 4));
             Assert.AreEqual(0, ws.NamedRanges.Count());
 
-            // Удаление со сдвигом ячеек влево
+            // Deleting with moving cells left
             wb = InitWorkBookForDeleteRangeTest();
             ws = wb.Worksheet("Test");
             parentRange = ws.NamedRange("Parent");
@@ -691,7 +691,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(leftCell2, ws.Cell(10, 4));
             Assert.AreEqual(0, ws.NamedRanges.Count());
 
-            // Удаление со сдвигом колонки влево
+            // Deleting with moving the column left
             wb = InitWorkBookForDeleteRangeTest();
             ws = wb.Worksheet("Test");
             parentRange = ws.NamedRange("Parent");
@@ -730,7 +730,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.AreEqual(leftCell2, ws.Cell(10, 4));
             Assert.AreEqual(0, ws.NamedRanges.Count());
 
-            // Удаление без сдвига
+            // Deleting without any shift
             wb = InitWorkBookForDeleteRangeTest();
             ws = wb.Worksheet("Test");
             parentRange = ws.NamedRange("Parent");

@@ -224,7 +224,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
             Assert.AreEqual(string.Empty, result[3]);
             Assert.AreEqual(string.Empty, result[4]);
 
-            // Экранирование
+            // Escaping
             result = (string[])method.Invoke(methodCallValueProvider, new[] { "Привет,, медвед!,m:Method(10,p:Name)" });
             Assert.AreEqual(2, result.Length);
             Assert.AreEqual("Привет, медвед!", result[0]);

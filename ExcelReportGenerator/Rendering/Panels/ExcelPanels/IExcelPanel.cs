@@ -26,8 +26,8 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
         void Move(IXLCell cell);
 
-        // Пересчитывает Range относительно родительского, а также Range'и всех Children'ов
-        // Только для внутренних целей
+        // Recalculates the Range relative to the parent as well as the all children's ranges
+        // For internal purposes only
         void RecalculateRangeRelativeParentRecursive();
     }
 }

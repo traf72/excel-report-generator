@@ -300,7 +300,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [Test]
         public void TestAllocateSpaceForNextRange()
         {
-            // Добавление ячеек сверху
+            // Adding cells at the top
             var wb = InitWorkBookForShiftTests();
             IXLWorksheet ws = wb.Worksheet("Test");
             IXLRange range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
@@ -331,7 +331,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(leftCell2, ws.Cell(10, 4));
 
 
-            // Добавление ячеек снизу
+            // Adding cells at the bottom
             wb = InitWorkBookForShiftTests();
             ws = wb.Worksheet("Test");
             range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
@@ -362,7 +362,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(leftCell2, ws.Cell(10, 4));
 
 
-            // Добавление строк сверху
+            // Adding rows at the top
             wb = InitWorkBookForShiftTests();
             ws = wb.Worksheet("Test");
             range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
@@ -393,7 +393,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(leftCell2, ws.Cell(14, 4));
 
 
-            // Добавление строк снизу
+            // Adding rows at the bottom
             wb = InitWorkBookForShiftTests();
             ws = wb.Worksheet("Test");
             range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
@@ -424,7 +424,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(leftCell2, ws.Cell(14, 4));
 
 
-            // Добавление ячеек слева
+            // Adding cells on the left
             wb = InitWorkBookForShiftTests();
             ws = wb.Worksheet("Test");
             range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
@@ -455,7 +455,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(leftCell2, ws.Cell(10, 4));
 
 
-            // Добавление ячеек справа
+            // Adding cells on the right
             wb = InitWorkBookForShiftTests();
             ws = wb.Worksheet("Test");
             range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
@@ -486,7 +486,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(leftCell2, ws.Cell(10, 4));
 
 
-            // Добавление колонок слева
+            // Adding columns on the left
             wb = InitWorkBookForShiftTests();
             ws = wb.Worksheet("Test");
             range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
@@ -517,7 +517,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(leftCell2, ws.Cell(10, 4));
 
 
-            // Добавление колонок справа
+            // Adding columns on the right
             wb = InitWorkBookForShiftTests();
             ws = wb.Worksheet("Test");
             range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
@@ -548,7 +548,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(leftCell2, ws.Cell(10, 4));
 
 
-            // Ничего не добавляется (без сдвига)
+            // Adding nothing (without shift)
             wb = InitWorkBookForShiftTests();
             ws = wb.Worksheet("Test");
             range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
@@ -584,7 +584,7 @@ namespace ExcelReportGenerator.Tests.Excel
         [Test]
         public void TestDeleteRange()
         {
-            // Удаление со сдвигом ячеек вверх
+            // Deleting with moving cells up
             var wb = InitWorkBookForShiftTests();
             IXLWorksheet ws = wb.Worksheet("Test");
             IXLRange range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
@@ -614,7 +614,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(leftCell1, ws.Cell(7, 4));
             Assert.AreEqual(leftCell2, ws.Cell(10, 4));
 
-            // Удаление со сдвигом строки вверх
+            // Deleting with moving the row up
             wb = InitWorkBookForShiftTests();
             ws = wb.Worksheet("Test");
             range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
@@ -644,7 +644,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(aboveCell2, ws.Cell(5, 4));
             Assert.AreEqual(leftCell2, ws.Cell(6, 4));
 
-            // Удаление со сдвигом ячеек влево
+            // Deleting with moving cells left
             wb = InitWorkBookForShiftTests();
             ws = wb.Worksheet("Test");
             range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
@@ -674,7 +674,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(leftCell1, ws.Cell(7, 4));
             Assert.AreEqual(leftCell2, ws.Cell(10, 4));
 
-            // Удаление со сдвигом колонки влево
+            // Deleting with moving the column left
             wb = InitWorkBookForShiftTests();
             ws = wb.Worksheet("Test");
             range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
@@ -704,7 +704,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(leftCell1, ws.Cell(7, 4));
             Assert.AreEqual(leftCell2, ws.Cell(10, 4));
 
-            // Удаление без сдвига
+            // Deleting without any shift
             wb = InitWorkBookForShiftTests();
             ws = wb.Worksheet("Test");
             range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
@@ -992,7 +992,8 @@ namespace ExcelReportGenerator.Tests.Excel
             IXLRange range = ws.Range(3, 3, 5, 5);
 
             Assert.AreEqual(range, ExcelHelper.CloneRange(range));
-            // С версии ClosedXml 0.93.0 эта строка не проходит
+
+            // Since ClosedXml 0.93.0 this test does not pass
             Assert.AreNotSame(range, ExcelHelper.CloneRange(range));
 
             Assert.IsNull(ExcelHelper.CloneRange(null));
