@@ -2,7 +2,6 @@
 using ExcelReportGenerator.Attributes;
 using ExcelReportGenerator.Converters;
 using ExcelReportGenerator.Helpers;
-using ExcelReportGenerator.License;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using System;
 using System.Collections.Generic;
@@ -25,13 +24,6 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             _report = report ?? throw new ArgumentNullException(nameof(report), ArgumentHelper.NullParamMessage);
             _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor), ArgumentHelper.NullParamMessage);
             _panelParsingSettings = panelParsingSettings ?? throw new ArgumentNullException(nameof(panelParsingSettings), ArgumentHelper.NullParamMessage);
-            InitLicensing();
-        }
-
-        // This method is not refer to this class, it just hidden here
-        public void InitLicensing()
-        {
-            new Licensing().LoadLicenseInfo();
         }
 
         public IExcelPanel Create(IXLNamedRange namedRange, IDictionary<string, string> properties)

@@ -5,9 +5,7 @@ VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelReportGenerator", "ExcelReportGenerator\ExcelReportGenerator.csproj", "{1C802C04-06DE-433D-B79E-1179F1D931C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelReportGenerator.Tests", "ExcelReportGenerator.Tests\ExcelReportGenerator.Tests.csproj", "{49759C4A-2CB5-4672-BD36-C4138B7DA076}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelReportGenerator.LicenseManager", "ExcelReportGenerator.LicenseManager\ExcelReportGenerator.LicenseManager.csproj", "{5726DFDF-041F-40CC-A11A-F9C1FCADEBAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelReportGenerator.Tests", "ExcelReportGenerator.Tests\ExcelReportGenerator.Tests.csproj", "{49759C4A-2CB5-4672-BD36-C4138B7DA076}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelReportGenerator.Samples", "ExcelReportGenerator.Samples\ExcelReportGenerator.Samples.csproj", "{2A57B75F-4849-463B-A842-45D3BC30BDA2}"
 EndProject
@@ -25,10 +23,6 @@ Global
 		{49759C4A-2CB5-4672-BD36-C4138B7DA076}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49759C4A-2CB5-4672-BD36-C4138B7DA076}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49759C4A-2CB5-4672-BD36-C4138B7DA076}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5726DFDF-041F-40CC-A11A-F9C1FCADEBAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5726DFDF-041F-40CC-A11A-F9C1FCADEBAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5726DFDF-041F-40CC-A11A-F9C1FCADEBAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5726DFDF-041F-40CC-A11A-F9C1FCADEBAC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2A57B75F-4849-463B-A842-45D3BC30BDA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2A57B75F-4849-463B-A842-45D3BC30BDA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A57B75F-4849-463B-A842-45D3BC30BDA2}.Release|Any CPU.ActiveCfg = Release|Any CPU

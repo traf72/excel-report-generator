@@ -9,7 +9,6 @@ using ExcelReportGenerator.Rendering.TemplateProcessors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExcelReportGenerator.License;
 
 namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 {
@@ -228,16 +227,6 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             foreach (IExcelPanel child in templatePanel.Children)
             {
                 child.Parent = templatePanel;
-            }
-
-            // For rarely call
-            if (!(Parent is ExcelDataSourcePanel) && !(Parent is ExcelDataItemPanel))
-            {
-                // Check license
-                if (Licensing.LicenseExpirationDate.Date < DateTime.Now.Date)
-                {
-                    throw new Exception(Licensing.LicenseExpiredMessage);
-                }
             }
 
             return templatePanel;

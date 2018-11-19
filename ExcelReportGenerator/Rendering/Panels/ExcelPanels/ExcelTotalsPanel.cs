@@ -11,7 +11,6 @@ using System.Dynamic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ExcelReportGenerator.Excel;
-using ExcelReportGenerator.License;
 
 namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 {
@@ -197,16 +196,6 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                         default:
                             throw new NotSupportedException("Unsupportable aggregation function");
                     }
-                }
-            }
-
-            // For rarely call
-            if (!(Parent is ExcelDataSourcePanel) && !(Parent is ExcelDataItemPanel))
-            {
-                // Check license
-                if (Licensing.LicenseExpirationDate.Date < DateTime.Now.Date)
-                {
-                    throw new Exception(Licensing.LicenseExpiredMessage);
                 }
             }
 

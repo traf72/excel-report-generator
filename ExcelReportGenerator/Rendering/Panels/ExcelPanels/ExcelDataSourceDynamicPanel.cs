@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
-using ExcelReportGenerator.License;
 
 namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 {
@@ -219,16 +218,6 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             if (isCanceled)
             {
                 return range;
-            }
-
-            // For rarely call
-            if (!(Parent is ExcelDataSourcePanel) && !(Parent is ExcelDataItemPanel))
-            {
-                // Check license
-                if (Licensing.LicenseExpirationDate.Date < DateTime.Now.Date)
-                {
-                    throw new Exception(Licensing.LicenseExpiredMessage);
-                }
             }
 
             cell.Value = _templateProcessor.BuildDataItemTemplate(nameof(DataTemplatesHelper.Template));
