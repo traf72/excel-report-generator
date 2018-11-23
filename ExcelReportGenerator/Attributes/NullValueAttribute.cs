@@ -6,7 +6,6 @@ namespace ExcelReportGenerator.Attributes
     /// An attribute that allows you to replace null-values to more readable
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-    [LicenceKeyPart(L = true, R = true)]
     public class NullValueAttribute : Attribute
     {
         public NullValueAttribute(object value)

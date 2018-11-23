@@ -1,11 +1,8 @@
-﻿using ExcelReportGenerator.Attributes;
-
-namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
+﻿namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
 {
     /// <summary>
     /// Provides values for data item templates
     /// </summary>
-    [LicenceKeyPart(L = true, R = true)]
     public interface IDataItemValueProvider
     {
         /// <summary>

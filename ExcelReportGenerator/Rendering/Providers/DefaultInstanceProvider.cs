@@ -1,13 +1,11 @@
-﻿using ExcelReportGenerator.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace ExcelReportGenerator.Rendering.Providers
 {
     /// <summary>
-    /// Default implementation of <see cref="IInstanceProvider" /> 
+    /// Default implementation of <see cref="IInstanceProvider" />
     /// </summary>
-    [LicenceKeyPart(L = true)]
     public class DefaultInstanceProvider : IInstanceProvider
     {
         private readonly IDictionary<Type, object> _instanceCache = new Dictionary<Type, object>();

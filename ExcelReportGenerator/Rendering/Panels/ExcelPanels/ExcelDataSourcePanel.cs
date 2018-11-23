@@ -37,15 +37,12 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             _isDataReceivedDirectly = true;
         }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string GroupBy { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string BeforeDataItemRenderMethodName { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string AfterDataItemRenderMethodName { get; set; }
 

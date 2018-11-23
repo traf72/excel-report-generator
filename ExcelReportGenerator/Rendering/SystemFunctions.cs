@@ -3,14 +3,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using ExcelReportGenerator.Attributes;
 
 namespace ExcelReportGenerator.Rendering
 {
     /// <summary>
     /// System functions that can be called from Excel-template
     /// </summary>
-    [LicenceKeyPart(L = true)]
     public class SystemFunctions
     {
         /// <summary>

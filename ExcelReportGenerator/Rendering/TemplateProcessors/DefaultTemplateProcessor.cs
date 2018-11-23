@@ -5,14 +5,12 @@ using ExcelReportGenerator.Rendering.Providers;
 using ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
 using ExcelReportGenerator.Rendering.Providers.VariableProviders;
 using System;
-using ExcelReportGenerator.Attributes;
 
 namespace ExcelReportGenerator.Rendering.TemplateProcessors
 {
     /// <summary>
-    /// Default implementation of <see cref="ITemplateProcessor" /> 
+    /// Default implementation of <see cref="ITemplateProcessor" />
     /// </summary>
-    [LicenceKeyPart(U = true)]
     public class DefaultTemplateProcessor : ITemplateProcessor
     {
         /// <param name="propertyValueProvider">See <see cref="IPropertyValueProvider" /></param>
@@ -29,22 +27,22 @@ namespace ExcelReportGenerator.Rendering.TemplateProcessors
         }
 
         /// <summary>
-        /// See <see cref="IPropertyValueProvider" /> 
+        /// See <see cref="IPropertyValueProvider" />
         /// </summary>
         protected IPropertyValueProvider PropertyValueProvider { get; }
 
         /// <summary>
-        /// See <see cref="Providers.VariableProviders.SystemVariableProvider" /> 
+        /// See <see cref="Providers.VariableProviders.SystemVariableProvider" />
         /// </summary>
         protected SystemVariableProvider SystemVariableProvider { get; }
 
         /// <summary>
-        /// See <see cref="IGenericDataItemValueProvider{T}" /> 
+        /// See <see cref="IGenericDataItemValueProvider{T}" />
         /// </summary>
         protected IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider { get; }
 
         /// <summary>
-        /// See <see cref="IMethodCallValueProvider" /> 
+        /// See <see cref="IMethodCallValueProvider" />
         /// </summary>
         protected IMethodCallValueProvider MethodCallValueProvider { get; }
 

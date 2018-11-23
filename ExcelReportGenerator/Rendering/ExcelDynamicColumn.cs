@@ -1,13 +1,11 @@
 ﻿using ExcelReportGenerator.Enums;
 using System;
-using ExcelReportGenerator.Attributes;
 
 namespace ExcelReportGenerator.Rendering
 {
     /// <summary>
     /// Describes excel dynamic column
     /// </summary>
-    [LicenceKeyPart(L = true, U = true)]
     public class ExcelDynamicColumn
     {
         private string _caption;

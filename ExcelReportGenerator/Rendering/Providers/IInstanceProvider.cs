@@ -1,12 +1,10 @@
-﻿using ExcelReportGenerator.Attributes;
-using System;
+﻿using System;
 
 namespace ExcelReportGenerator.Rendering.Providers
 {
     /// <summary>
     /// Provides instances for templates
     /// </summary>
-    [LicenceKeyPart]
     public interface IInstanceProvider
     {
         /// <summary>

@@ -1,7 +1,6 @@
 ﻿using ExcelReportGenerator.Exceptions;
 using ExcelReportGenerator.Helpers;
 using System;
-using ExcelReportGenerator.Attributes;
 
 namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
 {
@@ -9,7 +8,6 @@ namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
     /// Default implementation of <see cref="IGenericDataItemValueProvider{T}" />
     /// Provides values from hierarchical data item
     /// </summary>
-    [LicenceKeyPart(U = true)]
     public class DefaultDataItemValueProvider : IGenericDataItemValueProvider<HierarchicalDataItem>
     {
         private readonly IDataItemValueProviderFactory _factory;
@@ -25,7 +23,6 @@ namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
 
         // Get or set the template if you want to return the data item itself
         internal string DataItemSelfTemplate { get; set; }
-
 
         /// <inheritdoc />
         /// <exception cref="ArgumentException">Thrown when <paramref name="template" /> is null, empty string or whitespace</exception>

@@ -28,51 +28,39 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
         {
         }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string BeforeHeadersRenderMethodName { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string AfterHeadersRenderMethodName { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string BeforeNumbersRenderMethodName { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string AfterNumbersRenderMethodName { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string BeforeDataTemplatesRenderMethodName { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string AfterDataTemplatesRenderMethodName { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string BeforeDataRenderMethodName { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string AfterDataRenderMethodName { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string BeforeTotalsTemplatesRenderMethodName { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string AfterTotalsTemplatesRenderMethodName { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string BeforeTotalsRenderMethodName { get; set; }
 
-        [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
         [ExternalProperty]
         public string AfterTotalsRenderMethodName { get; set; }
 
@@ -456,19 +444,16 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
         private class ColumnNumbersHelper
         {
-            [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
             public int Number { get; set; }
         }
 
         private class DataTemplatesHelper
         {
-            [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
             public string Template { get; set; }
         }
 
         private class TotalsTemplatesHelper
         {
-            [System.Reflection.Obfuscation(Exclude = true, Feature = "renaming")]
             public string Totals { get; set; }
         }
     }

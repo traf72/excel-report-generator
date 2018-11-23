@@ -1,11 +1,8 @@
-﻿using ExcelReportGenerator.Attributes;
-
-namespace ExcelReportGenerator.Rendering
+﻿namespace ExcelReportGenerator.Rendering
 {
     /// <summary>
     /// Allow to configure panel parsing settings
     /// </summary>
-    [LicenceKeyPart(R = true)]
     public class PanelParsingSettings
     {
         /// <summary>

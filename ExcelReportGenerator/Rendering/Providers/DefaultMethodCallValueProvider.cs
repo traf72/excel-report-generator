@@ -9,14 +9,12 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using ExcelReportGenerator.Attributes;
 
 namespace ExcelReportGenerator.Rendering.Providers
 {
     /// <summary>
-    /// Default implementation of <see cref="IMethodCallValueProvider" /> 
+    /// Default implementation of <see cref="IMethodCallValueProvider" />
     /// </summary>
-    [LicenceKeyPart]
     public class DefaultMethodCallValueProvider : IMethodCallValueProvider
     {
         private readonly Stack<string> _templateStack = new Stack<string>();
