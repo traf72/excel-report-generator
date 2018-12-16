@@ -23,13 +23,13 @@ namespace ExcelReportGenerator.Tests.Extensions
             ws.Cell(25, 30).FormulaA1 = "=A1+B2";
 
             Assert.AreEqual(5, ws.CellsUsed().Count());
-            Assert.AreEqual(6, ws.CellsUsed(true).Count());
+            Assert.AreEqual(6, ws.CellsUsed(XLCellsUsedOptions.All).Count());
             Assert.AreEqual(2, ws.CellsUsedWithoutFormulas().Count());
-            Assert.AreEqual(3, ws.CellsUsedWithoutFormulas(true).Count());
+            Assert.AreEqual(3, ws.CellsUsedWithoutFormulas(XLCellsUsedOptions.All).Count());
             Assert.AreEqual(2, ws.CellsUsed(c => c.Active || c.Style.Border.TopBorder == XLBorderStyleValues.Thin).Count());
             Assert.AreEqual(1, ws.CellsUsedWithoutFormulas(c => c.Active || c.Style.Border.TopBorder == XLBorderStyleValues.Thin).Count());
-            Assert.AreEqual(3, ws.CellsUsed(true, c => c.Active || c.Style.Border.TopBorder == XLBorderStyleValues.Thin).Count());
-            Assert.AreEqual(2, ws.CellsUsedWithoutFormulas(true, c => c.Active || c.Style.Border.TopBorder == XLBorderStyleValues.Thin).Count());
+            Assert.AreEqual(3, ws.CellsUsed(XLCellsUsedOptions.All, c => c.Active || c.Style.Border.TopBorder == XLBorderStyleValues.Thin).Count());
+            Assert.AreEqual(2, ws.CellsUsedWithoutFormulas(XLCellsUsedOptions.All, c => c.Active || c.Style.Border.TopBorder == XLBorderStyleValues.Thin).Count());
         }
 
         [Test]

@@ -1,13 +1,14 @@
-﻿using System.Linq;
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
 using NUnit.Framework;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourceDynamicPanelRenderTests
 {
-    
     public class DataSourceDynamicPanelDataSetRenderTest
     {
         [Test]
@@ -45,14 +46,15 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.AreEqual(ws.Range(2, 2, 7, 8), panel.ResultRange);
 
-            // Bug of ClosedXml - invalid determine of FirstCellUsed and LastCellUsed if merged ranges exist
-            ws.Cell(1, 1).Value = "Stub";
-            ws.Range(1, 1, 1, 1).Merge();
-            ws.Cell(8, 9).Value = "Stub";
-            ws.Range(8, 9, 8, 9).Merge();
+            // The test doesn't pass if we compare the expected workbook with the in-memory workbook (since ClosedXml 0.94.0)
+            string actualWorkbookName = $"{Guid.NewGuid()}.xlsx";
+            report.Workbook.SaveAs(actualWorkbookName);
+            var actualWorkbook = new XLWorkbook(actualWorkbookName);
 
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataSetRenderTest),
-                nameof(TestRenderDataSetWithEvents)), ws.Workbook);
+                nameof(TestRenderDataSetWithEvents)), actualWorkbook);
+
+            File.Delete(actualWorkbookName);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -90,8 +92,15 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.AreEqual(ws.Range(2, 2, 8, 6), panel.ResultRange);
 
+            // The test doesn't pass if we compare the expected workbook with the in-memory workbook (since ClosedXml 0.94.0)
+            string actualWorkbookName = $"{Guid.NewGuid()}.xlsx";
+            report.Workbook.SaveAs(actualWorkbookName);
+            var actualWorkbook = new XLWorkbook(actualWorkbookName);
+
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataSetRenderTest),
-                nameof(TestRenderDataSetWithEvents_HorizontalPanel)), ws.Workbook);
+                nameof(TestRenderDataSetWithEvents_HorizontalPanel)), actualWorkbook);
+
+            File.Delete(actualWorkbookName);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
