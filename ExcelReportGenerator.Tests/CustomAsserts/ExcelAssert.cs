@@ -13,13 +13,13 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
                 return;
             }
 
-            Assert.AreEqual(expected.CellsUsed(true).Count(), actual.CellsUsed(true).Count(), "Cells used count failed");
+            Assert.AreEqual(expected.CellsUsed(XLCellsUsedOptions.All).Count(), actual.CellsUsed(XLCellsUsedOptions.All).Count(), "Cells used count failed");
 
-            IXLCell expectedFirstCellUsed = expected.FirstCellUsed(true);
-            IXLCell actualFirstCellUsed = actual.FirstCellUsed(true);
+            IXLCell expectedFirstCellUsed = expected.FirstCellUsed(XLCellsUsedOptions.All);
+            IXLCell actualFirstCellUsed = actual.FirstCellUsed(XLCellsUsedOptions.All);
             Assert.AreEqual(expectedFirstCellUsed.Address, actualFirstCellUsed.Address, "First cell used failed");
-            IXLCell expectedLastCellUsed = expected.LastCellUsed(true);
-            IXLCell actualLastCellUsed = actual.LastCellUsed(true);
+            IXLCell expectedLastCellUsed = expected.LastCellUsed(XLCellsUsedOptions.All);
+            IXLCell actualLastCellUsed = actual.LastCellUsed(XLCellsUsedOptions.All);
             Assert.AreEqual(expectedLastCellUsed.Address, actualLastCellUsed.Address, "Last cell used failed");
 
             IXLRange range = expected.Range(expectedFirstCellUsed, expectedLastCellUsed);

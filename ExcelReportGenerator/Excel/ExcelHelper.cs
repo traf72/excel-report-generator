@@ -280,7 +280,7 @@ namespace ExcelReportGenerator.Excel
                 range.FirstColumn().ColumnNumber();
                 range.LastColumn().ColumnNumber();
             }
-            catch (IndexOutOfRangeException)
+            catch (ArgumentOutOfRangeException)
             {
                 return true;
             }

@@ -15,14 +15,14 @@ namespace ExcelReportGenerator.Extensions
             return range.CellsUsed(c => predicate(c) && !c.HasFormula);
         }
 
-        public static IXLCells CellsUsedWithoutFormulas(this IXLRangeBase range, bool includeFormats)
+        public static IXLCells CellsUsedWithoutFormulas(this IXLRangeBase range, XLCellsUsedOptions options)
         {
-            return range.CellsUsed(includeFormats, c => !c.HasFormula);
+            return range.CellsUsed(options, c => !c.HasFormula);
         }
 
-        public static IXLCells CellsUsedWithoutFormulas(this IXLRangeBase range, bool includeFormats, Func<IXLCell, bool> predicate)
+        public static IXLCells CellsUsedWithoutFormulas(this IXLRangeBase range, XLCellsUsedOptions options, Func<IXLCell, bool> predicate)
         {
-            return range.CellsUsed(includeFormats, c => predicate(c) && !c.HasFormula);
+            return range.CellsUsed(options, c => predicate(c) && !c.HasFormula);
         }
 
         public static IXLCells CellsWithoutFormulas(this IXLRangeBase range)
