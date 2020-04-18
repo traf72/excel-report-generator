@@ -5,6 +5,7 @@ bin
 obj
 *.suo
 /.vs
+/.idea
 /ExcelReportGenerator.Samples/Database
 ~$*
 /Dotfuscated
