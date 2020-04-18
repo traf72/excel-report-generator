@@ -9,7 +9,7 @@ using System.Reflection;
 namespace ExcelReportGenerator.Tests.Rendering.Providers
 {
     
-    public class DefaulTypeProviderTest
+    public class DefaultTypeProviderTest
     {
         [Test]
         public void TestGetType()

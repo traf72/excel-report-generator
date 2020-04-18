@@ -8,8 +8,8 @@
             LastCell = lastCell;
         }
 
-        public CellCoords FirstCell { get; set; }
+        public CellCoords FirstCell { get; }
 
-        public CellCoords LastCell { get; set; }
+        public CellCoords LastCell { get; }
     }
 }

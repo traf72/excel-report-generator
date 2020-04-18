@@ -64,7 +64,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             var panel1 = new ExcelDataSourcePanel("m:DataProvider:GetDictionaryEnumerable()", ws.NamedRange("TestRange1"), report, report.TemplateProcessor);
             panel1.Render();
 
-            var dictWihtDecimalValues = new List<IDictionary<string, decimal>>
+            var dictWithDecimalValues = new List<IDictionary<string, decimal>>
             {
                 new Dictionary<string, decimal> { ["Value"] = 25.7m },
                 new Dictionary<string, decimal> { ["Value"] = 250.7m },
@@ -76,7 +76,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             ws.Cell(2, 6).Value = "{di:Value}";
 
-            var panel2 = new ExcelDataSourcePanel(dictWihtDecimalValues, ws.NamedRange("TestRange2"), report, report.TemplateProcessor);
+            var panel2 = new ExcelDataSourcePanel(dictWithDecimalValues, ws.NamedRange("TestRange2"), report, report.TemplateProcessor);
             panel2.Render();
 
             Assert.AreEqual(ws.Range(2, 2, 4, 4), panel1.ResultRange);

@@ -7,7 +7,7 @@ namespace ExcelReportGenerator.Tests.Extensions
 {
     public class DataReaderExtensionsTest
     {
-        private readonly string _conStr = Configuration.TestDbConectionString;
+        private readonly string _conStr = Configuration.TestDbConnectionString;
 
         [Test]
         public void TestSafeGetValue()

@@ -13,7 +13,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
         [Test]
         public void TestGetColumnsList()
         {
-            IGenericColumnsProvider<DataTable> dataTableColumsProvider = Substitute.For<IGenericColumnsProvider<DataTable>>();
+            IGenericColumnsProvider<DataTable> dataTableColumnsProvider = Substitute.For<IGenericColumnsProvider<DataTable>>();
 
             var dataTable1 = new DataTable("Table1");
             var dataTable2 = new DataTable("Table2");
@@ -22,21 +22,21 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
                 Tables = { dataTable1, dataTable2 }
             };
 
-            IColumnsProvider columnsProvider = new DataSetColumnsProvider(dataTableColumsProvider);
+            IColumnsProvider columnsProvider = new DataSetColumnsProvider(dataTableColumnsProvider);
             columnsProvider.GetColumnsList(dataSet);
-            dataTableColumsProvider.Received(1).GetColumnsList(dataTable1);
+            dataTableColumnsProvider.Received(1).GetColumnsList(dataTable1);
 
-            dataTableColumsProvider.ClearReceivedCalls();
+            dataTableColumnsProvider.ClearReceivedCalls();
 
-            columnsProvider = new DataSetColumnsProvider(dataTableColumsProvider, "Table2");
+            columnsProvider = new DataSetColumnsProvider(dataTableColumnsProvider, "Table2");
             columnsProvider.GetColumnsList(dataSet);
-            dataTableColumsProvider.Received(1).GetColumnsList(dataTable2);
+            dataTableColumnsProvider.Received(1).GetColumnsList(dataTable2);
 
-            dataTableColumsProvider.ClearReceivedCalls();
+            dataTableColumnsProvider.ClearReceivedCalls();
 
-            columnsProvider = new DataSetColumnsProvider(dataTableColumsProvider, "BadTable");
+            columnsProvider = new DataSetColumnsProvider(dataTableColumnsProvider, "BadTable");
             Assert.AreEqual(0, columnsProvider.GetColumnsList(dataSet).Count);
-            dataTableColumsProvider.DidNotReceiveWithAnyArgs().GetColumnsList(Arg.Any<DataTable>());
+            dataTableColumnsProvider.DidNotReceiveWithAnyArgs().GetColumnsList(Arg.Any<DataTable>());
         }
 
         [Test]

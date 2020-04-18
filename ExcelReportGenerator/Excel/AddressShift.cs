@@ -8,8 +8,8 @@
             ColCount = colCount;
         }
 
-        public int RowCount { get; set; }
+        public int RowCount { get; }
 
-        public int ColCount { get; set; }
+        public int ColCount { get; }
     }
 }

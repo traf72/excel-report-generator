@@ -80,13 +80,13 @@ namespace ExcelReportGenerator.Rendering.Providers
             ParameterInfo[] methodParameters = method.GetParameters();
             if (inputParameters.Count > methodParameters.Length)
             {
-                throw new InvalidOperationException($"Mismatch parameters count. Input pararameters count: {inputParameters.Count}. Method parameters count: {methodParameters.Length}. MethodCallTemplate: {MethodCallTemplate}");
+                throw new InvalidOperationException($"Mismatch parameters count. Input parameters count: {inputParameters.Count}. Method parameters count: {methodParameters.Length}. MethodCallTemplate: {MethodCallTemplate}");
             }
 
             ParameterInfo[] requiredParams = methodParameters.Where(p => !p.IsOptional).ToArray();
             if (inputParameters.Count < requiredParams.Length)
             {
-                throw new InvalidOperationException($"Mismatch parameters count. Input pararameters count: {inputParameters.Count}. Method required parameters count: {requiredParams.Length}. MethodCallTemplate: {MethodCallTemplate}");
+                throw new InvalidOperationException($"Mismatch parameters count. Input parameters count: {inputParameters.Count}. Method required parameters count: {requiredParams.Length}. MethodCallTemplate: {MethodCallTemplate}");
             }
 
             object[] callParams = methodParameters.Select(p => p.HasDefaultValue() ? p.DefaultValue : null).ToArray();

@@ -15,7 +15,7 @@ namespace ExcelReportGenerator.Tests
             _configuration = builder.Build();
         }
 
-        public static string TestDbConectionString
+        public static string TestDbConnectionString
         {
             get
             {

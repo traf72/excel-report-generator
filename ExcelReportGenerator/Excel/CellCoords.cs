@@ -8,8 +8,8 @@
             ColNum = colNum;
         }
 
-        public int RowNum { get; set; }
+        public int RowNum { get; }
 
-        public int ColNum { get; set; }
+        public int ColNum { get; }
     }
 }

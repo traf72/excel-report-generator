@@ -26,7 +26,7 @@ namespace ExcelReportGenerator.Rendering
         /// <summary>
         /// Column name from data source
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; }
 
         /// <summary>
         /// Column caption which will be displayed in excel sheet
@@ -34,7 +34,7 @@ namespace ExcelReportGenerator.Rendering
         public string Caption
         {
             get => string.IsNullOrWhiteSpace(_caption) ? Name : _caption;
-            set => _caption = value;
+            private set => _caption = value;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace ExcelReportGenerator.Rendering
         /// <summary>
         /// Column data type
         /// </summary>
-        public Type DataType { get; set; }
+        public Type DataType { get; }
 
         /// <summary>
         /// Aggregate function applied to this column

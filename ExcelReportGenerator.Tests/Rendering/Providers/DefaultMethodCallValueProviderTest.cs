@@ -450,8 +450,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers
             ExceptionAssert.Throws<FormatException>(() => methodCallValueProvider.CallMethod("Method3([int]str, str2, 127)", templateProcessor, null));
             ExceptionAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method3([int33]15)", templateProcessor, null), "Type \"int33\" is not supported");
             ExceptionAssert.Throws<OverflowException>(() => methodCallValueProvider.CallMethod("Method3(15, str2, 200)", templateProcessor, null));
-            ExceptionAssert.Throws<InvalidOperationException>(() => methodCallValueProvider.CallMethod("Method3()", templateProcessor, null), "Mismatch parameters count. Input pararameters count: 0. Method required parameters count: 1. MethodCallTemplate: Method3()");
-            ExceptionAssert.Throws<InvalidOperationException>(() => methodCallValueProvider.CallMethod("Method3(1, 2, 3, 4)", templateProcessor, null), "Mismatch parameters count. Input pararameters count: 4. Method parameters count: 3. MethodCallTemplate: Method3(1, 2, 3, 4)");
+            ExceptionAssert.Throws<InvalidOperationException>(() => methodCallValueProvider.CallMethod("Method3()", templateProcessor, null), "Mismatch parameters count. Input parameters count: 0. Method required parameters count: 1. MethodCallTemplate: Method3()");
+            ExceptionAssert.Throws<InvalidOperationException>(() => methodCallValueProvider.CallMethod("Method3(1, 2, 3, 4)", templateProcessor, null), "Mismatch parameters count. Input parameters count: 4. Method parameters count: 3. MethodCallTemplate: Method3(1, 2, 3, 4)");
 
             ExceptionAssert.Throws<NotSupportedException>(() => methodCallValueProvider.CallMethod("Method4([int]15)", templateProcessor, null), "Methods which have \"params\" argument are not supported. MethodCallTemplate: Method4([int]15)");
             ExceptionAssert.Throws<MethodNotFoundException>(() => methodCallValueProvider.CallMethod("Method5()", templateProcessor, null), "Could not find public method \"Method5\" in type \"TestOverloading\" and all its parents. MethodCallTemplate: Method5()");

@@ -70,37 +70,37 @@ namespace ExcelReportGenerator.Rendering
         /// <summary>
         /// Type provider. Default value is instance of <see cref="DefaultTypeProvider"/>
         /// </summary>
-        public virtual ITypeProvider TypeProvider => _typeProvider ?? (_typeProvider = new DefaultTypeProvider(defaultType: Report.GetType()));
+        public virtual ITypeProvider TypeProvider => _typeProvider ??= new DefaultTypeProvider(defaultType: Report.GetType());
 
         /// <summary>
         /// Instance provider. Default value is instance of <see cref="DefaultInstanceProvider"/>
         /// </summary>
-        public virtual IInstanceProvider InstanceProvider => _instanceProvider ?? (_instanceProvider = new DefaultInstanceProvider(Report));
+        public virtual IInstanceProvider InstanceProvider => _instanceProvider ??= new DefaultInstanceProvider(Report);
 
         /// <summary>
         /// Property value provider. Default value is instance of <see cref="DefaultPropertyValueProvider"/>
         /// </summary>
-        public virtual IPropertyValueProvider PropertyValueProvider => _propertyValueProvider ?? (_propertyValueProvider = new DefaultPropertyValueProvider(TypeProvider, InstanceProvider));
+        public virtual IPropertyValueProvider PropertyValueProvider => _propertyValueProvider ??= new DefaultPropertyValueProvider(TypeProvider, InstanceProvider);
 
         /// <summary>
         /// Method call value provider. Default value is instance of <see cref="DefaultMethodCallValueProvider"/>
         /// </summary>
-        public virtual IMethodCallValueProvider MethodCallValueProvider => _methodCallValueProvider ?? (_methodCallValueProvider = new DefaultMethodCallValueProvider(TypeProvider, InstanceProvider));
+        public virtual IMethodCallValueProvider MethodCallValueProvider => _methodCallValueProvider ??= new DefaultMethodCallValueProvider(TypeProvider, InstanceProvider);
 
         /// <summary>
         /// Data item value provider. Default value is instance of <see cref="DefaultDataItemValueProvider"/>
         /// </summary>
-        public virtual IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider => _dataItemValueProvider ?? (_dataItemValueProvider = new DefaultDataItemValueProvider());
+        public virtual IGenericDataItemValueProvider<HierarchicalDataItem> DataItemValueProvider => _dataItemValueProvider ??= new DefaultDataItemValueProvider();
 
         /// <summary>
         /// Template processor. Default value is instance of <see cref="DefaultTemplateProcessor"/>
         /// </summary>
-        public virtual ITemplateProcessor TemplateProcessor => _templateProcessor ?? (_templateProcessor = new DefaultTemplateProcessor(PropertyValueProvider, SystemVariableProvider, MethodCallValueProvider, DataItemValueProvider));
+        public virtual ITemplateProcessor TemplateProcessor => _templateProcessor ??= new DefaultTemplateProcessor(PropertyValueProvider, SystemVariableProvider, MethodCallValueProvider, DataItemValueProvider);
 
         /// <summary>
         /// See <see cref="Rendering.PanelParsingSettings"/>
         /// </summary>
-        public virtual PanelParsingSettings PanelParsingSettings => _panelParsingSettings ?? (_panelParsingSettings = new PanelParsingSettings
+        public virtual PanelParsingSettings PanelParsingSettings => _panelParsingSettings ??= new PanelParsingSettings
         {
             PanelPrefixSeparator = "_",
             SimplePanelPrefix = "s",
@@ -109,9 +109,9 @@ namespace ExcelReportGenerator.Rendering
             TotalsPanelPrefix = "t",
             PanelPropertiesSeparators = new[] { Environment.NewLine, "\t", ";" },
             PanelPropertyNameValueSeparator = "=",
-        });
+        };
 
-        private IPanelPropertiesParser PanelPropertiesParser => _panelPropertiesParser ?? (_panelPropertiesParser = new DefaultPanelPropertiesParser(PanelParsingSettings));
+        private IPanelPropertiesParser PanelPropertiesParser => _panelPropertiesParser ??= new DefaultPanelPropertiesParser(PanelParsingSettings);
 
         private string PanelsRegexPattern
         {

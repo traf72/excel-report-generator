@@ -238,7 +238,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             XLWorkbook wb = report.Workbook;
             IXLWorksheet sheet1 = wb.AddWorksheet("Sheet1");
             IXLWorksheet sheet2 = wb.AddWorksheet("Sheet2");
-            var reprotGenerator = new TestReportGenerator(report);
+            var reportGenerator = new TestReportGenerator(report);
 
             IXLRange parentRange = sheet1.Range(2, 2, 3, 5);
             parentRange.AddToNamed("d_Parent", XLScope.Worksheet);
@@ -306,7 +306,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             sheet2.Cell(2, 10).Value = "{sv:SheetName}";
             sheet2.Cell(3, 10).Value = "{sv:SheetNumber}";
 
-            reprotGenerator.Render(wb);
+            reportGenerator.Render(wb);
 
             ExcelAssert.AreWorkbooksContentEquals(
                 TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRender)), wb);
@@ -320,10 +320,10 @@ namespace ExcelReportGenerator.Tests.Rendering
             var report = new TestReport();
             XLWorkbook wb = report.Workbook;
             IXLWorksheet sheet1 = wb.AddWorksheet("Sheet1");
-            var reprotGenerator = new TestReportGenerator(report);
+            var reportGenerator = new TestReportGenerator(report);
 
-            reprotGenerator.BeforeReportRender += (sender, args) => args.Workbook.AddWorksheet("DynamicSheet");
-            reprotGenerator.BeforeWorksheetRender += (sender, args) =>
+            reportGenerator.BeforeReportRender += (sender, args) => args.Workbook.AddWorksheet("DynamicSheet");
+            reportGenerator.BeforeWorksheetRender += (sender, args) =>
             {
                 if (args.Worksheet.Name == "DynamicSheet")
                 {
@@ -332,7 +332,7 @@ namespace ExcelReportGenerator.Tests.Rendering
                 }
             };
 
-            reprotGenerator.AfterWorksheetRender += (sender, args) =>
+            reportGenerator.AfterWorksheetRender += (sender, args) =>
             {
                 if (args.Worksheet.Name == "Sheet1")
                 {
@@ -342,7 +342,7 @@ namespace ExcelReportGenerator.Tests.Rendering
 
             sheet1.Cell(2, 2).Value = "{sv:SheetNumber}";
 
-            reprotGenerator.Render(wb);
+            reportGenerator.Render(wb);
 
             ExcelAssert.AreWorkbooksContentEquals(
                 TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRenderWithEvents)), wb);
@@ -357,7 +357,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             XLWorkbook wb = report.Workbook;
             IXLWorksheet sheet1 = wb.AddWorksheet("Sheet1");
             IXLWorksheet sheet2 = wb.AddWorksheet("Sheet2");
-            var reprotGenerator = new TestReportGenerator2(report);
+            var reportGenerator = new TestReportGenerator2(report);
 
             IXLRange parentRange = sheet1.Range(2, 2, 3, 5);
             parentRange.AddToNamed("d_Parent", XLScope.Worksheet);
@@ -416,7 +416,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             sheet2.Cell(1, 1).Value = " { m:Format ( p:DateParam ) } ";
             sheet2.Cell(7, 1).Value = "{P:BoolParam}";
 
-            reprotGenerator.Render(wb, new[] {sheet1});
+            reportGenerator.Render(wb, new[] {sheet1});
 
             ExcelAssert.AreWorkbooksContentEquals(
                 TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRenderPartialWorksheets)),
@@ -431,7 +431,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             var report = new TestReport();
             XLWorkbook wb = report.Workbook;
             IXLWorksheet sheet1 = wb.AddWorksheet("Sheet1");
-            var reprotGenerator = new TestReportGenerator(report)
+            var reportGenerator = new TestReportGenerator(report)
             {
                 SystemVariableProvider = new VariableProvider(),
                 SystemFunctionsType = typeof(Functions),
@@ -444,7 +444,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             sheet1.Cell(2, 6).Value = "{sf:StaticFunc(p:IntParam)}";
             sheet1.Cell(2, 7).Value = "{sf:InstanceFunc(p:IntParam)}";
 
-            reprotGenerator.Render(wb);
+            reportGenerator.Render(wb);
 
             ExcelAssert.AreWorkbooksContentEquals(
                 TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest),
@@ -461,10 +461,9 @@ namespace ExcelReportGenerator.Tests.Rendering
             {
             }
 
-            public override ITypeProvider TypeProvider => _typeProvider ?? (_typeProvider =
-                                                              new DefaultTypeProvider(
-                                                                  new[] {Assembly.GetExecutingAssembly()},
-                                                                  Report.GetType()));
+            public override ITypeProvider TypeProvider => _typeProvider ??= new DefaultTypeProvider(
+                new[] {Assembly.GetExecutingAssembly()},
+                Report.GetType());
         }
 
         private class TestReportGenerator2 : TestReportGenerator
@@ -476,8 +475,8 @@ namespace ExcelReportGenerator.Tests.Rendering
             }
 
             public override ITemplateProcessor TemplateProcessor =>
-                _templateProcessor ?? (_templateProcessor = new TemplateProcessor(PropertyValueProvider,
-                    SystemVariableProvider, MethodCallValueProvider, DataItemValueProvider));
+                _templateProcessor ??= new TemplateProcessor(PropertyValueProvider,
+                    SystemVariableProvider, MethodCallValueProvider, DataItemValueProvider);
         }
 
         private class VariableProvider : SystemVariableProvider

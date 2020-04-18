@@ -60,7 +60,7 @@ namespace ExcelReportGenerator.Tests.Rendering
 
         static DataProvider()
         {
-            _conStr = Configuration.TestDbConectionString;
+            _conStr = Configuration.TestDbConnectionString;
         }
 
         public TestItem GetSingleItem()
@@ -131,28 +131,24 @@ namespace ExcelReportGenerator.Tests.Rendering
 
         public DataSet GetAllCustomersDataSet()
         {
-            using (var conn = new SqlConnection(_conStr))
-            {
-                conn.Open();
-                var command = new SqlCommand(GetAllCustomersQuery(), conn);
-                var adapter = new SqlDataAdapter(command);
-                var ds = new DataSet();
-                adapter.Fill(ds);
-                return ds;
-            }
+            using var conn = new SqlConnection(_conStr);
+            conn.Open();
+            var command = new SqlCommand(GetAllCustomersQuery(), conn);
+            var adapter = new SqlDataAdapter(command);
+            var ds = new DataSet();
+            adapter.Fill(ds);
+            return ds;
         }
 
         public DataSet GetEmptyDataSet()
         {
-            using (var conn = new SqlConnection(_conStr))
-            {
-                conn.Open();
-                var command = new SqlCommand(GetNoCustomersQuery(), conn);
-                var adapter = new SqlDataAdapter(command);
-                var ds = new DataSet();
-                adapter.Fill(ds);
-                return ds;
-            }
+            using var conn = new SqlConnection(_conStr);
+            conn.Open();
+            var command = new SqlCommand(GetNoCustomersQuery(), conn);
+            var adapter = new SqlDataAdapter(command);
+            var ds = new DataSet();
+            adapter.Fill(ds);
+            return ds;
         }
 
         public IEnumerable<IDictionary<string, object>> GetDictionaryEnumerable()

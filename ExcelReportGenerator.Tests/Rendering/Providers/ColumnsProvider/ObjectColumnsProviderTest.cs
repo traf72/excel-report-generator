@@ -12,18 +12,18 @@ namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider
         [Test]
         public void TestGetColumnsList()
         {
-            IGenericColumnsProvider<Type> typeColumsProvider = Substitute.For<IGenericColumnsProvider<Type>>();
+            IGenericColumnsProvider<Type> typeColumnsProvider = Substitute.For<IGenericColumnsProvider<Type>>();
 
-            IColumnsProvider columnsProvider = new ObjectColumnsProvider(typeColumsProvider);
+            IColumnsProvider columnsProvider = new ObjectColumnsProvider(typeColumnsProvider);
             var testObject = new TypeColumnsProviderTest.TestType();
             columnsProvider.GetColumnsList(testObject);
-            typeColumsProvider.Received(1).GetColumnsList(testObject.GetType());
+            typeColumnsProvider.Received(1).GetColumnsList(testObject.GetType());
 
-            typeColumsProvider.ClearReceivedCalls();
+            typeColumnsProvider.ClearReceivedCalls();
 
             var str = "str";
             columnsProvider.GetColumnsList(str);
-            typeColumsProvider.Received(1).GetColumnsList(str.GetType());
+            typeColumnsProvider.Received(1).GetColumnsList(str.GetType());
         }
 
         [Test]

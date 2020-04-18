@@ -53,9 +53,9 @@ namespace ExcelReportGenerator.Excel
             return nearestParents.First();
         }
 
-        public static CellCoords GetCellCoordsRelativeRange(IXLRange range, IXLCell cell, bool checkСorrectness = true)
+        public static CellCoords GetCellCoordsRelativeRange(IXLRange range, IXLCell cell, bool checkCorrectness = true)
         {
-            if (checkСorrectness && !IsCellInsideRange(cell, range))
+            if (checkCorrectness && !IsCellInsideRange(cell, range))
             {
                 throw new InvalidOperationException($"Cell {cell} is outside of the range {range}");
             }
@@ -64,9 +64,9 @@ namespace ExcelReportGenerator.Excel
                 cell.Address.ColumnNumber - range.FirstColumn().ColumnNumber() + 1);
         }
 
-        public static RangeCoords GetRangeCoordsRelativeParent(IXLRange parentRange, IXLRange childRange, bool checkСorrectness = true)
+        public static RangeCoords GetRangeCoordsRelativeParent(IXLRange parentRange, IXLRange childRange, bool checkCorrectness = true)
         {
-            if (checkСorrectness && !IsRangeInsideAnotherRange(parentRange, childRange))
+            if (checkCorrectness && !IsRangeInsideAnotherRange(parentRange, childRange))
             {
                 throw new InvalidOperationException($"Range {parentRange} is not a parent of the range {childRange}. Child range is outside of the parent range.");
             }

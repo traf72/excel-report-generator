@@ -78,7 +78,7 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
                 return;
             }
 
-            message = message ?? string.Empty;
+            message ??= string.Empty;
             Assert.AreEqual(expected.IsHidden, actual.IsHidden, string.Format(message, "IsHidden"));
             Assert.AreEqual(expected.OutlineLevel, actual.OutlineLevel, string.Format(message, "OutlineLevel"));
             Assert.AreEqual(expected.Width, actual.Width, 1e-6, string.Format(message, "Width"));
@@ -91,7 +91,7 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
                 return;
             }
 
-            message = message ?? string.Empty;
+            message ??= string.Empty;
             Assert.AreEqual(expected.IsHidden, actual.IsHidden, string.Format(message, "IsHidden"));
             Assert.AreEqual(expected.OutlineLevel, actual.OutlineLevel, string.Format(message, "OutlineLevel"));
             Assert.AreEqual(expected.Height, actual.Height, 1e-6, string.Format(message, "Height"));
@@ -104,7 +104,7 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
                 return;
             }
 
-            message = message ?? string.Empty;
+            message ??= string.Empty;
             Assert.AreEqual(expected.Border, actual.Border, string.Format(message, "Border"));
             Assert.AreEqual(expected.Alignment, actual.Alignment, string.Format(message, "Alignment"));
             Assert.AreEqual(expected.DateFormat, actual.DateFormat, string.Format(message, "DateFormat"));
@@ -121,7 +121,7 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
                 return;
             }
 
-            message = message ?? string.Empty;
+            message ??= string.Empty;
             Assert.AreEqual(expected.Text, actual.Text, string.Format(message, "Text"));
             Assert.AreEqual(expected.Author, actual.Author, string.Format(message, "Author"));
             Assert.AreEqual(expected.Count, actual.Count, string.Format(message, "Count"));
@@ -172,7 +172,7 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
                 return;
             }
 
-            message = message ?? string.Empty;
+            message ??= string.Empty;
 
             Assert.AreEqual(expected.PagesTall, actual.PagesTall, string.Format(message, "PagesTall"));
             Assert.AreEqual(expected.PagesWide, actual.PagesWide, string.Format(message, "PagesWide"));

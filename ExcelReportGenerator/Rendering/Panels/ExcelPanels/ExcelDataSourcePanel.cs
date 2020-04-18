@@ -48,7 +48,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
         public override void Render()
         {
-            // Receieve parent data item context
+            // Receive parent data item context
             HierarchicalDataItem parentDataItem = GetDataContext();
 
             _data = _isDataReceivedDirectly ? _data : _templateProcessor.GetValue(_dataSourceTemplate, parentDataItem);
