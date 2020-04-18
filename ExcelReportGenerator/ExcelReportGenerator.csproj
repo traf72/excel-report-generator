@@ -6,14 +6,15 @@
     <Authors>Traf</Authors>
     <Company />
     <Description>The library ExcelReportGenerator allows you to render data to Microsoft Excel by marking Excel sheets using panels and templates. It allows you easily connecting to various data sources like IDataReader, DataSet, DataTable, IEnumerable&lt;T&gt;, etc, and render data from them to Excel. You can also apply to the data an aggregation, different types of grouping, formatting, etc. More detailed documentation you can find inside the project repository.</Description>
-    <Copyright>Copyright © Traf 2018</Copyright>
-    <AssemblyVersion>1.2.1</AssemblyVersion>
-    <FileVersion>1.2.1</FileVersion>
+    <Copyright>Copyright © Traf 2020</Copyright>
+    <AssemblyVersion>1.2.2</AssemblyVersion>
+    <FileVersion>1.2.2</FileVersion>
     <PackageTags>Excel Report Reports Reporting xlsx ClosedXml Spreadsheet Workbook Worksheet Generator</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.2.1</Version>
-    <PackageReleaseNotes>Support for ClosedXml 0.94.0</PackageReleaseNotes>
+    <Version>1.2.2</Version>
+    <PackageReleaseNotes>Support for ClosedXml 0.95.0</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/traf72/excel-report-generator</PackageProjectUrl>
+    <PackageVersion>1.2.2</PackageVersion>
   </PropertyGroup>
 
   <!--XML-Docs-->
