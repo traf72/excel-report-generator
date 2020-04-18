@@ -53,7 +53,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.IsNull(panel.ResultRange);
 
-            Assert.AreEqual(0, ws.CellsUsed().Count());
+            Assert.AreEqual(0, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
 
             Assert.AreEqual(0, ws.NamedRanges.Count());
             Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());

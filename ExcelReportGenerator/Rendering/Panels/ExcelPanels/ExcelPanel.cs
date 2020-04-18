@@ -85,7 +85,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 return;
             }
 
-            IList<IXLCell> childrenCells = Children.SelectMany(c => c.Range.CellsUsed()).ToList();
+            IList<IXLCell> childrenCells = Children.SelectMany(c => c.Range.CellsUsed(XLCellsUsedOptions.Contents)).ToList();
             string templatePattern = _templateProcessor.GetFullRegexPattern();
             foreach (IXLCell cell in Range.CellsUsedWithoutFormulas(c => !childrenCells.Contains(c)))
             {

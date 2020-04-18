@@ -22,7 +22,7 @@ namespace ExcelReportGenerator.Tests.Extensions
             ws.Cell(25, 30).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
             ws.Cell(25, 30).FormulaA1 = "=A1+B2";
 
-            Assert.AreEqual(5, ws.CellsUsed().Count());
+            Assert.AreEqual(5, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(6, ws.CellsUsed(XLCellsUsedOptions.All).Count());
             Assert.AreEqual(2, ws.CellsUsedWithoutFormulas().Count());
             Assert.AreEqual(3, ws.CellsUsedWithoutFormulas(XLCellsUsedOptions.All).Count());

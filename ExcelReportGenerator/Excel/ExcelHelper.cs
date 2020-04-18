@@ -220,9 +220,9 @@ namespace ExcelReportGenerator.Excel
             try
             {
                 tempWs = AddTempWorksheet(range.Worksheet.Workbook);
-                IXLRange tempRange = CopyRange(range, tempWs.FirstCell());
+                IXLRange tempRange = range.CopyTo(tempWs.FirstCell());
                 range.Clear();
-                return CopyRange(tempRange, cell);
+                return tempRange.CopyTo(cell);
             }
             finally
             {

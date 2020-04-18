@@ -311,7 +311,7 @@ namespace ExcelReportGenerator.Tests.Rendering
             ExcelAssert.AreWorkbooksContentEquals(
                 TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRender)), wb);
 
-            //wb.SaveAs("test.xlsx");
+            // wb.SaveAs("test.xlsx");
         }
 
         [Test]

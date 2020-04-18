@@ -46,15 +46,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.AreEqual(ws.Range(2, 2, 7, 8), panel.ResultRange);
 
-            // The test doesn't pass if we compare the expected workbook with the in-memory workbook (since ClosedXml 0.94.0)
-            string actualWorkbookName = $"{Guid.NewGuid()}.xlsx";
-            report.Workbook.SaveAs(actualWorkbookName);
-            var actualWorkbook = new XLWorkbook(actualWorkbookName);
-
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataSetRenderTest),
-                nameof(TestRenderDataSetWithEvents)), actualWorkbook);
-
-            File.Delete(actualWorkbookName);
+                nameof(TestRenderDataSetWithEvents)), ws.Workbook);
 
             //report.Workbook.SaveAs("test.xlsx");
         }
@@ -92,17 +85,10 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.AreEqual(ws.Range(2, 2, 8, 6), panel.ResultRange);
 
-            // The test doesn't pass if we compare the expected workbook with the in-memory workbook (since ClosedXml 0.94.0)
-            string actualWorkbookName = $"{Guid.NewGuid()}.xlsx";
-            report.Workbook.SaveAs(actualWorkbookName);
-            var actualWorkbook = new XLWorkbook(actualWorkbookName);
-
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelDataSetRenderTest),
-                nameof(TestRenderDataSetWithEvents_HorizontalPanel)), actualWorkbook);
-
-            File.Delete(actualWorkbookName);
-
-            //report.Workbook.SaveAs("test.xlsx");
+                nameof(TestRenderDataSetWithEvents_HorizontalPanel)), ws.Workbook);
+            
+            // report.Workbook.SaveAs("test.xlsx");
         }
 
         [Test]
@@ -125,7 +111,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.AreEqual(range, panel.ResultRange);
 
-            Assert.AreEqual(3, ws.CellsUsed().Count());
+            Assert.AreEqual(3, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual("CanceledHeaders", ws.Cell(2, 2).Value);
             Assert.AreEqual("CanceledData", ws.Cell(3, 2).Value);
             Assert.AreEqual("CanceledTotals", ws.Cell(4, 2).Value);

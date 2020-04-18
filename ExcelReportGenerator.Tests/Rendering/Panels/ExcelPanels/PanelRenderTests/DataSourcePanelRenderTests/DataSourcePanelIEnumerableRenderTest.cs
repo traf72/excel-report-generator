@@ -362,7 +362,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.AreEqual(range, panel.ResultRange);
 
-            Assert.AreEqual(1, ws.CellsUsed().Count());
+            Assert.AreEqual(1, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual("{di:di}", ws.Cell(2, 2).Value);
 
             //report.Workbook.SaveAs("test.xlsx");

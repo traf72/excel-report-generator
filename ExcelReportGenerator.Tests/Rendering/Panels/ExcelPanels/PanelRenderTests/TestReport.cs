@@ -31,7 +31,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
         public DateTime DateParam { get; } = new DateTime(2017, 10, 25);
 
-        public TimeSpan TimeSpanParam { get; set; } = new TimeSpan(36500, 22, 30, 40);
+        public TimeSpan TimeSpanParam { get; set; } = TimeSpan.FromHours(20);
 
         public ComplexType ComplexTypeParam { get; set; } = new ComplexType();
 

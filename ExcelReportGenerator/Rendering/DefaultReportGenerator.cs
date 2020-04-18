@@ -174,7 +174,7 @@ namespace ExcelReportGenerator.Rendering
 
                 OnBeforeWorksheetRender(new WorksheetRenderEventArgs { Worksheet = ws });
 
-                if (!ws.CellsUsed().Any())
+                if (!ws.CellsUsed(XLCellsUsedOptions.Contents).Any())
                 {
                     continue;
                 }

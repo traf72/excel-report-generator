@@ -313,7 +313,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
 
             Assert.IsNull(rangeStartCell);
             Assert.IsNull(rangeEndCell);
-            Assert.AreEqual(8, ws.CellsUsed().Count());
+            Assert.AreEqual(8, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(belowCell1, ws.Cell(6, 6));
             Assert.AreEqual(belowCell2, ws.Cell(10, 8));
             Assert.AreEqual(rightCell1, ws.Cell(7, 8));
@@ -346,7 +346,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.IsNull(rangeEndCell);
             Assert.IsNull(leftCell1);
             Assert.IsNull(rightCell1);
-            Assert.AreEqual(6, ws.CellsUsed().Count());
+            Assert.AreEqual(6, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(belowCell1, ws.Cell(6, 6));
             Assert.AreEqual(belowCell2, ws.Cell(6, 8));
             Assert.AreEqual(rightCell2, ws.Cell(5, 8));
@@ -375,7 +375,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
 
             Assert.IsNull(rangeStartCell);
             Assert.IsNull(rangeEndCell);
-            Assert.AreEqual(8, ws.CellsUsed().Count());
+            Assert.AreEqual(8, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(belowCell1, ws.Cell(10, 6));
             Assert.AreEqual(belowCell2, ws.Cell(10, 8));
             Assert.AreEqual(rightCell1, ws.Cell(7, 5));
@@ -408,7 +408,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.IsNull(rangeEndCell);
             Assert.IsNull(aboveCell1);
             Assert.IsNull(belowCell1);
-            Assert.AreEqual(6, ws.CellsUsed().Count());
+            Assert.AreEqual(6, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(belowCell2, ws.Cell(10, 5));
             Assert.AreEqual(rightCell1, ws.Cell(7, 5));
             Assert.AreEqual(rightCell2, ws.Cell(5, 5));
@@ -439,7 +439,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             Assert.IsNull(rangeEndCell);
             Assert.AreEqual(XLBorderStyleValues.None, range.FirstCell().Style.Border.TopBorder);
             Assert.AreEqual(XLBorderStyleValues.None, range.LastCell().Style.Border.BottomBorder);
-            Assert.AreEqual(8, ws.CellsUsed().Count());
+            Assert.AreEqual(8, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(belowCell1, ws.Cell(10, 6));
             Assert.AreEqual(belowCell2, ws.Cell(10, 8));
             Assert.AreEqual(rightCell1, ws.Cell(7, 8));

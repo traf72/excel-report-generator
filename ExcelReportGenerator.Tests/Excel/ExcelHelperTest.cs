@@ -195,11 +195,10 @@ namespace ExcelReportGenerator.Tests.Excel
 
             ws.Cell(11, 9).Value = DateTime.Now;
             ws.Cell(11, 9).DataType = XLDataType.DateTime;
-            //ws.Cell(11, 9).DataType = XLCellValues.DateTime;
 
             IXLRange newRange = ExcelHelper.CopyRange(range, ws.Cell(10, 8));
 
-            Assert.AreEqual(4, ws.CellsUsed().Count());
+            Assert.AreEqual(4, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(range.FirstCell(), ws.Cell(6, 5));
             Assert.AreEqual(range.LastCell(), ws.Cell(9, 7));
             Assert.AreEqual("RangeStart", range.FirstCell().Value.ToString());
@@ -213,12 +212,11 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(XLBorderStyleValues.Thin, newRange.FirstCell().Style.Border.TopBorder);
             Assert.AreEqual(XLBorderStyleValues.Thin, newRange.LastCell().Style.Border.BottomBorder);
             Assert.AreEqual(XLDataType.Text, ws.Cell(11, 9).DataType);
-            //Assert.AreEqual(XLCellValues.Text, ws.Cell(11, 9).DataType);
 
             range.Clear();
             IXLRange newRange2 = ExcelHelper.CopyRange(newRange, ws.Cell(11, 8));
 
-            Assert.AreEqual(3, ws.CellsUsed().Count());
+            Assert.AreEqual(3, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(newRange.FirstCell(), ws.Cell(10, 8));
             Assert.AreEqual(newRange.LastCell(), ws.Cell(13, 10));
             Assert.AreEqual("RangeStart", newRange.FirstCell().Value.ToString());
@@ -257,7 +255,7 @@ namespace ExcelReportGenerator.Tests.Excel
             IXLRange newRange = copiedNamedRange.Ranges.ElementAt(0);
 
             Assert.AreEqual(1, copiedNamedRange.Ranges.Count);
-            Assert.AreEqual(4, ws.CellsUsed().Count());
+            Assert.AreEqual(4, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(range.FirstCell(), ws.Cell(6, 5));
             Assert.AreEqual(range.LastCell(), ws.Cell(9, 7));
             Assert.AreEqual("RangeStart", range.FirstCell().Value.ToString());
@@ -278,7 +276,7 @@ namespace ExcelReportGenerator.Tests.Excel
             IXLRange newRange2 = copiedNamedRange2.Ranges.ElementAt(0);
 
             Assert.AreEqual(1, copiedNamedRange2.Ranges.Count);
-            Assert.AreEqual(3, ws.CellsUsed().Count());
+            Assert.AreEqual(3, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(newRange.FirstCell(), ws.Cell(10, 8));
             Assert.AreEqual(newRange.LastCell(), ws.Cell(13, 10));
             Assert.AreEqual("RangeStart", newRange.FirstCell().Value.ToString());
@@ -318,7 +316,7 @@ namespace ExcelReportGenerator.Tests.Excel
             IXLCell leftCell1 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_1");
             IXLCell leftCell2 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_2");
 
-            Assert.AreEqual(10, ws.CellsUsed().Count());
+            Assert.AreEqual(10, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(rangeStartCell, ws.Cell(10, 5));
             Assert.AreEqual(rangeEndCell, ws.Cell(13, 7));
             Assert.AreEqual(belowCell1, ws.Cell(14, 6));
@@ -349,7 +347,7 @@ namespace ExcelReportGenerator.Tests.Excel
             leftCell1 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_1");
             leftCell2 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_2");
 
-            Assert.AreEqual(10, ws.CellsUsed().Count());
+            Assert.AreEqual(10, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(rangeStartCell, ws.Cell(6, 5));
             Assert.AreEqual(rangeEndCell, ws.Cell(9, 7));
             Assert.AreEqual(belowCell1, ws.Cell(14, 6));
@@ -380,7 +378,7 @@ namespace ExcelReportGenerator.Tests.Excel
             leftCell1 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_1");
             leftCell2 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_2");
 
-            Assert.AreEqual(10, ws.CellsUsed().Count());
+            Assert.AreEqual(10, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(rangeStartCell, ws.Cell(10, 5));
             Assert.AreEqual(rangeEndCell, ws.Cell(13, 7));
             Assert.AreEqual(belowCell1, ws.Cell(14, 6));
@@ -411,7 +409,7 @@ namespace ExcelReportGenerator.Tests.Excel
             leftCell1 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_1");
             leftCell2 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_2");
 
-            Assert.AreEqual(10, ws.CellsUsed().Count());
+            Assert.AreEqual(10, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(rangeStartCell, ws.Cell(6, 5));
             Assert.AreEqual(rangeEndCell, ws.Cell(9, 7));
             Assert.AreEqual(belowCell1, ws.Cell(14, 6));
@@ -442,7 +440,7 @@ namespace ExcelReportGenerator.Tests.Excel
             leftCell1 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_1");
             leftCell2 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_2");
 
-            Assert.AreEqual(10, ws.CellsUsed().Count());
+            Assert.AreEqual(10, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(rangeStartCell, ws.Cell(6, 8));
             Assert.AreEqual(rangeEndCell, ws.Cell(9, 10));
             Assert.AreEqual(belowCell1, ws.Cell(10, 6));
@@ -473,7 +471,7 @@ namespace ExcelReportGenerator.Tests.Excel
             leftCell1 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_1");
             leftCell2 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_2");
 
-            Assert.AreEqual(10, ws.CellsUsed().Count());
+            Assert.AreEqual(10, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(rangeStartCell, ws.Cell(6, 5));
             Assert.AreEqual(rangeEndCell, ws.Cell(9, 7));
             Assert.AreEqual(belowCell1, ws.Cell(10, 6));
@@ -504,7 +502,7 @@ namespace ExcelReportGenerator.Tests.Excel
             leftCell1 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_1");
             leftCell2 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_2");
 
-            Assert.AreEqual(10, ws.CellsUsed().Count());
+            Assert.AreEqual(10, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(rangeStartCell, ws.Cell(6, 8));
             Assert.AreEqual(rangeEndCell, ws.Cell(9, 10));
             Assert.AreEqual(belowCell1, ws.Cell(10, 9));
@@ -535,7 +533,7 @@ namespace ExcelReportGenerator.Tests.Excel
             leftCell1 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_1");
             leftCell2 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_2");
 
-            Assert.AreEqual(10, ws.CellsUsed().Count());
+            Assert.AreEqual(10, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(rangeStartCell, ws.Cell(6, 5));
             Assert.AreEqual(rangeEndCell, ws.Cell(9, 7));
             Assert.AreEqual(belowCell1, ws.Cell(10, 6));
@@ -566,7 +564,7 @@ namespace ExcelReportGenerator.Tests.Excel
             leftCell1 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_1");
             leftCell2 = ws.Cells().Single(c => c.Value.ToString() == "LeftCell_2");
 
-            Assert.AreEqual(10, ws.CellsUsed().Count());
+            Assert.AreEqual(10, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(rangeStartCell, ws.Cell(6, 5));
             Assert.AreEqual(rangeEndCell, ws.Cell(9, 7));
             Assert.AreEqual(belowCell1, ws.Cell(10, 6));
@@ -604,7 +602,7 @@ namespace ExcelReportGenerator.Tests.Excel
 
             Assert.IsNull(rangeStartCell);
             Assert.IsNull(rangeEndCell);
-            Assert.AreEqual(8, ws.CellsUsed().Count());
+            Assert.AreEqual(8, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(belowCell1, ws.Cell(6, 6));
             Assert.AreEqual(belowCell2, ws.Cell(10, 8));
             Assert.AreEqual(rightCell1, ws.Cell(7, 8));
@@ -636,7 +634,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.IsNull(rangeEndCell);
             Assert.IsNull(leftCell1);
             Assert.IsNull(rightCell1);
-            Assert.AreEqual(6, ws.CellsUsed().Count());
+            Assert.AreEqual(6, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(belowCell1, ws.Cell(6, 6));
             Assert.AreEqual(belowCell2, ws.Cell(6, 8));
             Assert.AreEqual(rightCell2, ws.Cell(5, 8));
@@ -664,7 +662,7 @@ namespace ExcelReportGenerator.Tests.Excel
 
             Assert.IsNull(rangeStartCell);
             Assert.IsNull(rangeEndCell);
-            Assert.AreEqual(8, ws.CellsUsed().Count());
+            Assert.AreEqual(8, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(belowCell1, ws.Cell(10, 6));
             Assert.AreEqual(belowCell2, ws.Cell(10, 8));
             Assert.AreEqual(rightCell1, ws.Cell(7, 5));
@@ -696,7 +694,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.IsNull(rangeEndCell);
             Assert.IsNull(aboveCell1);
             Assert.IsNull(belowCell1);
-            Assert.AreEqual(6, ws.CellsUsed().Count());
+            Assert.AreEqual(6, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(belowCell2, ws.Cell(10, 5));
             Assert.AreEqual(rightCell1, ws.Cell(7, 5));
             Assert.AreEqual(rightCell2, ws.Cell(5, 5));
@@ -726,7 +724,7 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.IsNull(rangeEndCell);
             Assert.AreEqual(XLBorderStyleValues.None, range.FirstCell().Style.Border.TopBorder);
             Assert.AreEqual(XLBorderStyleValues.None, range.LastCell().Style.Border.BottomBorder);
-            Assert.AreEqual(8, ws.CellsUsed().Count());
+            Assert.AreEqual(8, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(belowCell1, ws.Cell(10, 6));
             Assert.AreEqual(belowCell2, ws.Cell(10, 8));
             Assert.AreEqual(rightCell1, ws.Cell(7, 8));
@@ -757,7 +755,7 @@ namespace ExcelReportGenerator.Tests.Excel
 
             IXLRange movedRange = ExcelHelper.MoveRange(range, ws.Cell(10, 8));
 
-            Assert.AreEqual(2, ws.CellsUsed().Count());
+            Assert.AreEqual(2, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(range.FirstCell(), ws.Cell(6, 5));
             Assert.AreEqual(range.LastCell(), ws.Cell(9, 7));
             Assert.AreEqual(string.Empty, range.FirstCell().Value.ToString());
@@ -771,11 +769,10 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(XLBorderStyleValues.Thin, movedRange.FirstCell().Style.Border.TopBorder);
             Assert.AreEqual(XLBorderStyleValues.Thin, movedRange.LastCell().Style.Border.BottomBorder);
             Assert.AreEqual(XLDataType.Text, ws.Cell(11, 9).DataType);
-            //Assert.AreEqual(XLCellValues.Text, ws.Cell(11, 9).DataType);
 
             IXLRange movedRange2 = ExcelHelper.MoveRange(movedRange, ws.Cell(11, 8));
 
-            Assert.AreEqual(2, ws.CellsUsed().Count());
+            Assert.AreEqual(2, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(movedRange.FirstCell(), ws.Cell(10, 8));
             Assert.AreEqual(movedRange.LastCell(), ws.Cell(13, 10));
             Assert.AreEqual(string.Empty, movedRange.FirstCell().Value.ToString());
@@ -808,14 +805,13 @@ namespace ExcelReportGenerator.Tests.Excel
 
             ws.Cell(11, 9).Value = DateTime.Now;
             ws.Cell(11, 9).DataType = XLDataType.DateTime;
-            //ws.Cell(11, 9).DataType = XLCellValues.DateTime;
 
             IXLNamedRange movedNamedRange = ExcelHelper.MoveNamedRange(namedRange, ws.Cell(10, 8));
             IXLRange movedRange = movedNamedRange.Ranges.ElementAt(0);
 
             Assert.AreEqual(movedNamedRange, ws.NamedRange("TestRange"));
             Assert.AreEqual(1, movedNamedRange.Ranges.Count);
-            Assert.AreEqual(2, ws.CellsUsed().Count());
+            Assert.AreEqual(2, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(range.FirstCell(), ws.Cell(6, 5));
             Assert.AreEqual(range.LastCell(), ws.Cell(9, 7));
             Assert.AreEqual(string.Empty, range.FirstCell().Value.ToString());
@@ -829,14 +825,13 @@ namespace ExcelReportGenerator.Tests.Excel
             Assert.AreEqual(XLBorderStyleValues.Thin, movedRange.FirstCell().Style.Border.TopBorder);
             Assert.AreEqual(XLBorderStyleValues.Thin, movedRange.LastCell().Style.Border.BottomBorder);
             Assert.AreEqual(XLDataType.Text, ws.Cell(11, 9).DataType);
-            //Assert.AreEqual(XLCellValues.Text, ws.Cell(11, 9).DataType);
 
             IXLNamedRange movedNamedRange2 = ExcelHelper.MoveNamedRange(movedNamedRange, ws.Cell(11, 8));
             IXLRange movedRange2 = movedNamedRange2.Ranges.ElementAt(0);
 
             Assert.AreEqual(movedNamedRange2, ws.NamedRange("TestRange"));
             Assert.AreEqual(1, movedNamedRange2.Ranges.Count);
-            Assert.AreEqual(2, ws.CellsUsed().Count());
+            Assert.AreEqual(2, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual(movedRange.FirstCell(), ws.Cell(10, 8));
             Assert.AreEqual(movedRange.LastCell(), ws.Cell(13, 10));
             Assert.AreEqual(string.Empty, movedRange.FirstCell().Value.ToString());

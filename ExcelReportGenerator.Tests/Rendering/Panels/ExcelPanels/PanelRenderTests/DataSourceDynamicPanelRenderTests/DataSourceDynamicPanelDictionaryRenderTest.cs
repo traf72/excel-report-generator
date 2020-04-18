@@ -79,7 +79,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.AreEqual(ws.Range(6, 2, 7, 3), panel2.ResultRange);
 
-            Assert.AreEqual(4, ws.CellsUsed().Count());
+            Assert.AreEqual(4, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual("Key", ws.Cell(2, 2).Value);
             Assert.AreEqual("Value", ws.Cell(2, 3).Value);
             Assert.AreEqual("Key", ws.Cell(6, 2).Value);
@@ -147,7 +147,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.IsNull(panel.ResultRange);
 
-            Assert.AreEqual(0, ws.CellsUsed().Count());
+            Assert.AreEqual(0, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
 
             //report.Workbook.SaveAs("test.xlsx");
         }

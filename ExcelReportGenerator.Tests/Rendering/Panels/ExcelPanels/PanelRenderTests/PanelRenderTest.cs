@@ -48,12 +48,12 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.AreEqual(range, panel.ResultRange);
 
-            Assert.AreEqual(24, ws.CellsUsed().Count());
+            Assert.AreEqual(24, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual("String parameter", ws.Cell(1, 1).Value);
             Assert.AreEqual(10d, ws.Cell(1, 2).Value);
             Assert.AreEqual(new DateTime(2017, 10, 25), ws.Cell(1, 3).Value);
             Assert.AreEqual(true, ws.Cell(1, 4).Value);
-            Assert.AreEqual(new TimeSpan(36500, 22, 30, 40), ws.Cell(1, 5).Value);
+            Assert.AreEqual(TimeSpan.FromHours(20), ws.Cell(1, 5).Value);
             Assert.AreEqual(" String parameter ", ws.Cell(2, 1).Value);
             Assert.AreEqual("Plain text", ws.Cell(2, 2).Value);
             Assert.AreEqual("{Plain text}", ws.Cell(2, 3).Value);
@@ -132,7 +132,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.AreEqual(range, panel.ResultRange);
 
-            Assert.AreEqual(2, ws.CellsUsed().Count());
+            Assert.AreEqual(2, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual("{p:StrParam}", ws.Cell(1, 1).Value);
             Assert.AreEqual("{p:IntParam}", ws.Cell(1, 2).Value);
 
@@ -158,7 +158,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.AreEqual(range, panel.ResultRange);
 
-            Assert.AreEqual(2, ws.CellsUsed().Count());
+            Assert.AreEqual(2, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.IsTrue((bool)ws.Cell(1, 1).Value);
             Assert.AreEqual(11d, ws.Cell(1, 2).Value);
 
@@ -200,12 +200,12 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.AreEqual(range, panel.ResultRange);
 
-            Assert.AreEqual(21, ws.CellsUsed().Count());
+            Assert.AreEqual(21, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual("String parameter", ws.Cell(1, 1).Value);
             Assert.AreEqual(10d, ws.Cell(1, 2).Value);
             Assert.AreEqual(new DateTime(2017, 10, 25), ws.Cell(1, 3).Value);
             Assert.AreEqual(true, ws.Cell(1, 4).Value);
-            Assert.AreEqual(new TimeSpan(36500, 22, 30, 40), ws.Cell(1, 5).Value);
+            Assert.AreEqual(TimeSpan.FromHours(20), ws.Cell(1, 5).Value);
             Assert.AreEqual("String parameter", ws.Cell(2, 1).Value);
             Assert.AreEqual("Plain text", ws.Cell(2, 2).Value);
             Assert.AreEqual("{Plain text}", ws.Cell(2, 3).Value);
@@ -261,12 +261,12 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.AreEqual(range2, panel.ResultRange);
 
-            Assert.AreEqual(42, ws.CellsUsed().Count());
+            Assert.AreEqual(42, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual("String parameter", ws.Cell(8, 1).Value);
             Assert.AreEqual(10d, ws.Cell(8, 2).Value);
             Assert.AreEqual(new DateTime(2017, 10, 25), ws.Cell(8, 3).Value);
             Assert.AreEqual(true, ws.Cell(8, 4).Value);
-            Assert.AreEqual(new TimeSpan(36500, 22, 30, 40), ws.Cell(8, 5).Value);
+            Assert.AreEqual(TimeSpan.FromHours(20), ws.Cell(8, 5).Value);
             Assert.AreEqual("String parameter", ws.Cell(9, 1).Value);
             Assert.AreEqual("Plain text", ws.Cell(9, 2).Value);
             Assert.AreEqual("{Plain text}", ws.Cell(9, 3).Value);
@@ -385,7 +385,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.AreEqual(range1, panel1.ResultRange);
 
-            Assert.AreEqual(14, ws.CellsUsed().Count());
+            Assert.AreEqual(14, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
             Assert.AreEqual("Panel1: 10", ws.Cell(1, 1).Value);
             Assert.AreEqual("Panel1: 10", ws.Cell(10, 8).Value);
             Assert.AreEqual("Panel2: 10", ws.Cell(3, 1).Value);

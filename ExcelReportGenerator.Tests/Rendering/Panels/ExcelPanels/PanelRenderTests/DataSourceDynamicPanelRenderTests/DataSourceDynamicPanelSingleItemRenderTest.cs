@@ -29,7 +29,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelSingleItemRenderTest),
                 nameof(TestRenderSingleItem)), ws.Workbook);
 
-            //report.Workbook.SaveAs("test.xlsx");
+            // report.Workbook.SaveAs("test.xlsx");
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
             Assert.IsNull(panel.ResultRange);
 
-            Assert.AreEqual(0, ws.CellsUsed().Count());
+            Assert.AreEqual(0, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
         }
     }
 }
