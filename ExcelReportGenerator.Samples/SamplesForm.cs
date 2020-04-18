@@ -5,6 +5,7 @@ using ExcelReportGenerator.Samples.Reports;
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -26,8 +27,8 @@ namespace ExcelReportGenerator.Samples
 
         private async void btnRun_Click(object sender, EventArgs e)
         {
-            Type reportType = GetSelectedReport();
-            DefaultReportGenerator reportGenerator = GetReportGenerator(reportType);
+            var reportType = GetSelectedReport();
+            var reportGenerator = GetReportGenerator(reportType);
 
             ToggleControlEnabled(true);
 
@@ -35,13 +36,13 @@ namespace ExcelReportGenerator.Samples
             {
                 await Task.Factory.StartNew(() =>
                 {
-                    XLWorkbook result = reportGenerator.Render(GetReportTemplateWorkbook(reportType));
-                    result.SaveAs(Path.Combine(txtOutputFolder.Text, string.Format("{0}_Result.xlsx", reportType.Name)));
+                    var result = reportGenerator.Render(GetReportTemplateWorkbook(reportType));
+                    result.SaveAs(Path.Combine(txtOutputFolder.Text, $"{reportType.Name}_Result.xlsx"));
                 });
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format("An error occurred while running report: {0}", ex.GetBaseException().Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"An error occurred while running report: {ex.GetBaseException().Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             ToggleControlEnabled(false);
@@ -53,7 +54,7 @@ namespace ExcelReportGenerator.Samples
             progressBar.Visible = reportRunning;
         }
 
-        private ReportBase GetReportInstance(Type reportType)
+        private static ReportBase GetReportInstance(Type reportType)
         {
             return (ReportBase)Activator.CreateInstance(reportType);
         }
@@ -63,14 +64,14 @@ namespace ExcelReportGenerator.Samples
             return (Type)cmbReports.SelectedItem;
         }
 
-        private XLWorkbook GetReportTemplateWorkbook(Type reportType)
+        private static XLWorkbook GetReportTemplateWorkbook(MemberInfo reportType)
         {
-            return new XLWorkbook(Path.Combine("Reports", "Templates", string.Format("{0}.xlsx", reportType.Name)));
+            return new XLWorkbook(Path.Combine("Reports", "Templates", $"{reportType.Name}.xlsx"));
         }
 
-        private DefaultReportGenerator GetReportGenerator(Type reportType)
+        private static DefaultReportGenerator GetReportGenerator(Type reportType)
         {
-            ReportBase report = GetReportInstance(reportType);
+            var report = GetReportInstance(reportType);
             return reportType == typeof(CustomReportGeneratorSample) ? new CustomReportGenerator(report) : new DefaultReportGenerator(report);
         }
     }

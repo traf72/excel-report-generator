@@ -2,12 +2,6 @@
 {
     public class DataSetConnect : ReportBase
     {
-        public override string ReportName
-        {
-            get
-            {
-                return "Connect to DataSet";
-            }
-        }
+        public override string ReportName => "Connect to DataSet";
     }
 }

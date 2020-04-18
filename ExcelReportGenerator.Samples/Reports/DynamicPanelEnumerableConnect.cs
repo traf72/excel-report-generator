@@ -5,13 +5,7 @@ namespace ExcelReportGenerator.Samples.Reports
 {
     public class DynamicPanelEnumerableConnect : ReportBase
     {
-        public override string ReportName
-        {
-            get
-            {
-                return "Connect to IEnumerable via dynamic panel";
-            }
-        }
+        public override string ReportName => "Connect to IEnumerable via dynamic panel";
 
         public void AfterDataTemplatesRender(DataSourceDynamicPanelEventArgs args)
         {

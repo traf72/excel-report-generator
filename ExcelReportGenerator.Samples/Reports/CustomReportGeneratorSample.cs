@@ -2,12 +2,6 @@
 {
     public class CustomReportGeneratorSample : ReportBase
     {
-        public override string ReportName
-        {
-            get
-            {
-                return "Custom report generator sample";
-            }
-        }
+        public override string ReportName => "Custom report generator sample";
     }
 }

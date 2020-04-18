@@ -5,9 +5,6 @@ namespace ExcelReportGenerator.Samples.Customizations
 {
     public class CustomSystemVariableProvider : SystemVariableProvider
     {
-        public string ReportTime
-        {
-            get { return DateTime.Now.ToString("g"); }
-        }
+        public string ReportTime => DateTime.Now.ToString("g");
     }
 }

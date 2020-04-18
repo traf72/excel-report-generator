@@ -2,12 +2,6 @@
 {
     public class DataTableConnect : ReportBase
     {
-        public override string ReportName
-        {
-            get
-            {
-                return "Connect to DataTable";
-            }
-        }
+        public override string ReportName => "Connect to DataTable";
     }
 }

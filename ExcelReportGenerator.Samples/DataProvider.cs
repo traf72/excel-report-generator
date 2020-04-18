@@ -1,10 +1,10 @@
-﻿using ExcelReportGenerator.Attributes;
-using ExcelReportGenerator.Enums;
-using ExcelReportGenerator.Samples.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using ExcelReportGenerator.Attributes;
+using ExcelReportGenerator.Enums;
+using ExcelReportGenerator.Samples.Extensions;
 
 namespace ExcelReportGenerator.Samples
 {
@@ -12,44 +12,36 @@ namespace ExcelReportGenerator.Samples
     {
         public IDataReader GetEmployeesAsIDataReader(string department = null)
         {
-            IDbConnection con = ConnectionFactory.Create();
-            using (IDbCommand command = con.CreateCommand())
-            {
-                command.CommandText = Query;
-                command.Parameters.Add(new SqlParameter("@department", string.IsNullOrWhiteSpace(department) ? (object)DBNull.Value : department));
-                return command.ExecuteReader(CommandBehavior.CloseConnection);
-            }
+            var con = ConnectionFactory.Create();
+            using var command = con.CreateCommand();
+            command.CommandText = Query;
+            command.Parameters.Add(new SqlParameter("@department", string.IsNullOrWhiteSpace(department) ? (object)DBNull.Value : department));
+            return command.ExecuteReader(CommandBehavior.CloseConnection);
         }
 
         public DataTable GetEmployeesAsDataTable(string department = null)
         {
-            using (IDataReader reader = GetEmployeesAsIDataReader(department))
-            {
-                var dataTable = new DataTable();
-                dataTable.Load(reader);
-                return dataTable;
-            }
+            using var reader = GetEmployeesAsIDataReader(department);
+            var dataTable = new DataTable();
+            dataTable.Load(reader);
+            return dataTable;
         }
 
         public DataSet GetEmployeesAsDataSet(string department = null)
         {
-            using (var con = (SqlConnection)ConnectionFactory.Create())
-            {
-                using (var command = new SqlCommand(Query, con))
-                {
-                    command.Parameters.Add(new SqlParameter("@department", string.IsNullOrWhiteSpace(department) ? (object)DBNull.Value : department));
-                    var adapter = new SqlDataAdapter(command);
-                    var dataSet = new DataSet();
-                    adapter.Fill(dataSet);
-                    return dataSet;
-                }
-            }
+            using var con = (SqlConnection)ConnectionFactory.Create();
+            using var command = new SqlCommand(Query, con);
+            command.Parameters.Add(new SqlParameter("@department", string.IsNullOrWhiteSpace(department) ? (object)DBNull.Value : department));
+            var adapter = new SqlDataAdapter(command);
+            var dataSet = new DataSet();
+            adapter.Fill(dataSet);
+            return dataSet;
         }
 
         public IEnumerable<Result> GetEmployeesAsIEnumerable(string department = null)
         {
             IList<Result> result = new List<Result>();
-            using (IDataReader reader = GetEmployeesAsIDataReader(department))
+            using (var reader = GetEmployeesAsIDataReader(department))
             {
                 while (reader.Read())
                 {
@@ -74,7 +66,7 @@ namespace ExcelReportGenerator.Samples
         public IEnumerable<IDictionary<string, object>> GetEmployeesAsIEnumerableOfDictionary(string department = null)
         {
             IList<IDictionary<string, object>> result = new List<IDictionary<string, object>>();
-            using (IDataReader reader = GetEmployeesAsIDataReader(department))
+            using (var reader = GetEmployeesAsIDataReader(department))
             {
                 while (reader.Read())
                 {
@@ -97,11 +89,8 @@ namespace ExcelReportGenerator.Samples
             return result;
         }
 
-        private string Query
-        {
-            get
-            {
-                return @"
+        private static string Query =>
+            @"
                     SELECT
 	                    p.LastName
 	                    , p.FirstName
@@ -139,8 +128,6 @@ namespace ExcelReportGenerator.Samples
 	                    , p.FirstName
 	                    , p.MiddleName
                     ";
-            }
-        }
 
         public class Result
         {

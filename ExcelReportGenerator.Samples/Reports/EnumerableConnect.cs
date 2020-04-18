@@ -2,12 +2,6 @@
 {
     public class EnumerableConnect : ReportBase
     {
-        public override string ReportName
-        {
-            get
-            {
-                return "Connect to IEnumerable";
-            }
-        }
+        public override string ReportName => "Connect to IEnumerable";
     }
 }

@@ -11,13 +11,7 @@ namespace ExcelReportGenerator.Samples.Reports
 
         private readonly IDictionary<string, DataProvider.Result[]> _employeesByDepartmentCache = new Dictionary<string, DataProvider.Result[]>();
 
-        public override string ReportName
-        {
-            get
-            {
-                return "Grouping with Panel Hierarchy";
-            }
-        }
+        public override string ReportName => "Grouping with Panel Hierarchy";
 
         public IEnumerable<string> GetDepartments()
         {
@@ -26,8 +20,7 @@ namespace ExcelReportGenerator.Samples.Reports
 
         public IEnumerable<DataProvider.Result> GetDepartmentEmployees(string department)
         {
-            DataProvider.Result[] result;
-            if (_employeesByDepartmentCache.TryGetValue(department, out result))
+            if (_employeesByDepartmentCache.TryGetValue(department, out var result))
             {
                 return result;
             }
@@ -39,7 +32,7 @@ namespace ExcelReportGenerator.Samples.Reports
 
         public IEnumerable<DataProvider.Result> GetAllEmployees()
         {
-            return _allEmployeesCache ?? (_allEmployeesCache = _dataProvider.GetEmployeesAsIEnumerable().ToArray());
+            return _allEmployeesCache ??= _dataProvider.GetEmployeesAsIEnumerable().ToArray();
         }
     }
 }

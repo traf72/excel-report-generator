@@ -2,12 +2,6 @@
 {
     public class EnumerableOfDictionaryConnect : ReportBase
     {
-        public override string ReportName
-        {
-            get
-            {
-                return "Connect to IEnumerable of Dictionary";
-            }
-        }
+        public override string ReportName => "Connect to IEnumerable of Dictionary";
     }
 }

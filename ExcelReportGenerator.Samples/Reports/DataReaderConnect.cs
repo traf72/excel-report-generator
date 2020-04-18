@@ -2,12 +2,6 @@
 {
     public class DataReaderConnect : ReportBase
     {
-        public override string ReportName
-        {
-            get
-            {
-                return "Connect to IDataReader";
-            }
-        }
+        public override string ReportName => "Connect to IDataReader";
     }
 }
