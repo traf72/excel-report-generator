@@ -1,6 +1,6 @@
 # ExcelReportGenerator
 
-This library allows you to render data to Microsoft Excel by marking Excel sheets using panels and templates. It allows you easily connecting to various data sources like IDataReader, DataSet, DataTable, IEnumerable<T>, etc, and render data from them to Excel. You can also apply to the data an aggregation, different types of grouping, formatting, etc. You can include the library to your project via [NuGet package](https://www.nuget.org/packages/ExcelReportGenerator).
+This library allows you to render data to Microsoft Excel by marking Excel sheets using panels and templates. It makes it easy to connect to various data sources like IDataReader, DataSet, DataTable, IEnumerable<T>, etc, and to render data from them to Excel. You can also apply to the data an aggregation, different types of grouping, formatting, etc. You can include the library to your project via [NuGet package](https://www.nuget.org/packages/ExcelReportGenerator).
 
 ## How to use?
 First of all you have to create a report template in Microsoft Excel. You need to mark up an excel sheet (or multiple sheets) using panels and templates which will be handled by the library. You can add any other formatting you want. All styles will be preserved after rendering. Your template can look like this:
