@@ -116,7 +116,7 @@ public class ExcelDataSourcePanelTest
     {
         var wb = new XLWorkbook();
         var ws = wb.AddWorksheet("Test");
-        var range = ws.Range(2, 2, 9, 6);
+        var range = ws.Range(2, 2, 9, 12);
 
         ws.Cell(2, 2).Value = "One";
         ws.Cell(3, 2).Value = "One";
@@ -164,10 +164,66 @@ public class ExcelDataSourcePanelTest
         ws.Cell(8, 6).Value = new DateTime(2018, 2, 21);
         ws.Cell(9, 6).Value = new DateTime(2018, 2, 21).ToString();
 
+        ws.Cell(1, 7).Value = "One";
+        ws.Cell(2, 7).Value = "One";
+        ws.Cell(10, 7).Value = "One";
+
+        ws.Range(2, 7, 9, 7).Merge();
+
+        ws.Cell(1, 8).Value = "Two";
+        ws.Cell(2, 8).Value = "Two";
+        ws.Cell(3, 8).Value = "One";
+        ws.Cell(10, 8).Value = "One";
+
+        ws.Range(3, 8, 9, 8).Merge();
+
+        ws.Cell(1, 9).Value = "One";
+        ws.Cell(2, 9).Value = "One";
+        ws.Cell(9, 9).Value = "Two";
+        ws.Cell(10, 9).Value = "Two";
+
+        ws.Range(2, 9, 8, 9).Merge();
+
+        ws.Cell(1, 10).Value = "One";
+        ws.Cell(2, 10).Value = "One";
+        ws.Cell(3, 10).Value = "One";
+        ws.Cell(6, 10).Value = "One";
+        ws.Cell(8, 10).Value = "Two";
+        ws.Cell(9, 10).Value = "Two";
+        ws.Cell(10, 10).Value = "Two";
+
+        ws.Range(3, 10, 5, 10).Merge();
+        ws.Range(6, 10, 7, 10).Merge();
+
+        ws.Cell(1, 11).Value = "Two";
+        ws.Cell(2, 11).Value = "Two";
+        ws.Cell(3, 11).Value = "One";
+        ws.Cell(5, 11).Value = "One";
+        ws.Cell(6, 11).Value = "One";
+        ws.Cell(8, 11).Value = "Two";
+        ws.Cell(9, 11).Value = "Two";
+        ws.Cell(10, 11).Value = "Two";
+
+        ws.Range(3, 11, 4, 11).Merge();
+        ws.Range(6, 11, 8, 11).Merge();
+
+        ws.Cell(1, 12).Value = "One";
+        ws.Cell(2, 12).Value = "One";
+        ws.Cell(3, 12).Value = "One";
+        ws.Cell(6, 12).Value = "One";
+        ws.Cell(8, 12).Value = "Two";
+        ws.Cell(9, 12).Value = "Two";
+        ws.Cell(10, 12).Value = "Two";
+
+        ws.Range(1, 12, 2, 12).Merge();
+        ws.Range(3, 12, 5, 12).Merge();
+        ws.Range(6, 12, 7, 12).Merge();
+        ws.Range(9, 12, 10,12).Merge();
+
         var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(),
             Substitute.For<ITemplateProcessor>())
         {
-            GroupBy = "1,2, 3 , 4,5"
+            GroupBy = "1,2, 3 , 4,5,6,7,8,9,10,11",
         };
 
         var method = panel.GetType().GetMethod("GroupResult", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -180,12 +236,83 @@ public class ExcelDataSourcePanelTest
         //wb.SaveAs("test.xlsx");
     }
 
+     [Test]
+    public void TestGroupResultVertical_WithoutGroupingBlankValues()
+    {
+        var wb = new XLWorkbook();
+        var ws = wb.AddWorksheet("Test");
+        var range = ws.Range(2, 2, 9, 7);
+
+        ws.Cell(2, 2).Value = "One";
+        ws.Cell(3, 2).Value = "One";
+        ws.Cell(4, 2).Value = "Two";
+        ws.Cell(5, 2).Value = "Three";
+        ws.Cell(6, 2).Value = "Three";
+        ws.Cell(7, 2).Value = "Three";
+
+        ws.Range(5, 2, 6, 2).Merge();
+
+        ws.Cell(2, 3).Value = "Orange";
+        ws.Cell(3, 3).Value = "Apple";
+        ws.Cell(4, 3).Value = "Apple";
+        ws.Cell(5, 3).Value = Blank.Value;
+        ws.Cell(6, 3).Value = Blank.Value;
+        ws.Cell(8, 3).Value = "Pear";
+        ws.Cell(9, 3).Value = "Pear";
+
+        ws.Cell(2, 4).Value = true;
+        ws.Cell(3, 4).Value = true;
+        ws.Cell(4, 4).Value = 1;
+        ws.Cell(7, 4).Value = 0;
+        ws.Cell(8, 4).Value = false;
+        ws.Cell(9, 4).Value = false;
+
+        ws.Cell(2, 5).Value = 1;
+        ws.Cell(3, 5).Value = 1;
+        ws.Cell(4, 5).Value = 1;
+        ws.Cell(5, 5).Value = 56;
+        ws.Cell(6, 5).Value = 56.1;
+        ws.Cell(7, 5).Value = 56;
+        ws.Cell(8, 5).Value = 77.7;
+        ws.Cell(9, 5).Value = 77.7m;
+
+        ws.Range(3, 5, 4, 5).Merge();
+
+        ws.Cell(2, 6).Value = new DateTime(2018, 2, 18);
+        ws.Cell(3, 6).Value = new DateTime(2018, 2, 20);
+        ws.Cell(4, 6).Value = new DateTime(2018, 2, 20);
+        ws.Cell(5, 6).Value = new DateTime(2018, 2, 18);
+
+        ws.Range(6, 6, 8, 6).Merge();
+        
+        ws.Cell(5, 7).Value = "Value";
+        ws.Cell(6, 7).Value = "Value";
+
+        ws.Range(2, 7, 3, 7).Merge();
+
+        var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(),
+            Substitute.For<ITemplateProcessor>())
+        {
+            GroupBy = "1,2, 3 , 4,5,6",
+            GroupBlankValues = false
+        };
+
+        var method = panel.GetType().GetMethod("GroupResult", BindingFlags.Instance | BindingFlags.NonPublic);
+        SetResultRange(panel, range);
+        method.Invoke(panel, null);
+
+        ExcelAssert.AreWorkbooksContentEquals(
+            TestHelper.GetExpectedWorkbook(nameof(ExcelDataSourcePanelTest), nameof(TestGroupResultVertical_WithoutGroupingBlankValues)), wb);
+
+        //wb.SaveAs("test.xlsx");
+    }
+
     [Test]
     public void TestGroupResultHorizontal()
     {
         var wb = new XLWorkbook();
         var ws = wb.AddWorksheet("Test");
-        var range = ws.Range(2, 2, 6, 9);
+        var range = ws.Range(2, 2, 12, 9);
 
         ws.Cell(2, 2).Value = "One";
         ws.Cell(2, 3).Value = "One";
@@ -201,15 +328,12 @@ public class ExcelDataSourcePanelTest
         ws.Cell(3, 2).Value = "Orange";
         ws.Cell(3, 3).Value = "Apple";
         ws.Cell(3, 4).Value = "Apple";
-        ws.Cell(3, 5).Value = Blank.Value;
-        ws.Cell(3, 6).Value = Blank.Value;
         ws.Cell(3, 8).Value = "Pear";
         ws.Cell(3, 9).Value = "Pear";
 
         ws.Cell(4, 2).Value = true;
         ws.Cell(4, 3).Value = true;
         ws.Cell(4, 4).Value = 1;
-        ws.Cell(4, 5).Value = Blank.Value;
         ws.Cell(4, 7).Value = 0;
         ws.Cell(4, 8).Value = false;
         ws.Cell(4, 9).Value = false;
@@ -233,10 +357,66 @@ public class ExcelDataSourcePanelTest
         ws.Cell(6, 8).Value = new DateTime(2018, 2, 21);
         ws.Cell(6, 9).Value = new DateTime(2018, 2, 21).ToString();
 
+        ws.Cell(7, 1).Value = "One";
+        ws.Cell(7, 2).Value = "One";
+        ws.Cell(7, 10).Value = "One";
+
+        ws.Range(7, 2, 7, 9).Merge();
+
+        ws.Cell(8, 1).Value = "Two";
+        ws.Cell(8, 2).Value = "Two";
+        ws.Cell(8, 3).Value = "One";
+        ws.Cell(8, 10).Value = "One";
+
+        ws.Range(8, 3, 8, 9).Merge();
+
+        ws.Cell(9, 1).Value = "One";
+        ws.Cell(9, 2).Value = "One";
+        ws.Cell(9, 9).Value = "Two";
+        ws.Cell(9, 10).Value = "Two";
+
+        ws.Range(9, 2, 9, 8).Merge();
+
+        ws.Cell(10, 1).Value = "One";
+        ws.Cell(10, 2).Value = "One";
+        ws.Cell(10, 3).Value = "One";
+        ws.Cell(10, 6).Value = "One";
+        ws.Cell(10, 8).Value = "Two";
+        ws.Cell(10, 9).Value = "Two";
+        ws.Cell(10, 10).Value = "Two";
+
+        ws.Range(10, 3, 10, 5).Merge();
+        ws.Range(10, 6, 10, 7).Merge();
+
+        ws.Cell(11, 1).Value = "Two";
+        ws.Cell(11, 2).Value = "Two";
+        ws.Cell(11, 3).Value = "One";
+        ws.Cell(11, 5).Value = "One";
+        ws.Cell(11, 6).Value = "One";
+        ws.Cell(11, 8).Value = "Two";
+        ws.Cell(11, 9).Value = "Two";
+        ws.Cell(11, 10).Value = "Two";
+
+        ws.Range(11, 3, 11, 4).Merge();
+        ws.Range(11, 6, 11, 8).Merge();
+
+        ws.Cell(12, 1).Value = "One";
+        ws.Cell(12, 2).Value = "One";
+        ws.Cell(12, 3).Value = "One";
+        ws.Cell(12, 6).Value = "One";
+        ws.Cell(12, 8).Value = "Two";
+        ws.Cell(12, 9).Value = "Two";
+        ws.Cell(12, 10).Value = "Two";
+
+        ws.Range(12, 1, 12, 2).Merge();
+        ws.Range(12, 3, 12, 5).Merge();
+        ws.Range(12, 6, 12, 7).Merge();
+        ws.Range(12, 9, 12, 10).Merge();
+
         var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(),
             Substitute.For<ITemplateProcessor>())
         {
-            GroupBy = "1,2, 3 , 4,5",
+            GroupBy = "1,2, 3 , 4,5,6,7,8,9,10,11",
             Type = PanelType.Horizontal
         };
 
@@ -246,6 +426,78 @@ public class ExcelDataSourcePanelTest
 
         ExcelAssert.AreWorkbooksContentEquals(
             TestHelper.GetExpectedWorkbook(nameof(ExcelDataSourcePanelTest), nameof(TestGroupResultHorizontal)), wb);
+
+        //wb.SaveAs("test.xlsx");
+    }
+
+    [Test]
+    public void TestGroupResultHorizontal_WithoutGroupingBlankValues()
+    {
+        var wb = new XLWorkbook();
+        var ws = wb.AddWorksheet("Test");
+        var range = ws.Range(2, 2, 7, 9);
+
+        ws.Cell(2, 2).Value = "One";
+        ws.Cell(2, 3).Value = "One";
+        ws.Cell(2, 4).Value = "Two";
+        ws.Cell(2, 5).Value = "Three";
+        ws.Cell(2, 6).Value = "Three";
+        ws.Cell(2, 7).Value = "Three";
+
+        ws.Range(2, 5, 2, 6).Merge();
+
+        ws.Cell(3, 2).Value = "Orange";
+        ws.Cell(3, 3).Value = "Apple";
+        ws.Cell(3, 4).Value = "Apple";
+        ws.Cell(3, 5).Value = Blank.Value;
+        ws.Cell(3, 6).Value = Blank.Value;
+        ws.Cell(3, 8).Value = "Pear";
+        ws.Cell(3, 9).Value = "Pear";
+
+        ws.Cell(4, 2).Value = true;
+        ws.Cell(4, 3).Value = true;
+        ws.Cell(4, 4).Value = 1;
+        ws.Cell(4, 7).Value = 0;
+        ws.Cell(4, 8).Value = false;
+        ws.Cell(4, 9).Value = false;
+
+        ws.Cell(5, 2).Value = 1;
+        ws.Cell(5, 3).Value = 1;
+        ws.Cell(5, 4).Value = 1;
+        ws.Cell(5, 5).Value = 56;
+        ws.Cell(5, 6).Value = 56.1;
+        ws.Cell(5, 7).Value = 56;
+        ws.Cell(5, 8).Value = 77.7;
+        ws.Cell(5, 9).Value = 77.7m;
+
+        ws.Range(5, 3, 5, 4).Merge();
+
+        ws.Cell(6, 2).Value = new DateTime(2018, 2, 18);
+        ws.Cell(6, 3).Value = new DateTime(2018, 2, 20);
+        ws.Cell(6, 4).Value = new DateTime(2018, 2, 20);
+        ws.Cell(6, 5).Value = new DateTime(2018, 2, 18);
+
+        ws.Range(6, 6, 6, 8).Merge();
+        
+        ws.Cell(7, 5).Value = "Value";
+        ws.Cell(7, 6).Value = "Value";
+
+        ws.Range(7, 2, 7, 3).Merge();
+
+        var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(),
+            Substitute.For<ITemplateProcessor>())
+        {
+            GroupBy = "1,2, 3 , 4,5,6",
+            GroupBlankValues = false,
+            Type = PanelType.Horizontal
+        };
+
+        var method = panel.GetType().GetMethod("GroupResult", BindingFlags.Instance | BindingFlags.NonPublic);
+        SetResultRange(panel, range);
+        method.Invoke(panel, null);
+
+        ExcelAssert.AreWorkbooksContentEquals(
+            TestHelper.GetExpectedWorkbook(nameof(ExcelDataSourcePanelTest), nameof(TestGroupResultHorizontal_WithoutGroupingBlankValues)), wb);
 
         //wb.SaveAs("test.xlsx");
     }

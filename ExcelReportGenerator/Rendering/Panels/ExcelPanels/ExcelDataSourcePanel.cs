@@ -38,6 +38,9 @@ internal class ExcelDataSourcePanel : ExcelNamedPanel
     public string GroupBy { get; set; }
 
     [ExternalProperty]
+    public bool GroupBlankValues { get; set; } = true;
+
+    [ExternalProperty]
     public string BeforeDataItemRenderMethodName { get; set; }
 
     [ExternalProperty]
@@ -154,22 +157,33 @@ internal class ExcelDataSourcePanel : ExcelNamedPanel
             IXLRangeRow row = range.Row(rowNum);
             foreach (int colNum in groupColNumbers)
             {
-                XLCellValue cellValue = row.Cell(colNum).Value;
+                IXLCell currentCell = row.Cell(colNum);
+                XLCellValue cellValue = currentCell.Value;
                 if (previousCellValues.TryGetValue(colNum, out var previousResult))
                 {
-                    if (!previousResult.StartCellValue.Equals(cellValue))
+                    var cellMergedRange = new Lazy<IXLRange>(() => currentCell.MergedRange());
+                    if (!previousResult.StartCellValue.Equals(cellValue)
+                        && (!cellValue.IsBlank || cellMergedRange.Value == null || !cellMergedRange.Value.Contains(range.Cell(rowNum - 1, colNum))))
                     {
-                        range.Range(previousResult.StartRowNum, colNum, rowNum - 1, colNum).Merge();
+                        MergeCellsWithSameValue(rowNum - 1);
                         previousCellValues[colNum] = (cellValue, rowNum);
                     }
                     else if (rowNum == rowsCount)
                     {
-                        range.Range(previousResult.StartRowNum, colNum, rowNum, colNum).Merge();
+                        MergeCellsWithSameValue(rowNum);
                     }
                 }
                 else
                 {
                     previousCellValues[colNum] = (cellValue, rowNum);
+                }
+                
+                void MergeCellsWithSameValue(int rowNumber)
+                {
+                    if (!previousResult.StartCellValue.IsBlank || GroupBlankValues)
+                    {
+                        range.Range(previousResult.StartRowNum, colNum, rowNumber, colNum).Merge();
+                    }
                 }
             }
         }
@@ -184,22 +198,33 @@ internal class ExcelDataSourcePanel : ExcelNamedPanel
             IXLRangeColumn col = range.Column(colNum);
             foreach (int rowNum in groupRowNumbers)
             {
-                XLCellValue cellValue = col.Cell(rowNum).Value;
+                IXLCell currentCell = col.Cell(rowNum);
+                XLCellValue cellValue = currentCell.Value;
                 if (previousCellValues.TryGetValue(rowNum, out var previousResult))
                 {
-                    if (!previousResult.StartCellValue.Equals(cellValue))
+                    var cellMergedRange = new Lazy<IXLRange>(() => currentCell.MergedRange());
+                    if (!previousResult.StartCellValue.Equals(cellValue)
+                        && (!cellValue.IsBlank || cellMergedRange.Value == null || !cellMergedRange.Value.Contains(range.Cell(rowNum, colNum - 1))))
                     {
-                        range.Range(rowNum, previousResult.StartColNum, rowNum, colNum - 1).Merge();
+                        MergeCellsWithSameValue(colNum - 1);
                         previousCellValues[rowNum] = (cellValue, colNum);
                     }
                     else if (colNum == colsCount)
                     {
-                        range.Range(rowNum, previousResult.StartColNum, rowNum, colNum).Merge();
+                        MergeCellsWithSameValue(colNum);
                     }
                 }
                 else
                 {
                     previousCellValues[rowNum] = (cellValue, colNum);
+                }
+
+                void MergeCellsWithSameValue(int columnNum)
+                {
+                    if (!previousResult.StartCellValue.IsBlank || GroupBlankValues)
+                    {
+                        range.Range(rowNum, previousResult.StartColNum, rowNum, columnNum).Merge();
+                    }
                 }
             }
         }
