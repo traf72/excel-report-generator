@@ -294,7 +294,7 @@ public class ExcelDataSourcePanelTest
             Substitute.For<ITemplateProcessor>())
         {
             GroupBy = "1,2, 3 , 4,5,6",
-            GroupBlankValues = false
+            GroupBlankCells = false
         };
 
         var method = panel.GetType().GetMethod("GroupResult", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -488,7 +488,7 @@ public class ExcelDataSourcePanelTest
             Substitute.For<ITemplateProcessor>())
         {
             GroupBy = "1,2, 3 , 4,5,6",
-            GroupBlankValues = false,
+            GroupBlankCells = false,
             Type = PanelType.Horizontal
         };
 

@@ -38,7 +38,7 @@ internal class ExcelDataSourcePanel : ExcelNamedPanel
     public string GroupBy { get; set; }
 
     [ExternalProperty]
-    public bool GroupBlankValues { get; set; } = true;
+    public bool GroupBlankCells { get; set; } = true;
 
     [ExternalProperty]
     public string BeforeDataItemRenderMethodName { get; set; }
@@ -180,7 +180,7 @@ internal class ExcelDataSourcePanel : ExcelNamedPanel
                 
                 void MergeCellsWithSameValue(int rowNumber)
                 {
-                    if (!previousResult.StartCellValue.IsBlank || GroupBlankValues)
+                    if (!previousResult.StartCellValue.IsBlank || GroupBlankCells)
                     {
                         range.Range(previousResult.StartRowNum, colNum, rowNumber, colNum).Merge();
                     }
@@ -221,7 +221,7 @@ internal class ExcelDataSourcePanel : ExcelNamedPanel
 
                 void MergeCellsWithSameValue(int columnNum)
                 {
-                    if (!previousResult.StartCellValue.IsBlank || GroupBlankValues)
+                    if (!previousResult.StartCellValue.IsBlank || GroupBlankCells)
                     {
                         range.Range(rowNum, previousResult.StartColNum, rowNum, columnNum).Merge();
                     }
