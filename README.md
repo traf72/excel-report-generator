@@ -46,4 +46,4 @@ Next you need to create a report class that will supply data for this template
 
 ![result](https://user-images.githubusercontent.com/45209977/48908531-94d25300-ee7b-11e8-8022-5c6cfdfca4e3.png)
 
-The detailed documentation is inside the [Docs](https://github.com/traf72/excel-report-generator/tree/master/Docs) folder. For more information see also ExcelReportGenerator.Samples.
+The detailed documentation is inside the [Docs](https://github.com/traf72/excel-report-generator/tree/master/Docs) folder. For more information see also [ExcelReportGenerator.Samples](https://github.com/traf72/excel-report-generator/tree/master/ExcelReportGenerator.Samples).
