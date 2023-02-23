@@ -1,15 +1,14 @@
 ﻿using ClosedXML.Excel;
 
-namespace ExcelReportGenerator.Rendering.EventArgs
+namespace ExcelReportGenerator.Rendering.EventArgs;
+
+/// <summary>
+/// Represent arguments of panel event
+/// </summary>
+public class PanelEventArgs : System.EventArgs
 {
     /// <summary>
-    /// Represent arguments of panel event
+    /// Excel range
     /// </summary>
-    public class PanelEventArgs : System.EventArgs
-    {
-        /// <summary>
-        /// Excel range
-        /// </summary>
-        public IXLRange Range { get; set; }
-    }
+    public IXLRange Range { get; set; }
 }

@@ -1,6 +1,5 @@
-﻿namespace ExcelReportGenerator.Converters.ExternalPropertiesConverters
+﻿namespace ExcelReportGenerator.Converters.ExternalPropertiesConverters;
+
+internal interface IExternalPropertyConverter<out TOut> : IGenericConverter<string, TOut>
 {
-    internal interface IExternalPropertyConverter<out TOut> : IGenericConverter<string, TOut>
-    {
-    }
 }

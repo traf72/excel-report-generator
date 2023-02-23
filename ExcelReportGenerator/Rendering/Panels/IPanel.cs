@@ -1,11 +1,10 @@
-﻿namespace ExcelReportGenerator.Rendering.Panels
+﻿namespace ExcelReportGenerator.Rendering.Panels;
+
+internal interface IPanel
 {
-    internal interface IPanel
-    {
-        void Delete();
+    void Delete();
 
-        string BeforeRenderMethodName { get; set; }
+    string BeforeRenderMethodName { get; set; }
 
-        string AfterRenderMethodName { get; set; }
-    }
+    string AfterRenderMethodName { get; set; }
 }

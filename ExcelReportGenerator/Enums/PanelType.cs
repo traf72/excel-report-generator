@@ -1,8 +1,7 @@
-﻿namespace ExcelReportGenerator.Enums
+﻿namespace ExcelReportGenerator.Enums;
+
+internal enum PanelType
 {
-    internal enum PanelType
-    {
-        Vertical,
-        Horizontal,
-    }
+    Vertical,
+    Horizontal,
 }

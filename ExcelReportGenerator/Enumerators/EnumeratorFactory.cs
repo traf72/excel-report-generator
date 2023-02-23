@@ -1,27 +1,20 @@
 ﻿using System.Collections;
 using System.Data;
 
-namespace ExcelReportGenerator.Enumerators
-{
-    internal static class EnumeratorFactory
-    {
-        public static ICustomEnumerator Create(object instance)
-        {
-            switch (instance)
-            {
-                case null:
-                    return null;
-                case IDataReader dr:
-                    return new DataReaderEnumerator(dr);
-                case DataTable dt:
-                    return new DataTableEnumerator(dt);
-                case DataSet ds:
-                    return new DataSetEnumerator(ds);
-                case IEnumerable e:
-                    return new EnumerableEnumerator(e);
-            }
+namespace ExcelReportGenerator.Enumerators;
 
-            return new EnumerableEnumerator(new[] { instance });
-        }
+internal static class EnumeratorFactory
+{
+    public static ICustomEnumerator Create(object instance)
+    {
+        return instance switch
+        {
+            null => null,
+            IDataReader dr => new DataReaderEnumerator(dr),
+            DataTable dt => new DataTableEnumerator(dt),
+            DataSet ds => new DataSetEnumerator(ds),
+            IEnumerable e => new EnumerableEnumerator(e),
+            _ => new EnumerableEnumerator(new[] {instance})
+        };
     }
 }

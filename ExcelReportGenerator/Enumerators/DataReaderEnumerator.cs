@@ -1,37 +1,35 @@
 ﻿using ExcelReportGenerator.Helpers;
-using System;
 using System.Collections;
 using System.Data;
 
-namespace ExcelReportGenerator.Enumerators
+namespace ExcelReportGenerator.Enumerators;
+
+internal class DataReaderEnumerator : IGenericCustomEnumerator<DataRow>
 {
-    internal class DataReaderEnumerator : IGenericCustomEnumerator<DataRow>
+    private readonly IGenericCustomEnumerator<DataRow> _dataTableEnumerator;
+
+    public DataReaderEnumerator(IDataReader dataReader)
     {
-        private readonly IGenericCustomEnumerator<DataRow> _dataTableEnumerator;
-
-        public DataReaderEnumerator(IDataReader dataReader)
+        if (dataReader == null)
         {
-            if (dataReader == null)
-            {
-                throw new ArgumentNullException(nameof(dataReader), ArgumentHelper.NullParamMessage);
-            }
-
-            var dataTable = new DataTable();
-            dataTable.Load(dataReader);
-            dataReader.Dispose();
-            _dataTableEnumerator = new DataTableEnumerator(dataTable);
+            throw new ArgumentNullException(nameof(dataReader), ArgumentHelper.NullParamMessage);
         }
 
-        public DataRow Current => _dataTableEnumerator.Current;
-
-        object IEnumerator.Current => Current;
-
-        public bool MoveNext() => _dataTableEnumerator.MoveNext();
-
-        public void Reset() => _dataTableEnumerator.Reset();
-
-        public int RowCount => _dataTableEnumerator.RowCount;
-
-        public void Dispose() => _dataTableEnumerator.Dispose();
+        var dataTable = new DataTable();
+        dataTable.Load(dataReader);
+        dataReader.Dispose();
+        _dataTableEnumerator = new DataTableEnumerator(dataTable);
     }
+
+    public DataRow Current => _dataTableEnumerator.Current;
+
+    object IEnumerator.Current => Current;
+
+    public bool MoveNext() => _dataTableEnumerator.MoveNext();
+
+    public void Reset() => _dataTableEnumerator.Reset();
+
+    public int RowCount => _dataTableEnumerator.RowCount;
+
+    public void Dispose() => _dataTableEnumerator.Dispose();
 }

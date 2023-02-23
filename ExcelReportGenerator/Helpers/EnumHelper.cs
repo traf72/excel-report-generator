@@ -1,12 +1,9 @@
-﻿using System;
+﻿namespace ExcelReportGenerator.Helpers;
 
-namespace ExcelReportGenerator.Helpers
+internal static class EnumHelper
 {
-    internal static class EnumHelper
+    public static TEnum Parse<TEnum>(string value, bool ignoreCase = true) where TEnum : struct, IConvertible
     {
-        public static TEnum Parse<TEnum>(string value, bool ignoreCase = true) where TEnum : struct, IConvertible
-        {
-            return (TEnum)Enum.Parse(typeof(TEnum), value, ignoreCase);
-        }
+        return (TEnum)Enum.Parse(typeof(TEnum), value, ignoreCase);
     }
 }

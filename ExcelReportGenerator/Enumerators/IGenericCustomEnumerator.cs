@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
+﻿namespace ExcelReportGenerator.Enumerators;
 
-namespace ExcelReportGenerator.Enumerators
+internal interface IGenericCustomEnumerator<out T> : ICustomEnumerator, IEnumerator<T>
 {
-    internal interface IGenericCustomEnumerator<out T> : ICustomEnumerator, IEnumerator<T>
-    {
-    }
 }

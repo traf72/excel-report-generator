@@ -1,83 +1,81 @@
 ﻿using ExcelReportGenerator.Attributes;
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
-namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
+namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders;
+
+/// <summary>
+/// Provides columns info from Type
+/// </summary>
+internal class TypeColumnsProvider : IGenericColumnsProvider<Type>
 {
-    // Provides columns info from Type
-    internal class TypeColumnsProvider : IGenericColumnsProvider<Type>
+    public IList<ExcelDynamicColumn> GetColumnsList(Type type)
     {
-        public IList<ExcelDynamicColumn> GetColumnsList(Type type)
+        if (type == null)
         {
-            if (type == null)
-            {
-                return new List<ExcelDynamicColumn>();
-            }
+            return new List<ExcelDynamicColumn>();
+        }
 
-            BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
-            MemberInfo[] probableExcelColumns = type.GetFields(flags)
-                .AsEnumerable<MemberInfo>()
-                .Concat(type.GetProperties(flags))
-                .Where(m => !m.IsDefined(typeof(NoExcelColumnAttribute), true)).ToArray();
+        BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
+        MemberInfo[] probableExcelColumns = type.GetFields(flags)
+            .AsEnumerable<MemberInfo>()
+            .Concat(type.GetProperties(flags))
+            .Where(m => !m.IsDefined(typeof(NoExcelColumnAttribute), true)).ToArray();
 
-            IList<ExcelDynamicColumn> result = new List<ExcelDynamicColumn>();
-            foreach (MemberInfo probableColumnMember in probableExcelColumns)
+        IList<ExcelDynamicColumn> result = new List<ExcelDynamicColumn>();
+        foreach (MemberInfo probableColumnMember in probableExcelColumns)
+        {
+            Type memberType = probableColumnMember is PropertyInfo p ? p.PropertyType : ((FieldInfo)probableColumnMember).FieldType;
+            var columnAttr = Extensions.CustomAttributeExtensions.GetCustomAttribute<ExcelColumnAttribute>(probableColumnMember);
+            if (columnAttr != null)
             {
-                Type memberType = probableColumnMember is PropertyInfo p ? p.PropertyType : ((FieldInfo)probableColumnMember).FieldType;
-                var columnAttr = Extensions.CustomAttributeExtensions.GetCustomAttribute<ExcelColumnAttribute>(probableColumnMember);
-                if (columnAttr != null)
+                var excelColumn = new ExcelDynamicColumn(probableColumnMember.Name, memberType, columnAttr.Caption)
                 {
-                    var excelColumn = new ExcelDynamicColumn(probableColumnMember.Name, memberType, columnAttr.Caption)
-                    {
-                        Width = columnAttr.Width > 0 ? columnAttr.Width : (double?)null,
-                        AdjustToContent = columnAttr.AdjustToContent,
-                        Order = columnAttr.Order,
-                    };
-                    SetAggregationFunction(columnAttr, excelColumn);
-                    SetDisplayFormat(columnAttr, excelColumn);
+                    Width = columnAttr.Width > 0 ? columnAttr.Width : (double?)null,
+                    AdjustToContent = columnAttr.AdjustToContent,
+                    Order = columnAttr.Order,
+                };
+                SetAggregationFunction(columnAttr, excelColumn);
+                SetDisplayFormat(columnAttr, excelColumn);
 
-                    result.Add(excelColumn);
-                }
-                else if (memberType.IsExtendedPrimitive() || memberType.IsEnum)
-                {
-                    result.Add(new ExcelDynamicColumn(probableColumnMember.Name, memberType));
-                }
+                result.Add(excelColumn);
             }
-
-            return result.OrderBy(c => c.Order).ToList();
+            else if (memberType.IsExtendedPrimitive() || memberType.IsEnum)
+            {
+                result.Add(new ExcelDynamicColumn(probableColumnMember.Name, memberType));
+            }
         }
 
-        private void SetAggregationFunction(ExcelColumnAttribute columnAttr, ExcelDynamicColumn column)
+        return result.OrderBy(c => c.Order).ToList();
+    }
+
+    private void SetAggregationFunction(ExcelColumnAttribute columnAttr, ExcelDynamicColumn column)
+    {
+        if (columnAttr.NoAggregate)
         {
-            if (columnAttr.NoAggregate)
-            {
-                column.AggregateFunction = AggregateFunction.NoAggregation;
-            }
-            else if (columnAttr.AggregateFunction != AggregateFunction.NoAggregation)
-            {
-                column.AggregateFunction = columnAttr.AggregateFunction;
-            }
+            column.AggregateFunction = AggregateFunction.NoAggregation;
         }
-
-        private void SetDisplayFormat(ExcelColumnAttribute columnAttr, ExcelDynamicColumn column)
+        else if (columnAttr.AggregateFunction != AggregateFunction.NoAggregation)
         {
-            if (columnAttr.IgnoreDisplayFormat)
-            {
-                column.DisplayFormat = null;
-            }
-            else if (!string.IsNullOrWhiteSpace(columnAttr.DisplayFormat))
-            {
-                column.DisplayFormat = columnAttr.DisplayFormat;
-            }
+            column.AggregateFunction = columnAttr.AggregateFunction;
         }
+    }
 
-        IList<ExcelDynamicColumn> IColumnsProvider.GetColumnsList(object type)
+    private void SetDisplayFormat(ExcelColumnAttribute columnAttr, ExcelDynamicColumn column)
+    {
+        if (columnAttr.IgnoreDisplayFormat)
         {
-            return GetColumnsList((Type)type);
+            column.DisplayFormat = null;
         }
+        else if (!string.IsNullOrWhiteSpace(columnAttr.DisplayFormat))
+        {
+            column.DisplayFormat = columnAttr.DisplayFormat;
+        }
+    }
+
+    IList<ExcelDynamicColumn> IColumnsProvider.GetColumnsList(object type)
+    {
+        return GetColumnsList((Type)type);
     }
 }

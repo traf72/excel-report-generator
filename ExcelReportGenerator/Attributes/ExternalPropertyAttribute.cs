@@ -1,11 +1,10 @@
-﻿using System;
+﻿namespace ExcelReportGenerator.Attributes;
 
-namespace ExcelReportGenerator.Attributes
+/// <summary>
+/// Marks panel property which can be populated from excel
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+internal class ExternalPropertyAttribute : Attribute
 {
-    // Marks panel property which can be populated from excel
-    [AttributeUsage(AttributeTargets.Property)]
-    internal class ExternalPropertyAttribute : Attribute
-    {
-        public Type Converter { get; set; }
-    }
+    public Type Converter { get; set; }
 }

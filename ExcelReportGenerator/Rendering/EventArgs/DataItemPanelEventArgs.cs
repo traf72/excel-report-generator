@@ -1,13 +1,12 @@
-﻿namespace ExcelReportGenerator.Rendering.EventArgs
+﻿namespace ExcelReportGenerator.Rendering.EventArgs;
+
+/// <summary>
+/// Represent arguments of data item panel event
+/// </summary>
+public class DataItemPanelEventArgs : PanelEventArgs
 {
     /// <summary>
-    /// Represent arguments of data item panel event
+    /// Hierarchical data item
     /// </summary>
-    public class DataItemPanelEventArgs : PanelEventArgs
-    {
-        /// <summary>
-        /// Hierarchical data item
-        /// </summary>
-        public HierarchicalDataItem DataItem { get; set; }
-    }
+    public HierarchicalDataItem DataItem { get; set; }
 }

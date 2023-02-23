@@ -1,15 +1,14 @@
-﻿namespace ExcelReportGenerator.Excel
+﻿namespace ExcelReportGenerator.Excel;
+
+internal struct RangeCoords
 {
-    internal struct RangeCoords
+    public RangeCoords(CellCoords firstCell, CellCoords lastCell)
     {
-        public RangeCoords(CellCoords firstCell, CellCoords lastCell)
-        {
-            FirstCell = firstCell;
-            LastCell = lastCell;
-        }
-
-        public CellCoords FirstCell { get; }
-
-        public CellCoords LastCell { get; }
+        FirstCell = firstCell;
+        LastCell = lastCell;
     }
+
+    public CellCoords FirstCell { get; }
+
+    public CellCoords LastCell { get; }
 }

@@ -1,7 +1,6 @@
-﻿namespace ExcelReportGenerator.Converters
+﻿namespace ExcelReportGenerator.Converters;
+
+internal interface IConverter
 {
-    internal interface IConverter
-    {
-        object Convert(object input);
-    }
+    object Convert(object input);
 }

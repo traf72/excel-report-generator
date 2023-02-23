@@ -1,7 +1,6 @@
-﻿namespace ExcelReportGenerator.Rendering.Panels
+﻿namespace ExcelReportGenerator.Rendering.Panels;
+
+internal interface INamedPanel : IPanel
 {
-    internal interface INamedPanel : IPanel
-    {
-        string Name { get; }
-    }
+    string Name { get; }
 }

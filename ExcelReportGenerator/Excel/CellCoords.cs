@@ -1,15 +1,14 @@
-﻿namespace ExcelReportGenerator.Excel
+﻿namespace ExcelReportGenerator.Excel;
+
+internal struct CellCoords
 {
-    internal struct CellCoords
+    public CellCoords(int rowNum, int colNum)
     {
-        public CellCoords(int rowNum, int colNum)
-        {
-            RowNum = rowNum;
-            ColNum = colNum;
-        }
-
-        public int RowNum { get; }
-
-        public int ColNum { get; }
+        RowNum = rowNum;
+        ColNum = colNum;
     }
+
+    public int RowNum { get; }
+
+    public int ColNum { get; }
 }

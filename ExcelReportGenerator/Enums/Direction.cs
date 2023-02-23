@@ -1,10 +1,9 @@
-﻿namespace ExcelReportGenerator.Enums
+﻿namespace ExcelReportGenerator.Enums;
+
+internal enum Direction
 {
-    internal enum Direction
-    {
-        Bottom,
-        Right,
-        Top,
-        Left,
-    }
+    Bottom,
+    Right,
+    Top,
+    Left,
 }

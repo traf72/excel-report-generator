@@ -1,70 +1,68 @@
 ﻿using ExcelReportGenerator.Helpers;
-using System;
 using System.Collections;
 
-namespace ExcelReportGenerator.Enumerators
+namespace ExcelReportGenerator.Enumerators;
+
+internal class EnumerableEnumerator : ICustomEnumerator
 {
-    internal class EnumerableEnumerator : ICustomEnumerator
+    private readonly IEnumerable _enumerable;
+    private IEnumerator _enumerator;
+
+    private int? _rowCount;
+
+    public EnumerableEnumerator(IEnumerable enumerable)
     {
-        private readonly IEnumerable _enumerable;
-        private IEnumerator _enumerator;
+        _enumerable = enumerable ?? throw new ArgumentNullException(nameof(enumerable), ArgumentHelper.NullParamMessage);
+        _enumerator = enumerable.GetEnumerator();
+    }
 
-        private int? _rowCount;
+    public bool MoveNext() => _enumerator.MoveNext();
 
-        public EnumerableEnumerator(IEnumerable enumerable)
+    public void Reset()
+    {
+        try
         {
-            _enumerable = enumerable ?? throw new ArgumentNullException(nameof(enumerable), ArgumentHelper.NullParamMessage);
-            _enumerator = enumerable.GetEnumerator();
+            _enumerator.Reset();
         }
-
-        public bool MoveNext() => _enumerator.MoveNext();
-
-        public void Reset()
+        catch (Exception e) when (e is NotSupportedException || e is NotImplementedException)
         {
-            try
-            {
-                _enumerator.Reset();
-            }
-            catch (Exception e) when (e is NotSupportedException || e is NotImplementedException)
-            {
-                _enumerator = _enumerable.GetEnumerator();
-            }
+            _enumerator = _enumerable.GetEnumerator();
         }
+    }
 
-        public object Current => _enumerator.Current;
+    public object Current => _enumerator.Current;
 
-        public int RowCount
+    public int RowCount
+    {
+        get
         {
-            get
+            if (!_rowCount.HasValue)
             {
-                if (!_rowCount.HasValue)
+                if (_enumerable is ICollection collection)
                 {
-                    if (_enumerable is ICollection collection)
+                    _rowCount = collection.Count;
+                }
+                else
+                {
+                    Type enumerableType = _enumerable.GetType();
+                    Type genericCollectionInterface = TypeHelper.TryGetGenericCollectionInterface(enumerableType);
+                    if (genericCollectionInterface != null)
                     {
-                        _rowCount = collection.Count;
+                        _rowCount = (int)enumerableType.GetProperty(nameof(ICollection.Count)).GetValue(_enumerable, null);
                     }
                     else
                     {
-                        Type enumerableType = _enumerable.GetType();
-                        Type genericCollectionInterface = TypeHelper.TryGetGenericCollectionInterface(enumerableType);
-                        if (genericCollectionInterface != null)
+                        int itemsCount = 0;
+                        foreach (object _ in _enumerable)
                         {
-                            _rowCount = (int)enumerableType.GetProperty(nameof(ICollection.Count)).GetValue(_enumerable, null);
+                            itemsCount++;
                         }
-                        else
-                        {
-                            int itemsCount = 0;
-                            foreach (object _ in _enumerable)
-                            {
-                                itemsCount++;
-                            }
-                            _rowCount = itemsCount;
-                        }
+                        _rowCount = itemsCount;
                     }
                 }
-
-                return _rowCount.Value;
             }
+
+            return _rowCount.Value;
         }
     }
 }

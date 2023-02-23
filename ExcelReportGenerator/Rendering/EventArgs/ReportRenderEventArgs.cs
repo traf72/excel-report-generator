@@ -1,15 +1,14 @@
 ﻿using ClosedXML.Excel;
 
-namespace ExcelReportGenerator.Rendering.EventArgs
+namespace ExcelReportGenerator.Rendering.EventArgs;
+
+/// <summary>
+/// Represent arguments of report render event
+/// </summary>
+public class ReportRenderEventArgs : System.EventArgs
 {
     /// <summary>
-    /// Represent arguments of report render event
+    /// Excel workbook
     /// </summary>
-    public class ReportRenderEventArgs : System.EventArgs
-    {
-        /// <summary>
-        /// Excel workbook
-        /// </summary>
-        public XLWorkbook Workbook { get; set; }
-    }
+    public XLWorkbook Workbook { get; set; }
 }

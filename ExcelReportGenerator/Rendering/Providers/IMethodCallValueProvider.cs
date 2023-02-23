@@ -1,28 +1,26 @@
-﻿using System;
-using ExcelReportGenerator.Rendering.TemplateProcessors;
+﻿using ExcelReportGenerator.Rendering.TemplateProcessors;
 
-namespace ExcelReportGenerator.Rendering.Providers
+namespace ExcelReportGenerator.Rendering.Providers;
+
+/// <summary>
+/// Provides results for methods invocation templates
+/// </summary>
+public interface IMethodCallValueProvider
 {
     /// <summary>
-    /// Provides results for methods invocation templates
+    /// Call method by template
     /// </summary>
-    public interface IMethodCallValueProvider
-    {
-        /// <summary>
-        /// Call method by template
-        /// </summary>
-        /// <param name="templateProcessor">Template processor that will be used for parameters specified as templates</param>
-        /// <param name="dataItem">Data item that will be used for parameters specified as data item templates</param>
-        /// <returns>Method call result</returns>
-        object CallMethod(string methodCallTemplate, ITemplateProcessor templateProcessor, HierarchicalDataItem dataItem);
+    /// <param name="templateProcessor">Template processor that will be used for parameters specified as templates</param>
+    /// <param name="dataItem">Data item that will be used for parameters specified as data item templates</param>
+    /// <returns>Method call result</returns>
+    object CallMethod(string methodCallTemplate, ITemplateProcessor templateProcessor, HierarchicalDataItem dataItem);
 
-        /// <summary>
-        /// Call method by template
-        /// </summary>
-        /// <param name="concreteType">Concrete type where method will be searched</param>
-        /// <param name="templateProcessor">Template processor that will be used for parameters specified as templates</param>
-        /// <param name="dataItem">Data item that will be used for parameters specified as data item templates</param>
-        /// <returns>Method call result</returns>
-        object CallMethod(string methodCallTemplate, Type concreteType, ITemplateProcessor templateProcessor, HierarchicalDataItem dataItem);
-    }
+    /// <summary>
+    /// Call method by template
+    /// </summary>
+    /// <param name="concreteType">Concrete type where method will be searched</param>
+    /// <param name="templateProcessor">Template processor that will be used for parameters specified as templates</param>
+    /// <param name="dataItem">Data item that will be used for parameters specified as data item templates</param>
+    /// <returns>Method call result</returns>
+    object CallMethod(string methodCallTemplate, Type concreteType, ITemplateProcessor templateProcessor, HierarchicalDataItem dataItem);
 }

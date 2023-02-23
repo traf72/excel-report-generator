@@ -6,306 +6,302 @@ using ExcelReportGenerator.Excel;
 using ExcelReportGenerator.Helpers;
 using ExcelReportGenerator.Rendering.EventArgs;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
+namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels;
+
+internal class ExcelDataSourcePanel : ExcelNamedPanel
 {
-    internal class ExcelDataSourcePanel : ExcelNamedPanel
+    protected readonly string _dataSourceTemplate;
+    protected readonly bool _isDataReceivedDirectly;
+    protected object _data;
+
+    private int _templatePanelRowCount;
+    private int _templatePanelColumnCount;
+
+    public ExcelDataSourcePanel(string dataSourceTemplate, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor)
+        : base(namedRange, report, templateProcessor)
     {
-        protected readonly string _dataSourceTemplate;
-        protected readonly bool _isDataReceivedDirectly;
-        protected object _data;
-
-        private int _templatePanelRowCount;
-        private int _templatePanelColumnCount;
-
-        public ExcelDataSourcePanel(string dataSourceTemplate, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor)
-            : base(namedRange, report, templateProcessor)
+        if (string.IsNullOrWhiteSpace(dataSourceTemplate))
         {
-            if (string.IsNullOrWhiteSpace(dataSourceTemplate))
-            {
-                throw new ArgumentException(ArgumentHelper.EmptyStringParamMessage, nameof(dataSourceTemplate));
-            }
-            _dataSourceTemplate = dataSourceTemplate;
+            throw new ArgumentException(ArgumentHelper.EmptyStringParamMessage, nameof(dataSourceTemplate));
+        }
+        _dataSourceTemplate = dataSourceTemplate;
+    }
+
+    public ExcelDataSourcePanel(object data, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor) : base(namedRange, report, templateProcessor)
+    {
+        _data = data ?? throw new ArgumentNullException(nameof(data), ArgumentHelper.NullParamMessage);
+        _isDataReceivedDirectly = true;
+    }
+
+    [ExternalProperty]
+    public string GroupBy { get; set; }
+
+    [ExternalProperty]
+    public string BeforeDataItemRenderMethodName { get; set; }
+
+    [ExternalProperty]
+    public string AfterDataItemRenderMethodName { get; set; }
+
+    public override void Render()
+    {
+        // Receive parent data item context
+        HierarchicalDataItem parentDataItem = GetDataContext();
+
+        _data = _isDataReceivedDirectly ? _data : _templateProcessor.GetValue(_dataSourceTemplate, parentDataItem);
+
+        bool isCanceled = CallBeforeRenderMethod();
+        if (isCanceled)
+        {
+            ResultRange = ExcelHelper.CloneRange(Range);
+            return;
         }
 
-        public ExcelDataSourcePanel(object data, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor) : base(namedRange, report, templateProcessor)
+        ICustomEnumerator enumerator = null;
+        try
         {
-            _data = data ?? throw new ArgumentNullException(nameof(data), ArgumentHelper.NullParamMessage);
-            _isDataReceivedDirectly = true;
-        }
-
-        [ExternalProperty]
-        public string GroupBy { get; set; }
-
-        [ExternalProperty]
-        public string BeforeDataItemRenderMethodName { get; set; }
-
-        [ExternalProperty]
-        public string AfterDataItemRenderMethodName { get; set; }
-
-        public override void Render()
-        {
-            // Receive parent data item context
-            HierarchicalDataItem parentDataItem = GetDataContext();
-
-            _data = _isDataReceivedDirectly ? _data : _templateProcessor.GetValue(_dataSourceTemplate, parentDataItem);
-
-            bool isCanceled = CallBeforeRenderMethod();
-            if (isCanceled)
+            enumerator = EnumeratorFactory.Create(_data);
+            // Removing the template if there are no data
+            if (enumerator == null || enumerator.RowCount == 0)
             {
-                ResultRange = ExcelHelper.CloneRange(Range);
+                DeletePanel(this);
                 return;
             }
 
-            ICustomEnumerator enumerator = null;
-            try
+            // Creating the panel template which will be replicated then
+            ExcelDataItemPanel templatePanel = CreateTemplatePanel();
+            _templatePanelRowCount = templatePanel.Range.RowCount();
+            _templatePanelColumnCount = templatePanel.Range.ColumnCount();
+
+            // Allocating space for data
+            if (enumerator.RowCount > 1)
             {
-                enumerator = EnumeratorFactory.Create(_data);
-                // Removing the template if there are no data
-                if (enumerator == null || enumerator.RowCount == 0)
-                {
-                    DeletePanel(this);
-                    return;
-                }
-
-                // Creating the panel template which will be replicated then
-                ExcelDataItemPanel templatePanel = CreateTemplatePanel();
-                _templatePanelRowCount = templatePanel.Range.RowCount();
-                _templatePanelColumnCount = templatePanel.Range.ColumnCount();
-
-                // Allocating space for data
-                if (enumerator.RowCount > 1)
-                {
-                    AllocateSpaceForData(templatePanel, enumerator.RowCount);
-                }
-
-                int rowNum = 0;
-                while (enumerator.MoveNext())
-                {
-                    object currentItem = enumerator.Current;
-                    ExcelDataItemPanel currentPanel;
-                    if (rowNum != enumerator.RowCount - 1)
-                    {
-                        IXLCell templateFirstCell = templatePanel.Range.FirstCell();
-                        // The template itself is moved down or right, depending on the type of panel
-                        MoveTemplatePanel(templatePanel);
-                        // Copying the template on its previous place for the panel which the current data item will be rendered in
-                        currentPanel = (ExcelDataItemPanel)templatePanel.Copy(templateFirstCell);
-                    }
-                    else
-                    {
-                        // Rendering data directly in the template if there is the last data item
-                        currentPanel = templatePanel;
-                    }
-
-                    currentPanel.DataItem = new HierarchicalDataItem { Value = currentItem, Parent = parentDataItem };
-
-                    // Fill template with data
-                    currentPanel.Render();
-                    ResultRange = ExcelHelper.MergeRanges(ResultRange, currentPanel.ResultRange);
-
-                    RemoveAllNamesRecursive(currentPanel);
-                    rowNum++;
-                }
-
-                RemoveName();
-            }
-            finally
-            {
-                (enumerator as IDisposable)?.Dispose();
+                AllocateSpaceForData(templatePanel, enumerator.RowCount);
             }
 
-            GroupResult();
-            CallAfterRenderMethod();
+            int rowNum = 0;
+            while (enumerator.MoveNext())
+            {
+                object currentItem = enumerator.Current;
+                ExcelDataItemPanel currentPanel;
+                if (rowNum != enumerator.RowCount - 1)
+                {
+                    IXLCell templateFirstCell = templatePanel.Range.FirstCell();
+                    // The template itself is moved down or right, depending on the type of panel
+                    MoveTemplatePanel(templatePanel);
+                    // Copying the template on its previous place for the panel which the current data item will be rendered in
+                    currentPanel = (ExcelDataItemPanel)templatePanel.Copy(templateFirstCell);
+                }
+                else
+                {
+                    // Rendering data directly in the template if there is the last data item
+                    currentPanel = templatePanel;
+                }
+
+                currentPanel.DataItem = new HierarchicalDataItem { Value = currentItem, Parent = parentDataItem };
+
+                // Fill template with data
+                currentPanel.Render();
+                ResultRange = ExcelHelper.MergeRanges(ResultRange, currentPanel.ResultRange);
+
+                RemoveAllNamesRecursive(currentPanel);
+                rowNum++;
+            }
+
+            RemoveName();
+        }
+        finally
+        {
+            (enumerator as IDisposable)?.Dispose();
         }
 
-        private void GroupResult()
+        GroupResult();
+        CallAfterRenderMethod();
+    }
+
+    private void GroupResult()
+    {
+        if (string.IsNullOrWhiteSpace(GroupBy))
         {
-            if (string.IsNullOrWhiteSpace(GroupBy))
-            {
-                return;
-            }
-
-            int[] groupColOrRowNumbers = GroupBy.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(strNum =>
-            {
-                if (int.TryParse(strNum, out int num))
-                {
-                    return num;
-                }
-                throw new InvalidCastException($"Parse \"{nameof(GroupBy)}\" property failed. Cannot convert value \"{strNum.Trim()}\" to {nameof(Int32)}");
-            }).ToArray();
-
-            if (Type == PanelType.Vertical)
-            {
-                GroupCellsVertical(ResultRange, groupColOrRowNumbers);
-            }
-            else
-            {
-                GroupCellsHorizontal(ResultRange, groupColOrRowNumbers);
-            }
+            return;
         }
 
-        private void GroupCellsVertical(IXLRange range, int[] groupColNumbers)
+        int[] groupColOrRowNumbers = GroupBy.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(strNum =>
         {
-            IDictionary<int, (XLCellValue StartCellValue, int StartRowNum)> previousCellValues = new Dictionary<int, (XLCellValue, int)>();
-            int rowsCount = range.Rows().Count();
-            for (int rowNum = 1; rowNum <= rowsCount; rowNum++)
+            if (int.TryParse(strNum, out int num))
             {
-                IXLRangeRow row = range.Row(rowNum);
-                foreach (int colNum in groupColNumbers)
+                return num;
+            }
+            throw new InvalidCastException($"Parse \"{nameof(GroupBy)}\" property failed. Cannot convert value \"{strNum.Trim()}\" to {nameof(Int32)}");
+        }).ToArray();
+
+        if (Type == PanelType.Vertical)
+        {
+            GroupCellsVertical(ResultRange, groupColOrRowNumbers);
+        }
+        else
+        {
+            GroupCellsHorizontal(ResultRange, groupColOrRowNumbers);
+        }
+    }
+
+    private void GroupCellsVertical(IXLRange range, int[] groupColNumbers)
+    {
+        IDictionary<int, (XLCellValue StartCellValue, int StartRowNum)> previousCellValues = new Dictionary<int, (XLCellValue, int)>();
+        int rowsCount = range.Rows().Count();
+        for (int rowNum = 1; rowNum <= rowsCount; rowNum++)
+        {
+            IXLRangeRow row = range.Row(rowNum);
+            foreach (int colNum in groupColNumbers)
+            {
+                XLCellValue cellValue = row.Cell(colNum).Value;
+                if (previousCellValues.TryGetValue(colNum, out var previousResult))
                 {
-                    XLCellValue cellValue = row.Cell(colNum).Value;
-                    if (previousCellValues.TryGetValue(colNum, out var previousResult))
+                    if (!previousResult.StartCellValue.Equals(cellValue))
                     {
-                        if (!previousResult.StartCellValue.Equals(cellValue))
-                        {
-                            range.Range(previousResult.StartRowNum, colNum, rowNum - 1, colNum).Merge();
-                            previousCellValues[colNum] = (cellValue, rowNum);
-                        }
-                        else if (rowNum == rowsCount)
-                        {
-                            range.Range(previousResult.StartRowNum, colNum, rowNum, colNum).Merge();
-                        }
-                    }
-                    else
-                    {
+                        range.Range(previousResult.StartRowNum, colNum, rowNum - 1, colNum).Merge();
                         previousCellValues[colNum] = (cellValue, rowNum);
                     }
-                }
-            }
-        }
-
-        private void GroupCellsHorizontal(IXLRange range, int[] groupRowNumbers)
-        {
-            IDictionary<int, (XLCellValue StartCellValue, int StartColNum)> previousCellValues = new Dictionary<int, (XLCellValue, int)>();
-            int colsCount = range.Columns().Count();
-            for (int colNum = 1; colNum <= colsCount; colNum++)
-            {
-                IXLRangeColumn col = range.Column(colNum);
-                foreach (int rowNum in groupRowNumbers)
-                {
-                    XLCellValue cellValue = col.Cell(rowNum).Value;
-                    if (previousCellValues.TryGetValue(rowNum, out var previousResult))
+                    else if (rowNum == rowsCount)
                     {
-                        if (!previousResult.StartCellValue.Equals(cellValue))
-                        {
-                            range.Range(rowNum, previousResult.StartColNum, rowNum, colNum - 1).Merge();
-                            previousCellValues[rowNum] = (cellValue, colNum);
-                        }
-                        else if (colNum == colsCount)
-                        {
-                            range.Range(rowNum, previousResult.StartColNum, rowNum, colNum).Merge();
-                        }
+                        range.Range(previousResult.StartRowNum, colNum, rowNum, colNum).Merge();
                     }
-                    else
-                    {
-                        previousCellValues[rowNum] = (cellValue, colNum);
-                    }
-                }
-            }
-        }
-
-        private ExcelDataItemPanel CreateTemplatePanel()
-        {
-            var templatePanel = new ExcelDataItemPanel(Range, _report, _templateProcessor)
-            {
-                Parent = Parent,
-                Children = Children,
-                RenderPriority = RenderPriority,
-                ShiftType = ShiftType,
-                Type = Type,
-                BeforeRenderMethodName = BeforeDataItemRenderMethodName,
-                AfterRenderMethodName = AfterDataItemRenderMethodName,
-            };
-
-            foreach (IExcelPanel child in templatePanel.Children)
-            {
-                child.Parent = templatePanel;
-            }
-
-            return templatePanel;
-        }
-
-        private void AllocateSpaceForData(IExcelPanel templatePanel, int dataItemsCount)
-        {
-            if (ShiftType == ShiftType.NoShift)
-            {
-                return;
-            }
-
-            IXLRange range = templatePanel.Range;
-            if (Type == PanelType.Vertical)
-            {
-                int rowCount = (dataItemsCount - 1) * Range.RowCount();
-                if (ShiftType == ShiftType.Row)
-                {
-                    range.Worksheet.Row(range.LastRow().RowNumber()).InsertRowsBelow(rowCount);
                 }
                 else
                 {
-                    range.InsertRowsBelow(rowCount, false);
+                    previousCellValues[colNum] = (cellValue, rowNum);
                 }
+            }
+        }
+    }
+
+    private void GroupCellsHorizontal(IXLRange range, int[] groupRowNumbers)
+    {
+        IDictionary<int, (XLCellValue StartCellValue, int StartColNum)> previousCellValues = new Dictionary<int, (XLCellValue, int)>();
+        int colsCount = range.Columns().Count();
+        for (int colNum = 1; colNum <= colsCount; colNum++)
+        {
+            IXLRangeColumn col = range.Column(colNum);
+            foreach (int rowNum in groupRowNumbers)
+            {
+                XLCellValue cellValue = col.Cell(rowNum).Value;
+                if (previousCellValues.TryGetValue(rowNum, out var previousResult))
+                {
+                    if (!previousResult.StartCellValue.Equals(cellValue))
+                    {
+                        range.Range(rowNum, previousResult.StartColNum, rowNum, colNum - 1).Merge();
+                        previousCellValues[rowNum] = (cellValue, colNum);
+                    }
+                    else if (colNum == colsCount)
+                    {
+                        range.Range(rowNum, previousResult.StartColNum, rowNum, colNum).Merge();
+                    }
+                }
+                else
+                {
+                    previousCellValues[rowNum] = (cellValue, colNum);
+                }
+            }
+        }
+    }
+
+    private ExcelDataItemPanel CreateTemplatePanel()
+    {
+        var templatePanel = new ExcelDataItemPanel(Range, _report, _templateProcessor)
+        {
+            Parent = Parent,
+            Children = Children,
+            RenderPriority = RenderPriority,
+            ShiftType = ShiftType,
+            Type = Type,
+            BeforeRenderMethodName = BeforeDataItemRenderMethodName,
+            AfterRenderMethodName = AfterDataItemRenderMethodName,
+        };
+
+        foreach (IExcelPanel child in templatePanel.Children)
+        {
+            child.Parent = templatePanel;
+        }
+
+        return templatePanel;
+    }
+
+    private void AllocateSpaceForData(IExcelPanel templatePanel, int dataItemsCount)
+    {
+        if (ShiftType == ShiftType.NoShift)
+        {
+            return;
+        }
+
+        IXLRange range = templatePanel.Range;
+        if (Type == PanelType.Vertical)
+        {
+            int rowCount = (dataItemsCount - 1) * Range.RowCount();
+            if (ShiftType == ShiftType.Row)
+            {
+                range.Worksheet.Row(range.LastRow().RowNumber()).InsertRowsBelow(rowCount);
             }
             else
             {
-                int columnCount = (dataItemsCount - 1) * Range.ColumnCount();
-                if (ShiftType == ShiftType.Row)
-                {
-                    range.Worksheet.Column(range.LastColumn().ColumnNumber()).InsertColumnsAfter(columnCount);
-                }
-                else
-                {
-                    range.InsertColumnsAfter(columnCount, false);
-                }
+                range.InsertRowsBelow(rowCount, false);
             }
         }
-
-        private void MoveTemplatePanel(IExcelPanel templatePanel)
+        else
         {
-            AddressShift shift = Type == PanelType.Vertical
-                ? new AddressShift(_templatePanelRowCount, 0)
-                : new AddressShift(0, _templatePanelColumnCount);
-
-            templatePanel.Move(ExcelHelper.ShiftCell(templatePanel.Range.FirstCell(), shift));
+            int columnCount = (dataItemsCount - 1) * Range.ColumnCount();
+            if (ShiftType == ShiftType.Row)
+            {
+                range.Worksheet.Column(range.LastColumn().ColumnNumber()).InsertColumnsAfter(columnCount);
+            }
+            else
+            {
+                range.InsertColumnsAfter(columnCount, false);
+            }
         }
+    }
 
-        protected void DeletePanel(IExcelPanel panel)
-        {
-            RemoveAllNamesRecursive(panel);
-            panel.Delete();
-        }
+    private void MoveTemplatePanel(IExcelPanel templatePanel)
+    {
+        AddressShift shift = Type == PanelType.Vertical
+            ? new AddressShift(_templatePanelRowCount, 0)
+            : new AddressShift(0, _templatePanelColumnCount);
 
-        protected override PanelBeforeRenderEventArgs GetBeforePanelRenderEventArgs()
-        {
-            return new DataSourcePanelBeforeRenderEventArgs { Range = Range, Data = _data };
-        }
+        templatePanel.Move(ExcelHelper.ShiftCell(templatePanel.Range.FirstCell(), shift));
+    }
 
-        protected override PanelEventArgs GetAfterPanelRenderEventArgs()
-        {
-            return new DataSourcePanelEventArgs { Range = ResultRange, Data = _data };
-        }
+    protected void DeletePanel(IExcelPanel panel)
+    {
+        RemoveAllNamesRecursive(panel);
+        panel.Delete();
+    }
 
-        protected override IExcelPanel CopyPanel(IXLCell cell)
-        {
-            var panel = _isDataReceivedDirectly
-                ? new ExcelDataSourcePanel(_data, CopyNamedRange(cell), _report, _templateProcessor)
-                : new ExcelDataSourcePanel(_dataSourceTemplate, CopyNamedRange(cell), _report, _templateProcessor);
+    protected override PanelBeforeRenderEventArgs GetBeforePanelRenderEventArgs()
+    {
+        return new DataSourcePanelBeforeRenderEventArgs { Range = Range, Data = _data };
+    }
 
-            FillCopyProperties(panel);
-            return panel;
-        }
+    protected override PanelEventArgs GetAfterPanelRenderEventArgs()
+    {
+        return new DataSourcePanelEventArgs { Range = ResultRange, Data = _data };
+    }
 
-        protected override void FillCopyProperties(IExcelPanel panel)
-        {
-            var dataSourcePanel = panel as ExcelDataSourcePanel;
-            dataSourcePanel.GroupBy = GroupBy;
-            dataSourcePanel.BeforeDataItemRenderMethodName = BeforeDataItemRenderMethodName;
-            dataSourcePanel.AfterDataItemRenderMethodName = AfterDataItemRenderMethodName;
+    protected override IExcelPanel CopyPanel(IXLCell cell)
+    {
+        var panel = _isDataReceivedDirectly
+            ? new ExcelDataSourcePanel(_data, CopyNamedRange(cell), _report, _templateProcessor)
+            : new ExcelDataSourcePanel(_dataSourceTemplate, CopyNamedRange(cell), _report, _templateProcessor);
 
-            base.FillCopyProperties(panel);
-        }
+        FillCopyProperties(panel);
+        return panel;
+    }
+
+    protected override void FillCopyProperties(IExcelPanel panel)
+    {
+        var dataSourcePanel = panel as ExcelDataSourcePanel;
+        dataSourcePanel.GroupBy = GroupBy;
+        dataSourcePanel.BeforeDataItemRenderMethodName = BeforeDataItemRenderMethodName;
+        dataSourcePanel.AfterDataItemRenderMethodName = AfterDataItemRenderMethodName;
+
+        base.FillCopyProperties(panel);
     }
 }

@@ -1,12 +1,11 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace ExcelReportGenerator.Helpers
+namespace ExcelReportGenerator.Helpers;
+
+internal static class RegexHelper
 {
-    internal static class RegexHelper
+    public static string SafeEscape(string value)
     {
-        public static string SafeEscape(string value)
-        {
-            return value == null ? null : Regex.Escape(value);
-        }
+        return value == null ? null : Regex.Escape(value);
     }
 }

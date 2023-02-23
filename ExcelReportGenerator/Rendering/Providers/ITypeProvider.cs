@@ -1,15 +1,12 @@
-﻿using System;
+﻿namespace ExcelReportGenerator.Rendering.Providers;
 
-namespace ExcelReportGenerator.Rendering.Providers
+/// <summary>
+/// Provides types for templates
+/// </summary>
+public interface ITypeProvider
 {
     /// <summary>
-    /// Provides types for templates
+    /// Provides type based on <paramref name="typeTemplate" />
     /// </summary>
-    public interface ITypeProvider
-    {
-        /// <summary>
-        /// Provides type based on <paramref name="typeTemplate" />
-        /// </summary>
-        Type GetType(string typeTemplate);
-    }
+    Type GetType(string typeTemplate);
 }

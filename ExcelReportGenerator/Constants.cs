@@ -1,7 +1,6 @@
-﻿namespace ExcelReportGenerator
+﻿namespace ExcelReportGenerator;
+
+internal static class Constants
 {
-    internal static class Constants
-    {
-        public const string InvalidTemplateMessage = "Template \"{0}\" is invalid";
-    }
+    public const string InvalidTemplateMessage = "Template \"{0}\" is invalid";
 }

@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 
-namespace ExcelReportGenerator.Enumerators
+namespace ExcelReportGenerator.Enumerators;
+
+internal interface ICustomEnumerator : IEnumerator
 {
-    internal interface ICustomEnumerator : IEnumerator
-    {
-        int RowCount { get; }
-    }
+    int RowCount { get; }
 }

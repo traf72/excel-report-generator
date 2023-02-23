@@ -1,46 +1,45 @@
 ﻿using ExcelReportGenerator.Helpers;
-using System;
-using System.Collections.Generic;
 
-namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
+namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders;
+
+/// <summary>
+/// Provides columns info from KeyValuePair
+/// </summary>
+internal class KeyValuePairColumnsProvider : IColumnsProvider
 {
-    // Provides columns info from KeyValuePair
-    internal class KeyValuePairColumnsProvider : IColumnsProvider
+    public IList<ExcelDynamicColumn> GetColumnsList(object data)
     {
-        public IList<ExcelDynamicColumn> GetColumnsList(object data)
-        {
-            Type[] genericArgs;
+        Type[] genericArgs;
 
-            if (data == null)
+        if (data == null)
+        {
+            genericArgs = new Type[2];
+        }
+        else
+        {
+            Type dataType = data.GetType();
+            if (TypeHelper.IsKeyValuePair(dataType))
             {
-                genericArgs = new Type[2];
+                genericArgs = dataType.GetGenericArguments();
             }
             else
             {
-                Type dataType = data.GetType();
-                if (TypeHelper.IsKeyValuePair(dataType))
+                Type genericEnumerable = TypeHelper.TryGetGenericEnumerableInterface(dataType);
+                if (genericEnumerable != null)
                 {
-                    genericArgs = dataType.GetGenericArguments();
+                    genericArgs = genericEnumerable.GetGenericArguments()[0].GetGenericArguments();
                 }
                 else
                 {
-                    Type genericEnumerable = TypeHelper.TryGetGenericEnumerableInterface(dataType);
-                    if (genericEnumerable != null)
-                    {
-                        genericArgs = genericEnumerable.GetGenericArguments()[0].GetGenericArguments();
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("Type of data must be KeyValuePair<TKey, TValue> or IEnumerable<KeyValuePair<TKey, TValue>>");
-                    }
+                    throw new InvalidOperationException("Type of data must be KeyValuePair<TKey, TValue> or IEnumerable<KeyValuePair<TKey, TValue>>");
                 }
             }
-
-            return new List<ExcelDynamicColumn>
-            {
-                new ExcelDynamicColumn("Key", genericArgs[0]),
-                new ExcelDynamicColumn("Value", genericArgs[1]),
-            };
         }
+
+        return new List<ExcelDynamicColumn>
+        {
+            new("Key", genericArgs[0]),
+            new("Value", genericArgs[1]),
+        };
     }
 }

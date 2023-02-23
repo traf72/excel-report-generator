@@ -1,9 +1,8 @@
-﻿namespace ExcelReportGenerator.Enums
+﻿namespace ExcelReportGenerator.Enums;
+
+internal enum ShiftType
 {
-    internal enum ShiftType
-    {
-        Cells,
-        Row,
-        NoShift,
-    }
+    Cells,
+    Row,
+    NoShift,
 }

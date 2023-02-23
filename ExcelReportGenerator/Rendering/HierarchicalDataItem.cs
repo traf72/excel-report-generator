@@ -1,12 +1,11 @@
-﻿namespace ExcelReportGenerator.Rendering
-{
-    /// <summary>
-    /// Type that represent hierarchical data item
-    /// </summary>
-    public class HierarchicalDataItem
-    {
-        public object Value { get; set; }
+﻿namespace ExcelReportGenerator.Rendering;
 
-        public HierarchicalDataItem Parent { get; set; }
-    }
+/// <summary>
+/// Type that represent hierarchical data item
+/// </summary>
+public class HierarchicalDataItem
+{
+    public object Value { get; set; }
+
+    public HierarchicalDataItem Parent { get; set; }
 }

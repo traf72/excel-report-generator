@@ -1,7 +1,6 @@
-﻿namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
+﻿namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
+
+internal interface IDataItemValueProviderFactory
 {
-    internal interface IDataItemValueProviderFactory
-    {
-        IDataItemValueProvider Create(object data);
-    }
+    IDataItemValueProvider Create(object data);
 }

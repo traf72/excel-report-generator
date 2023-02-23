@@ -1,66 +1,68 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using ExcelReportGenerator.Exceptions;
 using ExcelReportGenerator.Extensions;
 using ExcelReportGenerator.Helpers;
 
-namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders
+namespace ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
+
+/// <summary>
+/// Provides values from data reader
+/// </summary>
+internal class DataReaderValueProvider : IGenericDataItemValueProvider<IDataReader>
 {
-    // Provides values from data reader
-    internal class DataReaderValueProvider : IGenericDataItemValueProvider<IDataReader>
+    private string _columnName;
+    private IDataReader _dataReader;
+
+    /// <summary>
+    /// Returns value from specified column of data reader
+    /// </summary>
+    public virtual object GetValue(string columnName, IDataReader dataReader)
     {
-        private string _columnName;
-        private IDataReader _dataReader;
-
-        // Returns value from specified column of data reader
-        public virtual object GetValue(string columnName, IDataReader dataReader)
+        if (string.IsNullOrWhiteSpace(columnName))
         {
-            if (string.IsNullOrWhiteSpace(columnName))
-            {
-                throw new ArgumentException(ArgumentHelper.EmptyStringParamMessage, nameof(columnName));
-            }
-            if (dataReader == null)
-            {
-                throw new ArgumentNullException(nameof(dataReader), ArgumentHelper.NullParamMessage);
-            }
-            if (dataReader.IsClosed)
-            {
-                throw new InvalidOperationException("DataReader is closed");
-            }
-
-            _columnName = columnName.Trim();
-            _dataReader = dataReader;
-
-            return dataReader.SafeGetValue(GetColumnIndex());
+            throw new ArgumentException(ArgumentHelper.EmptyStringParamMessage, nameof(columnName));
+        }
+        if (dataReader == null)
+        {
+            throw new ArgumentNullException(nameof(dataReader), ArgumentHelper.NullParamMessage);
+        }
+        if (dataReader.IsClosed)
+        {
+            throw new InvalidOperationException("DataReader is closed");
         }
 
-        private int GetColumnIndex()
-        {
-            int colIndex = -1;
-            try
-            {
-                colIndex = _dataReader.GetOrdinal(_columnName);
-            }
-            catch (IndexOutOfRangeException e)
-            {
-                ThrowColumnNotFoundException(e);
-            }
+        _columnName = columnName.Trim();
+        _dataReader = dataReader;
 
-            if (colIndex == -1)
-            {
-                ThrowColumnNotFoundException();
-            }
-            return colIndex;
+        return dataReader.SafeGetValue(GetColumnIndex());
+    }
+
+    private int GetColumnIndex()
+    {
+        int colIndex = -1;
+        try
+        {
+            colIndex = _dataReader.GetOrdinal(_columnName);
+        }
+        catch (IndexOutOfRangeException e)
+        {
+            ThrowColumnNotFoundException(e);
         }
 
-        private void ThrowColumnNotFoundException(Exception innerException = null)
+        if (colIndex == -1)
         {
-            throw new ColumnNotFoundException($"DataReader does not contain column \"{_columnName}\"", innerException);
+            ThrowColumnNotFoundException();
         }
+        return colIndex;
+    }
 
-        object IDataItemValueProvider.GetValue(string columnName, object dataReader)
-        {
-            return GetValue(columnName, (IDataReader)dataReader);
-        }
+    private void ThrowColumnNotFoundException(Exception innerException = null)
+    {
+        throw new ColumnNotFoundException($"DataReader does not contain column \"{_columnName}\"", innerException);
+    }
+
+    object IDataItemValueProvider.GetValue(string columnName, object dataReader)
+    {
+        return GetValue(columnName, (IDataReader)dataReader);
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace ExcelReportGenerator.Rendering.Panels
+﻿namespace ExcelReportGenerator.Rendering.Panels;
+
+internal interface IDataItemPanel : IPanel
 {
-    internal interface IDataItemPanel : IPanel
-    {
-        HierarchicalDataItem DataItem { get; set; }
-    }
+    HierarchicalDataItem DataItem { get; set; }
 }

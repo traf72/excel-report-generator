@@ -1,31 +1,29 @@
 ﻿using ClosedXML.Excel;
 using ExcelReportGenerator.Enums;
-using System.Collections.Generic;
 
-namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
+namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels;
+
+internal interface IExcelPanel : IPanel
 {
-    internal interface IExcelPanel : IPanel
-    {
-        IExcelPanel Parent { get; set; }
+    IExcelPanel Parent { get; set; }
 
-        IList<IExcelPanel> Children { get; set; }
+    IList<IExcelPanel> Children { get; set; }
 
-        IXLRange Range { get; }
+    IXLRange Range { get; }
 
-        IXLRange ResultRange { get; }
+    IXLRange ResultRange { get; }
 
-        ShiftType ShiftType { get; set; }
+    ShiftType ShiftType { get; set; }
 
-        PanelType Type { get; set; }
+    PanelType Type { get; set; }
 
-        int RenderPriority { get; set; }
+    int RenderPriority { get; set; }
 
-        void Render();
+    void Render();
 
-        IExcelPanel Copy(IXLCell cell, bool recursive = true);
+    IExcelPanel Copy(IXLCell cell, bool recursive = true);
 
-        void Move(IXLCell cell);
+    void Move(IXLCell cell);
 
-        internal void RecalculateRangeRelativeParentRecursive();
-    }
+    internal void RecalculateRangeRelativeParentRecursive();
 }

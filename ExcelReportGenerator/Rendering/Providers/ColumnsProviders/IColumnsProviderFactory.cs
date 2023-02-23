@@ -1,8 +1,9 @@
-﻿namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
+﻿namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders;
+
+internal interface IColumnsProviderFactory
 {
-    internal interface IColumnsProviderFactory
-    {
-        // Create appropriate column provider based on data 
-        IColumnsProvider Create(object data);
-    }
+    /// <summary>
+    /// Create appropriate column provider based on data
+    /// </summary>
+    IColumnsProvider Create(object data);
 }

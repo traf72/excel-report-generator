@@ -1,41 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using ExcelReportGenerator.Helpers;
 
-namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
+namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders;
+
+/// <summary>
+/// Provides columns info from DataSet
+/// </summary>
+internal class DataSetColumnsProvider : IGenericColumnsProvider<DataSet>
 {
-    // Provides columns info from DataSet
-    internal class DataSetColumnsProvider : IGenericColumnsProvider<DataSet>
+    private readonly IGenericColumnsProvider<DataTable> _dataTableColumnsProvider;
+    private readonly string _tableName;
+
+    public DataSetColumnsProvider(IGenericColumnsProvider<DataTable> dataTableColumnsProvider, string tableName = null)
     {
-        private readonly IGenericColumnsProvider<DataTable> _dataTableColumnsProvider;
-        private readonly string _tableName;
+        _dataTableColumnsProvider = dataTableColumnsProvider ?? throw new ArgumentNullException(nameof(dataTableColumnsProvider), ArgumentHelper.NullParamMessage);
+        _tableName = tableName;
+    }
 
-        public DataSetColumnsProvider(IGenericColumnsProvider<DataTable> dataTableColumnsProvider, string tableName = null)
+    public IList<ExcelDynamicColumn> GetColumnsList(DataSet dataSet)
+    {
+        if (dataSet == null || dataSet.Tables.Count == 0)
         {
-            _dataTableColumnsProvider = dataTableColumnsProvider ?? throw new ArgumentNullException(nameof(dataTableColumnsProvider), ArgumentHelper.NullParamMessage);
-            _tableName = tableName;
+            return new List<ExcelDynamicColumn>();
         }
 
-        public IList<ExcelDynamicColumn> GetColumnsList(DataSet dataSet)
+        if (string.IsNullOrWhiteSpace(_tableName))
         {
-            if (dataSet == null || dataSet.Tables.Count == 0)
-            {
-                return new List<ExcelDynamicColumn>();
-            }
-
-            if (string.IsNullOrWhiteSpace(_tableName))
-            {
-                return _dataTableColumnsProvider.GetColumnsList(dataSet.Tables[0]);
-            }
-
-            DataTable table = dataSet.Tables[_tableName];
-            return table == null ? new List<ExcelDynamicColumn>() : _dataTableColumnsProvider.GetColumnsList(table);
+            return _dataTableColumnsProvider.GetColumnsList(dataSet.Tables[0]);
         }
 
-        IList<ExcelDynamicColumn> IColumnsProvider.GetColumnsList(object dataSet)
-        {
-            return GetColumnsList((DataSet)dataSet);
-        }
+        DataTable table = dataSet.Tables[_tableName];
+        return table == null ? new List<ExcelDynamicColumn>() : _dataTableColumnsProvider.GetColumnsList(table);
+    }
+
+    IList<ExcelDynamicColumn> IColumnsProvider.GetColumnsList(object dataSet)
+    {
+        return GetColumnsList((DataSet)dataSet);
     }
 }

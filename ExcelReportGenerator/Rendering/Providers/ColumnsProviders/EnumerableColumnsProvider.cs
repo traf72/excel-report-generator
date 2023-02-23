@@ -1,35 +1,33 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
 using ExcelReportGenerator.Helpers;
 
-namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
+namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders;
+
+/// <summary>
+/// Provides columns info from not generic enumerable
+/// </summary>
+internal class EnumerableColumnsProvider : IGenericColumnsProvider<IEnumerable>
 {
-    // Provides columns info from not generic enumerable
-    internal class EnumerableColumnsProvider : IGenericColumnsProvider<IEnumerable>
+    private readonly IGenericColumnsProvider<Type> _typeColumnsProvider;
+
+    public EnumerableColumnsProvider(IGenericColumnsProvider<Type> typeColumnsProvider)
     {
-        private readonly IGenericColumnsProvider<Type> _typeColumnsProvider;
+        _typeColumnsProvider = typeColumnsProvider ?? throw new ArgumentNullException(nameof(typeColumnsProvider), ArgumentHelper.NullParamMessage);
+    }
 
-        public EnumerableColumnsProvider(IGenericColumnsProvider<Type> typeColumnsProvider)
+    public IList<ExcelDynamicColumn> GetColumnsList(IEnumerable data)
+    {
+        object firstElement = data?.Cast<object>().FirstOrDefault();
+        if (firstElement == null)
         {
-            _typeColumnsProvider = typeColumnsProvider ?? throw new ArgumentNullException(nameof(typeColumnsProvider), ArgumentHelper.NullParamMessage);
+            return new List<ExcelDynamicColumn>();
         }
 
-        public IList<ExcelDynamicColumn> GetColumnsList(IEnumerable data)
-        {
-            object firstElement = data?.Cast<object>().FirstOrDefault();
-            if (firstElement == null)
-            {
-                return new List<ExcelDynamicColumn>();
-            }
+        return _typeColumnsProvider.GetColumnsList(firstElement.GetType());
+    }
 
-            return _typeColumnsProvider.GetColumnsList(firstElement.GetType());
-        }
-
-        IList<ExcelDynamicColumn> IColumnsProvider.GetColumnsList(object data)
-        {
-            return GetColumnsList((IEnumerable)data);
-        }
+    IList<ExcelDynamicColumn> IColumnsProvider.GetColumnsList(object data)
+    {
+        return GetColumnsList((IEnumerable)data);
     }
 }

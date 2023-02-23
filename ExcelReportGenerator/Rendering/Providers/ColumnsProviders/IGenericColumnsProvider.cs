@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
+﻿namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders;
 
-namespace ExcelReportGenerator.Rendering.Providers.ColumnsProviders
+internal interface IGenericColumnsProvider<in T> : IColumnsProvider
 {
-    internal interface IGenericColumnsProvider<in T> : IColumnsProvider
-    {
-        IList<ExcelDynamicColumn> GetColumnsList(T data);
-    }
+    IList<ExcelDynamicColumn> GetColumnsList(T data);
 }

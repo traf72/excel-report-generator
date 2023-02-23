@@ -1,15 +1,12 @@
-﻿using System;
+﻿namespace ExcelReportGenerator.Exceptions;
 
-namespace ExcelReportGenerator.Exceptions
+public class MethodNotFoundException : Exception
 {
-    public class MethodNotFoundException : Exception
+    public MethodNotFoundException(string message) : base(message)
     {
-        public MethodNotFoundException(string message) : base(message)
-        {
-        }
+    }
 
-        public MethodNotFoundException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
+    public MethodNotFoundException(string message, Exception innerException) : base(message, innerException)
+    {
     }
 }

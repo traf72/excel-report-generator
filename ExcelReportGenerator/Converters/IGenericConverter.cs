@@ -1,7 +1,6 @@
-﻿namespace ExcelReportGenerator.Converters
+﻿namespace ExcelReportGenerator.Converters;
+
+internal interface IGenericConverter<in TIn, out TOut> : IConverter
 {
-    internal interface IGenericConverter<in TIn, out TOut> : IConverter
-    {
-        TOut Convert(TIn input);
-    }
+    TOut Convert(TIn input);
 }
