@@ -13,7 +13,7 @@
     <PackageTags>Excel Report Reports Reporting xlsx ClosedXml Spreadsheet Workbook Worksheet Generator</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>2.0.0</Version>
-    <PackageReleaseNotes>Support for ClosedXml 0.95.0</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/traf72/excel-report-generator/releases</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/traf72/excel-report-generator</PackageProjectUrl>
     <PackageVersion>2.0.0</PackageVersion>
   </PropertyGroup>
