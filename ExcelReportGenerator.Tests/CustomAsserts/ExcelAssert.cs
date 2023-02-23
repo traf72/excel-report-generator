@@ -29,8 +29,7 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
                 if (expectedCell.HasFormula)
                 {
                     Assert.AreEqual(expectedCell.FormulaA1, actualCell.FormulaA1, $"Cell {expectedCell.Address} FormulaA1 failed.");
-                    //// For some reason sometimes the formulas "FormulaR1C1" are different although the formulas "FormulaA1" are match
-                    //Assert.AreEqual(expectedCell.FormulaR1C1, actualCell.FormulaR1C1, $"Cell {expectedCell.Address} FormulaR1C1 failed.");
+                    Assert.AreEqual(expectedCell.FormulaR1C1, actualCell.FormulaR1C1, $"Cell {expectedCell.Address} FormulaR1C1 failed.");
                     Assert.AreEqual(expectedCell.FormulaReference, actualCell.FormulaReference, $"Cell {expectedCell.Address} FormulaReference failed.");
                 }
                 else
@@ -42,7 +41,7 @@ namespace ExcelReportGenerator.Tests.CustomAsserts
                 AreColumnsEquals(expectedCell.WorksheetColumn(), actualCell.WorksheetColumn(), $"Column {actualCell.WorksheetColumn().RangeAddress} {{0}} failed.");
                 AreRowEquals(expectedCell.WorksheetRow(), actualCell.WorksheetRow(), $"Row {actualCell.WorksheetRow().RangeAddress} {{0}} failed.");
                 AreCellsStyleEquals(expectedCell.Style, actualCell.Style, $"Cell {expectedCell.Address} Style {{0}} failed.");
-                AreCellsCommentEquals(expectedCell.Comment, actualCell.Comment, $"Cell {expectedCell.Address} Comment {{0}} failed.");
+                AreCellsCommentEquals(expectedCell.GetComment(), actualCell.GetComment(), $"Cell {expectedCell.Address} Comment {{0}} failed.");
             }
 
             AreMergedRangesEquals(expected.MergedRanges, actual.MergedRanges);

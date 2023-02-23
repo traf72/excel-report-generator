@@ -119,7 +119,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
 
         public void TestExcelPanelAfterRender(PanelEventArgs args)
         {
-            args.Range.Cell(1, 2).Value = Convert.ToInt32(args.Range.Cell(1, 2).Value) + 1;
+            args.Range.Cell(1, 2).Value = args.Range.Cell(1, 2).GetValue<int>() + 1;
         }
 
         public void TestExcelDataSourcePanelBeforeRender(DataSourcePanelBeforeRenderEventArgs args)
@@ -242,9 +242,9 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
         public void TestExcelDynamicPanelAfterDataItemRender(DataItemPanelEventArgs args)
         {
             IXLCell targetCell = args.Range.Cells().ElementAt(2);
-            if (targetCell.Value is bool val)
+            if (targetCell.Value.IsBoolean)
             {
-                targetCell.Value = val ? "Yes" : "No";
+                targetCell.Value = targetCell.Value.GetBoolean() ? "Yes" : "No";
             }
         }
 

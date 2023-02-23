@@ -93,13 +93,13 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 if (_templateProcessor.IsHorizontalPageBreak(cellValue))
                 {
                     cell.Worksheet.PageSetup.AddHorizontalPageBreak(cell.WorksheetRow().RowNumber());
-                    cell.Value = null;
+                    cell.Value = Blank.Value;
                     continue;
                 }
                 if (_templateProcessor.IsVerticalPageBreak(cellValue))
                 {
                     cell.Worksheet.PageSetup.AddVerticalPageBreak(cell.WorksheetColumn().ColumnNumber());
-                    cell.Value = null;
+                    cell.Value = Blank.Value;
                     continue;
                 }
 
@@ -112,7 +112,24 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                 HierarchicalDataItem dataContext = GetDataContext();
                 if (matches.Count == 1 && Regex.IsMatch(cellValue, $@"^{templatePattern}$", RegexOptions.IgnoreCase))
                 {
-                    cell.Value = _templateProcessor.GetValue(cellValue, dataContext);
+                    object value = _templateProcessor.GetValue(cellValue, dataContext);
+                    if (value == null)
+                    {
+                        cell.Value = Blank.Value;
+                    }
+                    else if (value.GetType().IsNumeric())
+                    {
+                        cell.Value = Convert.ToDouble(value);
+                    }
+                    else
+                        cell.Value = value switch
+                        {
+                            bool boolValue => boolValue,
+                            DateTime dateTimeValue => dateTimeValue,
+                            TimeSpan timeSpanValue => timeSpanValue,
+                            _ => GetValueFromString(value.ToString())
+                        };
+
                     continue;
                 }
 
@@ -122,7 +139,9 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
                     cellValue = cellValue.Replace(template, _templateProcessor.GetValue(template, dataContext)?.ToString());
                 }
 
-                cell.Value = cellValue;
+                cell.Value = GetValueFromString(cellValue);
+                
+                XLCellValue GetValueFromString(string value) => value == string.Empty ? Blank.Value : value;
             }
 
             foreach (IExcelPanel child in Children.OrderByDescending(p => p.RenderPriority))
@@ -187,7 +206,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             }
         }
 
-        public virtual void RecalculateRangeRelativeParentRecursive()
+        void IExcelPanel.RecalculateRangeRelativeParentRecursive()
         {
             if (Parent != null)
             {

@@ -150,14 +150,14 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
         private void GroupCellsVertical(IXLRange range, int[] groupColNumbers)
         {
-            IDictionary<int, (object StartCellValue, int StartRowNum)> previousCellValues = new Dictionary<int, (object, int)>();
+            IDictionary<int, (XLCellValue StartCellValue, int StartRowNum)> previousCellValues = new Dictionary<int, (XLCellValue, int)>();
             int rowsCount = range.Rows().Count();
             for (int rowNum = 1; rowNum <= rowsCount; rowNum++)
             {
                 IXLRangeRow row = range.Row(rowNum);
                 foreach (int colNum in groupColNumbers)
                 {
-                    object cellValue = row.Cell(colNum).Value;
+                    XLCellValue cellValue = row.Cell(colNum).Value;
                     if (previousCellValues.TryGetValue(colNum, out var previousResult))
                     {
                         if (!previousResult.StartCellValue.Equals(cellValue))
@@ -180,14 +180,14 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
 
         private void GroupCellsHorizontal(IXLRange range, int[] groupRowNumbers)
         {
-            IDictionary<int, (object StartCellValue, int StartColNum)> previousCellValues = new Dictionary<int, (object, int)>();
+            IDictionary<int, (XLCellValue StartCellValue, int StartColNum)> previousCellValues = new Dictionary<int, (XLCellValue, int)>();
             int colsCount = range.Columns().Count();
             for (int colNum = 1; colNum <= colsCount; colNum++)
             {
                 IXLRangeColumn col = range.Column(colNum);
                 foreach (int rowNum in groupRowNumbers)
                 {
-                    object cellValue = col.Cell(rowNum).Value;
+                    XLCellValue cellValue = col.Cell(rowNum).Value;
                     if (previousCellValues.TryGetValue(rowNum, out var previousResult))
                     {
                         if (!previousResult.StartCellValue.Equals(cellValue))

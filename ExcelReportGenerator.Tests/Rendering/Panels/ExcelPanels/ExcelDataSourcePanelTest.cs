@@ -124,15 +124,15 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             ws.Cell(2, 3).Value = "Orange";
             ws.Cell(3, 3).Value = "Apple";
             ws.Cell(4, 3).Value = "Apple";
-            ws.Cell(5, 3).Value = string.Empty;
-            ws.Cell(6, 3).Value = null;
+            ws.Cell(5, 3).Value = Blank.Value;
+            ws.Cell(6, 3).Value = Blank.Value;
             ws.Cell(8, 3).Value = "Pear";
             ws.Cell(9, 3).Value = "Pear";
 
             ws.Cell(2, 4).Value = true;
             ws.Cell(3, 4).Value = true;
             ws.Cell(4, 4).Value = 1;
-            ws.Cell(5, 4).Value = null;
+            ws.Cell(5, 4).Value = Blank.Value;
             ws.Cell(7, 4).Value = 0;
             ws.Cell(8, 4).Value = false;
             ws.Cell(9, 4).Value = false;
@@ -152,7 +152,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             ws.Cell(3, 6).Value = new DateTime(2018, 2, 20);
             ws.Cell(4, 6).Value = new DateTime(2018, 2, 20);
             ws.Cell(5, 6).Value = new DateTime(2018, 2, 18);
-            ws.Cell(6, 6).Value = null;
+            ws.Cell(6, 6).Value =  Blank.Value;
             ws.Cell(8, 6).Value = new DateTime(2018, 2, 21);
             ws.Cell(9, 6).Value = new DateTime(2018, 2, 21).ToString();
 
@@ -191,15 +191,15 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             ws.Cell(3, 2).Value = "Orange";
             ws.Cell(3, 3).Value = "Apple";
             ws.Cell(3, 4).Value = "Apple";
-            ws.Cell(3, 5).Value = string.Empty;
-            ws.Cell(3, 6).Value = null;
+            ws.Cell(3, 5).Value = Blank.Value;
+            ws.Cell(3, 6).Value = Blank.Value;
             ws.Cell(3, 8).Value = "Pear";
             ws.Cell(3, 9).Value = "Pear";
 
             ws.Cell(4, 2).Value = true;
             ws.Cell(4, 3).Value = true;
             ws.Cell(4, 4).Value = 1;
-            ws.Cell(4, 5).Value = null;
+            ws.Cell(4, 5).Value = Blank.Value;
             ws.Cell(4, 7).Value = 0;
             ws.Cell(4, 8).Value = false;
             ws.Cell(4, 9).Value = false;
@@ -219,7 +219,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             ws.Cell(6, 3).Value = new DateTime(2018, 2, 20);
             ws.Cell(6, 4).Value = new DateTime(2018, 2, 20);
             ws.Cell(6, 5).Value = new DateTime(2018, 2, 18);
-            ws.Cell(6, 6).Value = null;
+            ws.Cell(6, 6).Value = Blank.Value;
             ws.Cell(6, 8).Value = new DateTime(2018, 2, 21);
             ws.Cell(6, 9).Value = new DateTime(2018, 2, 21).ToString();
 
@@ -258,7 +258,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels
             ws.Cell(3, 3).Value = "Apple";
             ws.Cell(4, 3).Value = "Apple";
             ws.Cell(5, 3).Value = string.Empty;
-            ws.Cell(6, 3).Value = null;
+            ws.Cell(6, 3).Value = Blank.Value;
             ws.Cell(8, 3).Value = "Pear";
             ws.Cell(9, 3).Value = "Pear";
 

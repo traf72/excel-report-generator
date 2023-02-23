@@ -57,7 +57,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             Assert.AreEqual(" String parameter ", ws.Cell(2, 1).Value);
             Assert.AreEqual("Plain text", ws.Cell(2, 2).Value);
             Assert.AreEqual("{Plain text}", ws.Cell(2, 3).Value);
-            Assert.AreEqual(20171025d, ws.Cell(2, 4).Value);
+            Assert.AreEqual(" 20171025 ", ws.Cell(2, 4).Value);
             Assert.AreEqual("20171025", ws.Cell(2, 5).Value);
             Assert.AreEqual("Int: 10. Str: Complex type string parameter. FormattedDate: 20171025. NullProp: ", ws.Cell(3, 1).Value);
             Assert.AreEqual("0001-01-12", ws.Cell(3, 2).Value);
@@ -69,11 +69,11 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             Assert.AreEqual(2d, ws.Cell(4, 2).Value);
             Assert.AreEqual(3d, ws.Cell(4, 3).Value);
             Assert.AreEqual(11d, ws.Cell(4, 4).Value);
-            Assert.IsTrue(ws.Cell(4, 5).IsEmpty());
+            Assert.AreEqual(Blank.Value, ws.Cell(4, 5).Value);
 
             Assert.AreEqual("ExpandoStr", ws.Cell(5, 1).Value);
             Assert.AreEqual(5.56d, ws.Cell(5, 2).Value);
-            Assert.IsTrue(ws.Cell(5, 3).IsEmpty());
+            Assert.AreEqual(Blank.Value, ws.Cell(5, 3).Value);
 
             Assert.AreEqual("{p:StrParam}", ws.Cell(6, 1).Value);
             Assert.AreEqual("{m:Counter()}", ws.Cell(6, 2).Value);
@@ -209,7 +209,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             Assert.AreEqual("String parameter", ws.Cell(2, 1).Value);
             Assert.AreEqual("Plain text", ws.Cell(2, 2).Value);
             Assert.AreEqual("{Plain text}", ws.Cell(2, 3).Value);
-            Assert.AreEqual(20171025d, ws.Cell(2, 4).Value);
+            Assert.AreEqual(" 20171025 ", ws.Cell(2, 4).Value);
             Assert.AreEqual("20171025", ws.Cell(2, 5).Value);
             Assert.AreEqual("Int: 10. Str: Complex type string parameter. FormattedDate: 20171025", ws.Cell(3, 1).Value);
             Assert.AreEqual("0001-01-12", ws.Cell(3, 2).Value);
@@ -220,8 +220,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             Assert.AreEqual(1d, ws.Cell(4, 1).Value);
             Assert.AreEqual(2d, ws.Cell(4, 2).Value);
             Assert.AreEqual(3d, ws.Cell(4, 3).Value);
-            Assert.IsTrue(ws.Cell(4, 4).IsEmpty());
-            Assert.IsTrue(ws.Cell(4, 5).IsEmpty());
+            Assert.AreEqual(Blank.Value, ws.Cell(4, 4).Value);
+            Assert.AreEqual(Blank.Value, ws.Cell(4, 5).Value);
 
             Assert.AreEqual("{p:StrParam}", ws.Cell(5, 1).Value);
             Assert.AreEqual("{m:Counter()}", ws.Cell(5, 2).Value);
@@ -270,7 +270,7 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             Assert.AreEqual("String parameter", ws.Cell(9, 1).Value);
             Assert.AreEqual("Plain text", ws.Cell(9, 2).Value);
             Assert.AreEqual("{Plain text}", ws.Cell(9, 3).Value);
-            Assert.AreEqual(20171025d, ws.Cell(9, 4).Value);
+            Assert.AreEqual(" 20171025 ", ws.Cell(9, 4).Value);
             Assert.AreEqual("20171025", ws.Cell(9, 5).Value);
             Assert.AreEqual("Int: 10. Str: Complex type string parameter. FormattedDate: 20171025", ws.Cell(10, 1).Value);
             Assert.AreEqual("0001-01-12", ws.Cell(10, 2).Value);
@@ -281,8 +281,8 @@ namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTes
             Assert.AreEqual(4d, ws.Cell(11, 1).Value);
             Assert.AreEqual(5d, ws.Cell(11, 2).Value);
             Assert.AreEqual(6d, ws.Cell(11, 3).Value);
-            Assert.IsTrue(ws.Cell(11, 4).IsEmpty());
-            Assert.IsTrue(ws.Cell(11, 5).IsEmpty());
+            Assert.AreEqual(Blank.Value, ws.Cell(11, 4).Value);
+            Assert.AreEqual(Blank.Value, ws.Cell(11, 5).Value);
 
             Assert.AreEqual("{p:StrParam}", ws.Cell(12, 1).Value);
             Assert.AreEqual("{m:Counter()}", ws.Cell(12, 2).Value);

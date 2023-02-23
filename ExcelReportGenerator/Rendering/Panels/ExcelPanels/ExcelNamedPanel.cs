@@ -89,7 +89,7 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels
             _namedRange = ExcelHelper.MoveNamedRange(_namedRange, cell);
         }
 
-        public override void RecalculateRangeRelativeParentRecursive()
+        void IExcelPanel.RecalculateRangeRelativeParentRecursive()
         {
             if (Parent == null)
             {

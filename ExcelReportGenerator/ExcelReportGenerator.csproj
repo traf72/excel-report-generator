@@ -1,20 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net46;net40</TargetFrameworks>
-    <LangVersion>8</LangVersion>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <Authors>Traf</Authors>
     <Company />
     <Description>The library ExcelReportGenerator allows you to render data to Microsoft Excel by marking Excel sheets using panels and templates. It allows you easily connecting to various data sources like IDataReader, DataSet, DataTable, IEnumerable&lt;T&gt;, etc, and render data from them to Excel. You can also apply to the data an aggregation, different types of grouping, formatting, etc. More detailed documentation you can find inside the project repository.</Description>
-    <Copyright>Copyright © Traf 2020</Copyright>
-    <AssemblyVersion>1.2.2</AssemblyVersion>
-    <FileVersion>1.2.2</FileVersion>
+    <Copyright>Copyright © Traf 2023</Copyright>
+    <AssemblyVersion>2.0.0</AssemblyVersion>
+    <FileVersion>2.0.0</FileVersion>
     <PackageTags>Excel Report Reports Reporting xlsx ClosedXml Spreadsheet Workbook Worksheet Generator</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.2.2</Version>
+    <Version>2.0.0</Version>
     <PackageReleaseNotes>Support for ClosedXml 0.95.0</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/traf72/excel-report-generator</PackageProjectUrl>
-    <PackageVersion>1.2.2</PackageVersion>
+    <PackageVersion>2.0.0</PackageVersion>
   </PropertyGroup>
 
   <!--XML-Docs-->
@@ -22,33 +22,12 @@
     <DocumentationFile>bin\ExcelReportGenerator.xml</DocumentationFile>
   </PropertyGroup>
 
-  <!-- Common NuGet package refs that affect all projects -->
   <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.95.0" />
-  </ItemGroup>
-
-  <!-- .NET Standard 2.0 -->
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
-    <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="ClosedXML" Version="0.100.3" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
 
-  <!-- .NET 4.6 -->
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net46'">
-    <DefineConstants>NET46;NETFULL</DefineConstants>
+  <PropertyGroup>
+    <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
-  
-  <!-- .NET 4.0 -->
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net40'">
-    <DefineConstants>NET40;NETFULL</DefineConstants>
-  </PropertyGroup>
-
-  <!-- .NET 4.6 and .NET 4.0 -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' OR '$(TargetFramework)' == 'net40'">
-    <Reference Include="System.Data.DataSetExtensions" />
-    <PackageReference Include="System.ValueTuple" Version="4.3.0" />
-  </ItemGroup>
-
 </Project>

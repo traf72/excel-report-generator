@@ -14,6 +14,7 @@ namespace ExcelReportGenerator.Samples
         {
             Ioc.Container = new Container();
             Ioc.Container.Register<DataProvider>(Lifestyle.Singleton);
+            Ioc.Container.Options.ResolveUnregisteredConcreteTypes = true;
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
