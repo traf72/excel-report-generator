@@ -1,10 +1,8 @@
 ﻿using ExcelReportGenerator.Rendering.Providers.VariableProviders;
-using System;
 
-namespace ExcelReportGenerator.Samples.Customizations
+namespace ExcelReportGenerator.Samples.Customizations;
+
+public class CustomSystemVariableProvider : SystemVariableProvider
 {
-    public class CustomSystemVariableProvider : SystemVariableProvider
-    {
-        public string ReportTime => DateTime.Now.ToString("g");
-    }
+    public string ReportTime => DateTime.Now.ToString("g");
 }

@@ -2,244 +2,247 @@
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using NUnit.Framework;
 
-namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourcePanelRenderTests
+namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourcePanelRenderTests;
+
+public class DataSourcePanelNullItemRenderTest
 {
-    
-    public class DataSourcePanelNullItemRenderTest
+    [Test]
+    public void TestRenderNullItemVerticalCellsShift()
     {
-        [Test]
-        public void TestRenderNullItemVerticalCellsShift()
+        var report = new TestReport();
+        var ws = report.Workbook.AddWorksheet("Test");
+        var range = ws.Range(2, 2, 3, 5);
+        range.AddToNamed("TestRange", XLScope.Worksheet);
+
+        ws.Cell(2, 2).Value = "{di:Name}";
+        ws.Cell(2, 3).Value = "{di:Date}";
+        ws.Cell(2, 4).Value = "{m:Multiply(di:Sum, 5)}";
+        ws.Cell(2, 5).Value = "{di:Contacts}";
+        ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
+        ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
+        ws.Cell(3, 4).Value = "{p:StrParam}";
+
+        ws.Cell(1, 1).Value = "{di:Name}";
+        ws.Cell(4, 1).Value = "{di:Name}";
+        ws.Cell(1, 6).Value = "{di:Name}";
+        ws.Cell(4, 6).Value = "{di:Name}";
+        ws.Cell(3, 1).Value = "{di:Name}";
+        ws.Cell(3, 6).Value = "{di:Name}";
+        ws.Cell(1, 4).Value = "{di:Name}";
+        ws.Cell(4, 4).Value = "{di:Name}";
+
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetNullItem()", ws.NamedRange("TestRange"), report,
+            report.TemplateProcessor);
+        panel.Render();
+
+        Assert.IsNull(panel.ResultRange);
+
+        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
+            nameof(TestRenderNullItemVerticalCellsShift)), ws.Workbook);
+
+        //report.Workbook.SaveAs("test.xlsx");
+    }
+
+    [Test]
+    public void TestRenderNullItemVerticalRowShift()
+    {
+        var report = new TestReport();
+        var ws = report.Workbook.AddWorksheet("Test");
+        var range = ws.Range(2, 2, 3, 5);
+        range.AddToNamed("TestRange", XLScope.Worksheet);
+
+        ws.Cell(2, 2).Value = "{di:Name}";
+        ws.Cell(2, 3).Value = "{di:Date}";
+        ws.Cell(2, 4).Value = "{m:Multiply(di:Sum, 5)}";
+        ws.Cell(2, 5).Value = "{di:Contacts}";
+        ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
+        ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
+        ws.Cell(3, 4).Value = "{p:StrParam}";
+
+        ws.Cell(1, 1).Value = "{di:Name}";
+        ws.Cell(4, 1).Value = "{di:Name}";
+        ws.Cell(1, 6).Value = "{di:Name}";
+        ws.Cell(4, 6).Value = "{di:Name}";
+        ws.Cell(3, 1).Value = "{di:Name}";
+        ws.Cell(3, 6).Value = "{di:Name}";
+        ws.Cell(1, 4).Value = "{di:Name}";
+        ws.Cell(4, 4).Value = "{di:Name}";
+
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetNullItem()", ws.NamedRange("TestRange"), report,
+            report.TemplateProcessor)
         {
-            var report = new TestReport();
-            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 3, 5);
-            range.AddToNamed("TestRange", XLScope.Worksheet);
+            ShiftType = ShiftType.Row
+        };
+        panel.Render();
 
-            ws.Cell(2, 2).Value = "{di:Name}";
-            ws.Cell(2, 3).Value = "{di:Date}";
-            ws.Cell(2, 4).Value = "{m:Multiply(di:Sum, 5)}";
-            ws.Cell(2, 5).Value = "{di:Contacts}";
-            ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
-            ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
-            ws.Cell(3, 4).Value = "{p:StrParam}";
+        Assert.IsNull(panel.ResultRange);
 
-            ws.Cell(1, 1).Value = "{di:Name}";
-            ws.Cell(4, 1).Value = "{di:Name}";
-            ws.Cell(1, 6).Value = "{di:Name}";
-            ws.Cell(4, 6).Value = "{di:Name}";
-            ws.Cell(3, 1).Value = "{di:Name}";
-            ws.Cell(3, 6).Value = "{di:Name}";
-            ws.Cell(1, 4).Value = "{di:Name}";
-            ws.Cell(4, 4).Value = "{di:Name}";
+        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
+            nameof(TestRenderNullItemVerticalRowShift)), ws.Workbook);
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetNullItem()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            panel.Render();
+        //report.Workbook.SaveAs("test.xlsx");
+    }
 
-            Assert.IsNull(panel.ResultRange);
+    [Test]
+    public void TestRenderNullItemVerticalNoShift()
+    {
+        var report = new TestReport();
+        var ws = report.Workbook.AddWorksheet("Test");
+        var range = ws.Range(2, 2, 3, 5);
+        range.AddToNamed("TestRange", XLScope.Worksheet);
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
-                nameof(TestRenderNullItemVerticalCellsShift)), ws.Workbook);
+        ws.Cell(2, 2).Value = "{di:Name}";
+        ws.Cell(2, 3).Value = "{di:Date}";
+        ws.Cell(2, 4).Value = "{m:Multiply(di:Sum, 5)}";
+        ws.Cell(2, 5).Value = "{di:Contacts}";
+        ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
+        ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
+        ws.Cell(3, 4).Value = "{p:StrParam}";
 
-            //report.Workbook.SaveAs("test.xlsx");
-        }
+        ws.Cell(1, 1).Value = "{di:Name}";
+        ws.Cell(4, 1).Value = "{di:Name}";
+        ws.Cell(1, 6).Value = "{di:Name}";
+        ws.Cell(4, 6).Value = "{di:Name}";
+        ws.Cell(3, 1).Value = "{di:Name}";
+        ws.Cell(3, 6).Value = "{di:Name}";
+        ws.Cell(1, 4).Value = "{di:Name}";
+        ws.Cell(4, 4).Value = "{di:Name}";
 
-        [Test]
-        public void TestRenderNullItemVerticalRowShift()
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetNullItem()", ws.NamedRange("TestRange"), report,
+            report.TemplateProcessor)
         {
-            var report = new TestReport();
-            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 3, 5);
-            range.AddToNamed("TestRange", XLScope.Worksheet);
+            ShiftType = ShiftType.NoShift
+        };
+        panel.Render();
 
-            ws.Cell(2, 2).Value = "{di:Name}";
-            ws.Cell(2, 3).Value = "{di:Date}";
-            ws.Cell(2, 4).Value = "{m:Multiply(di:Sum, 5)}";
-            ws.Cell(2, 5).Value = "{di:Contacts}";
-            ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
-            ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
-            ws.Cell(3, 4).Value = "{p:StrParam}";
+        Assert.IsNull(panel.ResultRange);
 
-            ws.Cell(1, 1).Value = "{di:Name}";
-            ws.Cell(4, 1).Value = "{di:Name}";
-            ws.Cell(1, 6).Value = "{di:Name}";
-            ws.Cell(4, 6).Value = "{di:Name}";
-            ws.Cell(3, 1).Value = "{di:Name}";
-            ws.Cell(3, 6).Value = "{di:Name}";
-            ws.Cell(1, 4).Value = "{di:Name}";
-            ws.Cell(4, 4).Value = "{di:Name}";
+        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
+            nameof(TestRenderNullItemVerticalNoShift)), ws.Workbook);
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetNullItem()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
-            {
-                ShiftType = ShiftType.Row,
-            };
-            panel.Render();
+        //report.Workbook.SaveAs("test.xlsx");
+    }
 
-            Assert.IsNull(panel.ResultRange);
+    [Test]
+    public void TestRenderNullItemHorizontalCellsShift()
+    {
+        var report = new TestReport();
+        var ws = report.Workbook.AddWorksheet("Test");
+        var range = ws.Range(2, 2, 3, 5);
+        range.AddToNamed("TestRange", XLScope.Worksheet);
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
-                nameof(TestRenderNullItemVerticalRowShift)), ws.Workbook);
+        ws.Cell(2, 2).Value = "{di:Name}";
+        ws.Cell(2, 3).Value = "{di:Date}";
+        ws.Cell(2, 4).Value = "{m:Multiply(di:Sum, 5)}";
+        ws.Cell(2, 5).Value = "{di:Contacts}";
+        ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
+        ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
+        ws.Cell(3, 4).Value = "{p:StrParam}";
 
-            //report.Workbook.SaveAs("test.xlsx");
-        }
+        ws.Cell(1, 1).Value = "{di:Name}";
+        ws.Cell(4, 1).Value = "{di:Name}";
+        ws.Cell(1, 6).Value = "{di:Name}";
+        ws.Cell(4, 6).Value = "{di:Name}";
+        ws.Cell(3, 1).Value = "{di:Name}";
+        ws.Cell(3, 6).Value = "{di:Name}";
+        ws.Cell(1, 4).Value = "{di:Name}";
+        ws.Cell(4, 4).Value = "{di:Name}";
 
-        [Test]
-        public void TestRenderNullItemVerticalNoShift()
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetNullItem()", ws.NamedRange("TestRange"), report,
+            report.TemplateProcessor)
         {
-            var report = new TestReport();
-            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 3, 5);
-            range.AddToNamed("TestRange", XLScope.Worksheet);
+            Type = PanelType.Horizontal
+        };
+        panel.Render();
 
-            ws.Cell(2, 2).Value = "{di:Name}";
-            ws.Cell(2, 3).Value = "{di:Date}";
-            ws.Cell(2, 4).Value = "{m:Multiply(di:Sum, 5)}";
-            ws.Cell(2, 5).Value = "{di:Contacts}";
-            ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
-            ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
-            ws.Cell(3, 4).Value = "{p:StrParam}";
+        Assert.IsNull(panel.ResultRange);
 
-            ws.Cell(1, 1).Value = "{di:Name}";
-            ws.Cell(4, 1).Value = "{di:Name}";
-            ws.Cell(1, 6).Value = "{di:Name}";
-            ws.Cell(4, 6).Value = "{di:Name}";
-            ws.Cell(3, 1).Value = "{di:Name}";
-            ws.Cell(3, 6).Value = "{di:Name}";
-            ws.Cell(1, 4).Value = "{di:Name}";
-            ws.Cell(4, 4).Value = "{di:Name}";
+        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
+            nameof(TestRenderNullItemHorizontalCellsShift)), ws.Workbook);
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetNullItem()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
-            {
-                ShiftType = ShiftType.NoShift,
-            };
-            panel.Render();
+        //report.Workbook.SaveAs("test.xlsx");
+    }
 
-            Assert.IsNull(panel.ResultRange);
+    [Test]
+    public void TestRenderNullItemHorizontalRowShift()
+    {
+        var report = new TestReport();
+        var ws = report.Workbook.AddWorksheet("Test");
+        var range = ws.Range(2, 2, 3, 5);
+        range.AddToNamed("TestRange", XLScope.Worksheet);
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
-                nameof(TestRenderNullItemVerticalNoShift)), ws.Workbook);
+        ws.Cell(2, 2).Value = "{di:Name}";
+        ws.Cell(2, 3).Value = "{di:Date}";
+        ws.Cell(2, 4).Value = "{m:Multiply(di:Sum, 5)}";
+        ws.Cell(2, 5).Value = "{di:Contacts}";
+        ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
+        ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
+        ws.Cell(3, 4).Value = "{p:StrParam}";
 
-            //report.Workbook.SaveAs("test.xlsx");
-        }
+        ws.Cell(1, 1).Value = "{di:Name}";
+        ws.Cell(4, 1).Value = "{di:Name}";
+        ws.Cell(1, 6).Value = "{di:Name}";
+        ws.Cell(4, 6).Value = "{di:Name}";
+        ws.Cell(3, 1).Value = "{di:Name}";
+        ws.Cell(3, 6).Value = "{di:Name}";
+        ws.Cell(1, 4).Value = "{di:Name}";
+        ws.Cell(4, 4).Value = "{di:Name}";
 
-        [Test]
-        public void TestRenderNullItemHorizontalCellsShift()
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetNullItem()", ws.NamedRange("TestRange"), report,
+            report.TemplateProcessor)
         {
-            var report = new TestReport();
-            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 3, 5);
-            range.AddToNamed("TestRange", XLScope.Worksheet);
+            Type = PanelType.Horizontal,
+            ShiftType = ShiftType.Row
+        };
+        panel.Render();
 
-            ws.Cell(2, 2).Value = "{di:Name}";
-            ws.Cell(2, 3).Value = "{di:Date}";
-            ws.Cell(2, 4).Value = "{m:Multiply(di:Sum, 5)}";
-            ws.Cell(2, 5).Value = "{di:Contacts}";
-            ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
-            ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
-            ws.Cell(3, 4).Value = "{p:StrParam}";
+        Assert.IsNull(panel.ResultRange);
 
-            ws.Cell(1, 1).Value = "{di:Name}";
-            ws.Cell(4, 1).Value = "{di:Name}";
-            ws.Cell(1, 6).Value = "{di:Name}";
-            ws.Cell(4, 6).Value = "{di:Name}";
-            ws.Cell(3, 1).Value = "{di:Name}";
-            ws.Cell(3, 6).Value = "{di:Name}";
-            ws.Cell(1, 4).Value = "{di:Name}";
-            ws.Cell(4, 4).Value = "{di:Name}";
+        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
+            nameof(TestRenderNullItemHorizontalRowShift)), ws.Workbook);
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetNullItem()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
-            {
-                Type = PanelType.Horizontal,
-            };
-            panel.Render();
+        //report.Workbook.SaveAs("test.xlsx");
+    }
 
-            Assert.IsNull(panel.ResultRange);
+    [Test]
+    public void TestRenderNullItemHorizontalNoShift()
+    {
+        var report = new TestReport();
+        var ws = report.Workbook.AddWorksheet("Test");
+        var range = ws.Range(2, 2, 3, 5);
+        range.AddToNamed("TestRange", XLScope.Worksheet);
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
-                nameof(TestRenderNullItemHorizontalCellsShift)), ws.Workbook);
+        ws.Cell(2, 2).Value = "{di:Name}";
+        ws.Cell(2, 3).Value = "{di:Date}";
+        ws.Cell(2, 4).Value = "{m:Multiply(di:Sum, 5)}";
+        ws.Cell(2, 5).Value = "{di:Contacts}";
+        ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
+        ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
+        ws.Cell(3, 4).Value = "{p:StrParam}";
 
-            //report.Workbook.SaveAs("test.xlsx");
-        }
+        ws.Cell(1, 1).Value = "{di:Name}";
+        ws.Cell(4, 1).Value = "{di:Name}";
+        ws.Cell(1, 6).Value = "{di:Name}";
+        ws.Cell(4, 6).Value = "{di:Name}";
+        ws.Cell(3, 1).Value = "{di:Name}";
+        ws.Cell(3, 6).Value = "{di:Name}";
+        ws.Cell(1, 4).Value = "{di:Name}";
+        ws.Cell(4, 4).Value = "{di:Name}";
 
-        [Test]
-        public void TestRenderNullItemHorizontalRowShift()
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetNullItem()", ws.NamedRange("TestRange"), report,
+            report.TemplateProcessor)
         {
-            var report = new TestReport();
-            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 3, 5);
-            range.AddToNamed("TestRange", XLScope.Worksheet);
+            Type = PanelType.Horizontal,
+            ShiftType = ShiftType.NoShift
+        };
+        panel.Render();
 
-            ws.Cell(2, 2).Value = "{di:Name}";
-            ws.Cell(2, 3).Value = "{di:Date}";
-            ws.Cell(2, 4).Value = "{m:Multiply(di:Sum, 5)}";
-            ws.Cell(2, 5).Value = "{di:Contacts}";
-            ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
-            ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
-            ws.Cell(3, 4).Value = "{p:StrParam}";
+        Assert.IsNull(panel.ResultRange);
 
-            ws.Cell(1, 1).Value = "{di:Name}";
-            ws.Cell(4, 1).Value = "{di:Name}";
-            ws.Cell(1, 6).Value = "{di:Name}";
-            ws.Cell(4, 6).Value = "{di:Name}";
-            ws.Cell(3, 1).Value = "{di:Name}";
-            ws.Cell(3, 6).Value = "{di:Name}";
-            ws.Cell(1, 4).Value = "{di:Name}";
-            ws.Cell(4, 4).Value = "{di:Name}";
+        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
+            nameof(TestRenderNullItemHorizontalNoShift)), ws.Workbook);
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetNullItem()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
-            {
-                Type = PanelType.Horizontal,
-                ShiftType = ShiftType.Row,
-            };
-            panel.Render();
-
-            Assert.IsNull(panel.ResultRange);
-
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
-                nameof(TestRenderNullItemHorizontalRowShift)), ws.Workbook);
-
-            //report.Workbook.SaveAs("test.xlsx");
-        }
-
-        [Test]
-        public void TestRenderNullItemHorizontalNoShift()
-        {
-            var report = new TestReport();
-            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 3, 5);
-            range.AddToNamed("TestRange", XLScope.Worksheet);
-
-            ws.Cell(2, 2).Value = "{di:Name}";
-            ws.Cell(2, 3).Value = "{di:Date}";
-            ws.Cell(2, 4).Value = "{m:Multiply(di:Sum, 5)}";
-            ws.Cell(2, 5).Value = "{di:Contacts}";
-            ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
-            ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
-            ws.Cell(3, 4).Value = "{p:StrParam}";
-
-            ws.Cell(1, 1).Value = "{di:Name}";
-            ws.Cell(4, 1).Value = "{di:Name}";
-            ws.Cell(1, 6).Value = "{di:Name}";
-            ws.Cell(4, 6).Value = "{di:Name}";
-            ws.Cell(3, 1).Value = "{di:Name}";
-            ws.Cell(3, 6).Value = "{di:Name}";
-            ws.Cell(1, 4).Value = "{di:Name}";
-            ws.Cell(4, 4).Value = "{di:Name}";
-
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetNullItem()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
-            {
-                Type = PanelType.Horizontal,
-                ShiftType = ShiftType.NoShift,
-            };
-            panel.Render();
-
-            Assert.IsNull(panel.ResultRange);
-
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
-                nameof(TestRenderNullItemHorizontalNoShift)), ws.Workbook);
-
-            //report.Workbook.SaveAs("test.xlsx");
-        }
+        //report.Workbook.SaveAs("test.xlsx");
     }
 }

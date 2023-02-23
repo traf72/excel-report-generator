@@ -1,57 +1,58 @@
 ﻿using ClosedXML.Excel;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using NUnit.Framework;
 
-namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourceDynamicPanelRenderTests
+namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourceDynamicPanelRenderTests;
+
+public class DataSourceDynamicPanelEnumerableRenderTest
 {
-    
-    public class DataSourceDynamicPanelEnumerableRenderTest
+    [Test]
+    public void TestRenderEnumerable()
     {
-        [Test]
-        public void TestRenderEnumerable()
-        {
-            var report = new TestReport();
-            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range1 = ws.Range(2, 2, 4, 2);
-            range1.AddToNamed("TestRange", XLScope.Worksheet);
+        var report = new TestReport();
+        var ws = report.Workbook.AddWorksheet("Test");
+        var range1 = ws.Range(2, 2, 4, 2);
+        range1.AddToNamed("TestRange", XLScope.Worksheet);
 
-            ws.Cell(2, 2).Value = "{Headers}";
-            ws.Cell(3, 2).Value = "{Data}";
-            ws.Cell(4, 2).Value = "{Totals}";
+        ws.Cell(2, 2).Value = "{Headers}";
+        ws.Cell(3, 2).Value = "{Data}";
+        ws.Cell(4, 2).Value = "{Totals}";
 
-            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            panel.Render();
+        var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"),
+            report, report.TemplateProcessor);
+        panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 6, 5), panel.ResultRange);
+        Assert.AreEqual(ws.Range(2, 2, 6, 5), panel.ResultRange);
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelEnumerableRenderTest),
-                nameof(TestRenderEnumerable)), ws.Workbook);
+        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+            nameof(DataSourceDynamicPanelEnumerableRenderTest),
+            nameof(TestRenderEnumerable)), ws.Workbook);
 
-            //report.Workbook.SaveAs("test.xlsx");
-        }
+        //report.Workbook.SaveAs("test.xlsx");
+    }
 
-        [Test]
-        public void TestRenderEmptyEnumerable()
-        {
-            var report = new TestReport();
-            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range1 = ws.Range(2, 2, 4, 2);
-            range1.AddToNamed("TestRange", XLScope.Worksheet);
+    [Test]
+    public void TestRenderEmptyEnumerable()
+    {
+        var report = new TestReport();
+        var ws = report.Workbook.AddWorksheet("Test");
+        var range1 = ws.Range(2, 2, 4, 2);
+        range1.AddToNamed("TestRange", XLScope.Worksheet);
 
-            ws.Cell(2, 2).Value = "{Headers}";
-            ws.Cell(3, 2).Value = "{Data}";
-            ws.Cell(4, 2).Value = "{Totals}";
+        ws.Cell(2, 2).Value = "{Headers}";
+        ws.Cell(3, 2).Value = "{Data}";
+        ws.Cell(4, 2).Value = "{Totals}";
 
-            var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            panel.Render();
+        var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"),
+            report, report.TemplateProcessor);
+        panel.Render();
 
-            Assert.AreEqual(ws.Range(2, 2, 3, 5), panel.ResultRange);
+        Assert.AreEqual(ws.Range(2, 2, 3, 5), panel.ResultRange);
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourceDynamicPanelEnumerableRenderTest),
-                nameof(TestRenderEmptyEnumerable)), ws.Workbook);
+        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+            nameof(DataSourceDynamicPanelEnumerableRenderTest),
+            nameof(TestRenderEmptyEnumerable)), ws.Workbook);
 
-            //report.Workbook.SaveAs("test.xlsx");
-        }
+        //report.Workbook.SaveAs("test.xlsx");
     }
 }

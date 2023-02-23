@@ -1,342 +1,348 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
-    <PackageReference Include="NSubstitute" Version="5.0.0" />
-    <PackageReference Include="NUnit" Version="3.13.3" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.3.1" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
-  </ItemGroup>
+    <ItemGroup>
+        <Using Include="NUnit.Framework"/>
+        <Using Include="NSubstitute"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ExcelReportGenerator\ExcelReportGenerator.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="7.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0"/>
+        <PackageReference Include="NSubstitute" Version="5.0.0"/>
+        <PackageReference Include="NUnit" Version="3.13.3"/>
+        <PackageReference Include="NUnit3TestAdapter" Version="4.3.1"/>
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.5"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourceDynamicPanelDataReaderRenderTest\TestRenderDataReader.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourceDynamicPanelDataReaderRenderTest\TestRenderDataReader_HorizontalPanel.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourceDynamicPanelDataReaderRenderTest\TestRenderEmptyDataReader.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourceDynamicPanelDataSetRenderTest\TestDynamicPanelAfterRenderEvent.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderDataSetWithEvents.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderDataSetWithEvents_HorizontalPanel.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderEmptyDataSet.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourceDynamicPanelDataTableRenderTest\TestRenderDataTable.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourceDynamicPanelDataTableRenderTest\TestRenderEmptyDataTable.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourceDynamicPanelDictionaryRenderTest\TestRenderDictionary.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourceDynamicPanelDictionaryRenderTest\TestRenderDictionaryEnumerable.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourceDynamicPanelEnumerableRenderTest\TestRenderEmptyEnumerable.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourceDynamicPanelEnumerableRenderTest\TestRenderEnumerable.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourceDynamicPanelSingleItemRenderTest\TestRenderSingleItem.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourceDynamicPanel_InsideDataSourcePanel_Test\TestRender_DynamicPanel_In_DataSourcePanel_Horizontal.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourceDynamicPanel_InsideDataSourcePanel_Test\TestRender_DynamicPanel_In_DataSourcePanel_Vertical.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelDataReaderRenderTest\TestRenderDataReader.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelDataSetRenderTest\TestRenderDataSet.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelDataTableRenderTest\TestRenderDataTable.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelDictionaryRenderTest\TestRenderDictionary.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelDictionaryRenderTest\TestRenderDictionaryEnumerable.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableHorizontalCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableHorizontalNoShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableHorizontalRowsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalNoShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalRowsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestPanelRenderEvents.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalNoShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalRowsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableOfInt.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableOfString.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalNoShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalRowsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemHorizontalCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemHorizontalNoShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemHorizontalRowShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalNoShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalRowShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_ChildEqualsParent_Test\Test_VerticalPanelsGrouping_ChildEqualsParent.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentCellsShiftChildCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumn.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumnWhichDeleteAfterRender.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentNoShiftChildCellsShift_WithFictitiousColumn.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentNoShiftChildRowShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentRowShiftChildCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentRowShiftChildCellsShift_WithFictitiousColumn.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentRowShiftChildRowShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentRowShiftChildRowShift_WithFictitiousColumn.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentCellsShiftChildCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumn.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumnWhichDeleteAfterRender.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentNoShiftChildCellsShift_WithFictitiousColumn.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentNoShiftChildRowShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentRowShiftChildCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentRowShiftChildCellsShift_WithFictitiousColumn.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentRowShiftChildRowShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentRowShiftChildRowShift_WithFictitiousColumn.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestHorizontalInVerticalPanelsGrouping.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestMultipleHorizontalPanelsGrouping.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestMultipleVerticalPanelsGrouping.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestVerticalInHorizontalPanelsGrouping.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent\Test_TwoChildren_Horizontal.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent\Test_TwoChildren_Vertical.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_PageBreaks_Test\Test_HorizontalPageBreaks.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_PageBreaks_Test\Test_VerticalPageBreaks.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentCellsShiftChildCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentCellsShiftChildCellsShift_WithFictitiousRow.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentCellsShiftChildCellsShift_WithFictitiousRowWhichDeleteAfterRender.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentNoShiftChildCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentNoShiftChildRowShift_WithFictitiousRow.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentRowShiftChildCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentRowShiftChildCellsShift_WithFictitiousRow.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentRowShiftChildRowShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentRowShiftChildRowShift_WithFictitiousRow.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentCellsShiftChildCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentCellsShiftChildCellsShift_WithFictitiousRow.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentCellsShiftChildRowShift_WithFictitiousRow.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentNoShiftChildCellsShift_WithFictitiousRowWhichDeleteAfterRender.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentNoShiftChildRowShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentRowShiftChildCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentRowShiftChildRowShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemHorizontalCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemHorizontalNoShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemHorizontalRowShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalCellsShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalNoShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalRowShift.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DefaultReportGeneratorTest\TestRender.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DefaultReportGeneratorTest\TestRenderPartialWorksheets.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DefaultReportGeneratorTest\TestRenderWithCustomVariableAndFunctionProviders.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\DefaultReportGeneratorTest\TestRenderWithEvents.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\ExcelDataSourcePanelTest\TestGroupResultHorizontal.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\ExcelDataSourcePanelTest\TestGroupResultVertical.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\ExcelDataSourcePanelTest\TestIfGroupByPropertyIsEmpty.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\PanelRenderTest\TestSimplePanelExpansion.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\SystemFunctionsTest\TestFormatOnRender.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\TotalsPanelRenderTest\TestPanelRender.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\TotalsPanelRenderTest\TestPanelRenderWithParentContext.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\TotalsPanelRenderTest\TestPanelWithNoData.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\TotalsPanelRenderTest\TestPanelWithNullData.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\ExcelReportGenerator\ExcelReportGenerator.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourceDynamicPanelDataReaderRenderTest\TestRenderDataReader.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourceDynamicPanelDataReaderRenderTest\TestRenderDataReader_HorizontalPanel.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourceDynamicPanelDataReaderRenderTest\TestRenderEmptyDataReader.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourceDynamicPanelDataSetRenderTest\TestDynamicPanelAfterRenderEvent.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderDataSetWithEvents.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderDataSetWithEvents_HorizontalPanel.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourceDynamicPanelDataSetRenderTest\TestRenderEmptyDataSet.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourceDynamicPanelDataTableRenderTest\TestRenderDataTable.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourceDynamicPanelDataTableRenderTest\TestRenderEmptyDataTable.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourceDynamicPanelDictionaryRenderTest\TestRenderDictionary.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourceDynamicPanelDictionaryRenderTest\TestRenderDictionaryEnumerable.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourceDynamicPanelEnumerableRenderTest\TestRenderEmptyEnumerable.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourceDynamicPanelEnumerableRenderTest\TestRenderEnumerable.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourceDynamicPanelSingleItemRenderTest\TestRenderSingleItem.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourceDynamicPanel_InsideDataSourcePanel_Test\TestRender_DynamicPanel_In_DataSourcePanel_Horizontal.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourceDynamicPanel_InsideDataSourcePanel_Test\TestRender_DynamicPanel_In_DataSourcePanel_Vertical.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelDataReaderRenderTest\TestRenderDataReader.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelDataSetRenderTest\TestRenderDataSet.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelDataTableRenderTest\TestRenderDataTable.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelDictionaryRenderTest\TestRenderDictionary.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelDictionaryRenderTest\TestRenderDictionaryEnumerable.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableHorizontalCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableHorizontalNoShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableHorizontalRowsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalNoShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelEmptyIEnumerableRenderTest\TestRenderEmptyIEnumerableVerticalRowsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestPanelRenderEvents.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalNoShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableHorizontalRowsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableOfInt.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableOfString.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalNoShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelIEnumerableRenderTest\TestRenderIEnumerableVerticalRowsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemHorizontalCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemHorizontalNoShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemHorizontalRowShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalNoShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelNullItemRenderTest\TestRenderNullItemVerticalRowShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_ChildEqualsParent_Test\Test_VerticalPanelsGrouping_ChildEqualsParent.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentCellsShiftChildCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumn.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumnWhichDeleteAfterRender.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentNoShiftChildCellsShift_WithFictitiousColumn.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentNoShiftChildRowShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentRowShiftChildCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentRowShiftChildCellsShift_WithFictitiousColumn.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentRowShiftChildRowShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentRowShiftChildRowShift_WithFictitiousColumn.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentCellsShiftChildCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumn.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentCellsShiftChildCellsShift_WithFictitiousColumnWhichDeleteAfterRender.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentNoShiftChildCellsShift_WithFictitiousColumn.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentNoShiftChildRowShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentRowShiftChildCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentRowShiftChildCellsShift_WithFictitiousColumn.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentRowShiftChildRowShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test\ParentRowShiftChildRowShift_WithFictitiousColumn.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestHorizontalInVerticalPanelsGrouping.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestMultipleHorizontalPanelsGrouping.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestMultipleVerticalPanelsGrouping.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_MixedPanels_Test\TestVerticalInHorizontalPanelsGrouping.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent\Test_TwoChildren_Horizontal.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent\Test_TwoChildren_Vertical.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_PageBreaks_Test\Test_HorizontalPageBreaks.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_PageBreaks_Test\Test_VerticalPageBreaks.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentCellsShiftChildCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentCellsShiftChildCellsShift_WithFictitiousRow.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentCellsShiftChildCellsShift_WithFictitiousRowWhichDeleteAfterRender.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentNoShiftChildCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentNoShiftChildRowShift_WithFictitiousRow.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentRowShiftChildCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentRowShiftChildCellsShift_WithFictitiousRow.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentRowShiftChildRowShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildBottom_Test\ParentRowShiftChildRowShift_WithFictitiousRow.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentCellsShiftChildCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentCellsShiftChildCellsShift_WithFictitiousRow.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentCellsShiftChildRowShift_WithFictitiousRow.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentNoShiftChildCellsShift_WithFictitiousRowWhichDeleteAfterRender.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentNoShiftChildRowShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentRowShiftChildCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_VerticalPanels_ChildTop_Test\ParentRowShiftChildRowShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemHorizontalCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemHorizontalNoShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemHorizontalRowShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalCellsShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalNoShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DataSourcePanelSingleItemRenderTest\TestRenderSingleItemVerticalRowShift.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DefaultReportGeneratorTest\TestRender.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DefaultReportGeneratorTest\TestRenderPartialWorksheets.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DefaultReportGeneratorTest\TestRenderWithCustomVariableAndFunctionProviders.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\DefaultReportGeneratorTest\TestRenderWithEvents.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\ExcelDataSourcePanelTest\TestGroupResultHorizontal.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\ExcelDataSourcePanelTest\TestGroupResultVertical.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\ExcelDataSourcePanelTest\TestIfGroupByPropertyIsEmpty.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\PanelRenderTest\TestSimplePanelExpansion.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\SystemFunctionsTest\TestFormatOnRender.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\TotalsPanelRenderTest\TestPanelRender.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\TotalsPanelRenderTest\TestPanelRenderWithParentContext.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\TotalsPanelRenderTest\TestPanelWithNoData.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="TestData\TotalsPanelRenderTest\TestPanelWithNullData.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 
 </Project>

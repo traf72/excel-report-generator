@@ -1,7 +1,6 @@
-﻿namespace ExcelReportGenerator.Samples.Reports
+﻿namespace ExcelReportGenerator.Samples.Reports;
+
+public class DataTableConnect : ReportBase
 {
-    public class DataTableConnect : ReportBase
-    {
-        public override string ReportName => "Connect to DataTable";
-    }
+    public override string ReportName => "Connect to DataTable";
 }

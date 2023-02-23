@@ -2,287 +2,295 @@
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 using ExcelReportGenerator.Tests.CustomAsserts;
-using NUnit.Framework;
 
-namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourcePanelRenderTests
+namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests.DataSourcePanelRenderTests;
+
+public class DataSourcePanelEmptyIEnumerableRenderTest
 {
-    
-    public class DataSourcePanelEmptyIEnumerableRenderTest
+    [Test]
+    public void TestRenderEmptyIEnumerableVerticalCellsShift()
     {
+        var report = new TestReport();
+        var ws = report.Workbook.AddWorksheet("Test");
+        var range = ws.Range(2, 2, 3, 5);
+        range.AddToNamed("TestRange", XLScope.Worksheet);
 
-        [Test]
-        public void TestRenderEmptyIEnumerableVerticalCellsShift()
+        range.Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetRightBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
+
+        ws.Cell(4, 3).Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
+
+        ws.Cell(2, 2).Value = "{di:Name}";
+        ws.Cell(2, 3).Value = "{di:Date}";
+        ws.Cell(2, 4).Value = "{di:Sum}";
+        ws.Cell(2, 5).Value = "{di:Contacts}";
+        ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
+        ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
+        ws.Cell(3, 4).Value = "{p:StrParam}";
+
+        ws.Cell(1, 1).Value = "{di:Name}";
+        ws.Cell(4, 1).Value = "{di:Name}";
+        ws.Cell(1, 6).Value = "{di:Name}";
+        ws.Cell(4, 6).Value = "{di:Name}";
+        ws.Cell(3, 1).Value = "{di:Name}";
+        ws.Cell(3, 6).Value = "{di:Name}";
+        ws.Cell(1, 4).Value = "{di:Name}";
+        ws.Cell(4, 4).Value = "{di:Name}";
+
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report,
+            report.TemplateProcessor);
+        panel.Render();
+
+        Assert.IsNull(panel.ResultRange);
+
+        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+            nameof(DataSourcePanelEmptyIEnumerableRenderTest),
+            nameof(TestRenderEmptyIEnumerableVerticalCellsShift)), ws.Workbook);
+
+        //report.Workbook.SaveAs("test.xlsx");
+    }
+
+    [Test]
+    public void TestRenderEmptyIEnumerableVerticalRowsShift()
+    {
+        var report = new TestReport();
+        var ws = report.Workbook.AddWorksheet("Test");
+        var range = ws.Range(2, 2, 3, 5);
+        range.AddToNamed("TestRange", XLScope.Worksheet);
+
+        range.Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetRightBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
+
+        ws.Cell(4, 3).Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
+
+        ws.Cell(2, 2).Value = "{di:Name}";
+        ws.Cell(2, 3).Value = "{di:Date}";
+        ws.Cell(2, 4).Value = "{di:Sum}";
+        ws.Cell(2, 5).Value = "{di:Contacts}";
+        ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
+        ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
+        ws.Cell(3, 4).Value = "{p:StrParam}";
+
+        ws.Cell(1, 1).Value = "{di:Name}";
+        ws.Cell(4, 1).Value = "{di:Name}";
+        ws.Cell(1, 6).Value = "{di:Name}";
+        ws.Cell(4, 6).Value = "{di:Name}";
+        ws.Cell(3, 1).Value = "{di:Name}";
+        ws.Cell(3, 6).Value = "{di:Name}";
+        ws.Cell(1, 4).Value = "{di:Name}";
+        ws.Cell(4, 4).Value = "{di:Name}";
+
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report,
+            report.TemplateProcessor)
         {
-            var report = new TestReport();
-            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 3, 5);
-            range.AddToNamed("TestRange", XLScope.Worksheet);
+            ShiftType = ShiftType.Row
+        };
+        panel.Render();
 
-            range.Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetRightBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
+        Assert.IsNull(panel.ResultRange);
 
-            ws.Cell(4, 3).Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
+        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+            nameof(DataSourcePanelEmptyIEnumerableRenderTest),
+            nameof(TestRenderEmptyIEnumerableVerticalRowsShift)), ws.Workbook);
 
-            ws.Cell(2, 2).Value = "{di:Name}";
-            ws.Cell(2, 3).Value = "{di:Date}";
-            ws.Cell(2, 4).Value = "{di:Sum}";
-            ws.Cell(2, 5).Value = "{di:Contacts}";
-            ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
-            ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
-            ws.Cell(3, 4).Value = "{p:StrParam}";
+        //report.Workbook.SaveAs("test.xlsx");
+    }
 
-            ws.Cell(1, 1).Value = "{di:Name}";
-            ws.Cell(4, 1).Value = "{di:Name}";
-            ws.Cell(1, 6).Value = "{di:Name}";
-            ws.Cell(4, 6).Value = "{di:Name}";
-            ws.Cell(3, 1).Value = "{di:Name}";
-            ws.Cell(3, 6).Value = "{di:Name}";
-            ws.Cell(1, 4).Value = "{di:Name}";
-            ws.Cell(4, 4).Value = "{di:Name}";
+    [Test]
+    public void TestRenderEmptyIEnumerableVerticalNoShift()
+    {
+        var report = new TestReport();
+        var ws = report.Workbook.AddWorksheet("Test");
+        var range = ws.Range(2, 2, 3, 5);
+        range.AddToNamed("TestRange", XLScope.Worksheet);
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor);
-            panel.Render();
+        range.Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetRightBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
 
-            Assert.IsNull(panel.ResultRange);
+        ws.Cell(4, 3).Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelEmptyIEnumerableRenderTest),
-                nameof(TestRenderEmptyIEnumerableVerticalCellsShift)), ws.Workbook);
+        ws.Cell(2, 2).Value = "{di:Name}";
+        ws.Cell(2, 3).Value = "{di:Date}";
+        ws.Cell(2, 4).Value = "{di:Sum}";
+        ws.Cell(2, 5).Value = "{di:Contacts}";
+        ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
+        ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
+        ws.Cell(3, 4).Value = "{p:StrParam}";
 
-            //report.Workbook.SaveAs("test.xlsx");
-        }
+        ws.Cell(1, 1).Value = "{di:Name}";
+        ws.Cell(4, 1).Value = "{di:Name}";
+        ws.Cell(1, 6).Value = "{di:Name}";
+        ws.Cell(4, 6).Value = "{di:Name}";
+        ws.Cell(3, 1).Value = "{di:Name}";
+        ws.Cell(3, 6).Value = "{di:Name}";
+        ws.Cell(1, 4).Value = "{di:Name}";
+        ws.Cell(4, 4).Value = "{di:Name}";
 
-        [Test]
-        public void TestRenderEmptyIEnumerableVerticalRowsShift()
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report,
+            report.TemplateProcessor)
         {
-            var report = new TestReport();
-            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 3, 5);
-            range.AddToNamed("TestRange", XLScope.Worksheet);
+            ShiftType = ShiftType.NoShift
+        };
+        panel.Render();
 
-            range.Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetRightBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
+        Assert.IsNull(panel.ResultRange);
 
-            ws.Cell(4, 3).Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
+        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+            nameof(DataSourcePanelEmptyIEnumerableRenderTest),
+            nameof(TestRenderEmptyIEnumerableVerticalNoShift)), ws.Workbook);
 
-            ws.Cell(2, 2).Value = "{di:Name}";
-            ws.Cell(2, 3).Value = "{di:Date}";
-            ws.Cell(2, 4).Value = "{di:Sum}";
-            ws.Cell(2, 5).Value = "{di:Contacts}";
-            ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
-            ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
-            ws.Cell(3, 4).Value = "{p:StrParam}";
+        //report.Workbook.SaveAs("test.xlsx");
+    }
 
-            ws.Cell(1, 1).Value = "{di:Name}";
-            ws.Cell(4, 1).Value = "{di:Name}";
-            ws.Cell(1, 6).Value = "{di:Name}";
-            ws.Cell(4, 6).Value = "{di:Name}";
-            ws.Cell(3, 1).Value = "{di:Name}";
-            ws.Cell(3, 6).Value = "{di:Name}";
-            ws.Cell(1, 4).Value = "{di:Name}";
-            ws.Cell(4, 4).Value = "{di:Name}";
+    [Test]
+    public void TestRenderEmptyIEnumerableHorizontalCellsShift()
+    {
+        var report = new TestReport();
+        var ws = report.Workbook.AddWorksheet("Test");
+        var range = ws.Range(2, 2, 3, 5);
+        range.AddToNamed("TestRange", XLScope.Worksheet);
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
-            {
-                ShiftType = ShiftType.Row,
-            };
-            panel.Render();
+        range.Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetRightBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
 
-            Assert.IsNull(panel.ResultRange);
+        ws.Cell(2, 6).Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelEmptyIEnumerableRenderTest),
-                nameof(TestRenderEmptyIEnumerableVerticalRowsShift)), ws.Workbook);
+        ws.Cell(2, 2).Value = "{di:Name}";
+        ws.Cell(2, 3).Value = "{di:Date}";
+        ws.Cell(2, 4).Value = "{di:Sum}";
+        ws.Cell(2, 5).Value = "{di:Contacts}";
+        ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
+        ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
+        ws.Cell(3, 4).Value = "{p:StrParam}";
 
-            //report.Workbook.SaveAs("test.xlsx");
-        }
+        ws.Cell(1, 1).Value = "{di:Name}";
+        ws.Cell(4, 1).Value = "{di:Name}";
+        ws.Cell(1, 6).Value = "{di:Name}";
+        ws.Cell(4, 6).Value = "{di:Name}";
+        ws.Cell(3, 1).Value = "{di:Name}";
+        ws.Cell(3, 6).Value = "{di:Name}";
+        ws.Cell(1, 4).Value = "{di:Name}";
+        ws.Cell(4, 4).Value = "{di:Name}";
 
-        [Test]
-        public void TestRenderEmptyIEnumerableVerticalNoShift()
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report,
+            report.TemplateProcessor)
         {
-            var report = new TestReport();
-            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 3, 5);
-            range.AddToNamed("TestRange", XLScope.Worksheet);
+            Type = PanelType.Horizontal
+        };
+        panel.Render();
 
-            range.Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetRightBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
+        Assert.IsNull(panel.ResultRange);
 
-            ws.Cell(4, 3).Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
+        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+            nameof(DataSourcePanelEmptyIEnumerableRenderTest),
+            nameof(TestRenderEmptyIEnumerableHorizontalCellsShift)), ws.Workbook);
 
-            ws.Cell(2, 2).Value = "{di:Name}";
-            ws.Cell(2, 3).Value = "{di:Date}";
-            ws.Cell(2, 4).Value = "{di:Sum}";
-            ws.Cell(2, 5).Value = "{di:Contacts}";
-            ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
-            ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
-            ws.Cell(3, 4).Value = "{p:StrParam}";
+        //report.Workbook.SaveAs("test.xlsx");
+    }
 
-            ws.Cell(1, 1).Value = "{di:Name}";
-            ws.Cell(4, 1).Value = "{di:Name}";
-            ws.Cell(1, 6).Value = "{di:Name}";
-            ws.Cell(4, 6).Value = "{di:Name}";
-            ws.Cell(3, 1).Value = "{di:Name}";
-            ws.Cell(3, 6).Value = "{di:Name}";
-            ws.Cell(1, 4).Value = "{di:Name}";
-            ws.Cell(4, 4).Value = "{di:Name}";
+    [Test]
+    public void TestRenderEmptyIEnumerableHorizontalRowsShift()
+    {
+        var report = new TestReport();
+        var ws = report.Workbook.AddWorksheet("Test");
+        var range = ws.Range(2, 2, 3, 5);
+        range.AddToNamed("TestRange", XLScope.Worksheet);
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
-            {
-                ShiftType = ShiftType.NoShift,
-            };
-            panel.Render();
+        range.Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetRightBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
 
-            Assert.IsNull(panel.ResultRange);
+        ws.Cell(2, 6).Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelEmptyIEnumerableRenderTest),
-                nameof(TestRenderEmptyIEnumerableVerticalNoShift)), ws.Workbook);
+        ws.Cell(2, 2).Value = "{di:Name}";
+        ws.Cell(2, 3).Value = "{di:Date}";
+        ws.Cell(2, 4).Value = "{di:Sum}";
+        ws.Cell(2, 5).Value = "{di:Contacts}";
+        ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
+        ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
+        ws.Cell(3, 4).Value = "{p:StrParam}";
 
-            //report.Workbook.SaveAs("test.xlsx");
-        }
+        ws.Cell(1, 1).Value = "{di:Name}";
+        ws.Cell(4, 1).Value = "{di:Name}";
+        ws.Cell(1, 6).Value = "{di:Name}";
+        ws.Cell(4, 6).Value = "{di:Name}";
+        ws.Cell(3, 1).Value = "{di:Name}";
+        ws.Cell(3, 6).Value = "{di:Name}";
+        ws.Cell(1, 4).Value = "{di:Name}";
+        ws.Cell(4, 4).Value = "{di:Name}";
 
-        [Test]
-        public void TestRenderEmptyIEnumerableHorizontalCellsShift()
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report,
+            report.TemplateProcessor)
         {
-            var report = new TestReport();
-            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 3, 5);
-            range.AddToNamed("TestRange", XLScope.Worksheet);
+            Type = PanelType.Horizontal,
+            ShiftType = ShiftType.Row
+        };
+        panel.Render();
 
-            range.Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetRightBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
+        Assert.IsNull(panel.ResultRange);
 
-            ws.Cell(2, 6).Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
+        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+            nameof(DataSourcePanelEmptyIEnumerableRenderTest),
+            nameof(TestRenderEmptyIEnumerableHorizontalRowsShift)), ws.Workbook);
 
-            ws.Cell(2, 2).Value = "{di:Name}";
-            ws.Cell(2, 3).Value = "{di:Date}";
-            ws.Cell(2, 4).Value = "{di:Sum}";
-            ws.Cell(2, 5).Value = "{di:Contacts}";
-            ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
-            ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
-            ws.Cell(3, 4).Value = "{p:StrParam}";
+        //report.Workbook.SaveAs("test.xlsx");
+    }
 
-            ws.Cell(1, 1).Value = "{di:Name}";
-            ws.Cell(4, 1).Value = "{di:Name}";
-            ws.Cell(1, 6).Value = "{di:Name}";
-            ws.Cell(4, 6).Value = "{di:Name}";
-            ws.Cell(3, 1).Value = "{di:Name}";
-            ws.Cell(3, 6).Value = "{di:Name}";
-            ws.Cell(1, 4).Value = "{di:Name}";
-            ws.Cell(4, 4).Value = "{di:Name}";
+    [Test]
+    public void TestRenderEmptyIEnumerableHorizontalNoShift()
+    {
+        var report = new TestReport();
+        var ws = report.Workbook.AddWorksheet("Test");
+        var range = ws.Range(2, 2, 3, 5);
+        range.AddToNamed("TestRange", XLScope.Worksheet);
 
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
-            {
-                Type = PanelType.Horizontal,
-            };
-            panel.Render();
+        range.Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetRightBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
+        range.Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
 
-            Assert.IsNull(panel.ResultRange);
+        ws.Cell(2, 6).Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
 
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelEmptyIEnumerableRenderTest),
-                nameof(TestRenderEmptyIEnumerableHorizontalCellsShift)), ws.Workbook);
+        ws.Cell(2, 2).Value = "{di:Name}";
+        ws.Cell(2, 3).Value = "{di:Date}";
+        ws.Cell(2, 4).Value = "{di:Sum}";
+        ws.Cell(2, 5).Value = "{di:Contacts}";
+        ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
+        ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
+        ws.Cell(3, 4).Value = "{p:StrParam}";
 
-            //report.Workbook.SaveAs("test.xlsx");
-        }
+        ws.Cell(1, 1).Value = "{di:Name}";
+        ws.Cell(4, 1).Value = "{di:Name}";
+        ws.Cell(1, 6).Value = "{di:Name}";
+        ws.Cell(4, 6).Value = "{di:Name}";
+        ws.Cell(3, 1).Value = "{di:Name}";
+        ws.Cell(3, 6).Value = "{di:Name}";
+        ws.Cell(1, 4).Value = "{di:Name}";
+        ws.Cell(4, 4).Value = "{di:Name}";
 
-        [Test]
-        public void TestRenderEmptyIEnumerableHorizontalRowsShift()
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report,
+            report.TemplateProcessor)
         {
-            var report = new TestReport();
-            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 3, 5);
-            range.AddToNamed("TestRange", XLScope.Worksheet);
+            Type = PanelType.Horizontal,
+            ShiftType = ShiftType.NoShift
+        };
+        panel.Render();
 
-            range.Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetRightBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
+        Assert.IsNull(panel.ResultRange);
 
-            ws.Cell(2, 6).Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
+        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+            nameof(DataSourcePanelEmptyIEnumerableRenderTest),
+            nameof(TestRenderEmptyIEnumerableHorizontalNoShift)), ws.Workbook);
 
-            ws.Cell(2, 2).Value = "{di:Name}";
-            ws.Cell(2, 3).Value = "{di:Date}";
-            ws.Cell(2, 4).Value = "{di:Sum}";
-            ws.Cell(2, 5).Value = "{di:Contacts}";
-            ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
-            ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
-            ws.Cell(3, 4).Value = "{p:StrParam}";
-
-            ws.Cell(1, 1).Value = "{di:Name}";
-            ws.Cell(4, 1).Value = "{di:Name}";
-            ws.Cell(1, 6).Value = "{di:Name}";
-            ws.Cell(4, 6).Value = "{di:Name}";
-            ws.Cell(3, 1).Value = "{di:Name}";
-            ws.Cell(3, 6).Value = "{di:Name}";
-            ws.Cell(1, 4).Value = "{di:Name}";
-            ws.Cell(4, 4).Value = "{di:Name}";
-
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
-            {
-                Type = PanelType.Horizontal,
-                ShiftType = ShiftType.Row,
-            };
-            panel.Render();
-
-            Assert.IsNull(panel.ResultRange);
-
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelEmptyIEnumerableRenderTest),
-                nameof(TestRenderEmptyIEnumerableHorizontalRowsShift)), ws.Workbook);
-
-            //report.Workbook.SaveAs("test.xlsx");
-        }
-
-        [Test]
-        public void TestRenderEmptyIEnumerableHorizontalNoShift()
-        {
-            var report = new TestReport();
-            IXLWorksheet ws = report.Workbook.AddWorksheet("Test");
-            IXLRange range = ws.Range(2, 2, 3, 5);
-            range.AddToNamed("TestRange", XLScope.Worksheet);
-
-            range.Style.Border.SetTopBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetRightBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
-            range.Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
-
-            ws.Cell(2, 6).Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
-
-            ws.Cell(2, 2).Value = "{di:Name}";
-            ws.Cell(2, 3).Value = "{di:Date}";
-            ws.Cell(2, 4).Value = "{di:Sum}";
-            ws.Cell(2, 5).Value = "{di:Contacts}";
-            ws.Cell(3, 2).Value = "{di:Contacts.Phone}";
-            ws.Cell(3, 3).Value = "{di:Contacts.Fax}";
-            ws.Cell(3, 4).Value = "{p:StrParam}";
-
-            ws.Cell(1, 1).Value = "{di:Name}";
-            ws.Cell(4, 1).Value = "{di:Name}";
-            ws.Cell(1, 6).Value = "{di:Name}";
-            ws.Cell(4, 6).Value = "{di:Name}";
-            ws.Cell(3, 1).Value = "{di:Name}";
-            ws.Cell(3, 6).Value = "{di:Name}";
-            ws.Cell(1, 4).Value = "{di:Name}";
-            ws.Cell(4, 4).Value = "{di:Name}";
-
-            var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report, report.TemplateProcessor)
-            {
-                Type = PanelType.Horizontal,
-                ShiftType = ShiftType.NoShift,
-            };
-            panel.Render();
-
-            Assert.IsNull(panel.ResultRange);
-
-            ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelEmptyIEnumerableRenderTest),
-                nameof(TestRenderEmptyIEnumerableHorizontalNoShift)), ws.Workbook);
-
-            //report.Workbook.SaveAs("test.xlsx");
-        }
+        //report.Workbook.SaveAs("test.xlsx");
     }
 }

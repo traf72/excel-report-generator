@@ -1,7 +1,6 @@
-﻿namespace ExcelReportGenerator.Samples.Reports
+﻿namespace ExcelReportGenerator.Samples.Reports;
+
+public class EnumerableConnect : ReportBase
 {
-    public class EnumerableConnect : ReportBase
-    {
-        public override string ReportName => "Connect to IEnumerable";
-    }
+    public override string ReportName => "Connect to IEnumerable";
 }

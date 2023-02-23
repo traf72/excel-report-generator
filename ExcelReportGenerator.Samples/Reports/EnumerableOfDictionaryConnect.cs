@@ -1,7 +1,6 @@
-﻿namespace ExcelReportGenerator.Samples.Reports
+﻿namespace ExcelReportGenerator.Samples.Reports;
+
+public class EnumerableOfDictionaryConnect : ReportBase
 {
-    public class EnumerableOfDictionaryConnect : ReportBase
-    {
-        public override string ReportName => "Connect to IEnumerable of Dictionary";
-    }
+    public override string ReportName => "Connect to IEnumerable of Dictionary";
 }

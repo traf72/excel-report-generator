@@ -1,7 +1,6 @@
-﻿namespace ExcelReportGenerator.Samples.Reports
+﻿namespace ExcelReportGenerator.Samples.Reports;
+
+public class CustomReportGeneratorSample : ReportBase
 {
-    public class CustomReportGeneratorSample : ReportBase
-    {
-        public override string ReportName => "Custom report generator sample";
-    }
+    public override string ReportName => "Custom report generator sample";
 }

@@ -1,27 +1,25 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System.IO;
 
-namespace ExcelReportGenerator.Tests
+namespace ExcelReportGenerator.Tests;
+
+public static class Configuration
 {
-    public static class Configuration
+    private static readonly IConfigurationRoot _configuration;
+
+    static Configuration()
     {
-        private static readonly IConfigurationRoot _configuration;
+        var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", true, true);
+        _configuration = builder.Build();
+    }
 
-        static Configuration()
+    public static string TestDbConnectionString
+    {
+        get
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            _configuration = builder.Build();
-        }
-
-        public static string TestDbConnectionString
-        {
-            get
-            {
-                string projectPath = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
-                return _configuration["ConnectionStrings:TestDb"].Replace("%DBPATH%", projectPath);
-            }
+            var projectPath = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
+            return _configuration["ConnectionStrings:TestDb"].Replace("%DBPATH%", projectPath);
         }
     }
 }
