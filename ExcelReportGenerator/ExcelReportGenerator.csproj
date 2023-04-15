@@ -8,14 +8,14 @@
     <Company />
     <Description>The library ExcelReportGenerator allows you to render data to Microsoft Excel by marking Excel sheets using panels and templates. It makes it easy to connect to various data sources like IDataReader, DataSet, DataTable, IEnumerable&lt;T&gt; and others and to render data from them to Excel. You can also apply aggregation, various types of grouping, formatting and so on to the data. More detailed documentation you can find inside the project repository.</Description>
     <Copyright>Copyright © Traf 2023</Copyright>
-    <AssemblyVersion>2.0.0</AssemblyVersion>
-    <FileVersion>2.0.0</FileVersion>
-    <PackageTags>Excel Report Reports Reporting xlsx ClosedXml Spreadsheet Workbook Worksheet Generator</PackageTags>
+    <AssemblyVersion>2.1.0</AssemblyVersion>
+    <FileVersion>2.1.0</FileVersion>
+    <PackageTags>excel report reports reporting xlsx closedxml spreadsheet workbook worksheet generator export openxml export-excel export-to-excel export-xlsx export-to-xlsx</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.0</Version>
-    <PackageReleaseNotes>https://github.com/traf72/excel-report-generator/releases/tag/2.0.0</PackageReleaseNotes>
+    <Version>2.1.0</Version>
+    <PackageReleaseNotes>https://github.com/traf72/excel-report-generator/releases/tag/2.1.0</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/traf72/excel-report-generator</PackageProjectUrl>
-    <PackageVersion>2.0.0</PackageVersion>
+    <PackageVersion>2.1.0</PackageVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/traf72/excel-report-generator</RepositoryUrl>
@@ -28,9 +28,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.100.3" />
+    <PackageReference Include="ClosedXML" Version="0.101.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <PropertyGroup>
