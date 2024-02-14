@@ -52,23 +52,18 @@ internal class ExcelPanel : IExcelPanel
 
     public IList<IExcelPanel> Children { get; set; } = new List<IExcelPanel>();
 
-    [Obfuscation(Exclude = true, Feature = "renaming")]
     [ExternalProperty(Converter = typeof(ShiftTypeConverter))]
     public ShiftType ShiftType { get; set; }
 
-    [Obfuscation(Exclude = true, Feature = "renaming")]
     [ExternalProperty(Converter = typeof(PanelTypeConverter))]
     public PanelType Type { get; set; }
 
-    [Obfuscation(Exclude = true, Feature = "renaming")]
     [ExternalProperty(Converter = typeof(RenderPriorityConverter))]
     public int RenderPriority { get; set; }
 
-    [Obfuscation(Exclude = true, Feature = "renaming")]
     [ExternalProperty]
     public string BeforeRenderMethodName { get; set; }
 
-    [Obfuscation(Exclude = true, Feature = "renaming")]
     [ExternalProperty]
     public string AfterRenderMethodName { get; set; }
 
