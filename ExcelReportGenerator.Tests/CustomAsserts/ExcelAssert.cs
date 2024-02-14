@@ -42,7 +42,7 @@ public class ExcelAssert
 
             Assert.AreEqual(expectedCell.DataType, actualCell.DataType,
                 $"Cell {expectedCell.Address} DataType failed.");
-            // Assert.AreEqual(expectedCell.Active, actualCell.Active, $"Cell {expectedCell.Address} Active failed.");
+            Assert.AreEqual(expectedCell.Active, actualCell.Active, $"Cell {expectedCell.Address} Active failed.");
             AreColumnsEquals(expectedCell.WorksheetColumn(), actualCell.WorksheetColumn(),
                 $"Column {actualCell.WorksheetColumn().RangeAddress} {{0}} failed.");
             AreRowEquals(expectedCell.WorksheetRow(), actualCell.WorksheetRow(),
