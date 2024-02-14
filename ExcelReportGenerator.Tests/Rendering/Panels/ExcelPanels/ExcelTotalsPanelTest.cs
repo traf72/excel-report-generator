@@ -11,6 +11,7 @@ using ExcelReportGenerator.Rendering.TemplateProcessors;
 using ExcelReportGenerator.Tests.CustomAsserts;
 using ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels.PanelRenderTests;
 using Microsoft.CSharp.RuntimeBinder;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace ExcelReportGenerator.Tests.Rendering.Panels.ExcelPanels;
 

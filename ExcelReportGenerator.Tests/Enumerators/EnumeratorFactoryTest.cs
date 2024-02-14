@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Data;
 using ExcelReportGenerator.Enumerators;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace ExcelReportGenerator.Tests.Enumerators;
 

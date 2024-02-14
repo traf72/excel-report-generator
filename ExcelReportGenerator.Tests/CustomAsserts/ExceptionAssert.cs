@@ -1,4 +1,6 @@
-﻿namespace ExcelReportGenerator.Tests.CustomAsserts;
+﻿using Assert = NUnit.Framework.Legacy.ClassicAssert;
+
+namespace ExcelReportGenerator.Tests.CustomAsserts;
 
 public class ExceptionAssert
 {

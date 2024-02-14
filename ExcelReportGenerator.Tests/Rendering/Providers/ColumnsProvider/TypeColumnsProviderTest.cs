@@ -1,6 +1,7 @@
 ﻿using ExcelReportGenerator.Attributes;
 using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Rendering.Providers.ColumnsProviders;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.ColumnsProvider;
 

@@ -4,6 +4,7 @@ using ExcelReportGenerator.Attributes;
 using ExcelReportGenerator.Exceptions;
 using ExcelReportGenerator.Helpers;
 using ExcelReportGenerator.Tests.CustomAsserts;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 #pragma warning disable 169
 #pragma warning disable 108,114

@@ -1,5 +1,6 @@
 ﻿using ExcelReportGenerator.Rendering;
 using ExcelReportGenerator.Rendering.Parsers;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace ExcelReportGenerator.Tests.Rendering.Parsers;
 

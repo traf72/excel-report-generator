@@ -1,4 +1,5 @@
 ﻿using ExcelReportGenerator.Extensions;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace ExcelReportGenerator.Tests.Extensions;
 

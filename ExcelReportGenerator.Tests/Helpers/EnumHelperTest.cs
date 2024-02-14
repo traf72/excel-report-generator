@@ -1,5 +1,6 @@
 ﻿using ExcelReportGenerator.Helpers;
 using ExcelReportGenerator.Tests.CustomAsserts;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace ExcelReportGenerator.Tests.Helpers;
 

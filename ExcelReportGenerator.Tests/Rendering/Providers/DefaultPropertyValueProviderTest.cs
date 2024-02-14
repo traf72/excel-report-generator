@@ -5,6 +5,7 @@ using ExcelReportGenerator.Exceptions;
 using ExcelReportGenerator.Helpers;
 using ExcelReportGenerator.Rendering.Providers;
 using ExcelReportGenerator.Tests.CustomAsserts;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers;
 

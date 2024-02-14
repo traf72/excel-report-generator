@@ -3,6 +3,7 @@ using ExcelReportGenerator.Exceptions;
 using ExcelReportGenerator.Rendering.Providers.DataItemValueProviders;
 using ExcelReportGenerator.Tests.CustomAsserts;
 using NSubstitute.ExceptionExtensions;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace ExcelReportGenerator.Tests.Rendering.Providers.DataItemValueProviders;
 

@@ -3,6 +3,7 @@ using ExcelReportGenerator.Enums;
 using ExcelReportGenerator.Extensions;
 using ExcelReportGenerator.Rendering.TemplateProcessors;
 using ExcelReportGenerator.Tests.CustomAsserts;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace ExcelReportGenerator.Tests.Extensions;
 
