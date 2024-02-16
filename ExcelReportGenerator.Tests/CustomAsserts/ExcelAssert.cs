@@ -37,7 +37,62 @@ public class ExcelAssert
             }
             else
             {
-                Assert.AreEqual(expectedCell.Value, actualCell.Value, $"Cell {expectedCell.Address} Value failed.");
+                if (!expectedCell.HasRichText && !actualCell.HasRichText)
+                {
+                    Assert.AreEqual(expectedCell.Value, actualCell.Value, $"Cell {expectedCell.Address} Value failed.");
+                }
+                else if (expectedCell.HasRichText && actualCell.HasRichText)
+                {
+                    AreRichTextEqual(expectedCell.GetRichText(), actualCell.GetRichText());
+                }
+                else
+                {
+                    Assert.Fail(
+                        $"Expected cell {expectedCell.Address} {nameof(IXLCell.HasRichText)} is {expectedCell.HasRichText}, but actual cell {nameof(IXLCell.HasRichText)} is {actualCell.HasRichText}");
+                }
+
+                void AreRichTextEqual(IXLRichText expectedRichText, IXLRichText actualRichText)
+                {
+                    Assert.AreEqual(expectedRichText.Count, actualRichText.Count,
+                        GetErrorMessage(nameof(IXLRichText.Count)));
+                    for (var i = 0; i < expectedRichText.Count; i++)
+                    {
+                        var expectedRichString = expectedRichText.ElementAt(i);
+                        var actualRichString = actualRichText.ElementAt(i);
+
+                        Assert.AreEqual(expectedRichString.Text, actualRichString.Text,
+                            GetErrorMessage(nameof(IXLRichString.Text)));
+                        Assert.AreEqual(expectedRichString.FontScheme, actualRichString.FontScheme,
+                            GetErrorMessage(nameof(IXLRichString.FontScheme)));
+                        Assert.AreEqual(expectedRichString.Bold, actualRichString.Bold,
+                            GetErrorMessage(nameof(IXLRichString.Bold)));
+                        Assert.AreEqual(expectedRichString.Italic, actualRichString.Italic,
+                            GetErrorMessage(nameof(IXLRichString.Italic)));
+                        Assert.AreEqual(expectedRichString.Shadow, actualRichString.Shadow,
+                            GetErrorMessage(nameof(IXLRichString.Shadow)));
+                        Assert.AreEqual(expectedRichString.Strikethrough, actualRichString.Strikethrough,
+                            GetErrorMessage(nameof(IXLRichString.Strikethrough)));
+                        Assert.AreEqual(expectedRichString.Underline, actualRichString.Underline,
+                            GetErrorMessage(nameof(IXLRichString.Underline)));
+                        Assert.AreEqual(expectedRichString.FontColor, actualRichString.FontColor,
+                            GetErrorMessage(nameof(IXLRichString.FontColor)));
+                        Assert.AreEqual(expectedRichString.FontName, actualRichString.FontName,
+                            GetErrorMessage(nameof(IXLRichString.FontName)));
+                        Assert.AreEqual(expectedRichString.FontSize, actualRichString.FontSize,
+                            GetErrorMessage(nameof(IXLRichString.FontSize)));
+                        Assert.AreEqual(expectedRichString.VerticalAlignment, actualRichString.VerticalAlignment,
+                            GetErrorMessage(nameof(IXLRichString.VerticalAlignment)));
+                        Assert.AreEqual(expectedRichString.FontCharSet, actualRichString.FontCharSet,
+                            GetErrorMessage(nameof(IXLRichString.FontCharSet)));
+                        Assert.AreEqual(expectedRichString.FontFamilyNumbering, actualRichString.FontFamilyNumbering,
+                            GetErrorMessage(nameof(IXLRichString.FontFamilyNumbering)));
+                    }
+
+                    return;
+
+                    string GetErrorMessage(string propName) =>
+                        $"Cell {expectedCell.Address} RichTextValue '{propName}' failed.";
+                }
             }
 
             Assert.AreEqual(expectedCell.DataType, actualCell.DataType,

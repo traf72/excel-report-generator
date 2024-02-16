@@ -13,7 +13,7 @@ public class PanelRenderTest
     {
         var report = new TestReport();
         var ws = report.Workbook.AddWorksheet("Test");
-        var range = ws.Range(1, 1, 5, 5);
+        var range = ws.Range(1, 1, 6, 6);
 
         ws.Cell(1, 1).Value = "{p:StrParam}";
         ws.Cell(1, 2).Value = "{p:IntParam}";
@@ -38,16 +38,49 @@ public class PanelRenderTest
         ws.Cell(5, 1).Value = "{p:ExpandoObj.StrProp}";
         ws.Cell(5, 2).Value = "{p:ExpandoObj.DecimalProp}";
         ws.Cell(5, 3).Value = "{p:NullProp}";
-        ws.Cell(6, 1).Value = "{p:StrParam}";
-        ws.Cell(6, 2).Value = "{m:Counter()}";
-        ws.Cell(7, 1).Value = "Plain text outside range";
+
+        ws.Cell(6, 1)
+            .CreateRichText()
+            .AddText("Rich expando")
+            .SetItalic()
+            .AddText(" {p:ExpandoObj.StrProp}")
+            .SetBold();
+
+        ws.Cell(6, 2)
+            .CreateRichText()
+            .AddText("Rich decimal before")
+            .SetItalic()
+            .AddText(" {p:ExpandoObj.DecimalProp} ")
+            .SetBold()
+            .AddText("Rich decimal after")
+            .SetStrikethrough();
+
+        ws.Cell(6, 3)
+            .CreateRichText()
+            .AddText("{p:ExpandoObj.StrProp}");
+        
+        ws.Cell(6, 3)
+            .GetRichText()
+            .Substring(0, 13)
+            .SetFontColor(XLColor.Green);
+
+        ws.Cell(10, 1).Value = "{p:StrParam}";
+        ws.Cell(10, 2).Value = "{m:Counter()}";
+        ws.Cell(11, 1).Value = "Plain text outside range";
+
+        ws.Cell(11, 2)
+            .CreateRichText()
+            .AddText("Rich outside first")
+            .SetItalic()
+            .AddText(" Rich outside second")
+            .SetFontColor(XLColor.Red);
 
         var panel = new ExcelPanel(range, report, report.TemplateProcessor);
         panel.Render();
 
         Assert.AreEqual(range, panel.ResultRange);
 
-        Assert.AreEqual(24, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
+        Assert.AreEqual(28, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
         Assert.AreEqual("String parameter", ws.Cell(1, 1).Value);
         Assert.AreEqual(10d, ws.Cell(1, 2).Value);
         Assert.AreEqual(new DateTime(2017, 10, 25), ws.Cell(1, 3).Value);
@@ -74,17 +107,47 @@ public class PanelRenderTest
         Assert.AreEqual("ExpandoStr", ws.Cell(5, 1).Value);
         Assert.AreEqual(5.56d, ws.Cell(5, 2).Value);
         Assert.AreEqual(Blank.Value, ws.Cell(5, 3).Value);
+        
+        Assert.True(ws.Cell(6, 1).HasRichText);
+        Assert.AreEqual(ws.Cell(6, 1).GetRichText().Count, 2);
+        Assert.AreEqual(ws.Cell(6, 1).GetRichText().First().Text, "Rich expando");
+        Assert.True(ws.Cell(6, 1).GetRichText().First().Italic);
+        Assert.AreEqual(ws.Cell(6, 1).GetRichText().Last().Text, " ExpandoStr");
+        Assert.True(ws.Cell(6, 1).GetRichText().Last().Bold);
+        
+        Assert.True(ws.Cell(6, 2).HasRichText);
+        Assert.AreEqual(ws.Cell(6, 2).GetRichText().Count, 3);
+        Assert.AreEqual(ws.Cell(6, 2).GetRichText().First().Text, "Rich decimal before");
+        Assert.True(ws.Cell(6, 2).GetRichText().First().Italic);
+        Assert.AreEqual(ws.Cell(6, 2).GetRichText().ElementAt(1).Text, $" {5.56d.ToString()} ");
+        Assert.True(ws.Cell(6, 2).GetRichText().ElementAt(1).Bold);
+        Assert.AreEqual(ws.Cell(6, 2).GetRichText().Last().Text, "Rich decimal after");
+        Assert.True(ws.Cell(6, 2).GetRichText().Last().Strikethrough);
 
-        Assert.AreEqual("{p:StrParam}", ws.Cell(6, 1).Value);
-        Assert.AreEqual("{m:Counter()}", ws.Cell(6, 2).Value);
-        Assert.AreEqual("Plain text outside range", ws.Cell(7, 1).Value);
+        Assert.AreEqual("{p:ExpandoObj.StrProp}", ws.Cell(6, 3).Value);
+        Assert.True(ws.Cell(6, 3).HasRichText);
+        Assert.AreEqual(ws.Cell(6, 3).GetRichText().Count, 2);
+        Assert.AreEqual(ws.Cell(6, 3).GetRichText().First().Text, "{p:ExpandoObj");
+        Assert.AreEqual(ws.Cell(6, 3).GetRichText().First().FontColor, XLColor.Green);
+        Assert.AreEqual(ws.Cell(6, 3).GetRichText().Last().Text, ".StrProp}");
+        
+        Assert.AreEqual("{p:StrParam}", ws.Cell(10, 1).Value);
+        Assert.AreEqual("{m:Counter()}", ws.Cell(10, 2).Value);
+        Assert.AreEqual("Plain text outside range", ws.Cell(11, 1).Value);
+        Assert.AreEqual("Rich outside first Rich outside second", ws.Cell(11, 2).Value);
+        Assert.True(ws.Cell(11, 2).HasRichText);
+        Assert.AreEqual(ws.Cell(11, 2).GetRichText().Count, 2);
+        Assert.AreEqual(ws.Cell(11, 2).GetRichText().First().Text, "Rich outside first");
+        Assert.True(ws.Cell(11, 2).GetRichText().First().Italic);
+        Assert.AreEqual(ws.Cell(11, 2).GetRichText().Last().Text, " Rich outside second");
+        Assert.AreEqual(ws.Cell(11, 2).GetRichText().Last().FontColor, XLColor.Red);
 
         Assert.AreEqual(0, ws.NamedRanges.Count());
         Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
 
         Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
 
-        //report.Workbook.SaveAs("test.xlsx");
+        // report.Workbook.SaveAs("test.xlsx");
     }
 
     [Test]

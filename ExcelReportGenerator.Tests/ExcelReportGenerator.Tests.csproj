@@ -349,6 +349,9 @@
         <None Update="TestData\ExcelDataSourcePanelTest\TestGroupResultVertical_WithoutGroupingBlankValues.xlsx">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="TestData\DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test\ParentCellsShiftChildCellsShift_WithRichText.xlsx">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

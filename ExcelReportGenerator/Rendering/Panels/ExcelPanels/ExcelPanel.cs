@@ -95,44 +95,69 @@ internal class ExcelPanel : IExcelPanel
                 continue;
             }
 
-            MatchCollection matches = Regex.Matches(cellValue, templatePattern, RegexOptions.IgnoreCase);
+            MatchCollection matches = GetMatches(cellValue);
             if (matches.Count == 0)
             {
                 continue;
             }
 
-            HierarchicalDataItem dataContext = GetDataContext();
-            if (matches.Count == 1 && Regex.IsMatch(cellValue, $@"^{templatePattern}$", RegexOptions.IgnoreCase))
+            if (!cell.HasRichText)
             {
-                object value = _templateProcessor.GetValue(cellValue, dataContext);
-                if (value == null)
+                cell.Value = GetCellValue(cellValue);
+            }
+            else
+            {
+                foreach (IXLRichString richString in cell.GetRichText())
                 {
-                    cell.Value = Blank.Value;
+                    matches = GetMatches(richString.Text);
+                    if (matches.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    richString.Text = GetCellValue(richString.Text).ToString();
                 }
-                else if (value.GetType().IsNumeric())
+            }
+
+            continue;
+            
+            MatchCollection GetMatches(string cellVal) => Regex.Matches(cellVal, templatePattern, RegexOptions.IgnoreCase);
+            
+            XLCellValue GetCellValue(string cellVal)
+            {
+                HierarchicalDataItem dataContext = GetDataContext();
+                if (matches.Count == 1 && Regex.IsMatch(cellVal, $@"^{templatePattern}$", RegexOptions.IgnoreCase))
                 {
-                    cell.Value = Convert.ToDouble(value);
-                }
-                else
-                    cell.Value = value switch
+                    object value = _templateProcessor.GetValue(cellVal, dataContext);
+                    if (value == null)
+                    {
+                        return Blank.Value;
+                    }
+
+                    if (value.GetType().IsNumeric())
+                    {
+                        return Convert.ToDouble(value);
+                    }
+
+                    return value switch
                     {
                         bool boolValue => boolValue,
                         DateTime dateTimeValue => dateTimeValue,
                         TimeSpan timeSpanValue => timeSpanValue,
                         _ => GetValueFromString(value.ToString())
                     };
+                }
 
-                continue;
+                foreach (object match in matches)
+                {
+                    string template = match.ToString();
+                    cellVal = cellVal.Replace(template,
+                        _templateProcessor.GetValue(template, dataContext)?.ToString());
+                }
+
+                return GetValueFromString(cellVal);
             }
 
-            foreach (object match in matches)
-            {
-                string template = match.ToString();
-                cellValue = cellValue.Replace(template, _templateProcessor.GetValue(template, dataContext)?.ToString());
-            }
-
-            cell.Value = GetValueFromString(cellValue);
-                
             XLCellValue GetValueFromString(string value) => value == string.Empty ? Blank.Value : value;
         }
 
