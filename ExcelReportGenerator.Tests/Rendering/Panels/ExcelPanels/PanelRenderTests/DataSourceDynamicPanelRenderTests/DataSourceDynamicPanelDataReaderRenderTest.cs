@@ -44,7 +44,7 @@ public class DataSourceDynamicPanelDataReaderRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 9, 7), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourceDynamicPanelDataReaderRenderTest),
             nameof(TestRenderDataReader)), ws.Workbook);
 
@@ -86,7 +86,7 @@ public class DataSourceDynamicPanelDataReaderRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 7, 7), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourceDynamicPanelDataReaderRenderTest),
             nameof(TestRenderDataReader_HorizontalPanel)), ws.Workbook);
 
@@ -120,7 +120,7 @@ public class DataSourceDynamicPanelDataReaderRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 3, 7), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourceDynamicPanelDataReaderRenderTest),
             nameof(TestRenderEmptyDataReader)), ws.Workbook);
 

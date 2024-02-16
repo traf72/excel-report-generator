@@ -42,7 +42,7 @@ public class TotalsPanelRenderTest
 
         Assert.AreEqual(range, panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(TotalsPanelRenderTest),
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(nameof(TotalsPanelRenderTest),
             nameof(TestPanelRender)), ws.Workbook);
 
         //report.Workbook.SaveAs("test.xlsx");
@@ -87,7 +87,7 @@ public class TotalsPanelRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 9, 5), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(TotalsPanelRenderTest),
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(nameof(TotalsPanelRenderTest),
             nameof(TestPanelRenderWithParentContext)), ws.Workbook);
 
         //report.Workbook.SaveAs("test.xlsx");
@@ -114,7 +114,7 @@ public class TotalsPanelRenderTest
 
         Assert.AreEqual(range, panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(TotalsPanelRenderTest),
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(nameof(TotalsPanelRenderTest),
             nameof(TestPanelWithNoData)), ws.Workbook);
 
         //report.Workbook.SaveAs("test.xlsx");
@@ -141,7 +141,7 @@ public class TotalsPanelRenderTest
 
         Assert.AreEqual(range, panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(TotalsPanelRenderTest),
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(nameof(TotalsPanelRenderTest),
             nameof(TestPanelWithNullData)), ws.Workbook);
 
         //report.Workbook.SaveAs("test.xlsx");

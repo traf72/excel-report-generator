@@ -44,7 +44,7 @@ public class DataSourcePanelIEnumerableRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 7, 5), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelIEnumerableRenderTest),
             nameof(TestRenderIEnumerableVerticalCellsShift)), ws.Workbook);
 
@@ -89,7 +89,7 @@ public class DataSourcePanelIEnumerableRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 7, 5), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelIEnumerableRenderTest),
             nameof(TestRenderIEnumerableVerticalRowsShift)), ws.Workbook);
 
@@ -147,7 +147,7 @@ public class DataSourcePanelIEnumerableRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 7, 5), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelIEnumerableRenderTest),
             nameof(TestRenderIEnumerableVerticalNoShift)), ws.Workbook);
 
@@ -192,7 +192,7 @@ public class DataSourcePanelIEnumerableRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 3, 13), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelIEnumerableRenderTest),
             nameof(TestRenderIEnumerableHorizontalCellsShift)), ws.Workbook);
 
@@ -238,7 +238,7 @@ public class DataSourcePanelIEnumerableRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 3, 13), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelIEnumerableRenderTest),
             nameof(TestRenderIEnumerableHorizontalRowsShift)), ws.Workbook);
 
@@ -285,7 +285,7 @@ public class DataSourcePanelIEnumerableRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 3, 13), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelIEnumerableRenderTest),
             nameof(TestRenderIEnumerableHorizontalNoShift)), ws.Workbook);
 
@@ -308,7 +308,7 @@ public class DataSourcePanelIEnumerableRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 5, 2), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelIEnumerableRenderTest),
             nameof(TestRenderIEnumerableOfInt)), ws.Workbook);
 
@@ -331,7 +331,7 @@ public class DataSourcePanelIEnumerableRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 5, 2), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelIEnumerableRenderTest),
             nameof(TestRenderIEnumerableOfString)), ws.Workbook);
 
@@ -386,7 +386,7 @@ public class DataSourcePanelIEnumerableRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 4, 2), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelIEnumerableRenderTest),
             nameof(TestPanelRenderEvents)), ws.Workbook);
 

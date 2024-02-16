@@ -303,7 +303,7 @@ public class DefaultReportGeneratorTest
 
         reportGenerator.Render(wb);
 
-        ExcelAssert.AreWorkbooksContentEquals(
+        ExcelAssert.AreWorkbooksContentEqual(
             TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRender)), wb);
 
         // wb.SaveAs("test.xlsx");
@@ -339,7 +339,7 @@ public class DefaultReportGeneratorTest
 
         reportGenerator.Render(wb);
 
-        ExcelAssert.AreWorkbooksContentEquals(
+        ExcelAssert.AreWorkbooksContentEqual(
             TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRenderWithEvents)), wb);
 
         //wb.SaveAs("test.xlsx");
@@ -413,7 +413,7 @@ public class DefaultReportGeneratorTest
 
         reportGenerator.Render(wb, new[] {sheet1});
 
-        ExcelAssert.AreWorkbooksContentEquals(
+        ExcelAssert.AreWorkbooksContentEqual(
             TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest), nameof(TestRenderPartialWorksheets)),
             wb);
 
@@ -441,7 +441,7 @@ public class DefaultReportGeneratorTest
 
         reportGenerator.Render(wb);
 
-        ExcelAssert.AreWorkbooksContentEquals(
+        ExcelAssert.AreWorkbooksContentEqual(
             TestHelper.GetExpectedWorkbook(nameof(DefaultReportGeneratorTest),
                 nameof(TestRenderWithCustomVariableAndFunctionProviders)), wb);
 

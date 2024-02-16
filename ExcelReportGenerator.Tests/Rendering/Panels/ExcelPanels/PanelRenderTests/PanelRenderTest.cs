@@ -517,7 +517,7 @@ public class PanelRenderTest
 
         Assert.AreEqual(ws.Range(1, 1, 5, 5), simplePanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(PanelRenderTest),
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(nameof(PanelRenderTest),
             nameof(TestSimplePanelExpansion)), ws.Workbook);
 
         //report.Workbook.SaveAs("test.xlsx");

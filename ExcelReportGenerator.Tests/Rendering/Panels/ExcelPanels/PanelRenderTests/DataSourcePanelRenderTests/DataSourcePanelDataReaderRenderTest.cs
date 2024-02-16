@@ -30,7 +30,7 @@ public class DataSourcePanelDataReaderRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 4, 9), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelDataReaderRenderTest),
             nameof(TestRenderDataReader)), ws.Workbook);
 

@@ -41,7 +41,7 @@ public class DataSourceDynamicPanelDictionaryRenderTest
 
         Assert.AreEqual(ws.Range(9, 2, 13, 3), panel2.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourceDynamicPanelDictionaryRenderTest),
             nameof(TestRenderDictionary)), ws.Workbook);
 
@@ -128,7 +128,7 @@ public class DataSourceDynamicPanelDictionaryRenderTest
 
         Assert.AreEqual(ws.Range(7, 2, 11, 2), panel2.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourceDynamicPanelDictionaryRenderTest),
             nameof(TestRenderDictionaryEnumerable)), ws.Workbook);
 

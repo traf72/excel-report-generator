@@ -100,7 +100,7 @@ public class DataSourcePanelRender_WithGrouping_MixedPanels_Test
 
         Assert.AreEqual(ws.Range(2, 2, 20, 7), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_MixedPanels_Test),
             nameof(TestMultipleVerticalPanelsGrouping)), ws.Workbook);
 
@@ -196,7 +196,7 @@ public class DataSourcePanelRender_WithGrouping_MixedPanels_Test
 
         Assert.AreEqual(ws.Range(2, 2, 7, 20), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_MixedPanels_Test),
             nameof(TestMultipleHorizontalPanelsGrouping)), ws.Workbook);
 
@@ -232,7 +232,7 @@ public class DataSourcePanelRender_WithGrouping_MixedPanels_Test
 
         Assert.AreEqual(ws.Range(2, 2, 10, 5), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_MixedPanels_Test),
             nameof(TestHorizontalInVerticalPanelsGrouping)), ws.Workbook);
 
@@ -270,7 +270,7 @@ public class DataSourcePanelRender_WithGrouping_MixedPanels_Test
 
         Assert.AreEqual(ws.Range(2, 2, 5, 10), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_MixedPanels_Test),
             nameof(TestVerticalInHorizontalPanelsGrouping)), ws.Workbook);
 

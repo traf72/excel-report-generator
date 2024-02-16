@@ -27,7 +27,7 @@ public class DataSourcePanelDataTableRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 4, 6), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelDataTableRenderTest),
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelDataTableRenderTest),
             nameof(TestRenderDataTable)), ws.Workbook);
 
         //report.Workbook.SaveAs("test.xlsx");

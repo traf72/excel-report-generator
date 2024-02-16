@@ -209,7 +209,7 @@ public class SystemFunctionsTest
         var panel = new ExcelPanel(range, report, report.TemplateProcessor);
         panel.Render();
 
-        ExcelAssert.AreWorkbooksContentEquals(
+        ExcelAssert.AreWorkbooksContentEqual(
             TestHelper.GetExpectedWorkbook(nameof(SystemFunctionsTest), "TestFormatOnRender"), ws.Workbook);
 
         //report.Workbook.SaveAs("test.xlsx");

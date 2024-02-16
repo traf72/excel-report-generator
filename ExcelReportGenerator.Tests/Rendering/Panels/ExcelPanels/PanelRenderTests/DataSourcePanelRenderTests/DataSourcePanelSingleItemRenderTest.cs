@@ -39,7 +39,7 @@ public class DataSourcePanelSingleItemRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 3, 5), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelSingleItemRenderTest),
             nameof(TestRenderSingleItemVerticalCellsShift)), ws.Workbook);
 
@@ -80,7 +80,7 @@ public class DataSourcePanelSingleItemRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 3, 5), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelSingleItemRenderTest),
             nameof(TestRenderSingleItemVerticalRowShift)), ws.Workbook);
 
@@ -121,7 +121,7 @@ public class DataSourcePanelSingleItemRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 3, 5), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelSingleItemRenderTest),
             nameof(TestRenderSingleItemVerticalNoShift)), ws.Workbook);
 
@@ -162,7 +162,7 @@ public class DataSourcePanelSingleItemRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 3, 5), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelSingleItemRenderTest),
             nameof(TestRenderSingleItemHorizontalCellsShift)), ws.Workbook);
 
@@ -204,7 +204,7 @@ public class DataSourcePanelSingleItemRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 3, 5), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelSingleItemRenderTest),
             nameof(TestRenderSingleItemHorizontalRowShift)), ws.Workbook);
 
@@ -246,7 +246,7 @@ public class DataSourcePanelSingleItemRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 3, 5), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelSingleItemRenderTest),
             nameof(TestRenderSingleItemHorizontalNoShift)), ws.Workbook);
 

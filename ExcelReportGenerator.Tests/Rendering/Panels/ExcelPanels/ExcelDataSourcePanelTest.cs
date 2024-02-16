@@ -231,7 +231,7 @@ public class ExcelDataSourcePanelTest
         SetResultRange(panel, range);
         method.Invoke(panel, null);
 
-        ExcelAssert.AreWorkbooksContentEquals(
+        ExcelAssert.AreWorkbooksContentEqual(
             TestHelper.GetExpectedWorkbook(nameof(ExcelDataSourcePanelTest), nameof(TestGroupResultVertical)), wb);
 
         //wb.SaveAs("test.xlsx");
@@ -302,7 +302,7 @@ public class ExcelDataSourcePanelTest
         SetResultRange(panel, range);
         method.Invoke(panel, null);
 
-        ExcelAssert.AreWorkbooksContentEquals(
+        ExcelAssert.AreWorkbooksContentEqual(
             TestHelper.GetExpectedWorkbook(nameof(ExcelDataSourcePanelTest), nameof(TestGroupResultVertical_WithoutGroupingBlankValues)), wb);
 
         //wb.SaveAs("test.xlsx");
@@ -425,7 +425,7 @@ public class ExcelDataSourcePanelTest
         SetResultRange(panel, range);
         method.Invoke(panel, null);
 
-        ExcelAssert.AreWorkbooksContentEquals(
+        ExcelAssert.AreWorkbooksContentEqual(
             TestHelper.GetExpectedWorkbook(nameof(ExcelDataSourcePanelTest), nameof(TestGroupResultHorizontal)), wb);
 
         //wb.SaveAs("test.xlsx");
@@ -497,7 +497,7 @@ public class ExcelDataSourcePanelTest
         SetResultRange(panel, range);
         method.Invoke(panel, null);
 
-        ExcelAssert.AreWorkbooksContentEquals(
+        ExcelAssert.AreWorkbooksContentEqual(
             TestHelper.GetExpectedWorkbook(nameof(ExcelDataSourcePanelTest), nameof(TestGroupResultHorizontal_WithoutGroupingBlankValues)), wb);
 
         //wb.SaveAs("test.xlsx");

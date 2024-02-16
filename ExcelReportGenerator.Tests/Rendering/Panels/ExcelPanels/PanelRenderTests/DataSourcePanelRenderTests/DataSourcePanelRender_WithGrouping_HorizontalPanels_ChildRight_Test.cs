@@ -57,7 +57,7 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test
 
         Assert.AreEqual(ws.Range(2, 2, 5, 9), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test),
             "ParentCellsShiftChildCellsShift"), ws.Workbook);
 
@@ -114,7 +114,7 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test
 
         Assert.AreEqual(ws.Range(2, 2, 5, 9), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test),
             "ParentRowShiftChildCellsShift"), ws.Workbook);
 
@@ -172,7 +172,7 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test
 
         Assert.AreEqual(ws.Range(2, 2, 5, 9), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test),
             "ParentRowShiftChildRowShift"), ws.Workbook);
         //report.Workbook.SaveAs("test.xlsx");
@@ -229,7 +229,7 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test
 
         Assert.AreEqual(ws.Range(2, 2, 5, 9), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test),
             "ParentNoShiftChildRowShift"), ws.Workbook);
 
@@ -285,7 +285,7 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test
 
         Assert.AreEqual(ws.Range(2, 2, 5, 12), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test),
             "ParentCellsShiftChildCellsShift_WithFictitiousColumn"), ws.Workbook);
 
@@ -342,7 +342,7 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test
 
         Assert.AreEqual(ws.Range(2, 2, 5, 12), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test),
             "ParentRowShiftChildCellsShift_WithFictitiousColumn"), ws.Workbook);
 
@@ -400,7 +400,7 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test
 
         Assert.AreEqual(ws.Range(2, 2, 5, 12), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test),
             "ParentRowShiftChildRowShift_WithFictitiousColumn"), ws.Workbook);
 
@@ -457,7 +457,7 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test
 
         Assert.AreEqual(ws.Range(2, 2, 5, 12), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test),
             "ParentNoShiftChildCellsShift_WithFictitiousColumn"), ws.Workbook);
 
@@ -515,7 +515,7 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test
 
         Assert.AreEqual(ws.Range(2, 2, 5, 9), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildRight_Test),
             "ParentCellsShiftChildCellsShift_WithFictitiousColumnWhichDeleteAfterRender"), ws.Workbook);
 

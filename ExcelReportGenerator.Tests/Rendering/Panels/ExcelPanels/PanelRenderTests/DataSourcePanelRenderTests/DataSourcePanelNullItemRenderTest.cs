@@ -39,7 +39,7 @@ public class DataSourcePanelNullItemRenderTest
 
         Assert.IsNull(panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
             nameof(TestRenderNullItemVerticalCellsShift)), ws.Workbook);
 
         //report.Workbook.SaveAs("test.xlsx");
@@ -79,7 +79,7 @@ public class DataSourcePanelNullItemRenderTest
 
         Assert.IsNull(panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
             nameof(TestRenderNullItemVerticalRowShift)), ws.Workbook);
 
         //report.Workbook.SaveAs("test.xlsx");
@@ -119,7 +119,7 @@ public class DataSourcePanelNullItemRenderTest
 
         Assert.IsNull(panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
             nameof(TestRenderNullItemVerticalNoShift)), ws.Workbook);
 
         //report.Workbook.SaveAs("test.xlsx");
@@ -159,7 +159,7 @@ public class DataSourcePanelNullItemRenderTest
 
         Assert.IsNull(panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
             nameof(TestRenderNullItemHorizontalCellsShift)), ws.Workbook);
 
         //report.Workbook.SaveAs("test.xlsx");
@@ -200,7 +200,7 @@ public class DataSourcePanelNullItemRenderTest
 
         Assert.IsNull(panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
             nameof(TestRenderNullItemHorizontalRowShift)), ws.Workbook);
 
         //report.Workbook.SaveAs("test.xlsx");
@@ -241,7 +241,7 @@ public class DataSourcePanelNullItemRenderTest
 
         Assert.IsNull(panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(nameof(DataSourcePanelNullItemRenderTest),
             nameof(TestRenderNullItemHorizontalNoShift)), ws.Workbook);
 
         //report.Workbook.SaveAs("test.xlsx");

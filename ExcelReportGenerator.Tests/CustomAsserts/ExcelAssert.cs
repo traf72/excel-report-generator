@@ -5,7 +5,7 @@ namespace ExcelReportGenerator.Tests.CustomAsserts;
 
 public class ExcelAssert
 {
-    public static void AreWorksheetsContentEquals(IXLWorksheet expected, IXLWorksheet actual)
+    public static void AreWorksheetsContentEqual(IXLWorksheet expected, IXLWorksheet actual)
     {
         if (expected == actual)
         {
@@ -98,22 +98,22 @@ public class ExcelAssert
             Assert.AreEqual(expectedCell.DataType, actualCell.DataType,
                 $"Cell {expectedCell.Address} DataType failed.");
             Assert.AreEqual(expectedCell.Active, actualCell.Active, $"Cell {expectedCell.Address} Active failed.");
-            AreColumnsEquals(expectedCell.WorksheetColumn(), actualCell.WorksheetColumn(),
+            AreColumnsEqual(expectedCell.WorksheetColumn(), actualCell.WorksheetColumn(),
                 $"Column {actualCell.WorksheetColumn().RangeAddress} {{0}} failed.");
-            AreRowEquals(expectedCell.WorksheetRow(), actualCell.WorksheetRow(),
+            AreRowEqual(expectedCell.WorksheetRow(), actualCell.WorksheetRow(),
                 $"Row {actualCell.WorksheetRow().RangeAddress} {{0}} failed.");
-            AreCellsStyleEquals(expectedCell.Style, actualCell.Style,
+            AreCellsStyleEqual(expectedCell.Style, actualCell.Style,
                 $"Cell {expectedCell.Address} Style {{0}} failed.");
-            AreCellsCommentEquals(expectedCell.GetComment(), actualCell.GetComment(),
+            AreCellsCommentEqual(expectedCell.GetComment(), actualCell.GetComment(),
                 $"Cell {expectedCell.Address} Comment {{0}} failed.");
         }
 
-        AreMergedRangesEquals(expected.MergedRanges, actual.MergedRanges);
-        AreNamedRangesEquals(expected.NamedRanges, actual.NamedRanges);
-        ArePageSetupEquals(expected.PageSetup, actual.PageSetup, "PageSetup {0} failed.");
+        AreMergedRangesEqual(expected.MergedRanges, actual.MergedRanges);
+        AreNamedRangesEqual(expected.NamedRanges, actual.NamedRanges);
+        ArePageSetupEqual(expected.PageSetup, actual.PageSetup, "PageSetup {0} failed.");
     }
 
-    public static void AreWorkbooksContentEquals(XLWorkbook expected, XLWorkbook actual)
+    public static void AreWorkbooksContentEqual(XLWorkbook expected, XLWorkbook actual)
     {
         if (expected == actual)
         {
@@ -127,14 +127,14 @@ public class ExcelAssert
         }
 
         Assert.AreEqual(expected.NamedRanges.Count(), actual.NamedRanges.Count(), "Workbook named ranges count failed");
-        AreNamedRangesEquals(expected.NamedRanges, actual.NamedRanges);
+        AreNamedRangesEqual(expected.NamedRanges, actual.NamedRanges);
         for (var i = 0; i < expected.Worksheets.Count; i++)
         {
-            AreWorksheetsContentEquals(expected.Worksheet(i + 1), actual.Worksheet(i + 1));
+            AreWorksheetsContentEqual(expected.Worksheet(i + 1), actual.Worksheet(i + 1));
         }
     }
 
-    public static void AreColumnsEquals(IXLColumn expected, IXLColumn actual, string message = null)
+    public static void AreColumnsEqual(IXLColumn expected, IXLColumn actual, string message = null)
     {
         if (expected.Equals(actual))
         {
@@ -147,7 +147,7 @@ public class ExcelAssert
         Assert.AreEqual(expected.Width, actual.Width, 1e-6, string.Format(message, "Width"));
     }
 
-    public static void AreRowEquals(IXLRow expected, IXLRow actual, string message = null)
+    public static void AreRowEqual(IXLRow expected, IXLRow actual, string message = null)
     {
         if (expected.Equals(actual))
         {
@@ -160,7 +160,7 @@ public class ExcelAssert
         Assert.AreEqual(expected.Height, actual.Height, 1e-6, string.Format(message, "Height"));
     }
 
-    public static void AreCellsStyleEquals(IXLStyle expected, IXLStyle actual, string message = null)
+    public static void AreCellsStyleEqual(IXLStyle expected, IXLStyle actual, string message = null)
     {
         if (expected.Equals(actual))
         {
@@ -177,7 +177,7 @@ public class ExcelAssert
         Assert.AreEqual(expected.Protection, actual.Protection, string.Format(message, "Protection"));
     }
 
-    public static void AreCellsCommentEquals(IXLComment expected, IXLComment actual, string message = null)
+    public static void AreCellsCommentEqual(IXLComment expected, IXLComment actual, string message = null)
     {
         if (expected == actual)
         {
@@ -190,7 +190,7 @@ public class ExcelAssert
         Assert.AreEqual(expected.Count, actual.Count, string.Format(message, "Count"));
     }
 
-    private static void AreMergedRangesEquals(IXLRanges expected, IXLRanges actual)
+    private static void AreMergedRangesEqual(IXLRanges expected, IXLRanges actual)
     {
         Assert.AreEqual(expected.Count(), actual.Count(), "Worksheet merged ranges count failed");
         var expectedArray = expected
@@ -215,7 +215,7 @@ public class ExcelAssert
         }
     }
 
-    public static void AreNamedRangesEquals(IXLNamedRanges expected, IXLNamedRanges actual)
+    public static void AreNamedRangesEqual(IXLNamedRanges expected, IXLNamedRanges actual)
     {
         Assert.AreEqual(expected.Count(), actual.Count(), "Worksheet named ranges count failed");
         foreach (var expectedNamedRange in expected)
@@ -237,7 +237,7 @@ public class ExcelAssert
         }
     }
 
-    public static void ArePageSetupEquals(IXLPageSetup expected, IXLPageSetup actual, string message = null)
+    public static void ArePageSetupEqual(IXLPageSetup expected, IXLPageSetup actual, string message = null)
     {
         if (expected == actual)
         {

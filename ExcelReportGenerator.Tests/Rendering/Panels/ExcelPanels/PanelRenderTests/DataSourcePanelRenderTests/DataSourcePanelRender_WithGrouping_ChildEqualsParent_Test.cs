@@ -34,7 +34,7 @@ public class DataSourcePanelRender_WithGrouping_ChildEqualsParent_Test
 
         Assert.AreEqual(ws.Range(2, 2, 6, 4), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_ChildEqualsParent_Test),
             "Test_VerticalPanelsGrouping_ChildEqualsParent"), ws.Workbook);
 

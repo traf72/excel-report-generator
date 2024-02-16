@@ -25,7 +25,7 @@ public class DataSourceDynamicPanelSingleItemRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 4, 5), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourceDynamicPanelSingleItemRenderTest),
             nameof(TestRenderSingleItem)), ws.Workbook);
 

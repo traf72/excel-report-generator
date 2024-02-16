@@ -49,7 +49,7 @@ public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
 
         Assert.AreEqual(ws.Range(2, 2, 12, 5), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_PageBreaks_Test),
             "Test_HorizontalPageBreaks"), ws.Workbook);
 
@@ -90,7 +90,7 @@ public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
 
         Assert.AreEqual(ws.Range(2, 2, 12, 5), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_PageBreaks_Test),
             "Test_HorizontalPageBreaks"), ws.Workbook);
 
@@ -139,7 +139,7 @@ public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
 
         Assert.AreEqual(ws.Range(2, 2, 12, 5), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_PageBreaks_Test),
             "Test_HorizontalPageBreaks"), ws.Workbook);
 
@@ -184,7 +184,7 @@ public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
 
         Assert.AreEqual(ws.Range(2, 2, 12, 5), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_PageBreaks_Test),
             "Test_HorizontalPageBreaks"), ws.Workbook);
 
@@ -236,7 +236,7 @@ public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
 
         Assert.AreEqual(ws.Range(2, 2, 5, 12), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_PageBreaks_Test),
             "Test_VerticalPageBreaks"), ws.Workbook);
 
@@ -281,7 +281,7 @@ public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
 
         Assert.AreEqual(ws.Range(2, 2, 5, 12), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_PageBreaks_Test),
             "Test_VerticalPageBreaks"), ws.Workbook);
 
@@ -335,7 +335,7 @@ public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
 
         Assert.AreEqual(ws.Range(2, 2, 5, 12), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_PageBreaks_Test),
             "Test_VerticalPageBreaks"), ws.Workbook);
 
@@ -381,7 +381,7 @@ public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
 
         Assert.AreEqual(ws.Range(2, 2, 5, 12), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_PageBreaks_Test),
             "Test_VerticalPageBreaks"), ws.Workbook);
 

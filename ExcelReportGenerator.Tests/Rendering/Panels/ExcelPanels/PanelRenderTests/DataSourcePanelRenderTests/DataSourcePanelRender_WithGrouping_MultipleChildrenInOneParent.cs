@@ -51,7 +51,7 @@ public class DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent
 
         Assert.AreEqual(ws.Range(2, 2, 21, 5), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent),
             nameof(Test_TwoChildren_Vertical)), ws.Workbook);
 
@@ -103,7 +103,7 @@ public class DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent
 
         Assert.AreEqual(ws.Range(2, 2, 13, 8), parentPanel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent),
             nameof(Test_TwoChildren_Horizontal)), ws.Workbook);
 

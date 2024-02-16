@@ -25,7 +25,7 @@ public class DataSourceDynamicPanelEnumerableRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 6, 5), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourceDynamicPanelEnumerableRenderTest),
             nameof(TestRenderEnumerable)), ws.Workbook);
 
@@ -50,7 +50,7 @@ public class DataSourceDynamicPanelEnumerableRenderTest
 
         Assert.AreEqual(ws.Range(2, 2, 3, 5), panel.ResultRange);
 
-        ExcelAssert.AreWorkbooksContentEquals(TestHelper.GetExpectedWorkbook(
+        ExcelAssert.AreWorkbooksContentEqual(TestHelper.GetExpectedWorkbook(
             nameof(DataSourceDynamicPanelEnumerableRenderTest),
             nameof(TestRenderEmptyEnumerable)), ws.Workbook);
 
