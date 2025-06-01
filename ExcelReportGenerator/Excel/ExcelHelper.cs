@@ -69,7 +69,7 @@ internal static class ExcelHelper
         return new RangeCoords(firstCell, lastCell);
     }
 
-    public static IXLNamedRange CopyNamedRange(IXLNamedRange namedRange, IXLCell cell, string name)
+    public static IXLDefinedName CopyNamedRange(IXLDefinedName namedRange, IXLCell cell, string name)
     {
         IXLRange newRange = CopyRange(namedRange.Ranges.ElementAt(0), cell);
         newRange.AddToNamed(name, XLScope.Worksheet);
@@ -219,7 +219,7 @@ internal static class ExcelHelper
         }
     }
 
-    public static IXLNamedRange MoveNamedRange(IXLNamedRange namedRange, IXLCell cell)
+    public static IXLDefinedName MoveNamedRange(IXLDefinedName namedRange, IXLCell cell)
     {
         string name = namedRange.Name;
         IXLRange newRange = MoveRange(namedRange.Ranges.ElementAt(0), cell);

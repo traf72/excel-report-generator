@@ -163,7 +163,7 @@ public class DefaultReportGenerator
             return reportTemplate;
         }
 
-        IList<IXLNamedRange> workbookPanels = GetPanelsNamedRanges(reportTemplate.NamedRanges);
+        IList<IXLDefinedName> workbookPanels = GetPanelsNamedRanges(reportTemplate.NamedRanges);
         foreach (IXLWorksheet ws in worksheets)
         {
             SystemVariableProvider.SheetName = ws.Name;
@@ -176,8 +176,8 @@ public class DefaultReportGenerator
                 continue;
             }
 
-            IList<IXLNamedRange> worksheetPanels = GetPanelsNamedRanges(ws.NamedRanges);
-            foreach (IXLNamedRange workbookPanel in workbookPanels)
+            IList<IXLDefinedName> worksheetPanels = GetPanelsNamedRanges(ws.NamedRanges);
+            foreach (IXLDefinedName workbookPanel in workbookPanels)
             {
                 if (workbookPanel.Ranges.First().Worksheet == ws
                     && !worksheetPanels.Any(p => p.Name.Trim().Equals(workbookPanel.Name.Trim(), StringComparison.CurrentCultureIgnoreCase)))
@@ -213,26 +213,26 @@ public class DefaultReportGenerator
         }
     }
 
-    private IXLRange GetRootRange(IXLWorksheet ws, IList<IXLNamedRange> worksheetPanels)
+    private IXLRange GetRootRange(IXLWorksheet ws, IList<IXLDefinedName> worksheetPanels)
     {
-        return ws.Range(ws.FirstCell(), GetRootRangeLastCell(ws.LastCellUsed(), worksheetPanels ?? new List<IXLNamedRange>()));
+        return ws.Range(ws.FirstCell(), GetRootRangeLastCell(ws.LastCellUsed(), worksheetPanels ?? new List<IXLDefinedName>()));
     }
 
-    private IXLCell GetRootRangeLastCell(IXLCell lastWorksheetCellUsed, IList<IXLNamedRange> worksheetPanels)
+    private IXLCell GetRootRangeLastCell(IXLCell lastWorksheetCellUsed, IList<IXLDefinedName> worksheetPanels)
     {
         return ExcelHelper.GetMaxCell(worksheetPanels.SelectMany(p => p.Ranges.First().Cells()).Concat(new[] { lastWorksheetCellUsed }).ToArray());
     }
 
-    private IList<IXLNamedRange> GetPanelsNamedRanges(IXLNamedRanges namedRanges)
+    private IList<IXLDefinedName> GetPanelsNamedRanges(IXLDefinedNames namedRanges)
     {
         return namedRanges.Where(r => Regex.IsMatch(r.Name, PanelsRegexPattern, RegexOptions.IgnoreCase)).ToList();
     }
 
-    private IDictionary<string, (IExcelPanel, string)> GetPanelsFlatView(IEnumerable<IXLNamedRange> panelsNamedRanges)
+    private IDictionary<string, (IExcelPanel, string)> GetPanelsFlatView(IEnumerable<IXLDefinedName> panelsNamedRanges)
     {
         var panelFactory = new ExcelPanelFactory(Report, TemplateProcessor, PanelParsingSettings);
         IDictionary<string, (IExcelPanel, string)> panels = new Dictionary<string, (IExcelPanel, string)>();
-        foreach (IXLNamedRange namedRange in panelsNamedRanges)
+        foreach (IXLDefinedName namedRange in panelsNamedRanges)
         {
             IDictionary<string, string> panelProperties = PanelPropertiesParser.Parse(namedRange.Comment);
             IExcelPanel panel = panelFactory.Create(namedRange, panelProperties);

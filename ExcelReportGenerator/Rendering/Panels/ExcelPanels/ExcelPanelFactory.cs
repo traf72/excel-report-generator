@@ -13,7 +13,7 @@ internal class ExcelPanelFactory
     private readonly ITemplateProcessor _templateProcessor;
     private readonly PanelParsingSettings _panelParsingSettings;
 
-    private IXLNamedRange _namedRange;
+    private IXLDefinedName _namedRange;
     private IDictionary<string, string> _properties;
 
     public ExcelPanelFactory(object report, ITemplateProcessor templateProcessor, PanelParsingSettings panelParsingSettings)
@@ -23,7 +23,7 @@ internal class ExcelPanelFactory
         _panelParsingSettings = panelParsingSettings ?? throw new ArgumentNullException(nameof(panelParsingSettings), ArgumentHelper.NullParamMessage);
     }
 
-    public IExcelPanel Create(IXLNamedRange namedRange, IDictionary<string, string> properties)
+    public IExcelPanel Create(IXLDefinedName namedRange, IDictionary<string, string> properties)
     {
         _namedRange = namedRange ?? throw new ArgumentNullException(nameof(namedRange), ArgumentHelper.NullParamMessage);
         _properties = properties ?? new Dictionary<string, string>(0);

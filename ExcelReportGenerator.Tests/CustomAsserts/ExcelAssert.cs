@@ -215,7 +215,7 @@ public class ExcelAssert
         }
     }
 
-    public static void AreNamedRangesEqual(IXLNamedRanges expected, IXLNamedRanges actual)
+    public static void AreNamedRangesEqual(IXLDefinedNames expected, IXLDefinedNames actual)
     {
         Assert.AreEqual(expected.Count(), actual.Count(), "Worksheet named ranges count failed");
         foreach (var expectedNamedRange in expected)

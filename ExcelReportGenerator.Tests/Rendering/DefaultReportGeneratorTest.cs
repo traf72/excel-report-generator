@@ -166,7 +166,7 @@ public class DefaultReportGeneratorTest
         var method = reportGenerator.GetType()
             .GetMethod("GetPanelsNamedRanges", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        var result = (IList<IXLNamedRange>) method.Invoke(reportGenerator, new object[] {ws.NamedRanges});
+        var result = (IList<IXLDefinedName>) method.Invoke(reportGenerator, new object[] {ws.NamedRanges});
 
         Assert.AreEqual(6, result.Count);
         Assert.AreEqual("s_Panel1", result[0].Name);
@@ -193,7 +193,7 @@ public class DefaultReportGeneratorTest
         Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(10, 10)),
             method.Invoke(reportGenerator, new object[] {ws, null}));
 
-        var namedRanges = new List<IXLNamedRange>();
+        var namedRanges = new List<IXLDefinedName>();
         Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(10, 10)),
             method.Invoke(reportGenerator, new object[] {ws, namedRanges}));
 

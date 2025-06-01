@@ -7,11 +7,11 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 
 internal class ExcelNamedPanel : ExcelPanel, IExcelNamedPanel
 {
-    protected IXLNamedRange _namedRange;
+    protected IXLDefinedName _namedRange;
 
     private string _copiedPanelName;
 
-    public ExcelNamedPanel(IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor) : base(report, templateProcessor)
+    public ExcelNamedPanel(IXLDefinedName namedRange, object report, ITemplateProcessor templateProcessor) : base(report, templateProcessor)
     {
         _namedRange = namedRange ?? throw new ArgumentNullException(nameof(namedRange), ArgumentHelper.NullParamMessage);
     }
@@ -72,7 +72,7 @@ internal class ExcelNamedPanel : ExcelPanel, IExcelNamedPanel
         return panel;
     }
 
-    protected IXLNamedRange CopyNamedRange(IXLCell cell)
+    protected IXLDefinedName CopyNamedRange(IXLCell cell)
     {
         return ExcelHelper.CopyNamedRange(_namedRange, cell, _copiedPanelName);
     }

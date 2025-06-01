@@ -18,7 +18,7 @@ internal class ExcelDataSourcePanel : ExcelNamedPanel
     private int _templatePanelRowCount;
     private int _templatePanelColumnCount;
 
-    public ExcelDataSourcePanel(string dataSourceTemplate, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor)
+    public ExcelDataSourcePanel(string dataSourceTemplate, IXLDefinedName namedRange, object report, ITemplateProcessor templateProcessor)
         : base(namedRange, report, templateProcessor)
     {
         if (string.IsNullOrWhiteSpace(dataSourceTemplate))
@@ -28,7 +28,7 @@ internal class ExcelDataSourcePanel : ExcelNamedPanel
         _dataSourceTemplate = dataSourceTemplate;
     }
 
-    public ExcelDataSourcePanel(object data, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor) : base(namedRange, report, templateProcessor)
+    public ExcelDataSourcePanel(object data, IXLDefinedName namedRange, object report, ITemplateProcessor templateProcessor) : base(namedRange, report, templateProcessor)
     {
         _data = data ?? throw new ArgumentNullException(nameof(data), ArgumentHelper.NullParamMessage);
         _isDataReceivedDirectly = true;
