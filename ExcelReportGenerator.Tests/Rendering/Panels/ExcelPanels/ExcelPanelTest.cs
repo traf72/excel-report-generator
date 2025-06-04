@@ -196,11 +196,11 @@ public class PanelTest
         var childRange1 = ws.Range(1, 1, 2, 5);
         var childRange2 = ws.Range(3, 1, 4, 5);
         childRange2.AddToNamed("childRange2", XLScope.Worksheet);
-        var namedChildRange = ws.NamedRange("childRange2");
+        var namedChildRange = ws.DefinedName("childRange2");
 
         var childOfChildRange1 = ws.Range(2, 1, 2, 5);
         childOfChildRange1.AddToNamed("childOfChildRange1", XLScope.Worksheet);
-        var childOfChildNamedRange = ws.NamedRange("childOfChildRange1");
+        var childOfChildNamedRange = ws.DefinedName("childOfChildRange1");
 
         var childOfChildRange2 = ws.Range(4, 1, 4, 5);
 
@@ -265,7 +265,7 @@ public class PanelTest
         Assert.IsNotInstanceOf<INamedPanel>(panel.Children.Last().Children.First());
         Assert.AreSame(panel.Children.Last(), panel.Children.Last().Children.First().Parent);
 
-        Assert.AreEqual(2, ws.NamedRanges.Count());
+        Assert.AreEqual(2, ws.DefinedNames.Count());
 
         panel.Move(ws.Cell(6, 6));
 
@@ -299,7 +299,7 @@ public class PanelTest
         Assert.IsNotInstanceOf<INamedPanel>(panel.Children.Last().Children.First());
         Assert.AreSame(panel.Children.Last(), panel.Children.Last().Children.First().Parent);
 
-        Assert.AreEqual(2, ws.NamedRanges.Count());
+        Assert.AreEqual(2, ws.DefinedNames.Count());
 
         //wb.SaveAs("test.xlsx");
     }
@@ -310,7 +310,7 @@ public class PanelTest
         // Deleting with moving cells up
         var wb = InitWorkBookForDeleteRangeTest();
         var ws = wb.Worksheet("Test");
-        var range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        var range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
         var excelReport = Substitute.For<object>();
         var templateProcessor = Substitute.For<ITemplateProcessor>();
 
@@ -343,7 +343,7 @@ public class PanelTest
         // Deleting with moving the row up
         wb = InitWorkBookForDeleteRangeTest();
         ws = wb.Worksheet("Test");
-        range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         panel = new ExcelPanel(range, excelReport, templateProcessor) {ShiftType = ShiftType.Row};
         panel.Delete();
@@ -374,7 +374,7 @@ public class PanelTest
         // Deleting with moving cells left
         wb = InitWorkBookForDeleteRangeTest();
         ws = wb.Worksheet("Test");
-        range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         panel = new ExcelPanel(range, excelReport, templateProcessor) {Type = PanelType.Horizontal};
         panel.Delete();
@@ -405,7 +405,7 @@ public class PanelTest
         // Deleting with moving the column left
         wb = InitWorkBookForDeleteRangeTest();
         ws = wb.Worksheet("Test");
-        range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         panel = new ExcelPanel(range, excelReport, templateProcessor)
             {Type = PanelType.Horizontal, ShiftType = ShiftType.Row};
@@ -437,7 +437,7 @@ public class PanelTest
         // Deleting without any shift
         wb = InitWorkBookForDeleteRangeTest();
         ws = wb.Worksheet("Test");
-        range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         panel = new ExcelPanel(range, excelReport, templateProcessor) {ShiftType = ShiftType.NoShift};
         panel.Delete();

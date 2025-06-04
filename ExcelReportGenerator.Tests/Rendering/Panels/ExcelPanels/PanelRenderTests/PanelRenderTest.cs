@@ -142,8 +142,8 @@ public class PanelRenderTest
         Assert.AreEqual(ws.Cell(11, 2).GetRichText().Last().Text, " Rich outside second");
         Assert.AreEqual(ws.Cell(11, 2).GetRichText().Last().FontColor, XLColor.Red);
 
-        Assert.AreEqual(0, ws.NamedRanges.Count());
-        Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
+        Assert.AreEqual(0, ws.DefinedNames.Count());
+        Assert.AreEqual(0, ws.Workbook.DefinedNames.Count());
 
         Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
 
@@ -261,7 +261,7 @@ public class PanelRenderTest
         ws.Cell(5, 2).Value = "{m:Counter()}";
         ws.Cell(6, 1).Value = "Plain text outside range";
 
-        var panel = new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel"), report, report.TemplateProcessor);
+        var panel = new ExcelNamedPanel(ws.Workbook.DefinedName("NamedPanel"), report, report.TemplateProcessor);
         panel.Render();
 
         Assert.AreEqual(range, panel.ResultRange);
@@ -293,8 +293,8 @@ public class PanelRenderTest
         Assert.AreEqual("{m:Counter()}", ws.Cell(5, 2).Value);
         Assert.AreEqual("Plain text outside range", ws.Cell(6, 1).Value);
 
-        Assert.AreEqual(0, ws.NamedRanges.Count());
-        Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
+        Assert.AreEqual(0, ws.DefinedNames.Count());
+        Assert.AreEqual(0, ws.Workbook.DefinedNames.Count());
         Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
 
         var range2 = ws.Range(8, 1, 11, 5);
@@ -323,7 +323,7 @@ public class PanelRenderTest
         ws.Cell(12, 2).Value = "{m:Counter()}";
         ws.Cell(13, 1).Value = "Plain text outside range";
 
-        panel = new ExcelNamedPanel(ws.NamedRange("NamedPanel2"), report, report.TemplateProcessor);
+        panel = new ExcelNamedPanel(ws.DefinedName("NamedPanel2"), report, report.TemplateProcessor);
         panel.Render();
 
         Assert.AreEqual(range2, panel.ResultRange);
@@ -355,8 +355,8 @@ public class PanelRenderTest
         Assert.AreEqual("{m:Counter()}", ws.Cell(12, 2).Value);
         Assert.AreEqual("Plain text outside range", ws.Cell(13, 1).Value);
 
-        Assert.AreEqual(0, ws.NamedRanges.Count());
-        Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
+        Assert.AreEqual(0, ws.DefinedNames.Count());
+        Assert.AreEqual(0, ws.Workbook.DefinedNames.Count());
         Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
 
         //report.Workbook.SaveAs("test.xlsx");
@@ -381,7 +381,7 @@ public class PanelRenderTest
         ws.Cell(1, 3).Value = "Panel3: {p:IntParam}";
         range3.AddToNamed("NamedPanel1");
         var panel3 =
-            new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel1"), report, report.TemplateProcessor)
+            new ExcelNamedPanel(ws.Workbook.DefinedName("NamedPanel1"), report, report.TemplateProcessor)
             {
                 Parent = panel1
             };
@@ -390,7 +390,7 @@ public class PanelRenderTest
         ws.Cell(5, 6).Value = "Panel4: {p:IntParam}";
         range4.AddToNamed("NamedPanel2", XLScope.Worksheet);
         var panel4 =
-            new ExcelNamedPanel(ws.NamedRange("NamedPanel2"), report, report.TemplateProcessor) {Parent = panel1};
+            new ExcelNamedPanel(ws.DefinedName("NamedPanel2"), report, report.TemplateProcessor) {Parent = panel1};
 
         var range5 = ws.Range(4, 1, 5, 2);
         ws.Cell(4, 1).Value = "Panel5: {p:IntParam}";
@@ -400,7 +400,7 @@ public class PanelRenderTest
         ws.Cell(6, 1).Value = "Panel6: {p:IntParam}";
         range6.AddToNamed("NamedPanel3");
         var panel6 =
-            new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel3"), report, report.TemplateProcessor)
+            new ExcelNamedPanel(ws.Workbook.DefinedName("NamedPanel3"), report, report.TemplateProcessor)
             {
                 Parent = panel2
             };
@@ -413,13 +413,13 @@ public class PanelRenderTest
         ws.Cell(7, 2).Value = "Panel8: {p:IntParam}";
         range8.AddToNamed("NamedPanel4", XLScope.Worksheet);
         var panel8 =
-            new ExcelNamedPanel(ws.NamedRange("NamedPanel4"), report, report.TemplateProcessor) {Parent = panel6};
+            new ExcelNamedPanel(ws.DefinedName("NamedPanel4"), report, report.TemplateProcessor) {Parent = panel6};
 
         var range9 = ws.Range(1, 3, 6, 5);
         ws.Cell(6, 5).Value = "Panel9: {p:IntParam}";
         range9.AddToNamed("NamedPanel5", XLScope.Worksheet);
         var panel9 =
-            new ExcelNamedPanel(ws.NamedRange("NamedPanel5"), report, report.TemplateProcessor) {Parent = panel3};
+            new ExcelNamedPanel(ws.DefinedName("NamedPanel5"), report, report.TemplateProcessor) {Parent = panel3};
 
         var range10 = ws.Range(3, 3, 4, 5);
         ws.Cell(4, 5).Value = "Panel10: {p:IntParam}";
@@ -433,7 +433,7 @@ public class PanelRenderTest
         ws.Cell(9, 8).Value = "Panel12: {p:IntParam}";
         range12.AddToNamed("NamedPanel6");
         var panel12 =
-            new ExcelNamedPanel(ws.Workbook.NamedRange("NamedPanel6"), report, report.TemplateProcessor)
+            new ExcelNamedPanel(ws.Workbook.DefinedName("NamedPanel6"), report, report.TemplateProcessor)
             {
                 Parent = panel11
             };
@@ -468,8 +468,8 @@ public class PanelRenderTest
         Assert.AreEqual("Panel12: 10", ws.Cell(9, 8).Value);
         Assert.AreEqual("Outside panel: {p:IntParam}", ws.Cell(11, 8).Value);
 
-        Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
-        Assert.AreEqual(0, ws.NamedRanges.Count());
+        Assert.AreEqual(0, ws.Workbook.DefinedNames.Count());
+        Assert.AreEqual(0, ws.DefinedNames.Count());
         Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
 
         //report.Workbook.SaveAs("test.xlsx");
@@ -492,7 +492,7 @@ public class PanelRenderTest
         ws.Cell(2, 4).Value = "{di:Sex}";
         ws.Cell(2, 5).Value = "{di:Sum}";
 
-        var dataPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("d_Data"), report,
+        var dataPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("d_Data"), report,
             report.TemplateProcessor)
         {
             Parent = simplePanel
@@ -506,7 +506,7 @@ public class PanelRenderTest
         ws.Cell(3, 4).Value = "{Max(di:Sex)}";
         ws.Cell(3, 5).Value = "{Sum(di:Sum)}";
 
-        var totalsPanel = new ExcelTotalsPanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("t_Totals"), report,
+        var totalsPanel = new ExcelTotalsPanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("t_Totals"), report,
             report.TemplateProcessor)
         {
             Parent = simplePanel

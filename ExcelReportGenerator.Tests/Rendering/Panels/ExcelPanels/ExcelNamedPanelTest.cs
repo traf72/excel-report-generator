@@ -21,15 +21,15 @@ public class NamedPanelTest
 
         var range = ws.Range(1, 1, 3, 4);
         range.AddToNamed("Parent", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("Parent");
+        var namedRange = ws.DefinedName("Parent");
 
         var childRange = ws.Range(2, 1, 3, 4);
         childRange.AddToNamed("Child", XLScope.Worksheet);
-        var namedChildRange = ws.NamedRange("Child");
+        var namedChildRange = ws.DefinedName("Child");
 
         var childOfChildRange = ws.Range(3, 1, 3, 4);
         childOfChildRange.AddToNamed("ChildOfChild", XLScope.Worksheet);
-        var namedChildOfChildRange = ws.NamedRange("ChildOfChild");
+        var namedChildOfChildRange = ws.DefinedName("ChildOfChild");
 
         var panel = new ExcelNamedPanel(namedRange, excelReport, templateProcessor)
         {
@@ -136,17 +136,17 @@ public class NamedPanelTest
         IExcelPanel globalParent = new ExcelPanel(ws.Range(1, 1, 20, 20), excelReport, templateProcessor);
         range = ws.Range(1, 1, 3, 4);
         range.AddToNamed("Parent", XLScope.Worksheet);
-        namedRange = ws.NamedRange("Parent");
+        namedRange = ws.DefinedName("Parent");
 
         var childRange1 = ws.Range(1, 1, 1, 4);
         childRange1.AddToNamed("Child", XLScope.Worksheet);
-        namedChildRange = ws.NamedRange("Child");
+        namedChildRange = ws.DefinedName("Child");
 
         var childRange2 = ws.Range(2, 1, 3, 4);
 
         childOfChildRange = ws.Range(3, 1, 3, 4);
         childOfChildRange.AddToNamed("ChildOfChild", XLScope.Worksheet);
-        namedChildOfChildRange = ws.NamedRange("ChildOfChild");
+        namedChildOfChildRange = ws.DefinedName("ChildOfChild");
 
         panel = new ExcelNamedPanel(namedRange, excelReport, templateProcessor)
         {
@@ -210,11 +210,11 @@ public class NamedPanelTest
         globalParent = new ExcelPanel(ws.Range(1, 1, 7, 7), excelReport, templateProcessor);
         range = ws.Range(1, 1, 3, 4);
         range.AddToNamed("Parent", XLScope.Worksheet);
-        namedRange = ws.NamedRange("Parent");
+        namedRange = ws.DefinedName("Parent");
 
         childRange = ws.Range(1, 1, 1, 4);
         childRange.AddToNamed("Child", XLScope.Worksheet);
-        namedChildRange = ws.NamedRange("Child");
+        namedChildRange = ws.DefinedName("Child");
 
         panel = new ExcelNamedPanel(namedRange, excelReport, templateProcessor)
         {
@@ -257,21 +257,21 @@ public class NamedPanelTest
 
         var range = ws.Range(1, 1, 3, 4);
         range.AddToNamed("Parent", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("Parent");
+        var namedRange = ws.DefinedName("Parent");
 
         var childRange1 = ws.Range(1, 1, 2, 4);
         childRange1.AddToNamed("Child", XLScope.Worksheet);
-        var namedChildRange = ws.NamedRange("Child");
+        var namedChildRange = ws.DefinedName("Child");
 
         var childRange2 = ws.Range(3, 1, 3, 4);
 
         var childOfChildRange1 = ws.Range(1, 1, 1, 4);
         childOfChildRange1.AddToNamed("ChildOfChild1", XLScope.Worksheet);
-        var namedChildOfChildRange1 = ws.NamedRange("ChildOfChild1");
+        var namedChildOfChildRange1 = ws.DefinedName("ChildOfChild1");
 
         var childOfChildRange2 = ws.Range(3, 1, 3, 4);
         childOfChildRange2.AddToNamed("ChildOfChild2", XLScope.Worksheet);
-        var namedChildOfChildRange2 = ws.NamedRange("ChildOfChild2");
+        var namedChildOfChildRange2 = ws.DefinedName("ChildOfChild2");
 
         var panel = new ExcelNamedPanel(namedRange, excelReport, templateProcessor)
         {
@@ -350,16 +350,16 @@ public class NamedPanelTest
 
         var range = ws.Range(1, 1, 4, 5);
         range.AddToNamed("parentRange", XLScope.Worksheet);
-        var namedParentRange = ws.NamedRange("parentRange");
+        var namedParentRange = ws.DefinedName("parentRange");
 
         var childRange1 = ws.Range(1, 1, 2, 5);
         var childRange2 = ws.Range(3, 1, 4, 5);
         childRange2.AddToNamed("childRange2", XLScope.Worksheet);
-        var namedChildRange = ws.NamedRange("childRange2");
+        var namedChildRange = ws.DefinedName("childRange2");
 
         var childOfChildRange1 = ws.Range(2, 1, 2, 5);
         childOfChildRange1.AddToNamed("childOfChildRange1", XLScope.Worksheet);
-        var childOfChildNamedRange = ws.NamedRange("childOfChildRange1");
+        var childOfChildNamedRange = ws.DefinedName("childOfChildRange1");
 
         var childOfChildRange2 = ws.Range(4, 1, 4, 5);
 
@@ -425,7 +425,7 @@ public class NamedPanelTest
         Assert.IsNotInstanceOf<IExcelNamedPanel>(panel.Children.Last().Children.First());
         Assert.AreSame(panel.Children.Last(), panel.Children.Last().Children.First().Parent);
 
-        Assert.AreEqual(3, ws.NamedRanges.Count());
+        Assert.AreEqual(3, ws.DefinedNames.Count());
 
         panel.Move(ws.Cell(6, 6));
 
@@ -459,7 +459,7 @@ public class NamedPanelTest
         Assert.IsNotInstanceOf<IExcelNamedPanel>(panel.Children.Last().Children.First());
         Assert.AreSame(panel.Children.Last(), panel.Children.Last().Children.First().Parent);
 
-        Assert.AreEqual(3, ws.NamedRanges.Count());
+        Assert.AreEqual(3, ws.DefinedNames.Count());
 
         //wb.SaveAs("test.xlsx");
     }
@@ -474,13 +474,13 @@ public class NamedPanelTest
 
         var range = ws.Range(1, 1, 3, 4);
         range.AddToNamed("Parent", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("Parent");
+        var namedRange = ws.DefinedName("Parent");
 
         var childRange = ws.Range(2, 1, 3, 4);
 
         var childOfChildRange = ws.Range(3, 1, 3, 4);
         childOfChildRange.AddToNamed("ChildOfChild", XLScope.Worksheet);
-        var childOfChildNamedRange = ws.NamedRange("ChildOfChild");
+        var childOfChildNamedRange = ws.DefinedName("ChildOfChild");
 
         IExcelPanel childOfChildPanel = new ExcelNamedPanel(childOfChildNamedRange, excelReport, templateProcessor);
         IExcelPanel childPanel = new ExcelPanel(childRange, excelReport, templateProcessor);
@@ -507,12 +507,12 @@ public class NamedPanelTest
 
         var range = ws.Range(1, 1, 3, 4);
         range.AddToNamed("Parent", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("Parent");
+        var namedRange = ws.DefinedName("Parent");
         IExcelNamedPanel parentPanel = new ExcelNamedPanel(namedRange, excelReport, templateProcessor);
 
         var childRange1 = ws.Range(1, 1, 1, 4);
         childRange1.AddToNamed("Child", XLScope.Worksheet);
-        var namedChildRange = ws.NamedRange("Child");
+        var namedChildRange = ws.DefinedName("Child");
         IExcelNamedPanel childPanel1 = new ExcelNamedPanel(namedChildRange, excelReport, templateProcessor);
         childPanel1.Parent = parentPanel;
 
@@ -524,7 +524,7 @@ public class NamedPanelTest
 
         var childOfChild1Range = ws.Range(1, 1, 1, 4);
         childOfChild1Range.AddToNamed("ChildOfChild1", XLScope.Worksheet);
-        var namedChildOfChild1RangeRange = ws.NamedRange("ChildOfChild1");
+        var namedChildOfChild1RangeRange = ws.DefinedName("ChildOfChild1");
         IExcelNamedPanel childOfChild1Panel =
             new ExcelNamedPanel(namedChildOfChild1RangeRange, excelReport, templateProcessor);
         childOfChild1Panel.Parent = childPanel1;
@@ -532,22 +532,22 @@ public class NamedPanelTest
 
         var childOfChild2Range = ws.Range(3, 1, 3, 4);
         childOfChild2Range.AddToNamed("ChildOfChild2", XLScope.Worksheet);
-        var namedChildOfChild2RangeRange = ws.NamedRange("ChildOfChild2");
+        var namedChildOfChild2RangeRange = ws.DefinedName("ChildOfChild2");
         IExcelNamedPanel childOfChild2Panel =
             new ExcelNamedPanel(namedChildOfChild2RangeRange, excelReport, templateProcessor);
         childOfChild2Panel.Parent = childPanel2;
         childPanel2.Children = new List<IExcelPanel> {childOfChild2Panel};
 
         parentPanel.RemoveName();
-        Assert.AreEqual(3, ws.NamedRanges.Count());
-        Assert.IsNull(ws.NamedRanges.SingleOrDefault(r => r.Name == "Parent"));
+        Assert.AreEqual(3, ws.DefinedNames.Count());
+        Assert.IsNull(ws.DefinedNames.SingleOrDefault(r => r.Name == "Parent"));
 
         range.AddToNamed("Parent", XLScope.Worksheet);
-        Assert.AreEqual(4, ws.NamedRanges.Count());
-        Assert.IsNotNull(ws.NamedRanges.SingleOrDefault(r => r.Name == "Parent"));
+        Assert.AreEqual(4, ws.DefinedNames.Count());
+        Assert.IsNotNull(ws.DefinedNames.SingleOrDefault(r => r.Name == "Parent"));
 
         parentPanel.RemoveName(true);
-        Assert.AreEqual(0, ws.NamedRanges.Count());
+        Assert.AreEqual(0, ws.DefinedNames.Count());
 
         //wb.SaveAs("test.xlsx");
     }
@@ -562,12 +562,12 @@ public class NamedPanelTest
 
         var range = ws.Range(1, 1, 3, 4);
         range.AddToNamed("Parent", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("Parent");
+        var namedRange = ws.DefinedName("Parent");
         IExcelNamedPanel parentPanel = new ExcelNamedPanel(namedRange, excelReport, templateProcessor);
 
         var childRange1 = ws.Range(1, 1, 1, 4);
         childRange1.AddToNamed("Child", XLScope.Worksheet);
-        var namedChildRange = ws.NamedRange("Child");
+        var namedChildRange = ws.DefinedName("Child");
         IExcelNamedPanel childPanel1 = new ExcelNamedPanel(namedChildRange, excelReport, templateProcessor);
         childPanel1.Parent = parentPanel;
 
@@ -579,7 +579,7 @@ public class NamedPanelTest
 
         var childOfChild1Range = ws.Range(1, 1, 1, 4);
         childOfChild1Range.AddToNamed("ChildOfChild1", XLScope.Worksheet);
-        var namedChildOfChild1RangeRange = ws.NamedRange("ChildOfChild1");
+        var namedChildOfChild1RangeRange = ws.DefinedName("ChildOfChild1");
         IExcelNamedPanel childOfChild1Panel =
             new ExcelNamedPanel(namedChildOfChild1RangeRange, excelReport, templateProcessor);
         childOfChild1Panel.Parent = childPanel1;
@@ -587,14 +587,14 @@ public class NamedPanelTest
 
         var childOfChild2Range = ws.Range(3, 1, 3, 4);
         childOfChild2Range.AddToNamed("ChildOfChild2", XLScope.Worksheet);
-        var namedChildOfChild2RangeRange = ws.NamedRange("ChildOfChild2");
+        var namedChildOfChild2RangeRange = ws.DefinedName("ChildOfChild2");
         IExcelNamedPanel childOfChild2Panel =
             new ExcelNamedPanel(namedChildOfChild2RangeRange, excelReport, templateProcessor);
         childOfChild2Panel.Parent = childPanel2;
         childPanel2.Children = new List<IExcelPanel> {childOfChild2Panel};
 
         ExcelNamedPanel.RemoveAllNamesRecursive(parentPanel);
-        Assert.AreEqual(0, ws.NamedRanges.Count());
+        Assert.AreEqual(0, ws.DefinedNames.Count());
 
         //wb.SaveAs("test.xlsx");
     }
@@ -605,9 +605,9 @@ public class NamedPanelTest
         // Deleting with moving cells up
         var wb = InitWorkBookForDeleteRangeTest();
         var ws = wb.Worksheet("Test");
-        var parentRange = ws.NamedRange("Parent");
-        var childRange = ws.NamedRange("Child");
-        Assert.AreEqual(2, ws.NamedRanges.Count());
+        var parentRange = ws.DefinedName("Parent");
+        var childRange = ws.DefinedName("Child");
+        Assert.AreEqual(2, ws.DefinedNames.Count());
         var excelReport = Substitute.For<object>();
         var templateProcessor = Substitute.For<ITemplateProcessor>();
 
@@ -639,14 +639,14 @@ public class NamedPanelTest
         Assert.AreEqual(aboveCell2, ws.Cell(5, 4));
         Assert.AreEqual(leftCell1, ws.Cell(7, 4));
         Assert.AreEqual(leftCell2, ws.Cell(10, 4));
-        Assert.AreEqual(0, ws.NamedRanges.Count());
+        Assert.AreEqual(0, ws.DefinedNames.Count());
 
         // Deleting with moving the row up
         wb = InitWorkBookForDeleteRangeTest();
         ws = wb.Worksheet("Test");
-        parentRange = ws.NamedRange("Parent");
-        childRange = ws.NamedRange("Child");
-        Assert.AreEqual(2, ws.NamedRanges.Count());
+        parentRange = ws.DefinedName("Parent");
+        childRange = ws.DefinedName("Child");
+        Assert.AreEqual(2, ws.DefinedNames.Count());
 
         panel = new ExcelNamedPanel(parentRange, excelReport, templateProcessor)
         {
@@ -677,14 +677,14 @@ public class NamedPanelTest
         Assert.AreEqual(aboveCell1, ws.Cell(5, 6));
         Assert.AreEqual(aboveCell2, ws.Cell(5, 4));
         Assert.AreEqual(leftCell2, ws.Cell(6, 4));
-        Assert.AreEqual(0, ws.NamedRanges.Count());
+        Assert.AreEqual(0, ws.DefinedNames.Count());
 
         // Deleting with moving cells left
         wb = InitWorkBookForDeleteRangeTest();
         ws = wb.Worksheet("Test");
-        parentRange = ws.NamedRange("Parent");
-        childRange = ws.NamedRange("Child");
-        Assert.AreEqual(2, ws.NamedRanges.Count());
+        parentRange = ws.DefinedName("Parent");
+        childRange = ws.DefinedName("Child");
+        Assert.AreEqual(2, ws.DefinedNames.Count());
 
         panel = new ExcelNamedPanel(parentRange, excelReport, templateProcessor)
         {
@@ -715,14 +715,14 @@ public class NamedPanelTest
         Assert.AreEqual(aboveCell2, ws.Cell(5, 4));
         Assert.AreEqual(leftCell1, ws.Cell(7, 4));
         Assert.AreEqual(leftCell2, ws.Cell(10, 4));
-        Assert.AreEqual(0, ws.NamedRanges.Count());
+        Assert.AreEqual(0, ws.DefinedNames.Count());
 
         // Deleting with moving the column left
         wb = InitWorkBookForDeleteRangeTest();
         ws = wb.Worksheet("Test");
-        parentRange = ws.NamedRange("Parent");
-        childRange = ws.NamedRange("Child");
-        Assert.AreEqual(2, ws.NamedRanges.Count());
+        parentRange = ws.DefinedName("Parent");
+        childRange = ws.DefinedName("Child");
+        Assert.AreEqual(2, ws.DefinedNames.Count());
 
         panel = new ExcelNamedPanel(parentRange, excelReport, templateProcessor)
         {
@@ -754,14 +754,14 @@ public class NamedPanelTest
         Assert.AreEqual(aboveCell2, ws.Cell(5, 4));
         Assert.AreEqual(leftCell1, ws.Cell(7, 4));
         Assert.AreEqual(leftCell2, ws.Cell(10, 4));
-        Assert.AreEqual(0, ws.NamedRanges.Count());
+        Assert.AreEqual(0, ws.DefinedNames.Count());
 
         // Deleting without any shift
         wb = InitWorkBookForDeleteRangeTest();
         ws = wb.Worksheet("Test");
-        parentRange = ws.NamedRange("Parent");
-        childRange = ws.NamedRange("Child");
-        Assert.AreEqual(2, ws.NamedRanges.Count());
+        parentRange = ws.DefinedName("Parent");
+        childRange = ws.DefinedName("Child");
+        Assert.AreEqual(2, ws.DefinedNames.Count());
 
         panel = new ExcelNamedPanel(parentRange, excelReport, templateProcessor)
         {
@@ -794,7 +794,7 @@ public class NamedPanelTest
         Assert.AreEqual(aboveCell2, ws.Cell(5, 4));
         Assert.AreEqual(leftCell1, ws.Cell(7, 4));
         Assert.AreEqual(leftCell2, ws.Cell(10, 4));
-        Assert.AreEqual(0, ws.NamedRanges.Count());
+        Assert.AreEqual(0, ws.DefinedNames.Count());
 
         //wb.SaveAs("test.xlsx");
     }

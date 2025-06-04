@@ -102,7 +102,7 @@ internal class ExcelNamedPanel : ExcelPanel, IExcelNamedPanel
             _coordsRelativeParent.LastCell.ColNum);
         _namedRange.Delete();
         range.AddToNamed(name, XLScope.Worksheet);
-        _namedRange = range.Worksheet.NamedRange(name);
+        _namedRange = range.Worksheet.DefinedName(name);
         MoveChildren();
     }
 

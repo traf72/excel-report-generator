@@ -130,7 +130,7 @@ internal class ExcelDataSourceDynamicPanel : ExcelDataSourcePanel
         string rangeName = $"Headers_{Guid.NewGuid():N}";
         range.AddToNamed(rangeName, XLScope.Worksheet);
 
-        var panel = new ExcelDataSourcePanel(columns, ws.NamedRange(rangeName), _report, _templateProcessor)
+        var panel = new ExcelDataSourcePanel(columns, ws.DefinedName(rangeName), _report, _templateProcessor)
         {
             ShiftType = ShiftType.Cells,
             Type = Type == PanelType.Vertical ? PanelType.Horizontal : PanelType.Vertical,
@@ -173,7 +173,7 @@ internal class ExcelDataSourceDynamicPanel : ExcelDataSourcePanel
         range.AddToNamed(rangeName, XLScope.Worksheet);
 
         var panel = new ExcelDataSourcePanel(columns.Select((c, i) => new ColumnNumbersHelper { Number = i + startNumber }).ToList(),
-            ws.NamedRange(rangeName), _report, _templateProcessor)
+            ws.DefinedName(rangeName), _report, _templateProcessor)
         {
             ShiftType = ShiftType.Cells,
             Type = Type == PanelType.Vertical ? PanelType.Horizontal : PanelType.Vertical,
@@ -210,7 +210,7 @@ internal class ExcelDataSourceDynamicPanel : ExcelDataSourcePanel
         range.AddToNamed(rangeName, XLScope.Worksheet);
 
         var panel = new ExcelDataSourcePanel(columns.Select(c => new DataTemplatesHelper { Template = _templateProcessor.BuildDataItemTemplate(c.Name) }).ToList(),
-            ws.NamedRange(rangeName), _report, _templateProcessor)
+            ws.DefinedName(rangeName), _report, _templateProcessor)
         {
             ShiftType = ShiftType.Cells,
             Type = Type == PanelType.Vertical ? PanelType.Horizontal : PanelType.Vertical,
@@ -230,7 +230,7 @@ internal class ExcelDataSourceDynamicPanel : ExcelDataSourcePanel
     {
         string rangeName = $"DynamicPanelData_{Guid.NewGuid():N}";
         dataRange.AddToNamed(rangeName, XLScope.Worksheet);
-        var dataPanel = new ExcelDataSourcePanel(_data, Range.Worksheet.NamedRange(rangeName), _report, _templateProcessor)
+        var dataPanel = new ExcelDataSourcePanel(_data, Range.Worksheet.DefinedName(rangeName), _report, _templateProcessor)
         {
             ShiftType = ShiftType,
             Type = Type,
@@ -275,7 +275,7 @@ internal class ExcelDataSourceDynamicPanel : ExcelDataSourcePanel
                 : null);
         }
 
-        var panel = new ExcelDataSourcePanel(totalsTemplates.Select(t => new TotalsTemplatesHelper { Totals = t }), ws.NamedRange(rangeName), _report, _templateProcessor)
+        var panel = new ExcelDataSourcePanel(totalsTemplates.Select(t => new TotalsTemplatesHelper { Totals = t }), ws.DefinedName(rangeName), _report, _templateProcessor)
         {
             ShiftType = ShiftType.Cells,
             Type = Type == PanelType.Vertical ? PanelType.Horizontal : PanelType.Vertical,
@@ -305,7 +305,7 @@ internal class ExcelDataSourceDynamicPanel : ExcelDataSourcePanel
             _data = _templateProcessor.GetValue(_dataSourceTemplate);
         }
 
-        var totalsPanel = new ExcelTotalsPanel(_data, Range.Worksheet.NamedRange(rangeName), _report, _templateProcessor)
+        var totalsPanel = new ExcelTotalsPanel(_data, Range.Worksheet.DefinedName(rangeName), _report, _templateProcessor)
         {
             ShiftType = ShiftType,
             Type = Type,

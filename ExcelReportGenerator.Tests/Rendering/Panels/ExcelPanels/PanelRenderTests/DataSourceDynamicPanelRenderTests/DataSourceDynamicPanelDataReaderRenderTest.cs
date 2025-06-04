@@ -39,7 +39,7 @@ public class DataSourceDynamicPanelDataReaderRenderTest
         ws.Cell(7, 2).Style.Border.OutsideBorderColor = XLColor.Blue;
 
         var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataReader()",
-            ws.NamedRange("TestRange"), report, report.TemplateProcessor);
+            ws.DefinedName("TestRange"), report, report.TemplateProcessor);
         panel.Render();
 
         Assert.AreEqual(ws.Range(2, 2, 9, 7), panel.ResultRange);
@@ -78,7 +78,7 @@ public class DataSourceDynamicPanelDataReaderRenderTest
         ws.Cell(2, 5).Style.Border.OutsideBorderColor = XLColor.Green;
 
         var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataReader()",
-            ws.NamedRange("TestRange"), report, report.TemplateProcessor)
+            ws.DefinedName("TestRange"), report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal
         };
@@ -114,7 +114,7 @@ public class DataSourceDynamicPanelDataReaderRenderTest
         ws.Cell(4, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Dotted;
         ws.Cell(4, 2).Style.Border.OutsideBorderColor = XLColor.Green;
 
-        var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataReader()", ws.NamedRange("TestRange"),
+        var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataReader()", ws.DefinedName("TestRange"),
             report, report.TemplateProcessor);
         panel.Render();
 

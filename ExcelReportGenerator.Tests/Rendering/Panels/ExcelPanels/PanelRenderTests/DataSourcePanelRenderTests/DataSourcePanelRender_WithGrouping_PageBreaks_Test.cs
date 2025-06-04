@@ -33,14 +33,14 @@ public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
 
         ws.Cell(4, 2).Value = "{HorizPageBreak}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor);
         var childPanel1 = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange1"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange1"), report, report.TemplateProcessor)
         {
             Parent = parentPanel
         };
-        var childPanel2 = new ExcelNamedPanel(ws.NamedRange("ChildRange2"), report, report.TemplateProcessor)
+        var childPanel2 = new ExcelNamedPanel(ws.DefinedName("ChildRange2"), report, report.TemplateProcessor)
         {
             Parent = parentPanel
         };
@@ -78,10 +78,10 @@ public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
 
         ws.Cell(4, 2).Value = "{ HorizPageBreak }";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor);
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel
         };
@@ -122,14 +122,14 @@ public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
 
         ws.Cell(4, 2).Value = "  {  horizpagebreak  }  ";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor);
         var childPanel1 = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange1"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange1"), report, report.TemplateProcessor)
         {
             Parent = parentPanel
         };
-        var childPanel2 = new ExcelNamedPanel(ws.NamedRange("ChildRange2"), report, report.TemplateProcessor)
+        var childPanel2 = new ExcelNamedPanel(ws.DefinedName("ChildRange2"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             ShiftType = ShiftType.Row
@@ -168,13 +168,13 @@ public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
 
         ws.Cell(4, 2).Value = "{HorizPageBreak}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             ShiftType = ShiftType.Row
         };
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             ShiftType = ShiftType.Row
@@ -216,18 +216,18 @@ public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
 
         ws.Cell(2, 4).Value = " {vertPageBreak} ";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal
         };
         var childPanel1 = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange1"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange1"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal
         };
-        var childPanel2 = new ExcelNamedPanel(ws.NamedRange("ChildRange2"), report, report.TemplateProcessor)
+        var childPanel2 = new ExcelNamedPanel(ws.DefinedName("ChildRange2"), report, report.TemplateProcessor)
         {
             Parent = parentPanel
         };
@@ -265,13 +265,13 @@ public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
 
         ws.Cell(2, 4).Value = " { VertPageBreak } ";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal
         };
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal
@@ -313,20 +313,20 @@ public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
 
         ws.Cell(2, 4).Value = "{VertPageBreak}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal,
             ShiftType = ShiftType.Row
         };
         var childPanel1 = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange1"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange1"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal,
             ShiftType = ShiftType.Row
         };
-        var childPanel2 = new ExcelNamedPanel(ws.NamedRange("ChildRange2"), report, report.TemplateProcessor)
+        var childPanel2 = new ExcelNamedPanel(ws.DefinedName("ChildRange2"), report, report.TemplateProcessor)
         {
             Parent = parentPanel
         };
@@ -364,13 +364,13 @@ public class DataSourcePanelRender_WithGrouping_PageBreaks_Test
 
         ws.Cell(2, 4).Value = "{VertPageBreak}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal
         };
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal,

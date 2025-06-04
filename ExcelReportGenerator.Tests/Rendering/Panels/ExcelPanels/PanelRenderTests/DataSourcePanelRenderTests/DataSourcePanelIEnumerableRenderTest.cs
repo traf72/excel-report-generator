@@ -38,7 +38,7 @@ public class DataSourcePanelIEnumerableRenderTest
         ws.Cell(1, 4).Value = "{di:Name}";
         ws.Cell(4, 4).Value = "{di:Name}";
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("TestRange"), report,
             report.TemplateProcessor);
         panel.Render();
 
@@ -80,7 +80,7 @@ public class DataSourcePanelIEnumerableRenderTest
         ws.Cell(1, 4).Value = "{di:Name}";
         ws.Cell(4, 4).Value = "{di:Name}";
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("TestRange"), report,
             report.TemplateProcessor)
         {
             ShiftType = ShiftType.Row
@@ -138,7 +138,7 @@ public class DataSourcePanelIEnumerableRenderTest
         ws.Cell(8, 5).Style.Border.SetBottomBorderColor(XLColor.Red);
         ws.Cell(8, 5).Style.Border.SetLeftBorderColor(XLColor.Red);
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("TestRange"), report,
             report.TemplateProcessor)
         {
             ShiftType = ShiftType.NoShift
@@ -183,7 +183,7 @@ public class DataSourcePanelIEnumerableRenderTest
         ws.Cell(1, 4).Value = "{di:Name}";
         ws.Cell(4, 4).Value = "{di:Name}";
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("TestRange"), report,
             report.TemplateProcessor)
         {
             Type = PanelType.Horizontal
@@ -228,7 +228,7 @@ public class DataSourcePanelIEnumerableRenderTest
         ws.Cell(1, 4).Value = "{di:Name}";
         ws.Cell(4, 4).Value = "{di:Name}";
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("TestRange"), report,
             report.TemplateProcessor)
         {
             Type = PanelType.Horizontal,
@@ -275,7 +275,7 @@ public class DataSourcePanelIEnumerableRenderTest
         ws.Cell(4, 4).Value = "{di:Name}";
         ws.Cell(2, 14).Value = "{di:Date}";
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("TestRange"), report,
             report.TemplateProcessor)
         {
             Type = PanelType.Horizontal,
@@ -302,7 +302,7 @@ public class DataSourcePanelIEnumerableRenderTest
 
         ws.Cell(2, 2).Value = "{di:di}";
 
-        var panel = new ExcelDataSourcePanel(new[] {1, 2, 3, 4}, ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel(new[] {1, 2, 3, 4}, ws.DefinedName("TestRange"), report,
             report.TemplateProcessor);
         panel.Render();
 
@@ -325,7 +325,7 @@ public class DataSourcePanelIEnumerableRenderTest
 
         ws.Cell(2, 2).Value = "{di:di}";
 
-        var panel = new ExcelDataSourcePanel(new[] {"One", "Two", "Three", "Four"}, ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel(new[] {"One", "Two", "Three", "Four"}, ws.DefinedName("TestRange"), report,
             report.TemplateProcessor);
         panel.Render();
 
@@ -348,7 +348,7 @@ public class DataSourcePanelIEnumerableRenderTest
 
         ws.Cell(2, 2).Value = "{di:di}";
 
-        var panel = new ExcelDataSourcePanel(new[] {1, 2, 3, 4}, ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel(new[] {1, 2, 3, 4}, ws.DefinedName("TestRange"), report,
             report.TemplateProcessor)
         {
             BeforeRenderMethodName = "CancelPanelRender"
@@ -374,7 +374,7 @@ public class DataSourcePanelIEnumerableRenderTest
         ws.Cell(2, 2).Value = "{di:Name}";
         ws.Cell(2, 3).Value = "{di:Date}";
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("TestRange"), report,
             report.TemplateProcessor)
         {
             BeforeRenderMethodName = "TestExcelDataSourcePanelBeforeRender",
@@ -416,7 +416,7 @@ public class DataSourcePanelIEnumerableRenderTest
                 new TestItem($"Name_{i}", DateTime.Now.AddHours(1), i + 10, new Contacts($"Phone_{i}", $"Fax_{i}")));
         }
 
-        var panel = new ExcelDataSourcePanel(data, ws.NamedRange("TestRange"), report, report.TemplateProcessor)
+        var panel = new ExcelDataSourcePanel(data, ws.DefinedName("TestRange"), report, report.TemplateProcessor)
         {
             //ShiftType = ShiftType.Row,
             //ShiftType = ShiftType.NoShift,
@@ -470,23 +470,23 @@ public class DataSourcePanelIEnumerableRenderTest
                 new Contacts($"Phone_{i}", $"Fax_{i}")));
         }
 
-        var parentPanel = new ExcelDataSourcePanel(data, ws.NamedRange("ParentRange"), report, report.TemplateProcessor)
+        var parentPanel = new ExcelDataSourcePanel(data, ws.DefinedName("ParentRange"), report, report.TemplateProcessor)
         {
             //ShiftType = ShiftType.Row,
             //ShiftType = ShiftType.NoShift,
         };
 
-        //var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildrenProportionally(di:di)", ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+        //var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildrenProportionally(di:di)", ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildrenRandom(10, 20)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             //ShiftType = ShiftType.Row,
             //ShiftType = ShiftType.NoShift,
             Parent = parentPanel
         };
 
-        //var totalPanel = new ExcelTotalsPanel("m:DataProvider:GetChildrenProportionally(di:di)", ws.NamedRange("TotalRange"), report, report.TemplateProcessor)
-        var totalPanel = new ExcelTotalsPanel("m:DataProvider:GetChildrenRandom(10, 20)", ws.NamedRange("TotalRange"),
+        //var totalPanel = new ExcelTotalsPanel("m:DataProvider:GetChildrenProportionally(di:di)", ws.DefinedName("TotalRange"), report, report.TemplateProcessor)
+        var totalPanel = new ExcelTotalsPanel("m:DataProvider:GetChildrenRandom(10, 20)", ws.DefinedName("TotalRange"),
             report, report.TemplateProcessor)
         {
             //ShiftType = ShiftType.Row,
@@ -545,14 +545,14 @@ public class DataSourcePanelIEnumerableRenderTest
                 new Contacts($"Phone_{i}", $"Fax_{i}")));
         }
 
-        var parentPanel = new ExcelDataSourcePanel(data, ws.NamedRange("ParentRange"), report, report.TemplateProcessor)
+        var parentPanel = new ExcelDataSourcePanel(data, ws.DefinedName("ParentRange"), report, report.TemplateProcessor)
         {
             //ShiftType = ShiftType.Row,
             //ShiftType = ShiftType.NoShift,
         };
 
         var childPanel1 = new ExcelDataSourcePanel("m:DataProvider:GetChildrenRandom(4, 6)",
-            ws.NamedRange("ChildRange1"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange1"), report, report.TemplateProcessor)
         {
             //ShiftType = ShiftType.Row,
             //ShiftType = ShiftType.NoShift,
@@ -560,7 +560,7 @@ public class DataSourcePanelIEnumerableRenderTest
         };
 
         var childPanel2 = new ExcelDataSourcePanel("m:DataProvider:GetChildrenRandom(10, 15)",
-            ws.NamedRange("ChildRange2"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange2"), report, report.TemplateProcessor)
         {
             //ShiftType = ShiftType.Row,
             //ShiftType = ShiftType.NoShift,

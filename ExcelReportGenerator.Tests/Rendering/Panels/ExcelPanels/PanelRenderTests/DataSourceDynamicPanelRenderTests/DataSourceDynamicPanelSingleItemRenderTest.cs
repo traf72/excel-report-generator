@@ -19,7 +19,7 @@ public class DataSourceDynamicPanelSingleItemRenderTest
         ws.Cell(3, 2).Value = "{Data}";
         ws.Cell(4, 2).Value = "{Totals}";
 
-        var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetSingleItem()", ws.NamedRange("TestRange"),
+        var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetSingleItem()", ws.DefinedName("TestRange"),
             report, report.TemplateProcessor);
         panel.Render();
 
@@ -44,7 +44,7 @@ public class DataSourceDynamicPanelSingleItemRenderTest
         ws.Cell(3, 2).Value = "{Data}";
         ws.Cell(4, 2).Value = "{Totals}";
 
-        var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetNullItem()", ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetNullItem()", ws.DefinedName("TestRange"), report,
             report.TemplateProcessor);
         panel.Render();
 

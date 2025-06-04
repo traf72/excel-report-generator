@@ -58,7 +58,7 @@ internal class ExcelTotalsPanel : ExcelDataSourcePanel
             string rangeName = $"AggFuncs_{Guid.NewGuid():N}";
             Range.AddToNamed(rangeName, XLScope.Worksheet);
 
-            var dataPanel = new ExcelDataSourcePanel(new[] { dataSource }, ws.NamedRange(rangeName), _report, _templateProcessor) { Parent = Parent };
+            var dataPanel = new ExcelDataSourcePanel(new[] { dataSource }, ws.DefinedName(rangeName), _report, _templateProcessor) { Parent = Parent };
             dataPanel.Render();
             ResultRange = ExcelHelper.MergeRanges(Range, dataPanel.ResultRange);
         }

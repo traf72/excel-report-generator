@@ -67,28 +67,28 @@ public class DataSourcePanelRender_WithGrouping_MixedPanels_Test
         ws.Cell(6, 6).Value = "{di:parent:Field2}";
         ws.Cell(6, 7).Value = "{di:parent:parent:Contacts.Fax}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             BeforeDataItemRenderMethodName = "BeforeRenderParentDataSourcePanel",
             AfterDataItemRenderMethodName = "AfterRenderParentDataSourcePanelChildBottom"
         };
-        var simplePanel1 = new ExcelNamedPanel(ws.Workbook.NamedRange("simpleRange1"), report, report.TemplateProcessor)
+        var simplePanel1 = new ExcelNamedPanel(ws.Workbook.DefinedName("simpleRange1"), report, report.TemplateProcessor)
         {
             Parent = parentPanel
         };
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             AfterDataItemRenderMethodName = "AfterRenderChildDataSourcePanel"
         };
-        var childOfChildPanel = new ExcelDataSourcePanel("di:Children", ws.Workbook.NamedRange("ChildOfChildRange"),
+        var childOfChildPanel = new ExcelDataSourcePanel("di:Children", ws.Workbook.DefinedName("ChildOfChildRange"),
             report, report.TemplateProcessor)
         {
             Parent = childPanel
         };
-        var simplePanel2 = new ExcelNamedPanel(ws.NamedRange("simpleRange2"), report, report.TemplateProcessor)
+        var simplePanel2 = new ExcelNamedPanel(ws.DefinedName("simpleRange2"), report, report.TemplateProcessor)
         {
             Parent = childOfChildPanel
         };
@@ -163,28 +163,28 @@ public class DataSourcePanelRender_WithGrouping_MixedPanels_Test
         ws.Cell(6, 6).Value = "{di:parent:Field2}";
         ws.Cell(7, 6).Value = "{di:parent:parent:Contacts.Fax}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal
         };
-        var simplePanel1 = new ExcelNamedPanel(ws.Workbook.NamedRange("simpleRange1"), report, report.TemplateProcessor)
+        var simplePanel1 = new ExcelNamedPanel(ws.Workbook.DefinedName("simpleRange1"), report, report.TemplateProcessor)
         {
             Parent = parentPanel
         };
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal
         };
-        var childOfChildPanel = new ExcelDataSourcePanel("di:Children", ws.Workbook.NamedRange("ChildOfChildRange"),
+        var childOfChildPanel = new ExcelDataSourcePanel("di:Children", ws.Workbook.DefinedName("ChildOfChildRange"),
             report, report.TemplateProcessor)
         {
             Parent = childPanel,
             Type = PanelType.Horizontal
         };
-        var simplePanel2 = new ExcelNamedPanel(ws.NamedRange("simpleRange2"), report, report.TemplateProcessor)
+        var simplePanel2 = new ExcelNamedPanel(ws.DefinedName("simpleRange2"), report, report.TemplateProcessor)
         {
             Parent = childOfChildPanel
         };
@@ -219,10 +219,10 @@ public class DataSourcePanelRender_WithGrouping_MixedPanels_Test
         ws.Cell(3, 3).Value = "{di:Field1}";
         ws.Cell(4, 3).Value = "{di:Field2}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor);
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal
@@ -255,13 +255,13 @@ public class DataSourcePanelRender_WithGrouping_MixedPanels_Test
         ws.Cell(3, 3).Value = "{di:Field1}";
         ws.Cell(3, 4).Value = "{di:Field2}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal
         };
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel
         };

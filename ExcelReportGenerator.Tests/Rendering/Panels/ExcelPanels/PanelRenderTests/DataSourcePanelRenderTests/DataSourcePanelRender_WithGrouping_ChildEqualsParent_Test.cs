@@ -22,10 +22,10 @@ public class DataSourcePanelRender_WithGrouping_ChildEqualsParent_Test
         ws.Cell(2, 3).Value = "{di:Field2}";
         ws.Cell(2, 4).Value = "{di:parent:Sum}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor);
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel
         };

@@ -8,13 +8,10 @@ namespace ExcelReportGenerator.Tests
         [OneTimeSetUp]
         public void SetUp()
         {
-            var culture = new CultureInfo("ka-GE");
+            var culture = new CultureInfo("ru-RU");
 
             CultureInfo.CurrentCulture = culture;
             CultureInfo.CurrentUICulture = culture;
-
-            culture.DateTimeFormat.ShortTimePattern = "H:mm:ss";
-            culture.DateTimeFormat.LongTimePattern = "H:mm:ss";
 
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;

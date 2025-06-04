@@ -27,7 +27,7 @@ public class ExcelTotalsPanelTest
 
         var range = ws.Range(1, 1, 2, 4);
         range.AddToNamed("DataPanel", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("DataPanel");
+        var namedRange = ws.DefinedName("DataPanel");
 
         var panel = new ExcelTotalsPanel("m:GetData()", namedRange, excelReport, templateProcessor)
         {
@@ -76,7 +76,7 @@ public class ExcelTotalsPanelTest
 
         var range = ws.Range(1, 1, 2, 4);
         range.AddToNamed("DataPanel", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("DataPanel");
+        var namedRange = ws.DefinedName("DataPanel");
 
         object[] data = {1, "One"};
         var panel = new ExcelTotalsPanel(data, namedRange, excelReport, templateProcessor)
@@ -378,7 +378,7 @@ public class ExcelTotalsPanelTest
             "Text {Plain Text} Sum(di:Count) {sf:Format(Sum(di:Amount,,PostAggregation), #,,0.00)} {p:Text} {Max(di:Count)} {m:Meth(1, Avg( di : Value ), Min(di:Amount, CustomAggregation, PostAggregation), \"Str\"} {sv:RenderDate} m:Meth2(Avg(di:Value))";
         ws.Cell(1, 8).Value = "{Sum(di:Amount)}";
 
-        var panel = new ExcelTotalsPanel("Stub", ws.NamedRange("Test"), report, report.TemplateProcessor);
+        var panel = new ExcelTotalsPanel("Stub", ws.DefinedName("Test"), report, report.TemplateProcessor);
         var method = panel.GetType().GetMethod("ParseTotalCells", BindingFlags.Instance | BindingFlags.NonPublic);
         var result = (IDictionary<IXLCell, IList<ExcelTotalsPanel.ParsedAggregationFunc>>) method.Invoke(panel, null);
 
@@ -486,7 +486,7 @@ public class ExcelTotalsPanelTest
             Workbook = wb
         };
 
-        var panel = new ExcelTotalsPanel("Stub", ws.NamedRange("Test"), report, report.TemplateProcessor);
+        var panel = new ExcelTotalsPanel("Stub", ws.DefinedName("Test"), report, report.TemplateProcessor);
         var method = panel.GetType().GetMethod("ParseTotalCells", BindingFlags.Instance | BindingFlags.NonPublic);
 
         ws.Cell(1, 1).Value = "<Sum(d-Val, fn1, fn2, fn3)>";

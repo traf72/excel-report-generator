@@ -29,7 +29,7 @@ public class DataSourceDynamicPanelDataTableRenderTest
         ws.Cell(4, 2).Style.Border.OutsideBorderColor = XLColor.Green;
 
         var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataTable()",
-            ws.NamedRange("TestRange"), report, report.TemplateProcessor);
+            ws.DefinedName("TestRange"), report, report.TemplateProcessor);
         panel.Render();
 
         Assert.AreEqual(ws.Range(2, 2, 6, 7), panel.ResultRange);
@@ -62,7 +62,7 @@ public class DataSourceDynamicPanelDataTableRenderTest
         ws.Cell(4, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Dotted;
         ws.Cell(4, 2).Style.Border.OutsideBorderColor = XLColor.Green;
 
-        var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataTable()", ws.NamedRange("TestRange"),
+        var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataTable()", ws.DefinedName("TestRange"),
             report, report.TemplateProcessor);
         panel.Render();
 

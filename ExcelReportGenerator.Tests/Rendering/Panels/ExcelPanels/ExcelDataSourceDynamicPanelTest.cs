@@ -19,7 +19,7 @@ public class ExcelDataSourceDynamicPanelTest
 
         var range = ws.Range(1, 1, 2, 4);
         range.AddToNamed("DataPanel", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("DataPanel");
+        var namedRange = ws.DefinedName("DataPanel");
 
         var panel = new ExcelDataSourceDynamicPanel("m:GetData()", namedRange, excelReport, templateProcessor)
         {
@@ -93,7 +93,7 @@ public class ExcelDataSourceDynamicPanelTest
 
         var range = ws.Range(1, 1, 2, 4);
         range.AddToNamed("DataPanel", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("DataPanel");
+        var namedRange = ws.DefinedName("DataPanel");
 
         object[] data = {1, "One"};
         var panel = new ExcelDataSourceDynamicPanel(data, namedRange, excelReport, templateProcessor)

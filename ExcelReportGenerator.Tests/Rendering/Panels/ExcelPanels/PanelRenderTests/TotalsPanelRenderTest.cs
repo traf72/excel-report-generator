@@ -32,7 +32,7 @@ public class TotalsPanelRenderTest
             "Aggregation: {m:TestClassForTotals:Meth(avg(di:Sum, , PostAggregationRound), Max( di : Sum ))}. Date: {sf:Format(p:DateParam, dd.MM.yyyy)}";
         ws.Cell(1, 13).Value = "{Sum(di:Sum)}";
 
-        var panel = new ExcelTotalsPanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("Test"), report,
+        var panel = new ExcelTotalsPanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("Test"), report,
             report.TemplateProcessor)
         {
             BeforeRenderMethodName = "TestExcelTotalsPanelBeforeRender",
@@ -70,15 +70,15 @@ public class TotalsPanelRenderTest
         ws.Cell(3, 4).Value = "{Max(di:parent:Sum)}";
         ws.Cell(3, 5).Value = "{di:parent:Name}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor);
         var childPanel1 = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange1"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange1"), report, report.TemplateProcessor)
         {
             Parent = parentPanel
         };
         var childPanel2 = new ExcelTotalsPanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange2"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange2"), report, report.TemplateProcessor)
         {
             Parent = parentPanel
         };
@@ -108,7 +108,7 @@ public class TotalsPanelRenderTest
         ws.Cell(1, 4).Value = "{Min(di:Sum)}";
         ws.Cell(1, 5).Value = "Text1 {count(di:Name)} Text2 {avg(di:Sum, , PostAggregationRound)} Text3 {Max(di:Sum)}";
 
-        var panel = new ExcelTotalsPanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("Test"), report,
+        var panel = new ExcelTotalsPanel("m:DataProvider:GetEmptyIEnumerable()", ws.DefinedName("Test"), report,
             report.TemplateProcessor);
         panel.Render();
 
@@ -135,7 +135,7 @@ public class TotalsPanelRenderTest
         ws.Cell(1, 4).Value = "{Min(di:Sum)}";
         ws.Cell(1, 5).Value = "Text1 {count(di:Name)} Text2 {avg(di:Sum, , PostAggregationRound)} Text3 {Max(di:Sum)}";
 
-        var panel = new ExcelTotalsPanel("m:DataProvider:GetNullItem()", ws.NamedRange("Test"), report,
+        var panel = new ExcelTotalsPanel("m:DataProvider:GetNullItem()", ws.DefinedName("Test"), report,
             report.TemplateProcessor);
         panel.Render();
 

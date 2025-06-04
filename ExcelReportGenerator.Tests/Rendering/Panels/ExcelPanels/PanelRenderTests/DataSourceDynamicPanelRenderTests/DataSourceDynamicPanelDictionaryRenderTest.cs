@@ -28,7 +28,7 @@ public class DataSourceDynamicPanelDictionaryRenderTest
 
         var data1 = new DataProvider().GetDictionaryEnumerable().First();
         var panel1 =
-            new ExcelDataSourceDynamicPanel(data1, ws.NamedRange("TestRange"), report, report.TemplateProcessor);
+            new ExcelDataSourceDynamicPanel(data1, ws.DefinedName("TestRange"), report, report.TemplateProcessor);
         panel1.Render();
 
         Assert.AreEqual(ws.Range(2, 2, 6, 3), panel1.ResultRange);
@@ -36,7 +36,7 @@ public class DataSourceDynamicPanelDictionaryRenderTest
         var data2 = new DataProvider().GetDictionaryEnumerable().First()
             .Select(x => new KeyValuePair<string, object>(x.Key, x.Value));
         var panel2 =
-            new ExcelDataSourceDynamicPanel(data2, ws.NamedRange("TestRange2"), report, report.TemplateProcessor);
+            new ExcelDataSourceDynamicPanel(data2, ws.DefinedName("TestRange2"), report, report.TemplateProcessor);
         panel2.Render();
 
         Assert.AreEqual(ws.Range(9, 2, 13, 3), panel2.ResultRange);
@@ -69,14 +69,14 @@ public class DataSourceDynamicPanelDictionaryRenderTest
 
         IDictionary<string, object> data1 = new Dictionary<string, object>();
         var panel1 =
-            new ExcelDataSourceDynamicPanel(data1, ws.NamedRange("TestRange"), report, report.TemplateProcessor);
+            new ExcelDataSourceDynamicPanel(data1, ws.DefinedName("TestRange"), report, report.TemplateProcessor);
         panel1.Render();
 
         Assert.AreEqual(ws.Range(2, 2, 3, 3), panel1.ResultRange);
 
         IEnumerable<KeyValuePair<string, object>> data2 = new List<KeyValuePair<string, object>>();
         var panel2 =
-            new ExcelDataSourceDynamicPanel(data2, ws.NamedRange("TestRange2"), report, report.TemplateProcessor);
+            new ExcelDataSourceDynamicPanel(data2, ws.DefinedName("TestRange2"), report, report.TemplateProcessor);
         panel2.Render();
 
         Assert.AreEqual(ws.Range(6, 2, 7, 3), panel2.ResultRange);
@@ -103,7 +103,7 @@ public class DataSourceDynamicPanelDictionaryRenderTest
         ws.Cell(4, 2).Value = "{Totals}";
 
         var panel1 = new ExcelDataSourceDynamicPanel("m:DataProvider:GetDictionaryEnumerable()",
-            ws.NamedRange("TestRange1"), report, report.TemplateProcessor);
+            ws.DefinedName("TestRange1"), report, report.TemplateProcessor);
         panel1.Render();
 
         Assert.AreEqual(ws.Range(2, 2, 6, 4), panel1.ResultRange);
@@ -122,7 +122,7 @@ public class DataSourceDynamicPanelDictionaryRenderTest
         ws.Cell(8, 2).Value = "{Data}";
         ws.Cell(9, 2).Value = "{Totals}";
 
-        var panel2 = new ExcelDataSourceDynamicPanel(dictWithDecimalValues, ws.NamedRange("TestRange2"), report,
+        var panel2 = new ExcelDataSourceDynamicPanel(dictWithDecimalValues, ws.DefinedName("TestRange2"), report,
             report.TemplateProcessor);
         panel2.Render();
 
@@ -148,7 +148,7 @@ public class DataSourceDynamicPanelDictionaryRenderTest
         ws.Cell(4, 2).Value = "{Totals}";
 
         var panel = new ExcelDataSourceDynamicPanel(new List<IDictionary<string, decimal>>(),
-            ws.NamedRange("TestRange1"), report, report.TemplateProcessor);
+            ws.DefinedName("TestRange1"), report, report.TemplateProcessor);
         panel.Render();
 
         Assert.IsNull(panel.ResultRange);

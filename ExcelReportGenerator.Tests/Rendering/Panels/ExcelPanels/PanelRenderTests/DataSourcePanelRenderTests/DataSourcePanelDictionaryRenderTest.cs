@@ -29,12 +29,12 @@ public class DataSourcePanelDictionaryRenderTest
         ws.Cell(2, 6).Value = "{di:Value}";
 
         var data1 = new DataProvider().GetDictionaryEnumerable().First();
-        var panel1 = new ExcelDataSourcePanel(data1, ws.NamedRange("TestRange"), report, report.TemplateProcessor);
+        var panel1 = new ExcelDataSourcePanel(data1, ws.DefinedName("TestRange"), report, report.TemplateProcessor);
         panel1.Render();
 
         var data2 = new DataProvider().GetDictionaryEnumerable().First()
             .Select(x => new KeyValuePair<string, object>(x.Key, x.Value));
-        var panel2 = new ExcelDataSourcePanel(data2, ws.NamedRange("TestRange2"), report, report.TemplateProcessor);
+        var panel2 = new ExcelDataSourcePanel(data2, ws.DefinedName("TestRange2"), report, report.TemplateProcessor);
         panel2.Render();
 
         Assert.AreEqual(ws.Range(2, 2, 4, 3), panel1.ResultRange);
@@ -59,7 +59,7 @@ public class DataSourcePanelDictionaryRenderTest
         ws.Cell(2, 3).Value = "{di:Value}";
         ws.Cell(2, 4).Value = "{di:IsVip}";
 
-        var panel1 = new ExcelDataSourcePanel("m:DataProvider:GetDictionaryEnumerable()", ws.NamedRange("TestRange1"),
+        var panel1 = new ExcelDataSourcePanel("m:DataProvider:GetDictionaryEnumerable()", ws.DefinedName("TestRange1"),
             report, report.TemplateProcessor);
         panel1.Render();
 
@@ -75,7 +75,7 @@ public class DataSourcePanelDictionaryRenderTest
 
         ws.Cell(2, 6).Value = "{di:Value}";
 
-        var panel2 = new ExcelDataSourcePanel(dictWithDecimalValues, ws.NamedRange("TestRange2"), report,
+        var panel2 = new ExcelDataSourcePanel(dictWithDecimalValues, ws.DefinedName("TestRange2"), report,
             report.TemplateProcessor);
         panel2.Render();
 

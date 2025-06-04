@@ -25,10 +25,10 @@ public class DataSourceDynamicPanel_InsideDataSourcePanel_Test
         ws.Cell(3, 2).Value = "{Data}";
         ws.Cell(4, 2).Value = "{Totals}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor);
         var childPanel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel
         };
@@ -61,13 +61,13 @@ public class DataSourceDynamicPanel_InsideDataSourcePanel_Test
         ws.Cell(2, 3).Value = "{Numbers}";
         ws.Cell(2, 4).Value = "{Data}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal
         };
         var childPanel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal

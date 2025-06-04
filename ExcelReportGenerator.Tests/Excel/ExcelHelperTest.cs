@@ -259,7 +259,7 @@ public class ExcelHelperTest
         var ws = wb.AddWorksheet("Test");
         var range = ws.Range(6, 5, 9, 7);
         range.AddToNamed("TestRange", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("TestRange");
+        var namedRange = ws.DefinedName("TestRange");
 
         range.FirstCell().Value = "RangeStart";
         range.LastCell().Value = "RangeEnd";
@@ -307,7 +307,7 @@ public class ExcelHelperTest
         Assert.AreEqual(XLBorderStyleValues.Thin, newRange2.FirstCell().Style.Border.TopBorder);
         Assert.AreEqual(XLBorderStyleValues.Thin, newRange2.LastCell().Style.Border.BottomBorder);
 
-        Assert.AreEqual(3, ws.NamedRanges.Count());
+        Assert.AreEqual(3, ws.DefinedNames.Count());
 
         //wb.SaveAs("test.xlsx");
     }
@@ -318,7 +318,7 @@ public class ExcelHelperTest
         // Adding cells at the top
         var wb = InitWorkBookForShiftTests();
         var ws = wb.Worksheet("Test");
-        var range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        var range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         ExcelHelper.AllocateSpaceForNextRange(range, Direction.Top);
 
@@ -349,7 +349,7 @@ public class ExcelHelperTest
         // Adding cells at the bottom
         wb = InitWorkBookForShiftTests();
         ws = wb.Worksheet("Test");
-        range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         ExcelHelper.AllocateSpaceForNextRange(range, Direction.Bottom);
 
@@ -380,7 +380,7 @@ public class ExcelHelperTest
         // Adding rows at the top
         wb = InitWorkBookForShiftTests();
         ws = wb.Worksheet("Test");
-        range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         ExcelHelper.AllocateSpaceForNextRange(range, Direction.Top, ShiftType.Row);
 
@@ -411,7 +411,7 @@ public class ExcelHelperTest
         // Adding rows at the bottom
         wb = InitWorkBookForShiftTests();
         ws = wb.Worksheet("Test");
-        range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         ExcelHelper.AllocateSpaceForNextRange(range, Direction.Bottom, ShiftType.Row);
 
@@ -442,7 +442,7 @@ public class ExcelHelperTest
         // Adding cells on the left
         wb = InitWorkBookForShiftTests();
         ws = wb.Worksheet("Test");
-        range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         ExcelHelper.AllocateSpaceForNextRange(range, Direction.Left);
 
@@ -473,7 +473,7 @@ public class ExcelHelperTest
         // Adding cells on the right
         wb = InitWorkBookForShiftTests();
         ws = wb.Worksheet("Test");
-        range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         ExcelHelper.AllocateSpaceForNextRange(range, Direction.Right);
 
@@ -504,7 +504,7 @@ public class ExcelHelperTest
         // Adding columns on the left
         wb = InitWorkBookForShiftTests();
         ws = wb.Worksheet("Test");
-        range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         ExcelHelper.AllocateSpaceForNextRange(range, Direction.Left, ShiftType.Row);
 
@@ -535,7 +535,7 @@ public class ExcelHelperTest
         // Adding columns on the right
         wb = InitWorkBookForShiftTests();
         ws = wb.Worksheet("Test");
-        range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         ExcelHelper.AllocateSpaceForNextRange(range, Direction.Right, ShiftType.Row);
 
@@ -566,7 +566,7 @@ public class ExcelHelperTest
         // Adding nothing (without shift)
         wb = InitWorkBookForShiftTests();
         ws = wb.Worksheet("Test");
-        range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         ExcelHelper.AllocateSpaceForNextRange(range, Direction.Top, ShiftType.NoShift);
 
@@ -602,7 +602,7 @@ public class ExcelHelperTest
         // Deleting with moving cells up
         var wb = InitWorkBookForShiftTests();
         var ws = wb.Worksheet("Test");
-        var range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        var range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         ExcelHelper.DeleteRange(range, ShiftType.Cells);
 
@@ -632,7 +632,7 @@ public class ExcelHelperTest
         // Deleting with moving the row up
         wb = InitWorkBookForShiftTests();
         ws = wb.Worksheet("Test");
-        range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         ExcelHelper.DeleteRange(range, ShiftType.Row);
 
@@ -662,7 +662,7 @@ public class ExcelHelperTest
         // Deleting with moving cells left
         wb = InitWorkBookForShiftTests();
         ws = wb.Worksheet("Test");
-        range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         ExcelHelper.DeleteRange(range, ShiftType.Cells, XLShiftDeletedCells.ShiftCellsLeft);
 
@@ -692,7 +692,7 @@ public class ExcelHelperTest
         // Deleting with moving the column left
         wb = InitWorkBookForShiftTests();
         ws = wb.Worksheet("Test");
-        range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         ExcelHelper.DeleteRange(range, ShiftType.Row, XLShiftDeletedCells.ShiftCellsLeft);
 
@@ -722,7 +722,7 @@ public class ExcelHelperTest
         // Deleting without any shift
         wb = InitWorkBookForShiftTests();
         ws = wb.Worksheet("Test");
-        range = ws.NamedRange("TestRange").Ranges.ElementAt(0);
+        range = ws.DefinedName("TestRange").Ranges.ElementAt(0);
 
         ExcelHelper.DeleteRange(range, ShiftType.NoShift);
 
@@ -812,7 +812,7 @@ public class ExcelHelperTest
         var ws = wb.AddWorksheet("Test");
         var range = ws.Range(6, 5, 9, 7);
         range.AddToNamed("TestRange", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("TestRange");
+        var namedRange = ws.DefinedName("TestRange");
 
         range.FirstCell().Value = "RangeStart";
         range.LastCell().Value = "RangeEnd";
@@ -824,7 +824,7 @@ public class ExcelHelperTest
         var movedNamedRange = ExcelHelper.MoveNamedRange(namedRange, ws.Cell(10, 8));
         var movedRange = movedNamedRange.Ranges.ElementAt(0);
 
-        Assert.AreEqual(movedNamedRange, ws.NamedRange("TestRange"));
+        Assert.AreEqual(movedNamedRange, ws.DefinedName("TestRange"));
         Assert.AreEqual(1, movedNamedRange.Ranges.Count);
         Assert.AreEqual(2, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
         Assert.AreEqual(range.FirstCell(), ws.Cell(6, 5));
@@ -845,7 +845,7 @@ public class ExcelHelperTest
         var movedNamedRange2 = ExcelHelper.MoveNamedRange(movedNamedRange, ws.Cell(11, 8));
         var movedRange2 = movedNamedRange2.Ranges.ElementAt(0);
 
-        Assert.AreEqual(movedNamedRange2, ws.NamedRange("TestRange"));
+        Assert.AreEqual(movedNamedRange2, ws.DefinedName("TestRange"));
         Assert.AreEqual(1, movedNamedRange2.Ranges.Count);
         Assert.AreEqual(2, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
         Assert.AreEqual(movedRange.FirstCell(), ws.Cell(10, 8));
@@ -935,7 +935,14 @@ public class ExcelHelperTest
         ExceptionAssert.Throws<InvalidOperationException>(() => ExcelHelper.MergeRanges(range1, range3),
             "Ranges belong to different worksheets");
 
+        // ClosedXML >= 0.104.0: Ranges are no longer deleted in the usual way (https://github.com/ClosedXML/ClosedXML/issues/2429)
         range1.Delete(XLShiftDeletedCells.ShiftCellsLeft);
+
+        // Assert.AreEqual(range2, ExcelHelper.MergeRanges(range1, range2));
+        // Assert.IsNull(ExcelHelper.MergeRanges(range1, null));
+
+        Assert.AreEqual(ws.Range(ws.Cell(3, 3), ws.Cell(6, 6)), ExcelHelper.MergeRanges(range1, range2));
+        Assert.AreEqual(range1, ExcelHelper.MergeRanges(range1, null));
 
         range1 = ws.Range(3, 3, 5, 5);
         range2.Delete(XLShiftDeletedCells.ShiftCellsLeft);

@@ -18,7 +18,7 @@ public class ExcelPanelFactoryTests
         var ws = wb.AddWorksheet("Test");
         var range = ws.Range(ws.Cell(1, 1), ws.Cell(2, 2));
         range.AddToNamed("s_Test", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("s_Test");
+        var namedRange = ws.DefinedName("s_Test");
 
         var report = new object();
         var templateProcessor = Substitute.For<ITemplateProcessor>();
@@ -54,7 +54,7 @@ public class ExcelPanelFactoryTests
 
         namedRange.Delete();
         range.AddToNamed("SS--Test", XLScope.Workbook);
-        namedRange = wb.NamedRange("SS--Test");
+        namedRange = wb.DefinedName("SS--Test");
 
         parseSettings.SimplePanelPrefix = "ss";
         parseSettings.PanelPrefixSeparator = "--";
@@ -84,7 +84,7 @@ public class ExcelPanelFactoryTests
         var ws = wb.AddWorksheet("Test");
         var range = ws.Range(ws.Cell(1, 1), ws.Cell(2, 2));
         range.AddToNamed("d_Test", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("d_Test");
+        var namedRange = ws.DefinedName("d_Test");
 
         var report = new object();
         var templateProcessor = Substitute.For<ITemplateProcessor>();
@@ -137,7 +137,7 @@ public class ExcelPanelFactoryTests
         var ws = wb.AddWorksheet("Test");
         var range = ws.Range(ws.Cell(1, 1), ws.Cell(2, 2));
         range.AddToNamed("dyn_Test", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("dyn_Test");
+        var namedRange = ws.DefinedName("dyn_Test");
 
         var report = new object();
         var templateProcessor = Substitute.For<ITemplateProcessor>();
@@ -214,7 +214,7 @@ public class ExcelPanelFactoryTests
         var ws = wb.AddWorksheet("Test");
         var range = ws.Range(ws.Cell(1, 1), ws.Cell(2, 2));
         range.AddToNamed("t_Test", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("t_Test");
+        var namedRange = ws.DefinedName("t_Test");
 
         var report = new object();
         var templateProcessor = Substitute.For<ITemplateProcessor>();
@@ -267,7 +267,7 @@ public class ExcelPanelFactoryTests
         var ws = wb.AddWorksheet("Test");
         var range = ws.Range(ws.Cell(1, 1), ws.Cell(2, 2));
         range.AddToNamed("b_Test", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("b_Test");
+        var namedRange = ws.DefinedName("b_Test");
 
         var report = new object();
         var templateProcessor = Substitute.For<ITemplateProcessor>();
@@ -285,7 +285,7 @@ public class ExcelPanelFactoryTests
         var ws = wb.AddWorksheet("Test");
         var range = ws.Range(ws.Cell(1, 1), ws.Cell(2, 2));
         range.AddToNamed("b_Test", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("b_Test");
+        var namedRange = ws.DefinedName("b_Test");
 
         var report = new object();
         var templateProcessor = Substitute.For<ITemplateProcessor>();

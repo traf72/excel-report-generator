@@ -109,7 +109,7 @@ public class ExcelAssert
         }
 
         AreMergedRangesEqual(expected.MergedRanges, actual.MergedRanges);
-        AreNamedRangesEqual(expected.NamedRanges, actual.NamedRanges);
+        AreNamedRangesEqual(expected.DefinedNames, actual.DefinedNames);
         ArePageSetupEqual(expected.PageSetup, actual.PageSetup, "PageSetup {0} failed.");
     }
 
@@ -126,8 +126,8 @@ public class ExcelAssert
             Assert.AreEqual(expected.Worksheet(i + 1).Name, actual.Worksheet(i + 1).Name, "Worksheets names failed");
         }
 
-        Assert.AreEqual(expected.NamedRanges.Count(), actual.NamedRanges.Count(), "Workbook named ranges count failed");
-        AreNamedRangesEqual(expected.NamedRanges, actual.NamedRanges);
+        Assert.AreEqual(expected.DefinedNames.Count(), actual.DefinedNames.Count(), "Workbook named ranges count failed");
+        AreNamedRangesEqual(expected.DefinedNames, actual.DefinedNames);
         for (var i = 0; i < expected.Worksheets.Count; i++)
         {
             AreWorksheetsContentEqual(expected.Worksheet(i + 1), actual.Worksheet(i + 1));
@@ -220,7 +220,7 @@ public class ExcelAssert
         Assert.AreEqual(expected.Count(), actual.Count(), "Worksheet named ranges count failed");
         foreach (var expectedNamedRange in expected)
         {
-            var actualNamedRange = actual.NamedRange(expectedNamedRange.Name);
+            var actualNamedRange = actual.DefinedName(expectedNamedRange.Name);
             Assert.AreEqual(expectedNamedRange.Comment, actualNamedRange.Comment,
                 $"Named range {expectedNamedRange.Name} comment failed");
             Assert.AreEqual(expectedNamedRange.Ranges.Count, actualNamedRange.Ranges.Count,

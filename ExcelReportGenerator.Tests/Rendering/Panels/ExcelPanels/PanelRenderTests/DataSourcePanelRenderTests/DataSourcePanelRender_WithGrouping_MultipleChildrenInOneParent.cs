@@ -34,14 +34,14 @@ public class DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent
         ws.Cell(5, 5).Style.Font.Bold = true;
         ws.Cell(6, 5).Value = "{di:di}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor);
         var childPanel1 = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange1"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange1"), report, report.TemplateProcessor)
         {
             Parent = parentPanel
         };
-        var childPanel2 = new ExcelDataSourcePanel("di:ChildrenPrimitive", ws.NamedRange("ChildRange2"), report,
+        var childPanel2 = new ExcelDataSourcePanel("di:ChildrenPrimitive", ws.DefinedName("ChildRange2"), report,
             report.TemplateProcessor)
         {
             Parent = parentPanel
@@ -84,15 +84,15 @@ public class DataSourcePanelRender_WithGrouping_MultipleChildrenInOneParent
         ws.Cell(5, 5).Style.Font.Bold = true;
         ws.Cell(5, 6).Value = "{di:di}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor);
         var childPanel1 = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange1"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange1"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal
         };
-        var childPanel2 = new ExcelDataSourcePanel("di:ChildrenPrimitive", ws.NamedRange("ChildRange2"), report,
+        var childPanel2 = new ExcelDataSourcePanel("di:ChildrenPrimitive", ws.DefinedName("ChildRange2"), report,
             report.TemplateProcessor)
         {
             Parent = parentPanel,

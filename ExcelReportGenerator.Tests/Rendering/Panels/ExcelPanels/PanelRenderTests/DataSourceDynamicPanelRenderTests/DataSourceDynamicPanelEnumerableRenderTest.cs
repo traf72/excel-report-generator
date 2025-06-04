@@ -19,7 +19,7 @@ public class DataSourceDynamicPanelEnumerableRenderTest
         ws.Cell(3, 2).Value = "{Data}";
         ws.Cell(4, 2).Value = "{Totals}";
 
-        var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("TestRange"),
+        var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("TestRange"),
             report, report.TemplateProcessor);
         panel.Render();
 
@@ -44,7 +44,7 @@ public class DataSourceDynamicPanelEnumerableRenderTest
         ws.Cell(3, 2).Value = "{Data}";
         ws.Cell(4, 2).Value = "{Totals}";
 
-        var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"),
+        var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyIEnumerable()", ws.DefinedName("TestRange"),
             report, report.TemplateProcessor);
         panel.Render();
 

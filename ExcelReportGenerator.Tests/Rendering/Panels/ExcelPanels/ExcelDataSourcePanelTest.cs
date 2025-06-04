@@ -20,7 +20,7 @@ public class ExcelDataSourcePanelTest
 
         var range = ws.Range(1, 1, 2, 4);
         range.AddToNamed("DataPanel", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("DataPanel");
+        var namedRange = ws.DefinedName("DataPanel");
 
         var panel = new ExcelDataSourcePanel("m:GetData()", namedRange, excelReport, templateProcessor)
         {
@@ -69,7 +69,7 @@ public class ExcelDataSourcePanelTest
 
         var range = ws.Range(1, 1, 2, 4);
         range.AddToNamed("DataPanel", XLScope.Worksheet);
-        var namedRange = ws.NamedRange("DataPanel");
+        var namedRange = ws.DefinedName("DataPanel");
 
         object[] data = {1, "One"};
         var panel = new ExcelDataSourcePanel(data, namedRange, excelReport, templateProcessor)

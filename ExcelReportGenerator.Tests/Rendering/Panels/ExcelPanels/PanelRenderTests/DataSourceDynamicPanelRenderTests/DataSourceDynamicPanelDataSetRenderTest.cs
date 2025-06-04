@@ -22,7 +22,7 @@ public class DataSourceDynamicPanelDataSetRenderTest
         ws.Cell(5, 2).Value = "{Totals}";
 
         var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataSet()",
-            ws.NamedRange("TestRange"), report, report.TemplateProcessor)
+            ws.DefinedName("TestRange"), report, report.TemplateProcessor)
         {
             BeforeHeadersRenderMethodName = "TestExcelDynamicPanelBeforeHeadersRender",
             AfterHeadersRenderMethodName = "TestExcelDynamicPanelAfterHeadersRender",
@@ -64,7 +64,7 @@ public class DataSourceDynamicPanelDataSetRenderTest
         ws.Cell(2, 4).Value = "{Totals}";
 
         var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataSet()",
-            ws.NamedRange("TestRange"), report, report.TemplateProcessor)
+            ws.DefinedName("TestRange"), report, report.TemplateProcessor)
         {
             BeforeHeadersRenderMethodName = "TestExcelDynamicPanelBeforeHeadersRender",
             AfterHeadersRenderMethodName = "TestExcelDynamicPanelAfterHeadersRender",
@@ -105,7 +105,7 @@ public class DataSourceDynamicPanelDataSetRenderTest
         ws.Cell(4, 2).Value = "{Totals}";
 
         var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataSet()",
-            ws.NamedRange("TestRange"), report, report.TemplateProcessor)
+            ws.DefinedName("TestRange"), report, report.TemplateProcessor)
         {
             BeforeRenderMethodName = "TestExcelDynamicPaneBeforeRender"
         };
@@ -134,7 +134,7 @@ public class DataSourceDynamicPanelDataSetRenderTest
         ws.Cell(4, 2).Value = "{Totals}";
 
         var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetAllCustomersDataSet()",
-            ws.NamedRange("TestRange"), report, report.TemplateProcessor)
+            ws.DefinedName("TestRange"), report, report.TemplateProcessor)
         {
             AfterRenderMethodName = "TestExcelDynamicPaneAfterRender"
         };
@@ -161,7 +161,7 @@ public class DataSourceDynamicPanelDataSetRenderTest
         ws.Cell(3, 2).Value = "{Data}";
         ws.Cell(4, 2).Value = "{Totals}";
 
-        var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataSet()", ws.NamedRange("TestRange"),
+        var panel = new ExcelDataSourceDynamicPanel("m:DataProvider:GetEmptyDataSet()", ws.DefinedName("TestRange"),
             report, report.TemplateProcessor);
         panel.Render();
 

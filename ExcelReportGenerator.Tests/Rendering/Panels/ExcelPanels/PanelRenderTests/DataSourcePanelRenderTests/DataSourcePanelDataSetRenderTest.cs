@@ -21,7 +21,7 @@ public class DataSourcePanelDataSetRenderTest
         ws.Cell(2, 5).Value = "{di:Description}";
         ws.Cell(2, 6).Value = "{di:Type}";
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetAllCustomersDataSet()", ws.NamedRange("TestRange"),
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetAllCustomersDataSet()", ws.DefinedName("TestRange"),
             report, report.TemplateProcessor);
         panel.Render();
 
@@ -47,7 +47,7 @@ public class DataSourcePanelDataSetRenderTest
         ws.Cell(2, 5).Value = "{di:Description}";
         ws.Cell(2, 6).Value = "{di:Type}";
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyDataSet()", ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyDataSet()", ws.DefinedName("TestRange"), report,
             report.TemplateProcessor);
         panel.Render();
 
@@ -55,8 +55,8 @@ public class DataSourcePanelDataSetRenderTest
 
         Assert.AreEqual(0, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
 
-        Assert.AreEqual(0, ws.NamedRanges.Count());
-        Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
+        Assert.AreEqual(0, ws.DefinedNames.Count());
+        Assert.AreEqual(0, ws.Workbook.DefinedNames.Count());
 
         Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
 

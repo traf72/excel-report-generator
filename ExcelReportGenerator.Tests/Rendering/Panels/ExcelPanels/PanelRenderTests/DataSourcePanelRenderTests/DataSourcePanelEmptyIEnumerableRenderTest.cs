@@ -40,7 +40,7 @@ public class DataSourcePanelEmptyIEnumerableRenderTest
         ws.Cell(1, 4).Value = "{di:Name}";
         ws.Cell(4, 4).Value = "{di:Name}";
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.DefinedName("TestRange"), report,
             report.TemplateProcessor);
         panel.Render();
 
@@ -85,7 +85,7 @@ public class DataSourcePanelEmptyIEnumerableRenderTest
         ws.Cell(1, 4).Value = "{di:Name}";
         ws.Cell(4, 4).Value = "{di:Name}";
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.DefinedName("TestRange"), report,
             report.TemplateProcessor)
         {
             ShiftType = ShiftType.Row
@@ -133,7 +133,7 @@ public class DataSourcePanelEmptyIEnumerableRenderTest
         ws.Cell(1, 4).Value = "{di:Name}";
         ws.Cell(4, 4).Value = "{di:Name}";
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.DefinedName("TestRange"), report,
             report.TemplateProcessor)
         {
             ShiftType = ShiftType.NoShift
@@ -181,7 +181,7 @@ public class DataSourcePanelEmptyIEnumerableRenderTest
         ws.Cell(1, 4).Value = "{di:Name}";
         ws.Cell(4, 4).Value = "{di:Name}";
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.DefinedName("TestRange"), report,
             report.TemplateProcessor)
         {
             Type = PanelType.Horizontal
@@ -229,7 +229,7 @@ public class DataSourcePanelEmptyIEnumerableRenderTest
         ws.Cell(1, 4).Value = "{di:Name}";
         ws.Cell(4, 4).Value = "{di:Name}";
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.DefinedName("TestRange"), report,
             report.TemplateProcessor)
         {
             Type = PanelType.Horizontal,
@@ -278,7 +278,7 @@ public class DataSourcePanelEmptyIEnumerableRenderTest
         ws.Cell(1, 4).Value = "{di:Name}";
         ws.Cell(4, 4).Value = "{di:Name}";
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyIEnumerable()", ws.DefinedName("TestRange"), report,
             report.TemplateProcessor)
         {
             Type = PanelType.Horizontal,

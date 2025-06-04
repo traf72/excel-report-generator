@@ -73,7 +73,7 @@ internal static class ExcelHelper
     {
         IXLRange newRange = CopyRange(namedRange.Ranges.ElementAt(0), cell);
         newRange.AddToNamed(name, XLScope.Worksheet);
-        return cell.Worksheet.NamedRange(name);
+        return cell.Worksheet.DefinedName(name);
     }
 
     public static IXLRange CopyRange(IXLRange range, IXLCell cell)
@@ -225,7 +225,7 @@ internal static class ExcelHelper
         IXLRange newRange = MoveRange(namedRange.Ranges.ElementAt(0), cell);
         namedRange.Delete();
         newRange.AddToNamed(name, XLScope.Worksheet);
-        return cell.Worksheet.NamedRange(name);
+        return cell.Worksheet.DefinedName(name);
     }
 
     public static IXLRange MergeRanges(IXLRange range1, IXLRange range2)

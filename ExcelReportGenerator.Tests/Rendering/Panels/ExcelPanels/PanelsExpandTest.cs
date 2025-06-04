@@ -35,7 +35,7 @@ public class PanelsExpandTest
         ws.Cell(3, 5).Value = "{di:Sum}";
 
         var parentPanel = new ExcelPanel(parentRange, report, report.TemplateProcessor);
-        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ChildRange"),
+        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ChildRange"),
             report, report.TemplateProcessor)
         {
             Parent = parentPanel
@@ -75,7 +75,7 @@ public class PanelsExpandTest
         ws.Cell(3, 5).Value = "{di:Sum}";
 
         var parentPanel = new ExcelPanel(parentRange, report, report.TemplateProcessor);
-        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ChildRange"),
+        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ChildRange"),
             report, report.TemplateProcessor)
         {
             Parent = parentPanel,
@@ -116,7 +116,7 @@ public class PanelsExpandTest
         ws.Cell(3, 5).Value = "{di:Sum}";
 
         var parentPanel = new ExcelPanel(parentRange, report, report.TemplateProcessor);
-        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ChildRange"),
+        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ChildRange"),
             report, report.TemplateProcessor)
         {
             Parent = parentPanel,
@@ -157,7 +157,7 @@ public class PanelsExpandTest
         ws.Cell(3, 5).Value = "{di:Sum}";
 
         var parentPanel = new ExcelPanel(parentRange, report, report.TemplateProcessor);
-        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ChildRange"),
+        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ChildRange"),
             report, report.TemplateProcessor)
         {
             Parent = parentPanel
@@ -197,7 +197,7 @@ public class PanelsExpandTest
         ws.Cell(3, 5).Value = "{di:Sum}";
 
         var parentPanel = new ExcelPanel(parentRange, report, report.TemplateProcessor);
-        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ChildRange"),
+        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ChildRange"),
             report, report.TemplateProcessor)
         {
             Parent = parentPanel,
@@ -238,7 +238,7 @@ public class PanelsExpandTest
         ws.Cell(3, 5).Value = "{di:Sum}";
 
         var parentPanel = new ExcelPanel(parentRange, report, report.TemplateProcessor);
-        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ChildRange"),
+        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ChildRange"),
             report, report.TemplateProcessor)
         {
             Parent = parentPanel,
@@ -279,7 +279,7 @@ public class PanelsExpandTest
         ws.Cell(3, 5).Value = "{di:Sum}";
 
         var parentPanel = new ExcelPanel(parentRange, report, report.TemplateProcessor);
-        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ChildRange"),
+        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ChildRange"),
             report, report.TemplateProcessor)
         {
             Parent = parentPanel
@@ -319,7 +319,7 @@ public class PanelsExpandTest
         ws.Cell(3, 5).Value = "{di:Sum}";
 
         var parentPanel = new ExcelPanel(parentRange, report, report.TemplateProcessor);
-        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ChildRange"),
+        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ChildRange"),
             report, report.TemplateProcessor)
         {
             Parent = parentPanel,
@@ -360,7 +360,7 @@ public class PanelsExpandTest
         ws.Cell(3, 5).Value = "{di:Sum}";
 
         var parentPanel = new ExcelPanel(parentRange, report, report.TemplateProcessor);
-        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ChildRange"),
+        var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ChildRange"),
             report, report.TemplateProcessor)
         {
             Parent = parentPanel,
@@ -399,10 +399,10 @@ public class PanelsExpandTest
         ws.Cell(3, 3).Value = "{di:Field1}";
         ws.Cell(3, 4).Value = "{di:Field2}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor);
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             ShiftType = ShiftType.Row
@@ -440,10 +440,10 @@ public class PanelsExpandTest
         ws.Cell(3, 3).Value = "{di:Field1}";
         ws.Cell(3, 4).Value = "{di:Field2}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor);
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             ShiftType = ShiftType.Row

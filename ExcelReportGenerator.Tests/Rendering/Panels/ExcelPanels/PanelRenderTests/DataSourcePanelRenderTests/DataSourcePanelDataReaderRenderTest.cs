@@ -24,7 +24,7 @@ public class DataSourcePanelDataReaderRenderTest
         ws.Cell(2, 8).FormulaA1 = "=SUM(B2,F2)";
         ws.Cell(2, 9).FormulaA1 = "=SUM(B$2,F$2)";
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetAllCustomersDataReader()", ws.NamedRange("TestRange"),
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetAllCustomersDataReader()", ws.DefinedName("TestRange"),
             report, report.TemplateProcessor);
         panel.Render();
 
@@ -51,7 +51,7 @@ public class DataSourcePanelDataReaderRenderTest
         ws.Cell(2, 5).Value = "{di:Description}";
         ws.Cell(2, 6).Value = "{di:Type}";
 
-        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyDataReader()", ws.NamedRange("TestRange"), report,
+        var panel = new ExcelDataSourcePanel("m:DataProvider:GetEmptyDataReader()", ws.DefinedName("TestRange"), report,
             report.TemplateProcessor);
         panel.Render();
 
@@ -59,8 +59,8 @@ public class DataSourcePanelDataReaderRenderTest
 
         Assert.AreEqual(0, ws.CellsUsed(XLCellsUsedOptions.Contents).Count());
 
-        Assert.AreEqual(0, ws.NamedRanges.Count());
-        Assert.AreEqual(0, ws.Workbook.NamedRanges.Count());
+        Assert.AreEqual(0, ws.DefinedNames.Count());
+        Assert.AreEqual(0, ws.Workbook.DefinedNames.Count());
 
         Assert.AreEqual(1, ws.Workbook.Worksheets.Count);
 

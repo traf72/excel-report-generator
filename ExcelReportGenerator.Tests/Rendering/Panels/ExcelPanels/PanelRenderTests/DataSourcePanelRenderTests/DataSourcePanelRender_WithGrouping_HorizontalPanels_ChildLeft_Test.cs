@@ -41,13 +41,13 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test
         ws.Cell(6, 3).Value = "{di:Name}";
         ws.Cell(6, 4).Value = "{di:Name}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal
         };
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal
@@ -163,13 +163,13 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test
         ws.Cell(6, 3).Value = "{di:Name}";
         ws.Cell(6, 4).Value = "{di:Name}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal
         };
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal
@@ -219,14 +219,14 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test
         ws.Cell(6, 3).Value = "{di:Name}";
         ws.Cell(6, 4).Value = "{di:Name}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal,
             ShiftType = ShiftType.Row
         };
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal
@@ -276,14 +276,14 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test
         ws.Cell(6, 3).Value = "{di:Name}";
         ws.Cell(6, 4).Value = "{di:Name}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal,
             ShiftType = ShiftType.Row
         };
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal,
@@ -334,14 +334,14 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test
         ws.Cell(6, 3).Value = "{di:Name}";
         ws.Cell(6, 4).Value = "{di:Name}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal,
             ShiftType = ShiftType.NoShift
         };
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal,
@@ -392,13 +392,13 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test
         ws.Cell(6, 3).Value = "{di:Name}";
         ws.Cell(6, 5).Value = "{di:Name}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal
         };
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal
@@ -448,14 +448,14 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test
         ws.Cell(6, 3).Value = "{di:Name}";
         ws.Cell(6, 5).Value = "{di:Name}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal,
             ShiftType = ShiftType.Row
         };
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal
@@ -505,14 +505,14 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test
         ws.Cell(6, 3).Value = "{di:Name}";
         ws.Cell(6, 5).Value = "{di:Name}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal,
             ShiftType = ShiftType.Row
         };
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal,
@@ -563,14 +563,14 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test
         ws.Cell(6, 3).Value = "{di:Name}";
         ws.Cell(6, 5).Value = "{di:Name}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal,
             ShiftType = ShiftType.NoShift
         };
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal
@@ -621,14 +621,14 @@ public class DataSourcePanelRender_WithGrouping_HorizontalPanels_ChildLeft_Test
         ws.Cell(6, 3).Value = "{di:Name}";
         ws.Cell(6, 5).Value = "{di:Name}";
 
-        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.NamedRange("ParentRange"),
+        var parentPanel = new ExcelDataSourcePanel("m:DataProvider:GetIEnumerable()", ws.DefinedName("ParentRange"),
             report, report.TemplateProcessor)
         {
             Type = PanelType.Horizontal,
             AfterDataItemRenderMethodName = "AfterRenderParentDataSourcePanelChildLeft"
         };
         var childPanel = new ExcelDataSourcePanel("m:DataProvider:GetChildIEnumerable(di:Name)",
-            ws.NamedRange("ChildRange"), report, report.TemplateProcessor)
+            ws.DefinedName("ChildRange"), report, report.TemplateProcessor)
         {
             Parent = parentPanel,
             Type = PanelType.Horizontal

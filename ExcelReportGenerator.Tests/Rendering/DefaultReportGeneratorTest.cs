@@ -34,16 +34,16 @@ public class DefaultReportGeneratorTest
         panel8Range.AddToNamed("Panel8", XLScope.Worksheet);
 
         var panel1 = new ExcelPanel(panel1Range, new object(), Substitute.For<ITemplateProcessor>());
-        var panel2 = new ExcelDataSourcePanel("Stub", ws.NamedRange("Panel2"), new object(),
+        var panel2 = new ExcelDataSourcePanel("Stub", ws.DefinedName("Panel2"), new object(),
             Substitute.For<ITemplateProcessor>());
-        var panel3 = new ExcelDataSourcePanel("Stub", wb.NamedRange("Panel3"), new object(),
+        var panel3 = new ExcelDataSourcePanel("Stub", wb.DefinedName("Panel3"), new object(),
             Substitute.For<ITemplateProcessor>());
         var panel4 = new ExcelPanel(panel4Range, new object(), Substitute.For<ITemplateProcessor>());
-        var panel5 = new ExcelDataSourceDynamicPanel("Stub", ws.NamedRange("Panel5"), new object(),
+        var panel5 = new ExcelDataSourceDynamicPanel("Stub", ws.DefinedName("Panel5"), new object(),
             Substitute.For<ITemplateProcessor>());
         var panel6 = new ExcelPanel(panel6Range, new object(), Substitute.For<ITemplateProcessor>());
         var panel7 = new ExcelPanel(panel7Range, new object(), Substitute.For<ITemplateProcessor>());
-        var panel8 = new ExcelTotalsPanel("Stub", ws.NamedRange("Panel8"), new object(),
+        var panel8 = new ExcelTotalsPanel("Stub", ws.DefinedName("Panel8"), new object(),
             Substitute.For<ITemplateProcessor>());
 
         IDictionary<string, (IExcelPanel, string)> panelsFlatView = new Dictionary<string, (IExcelPanel, string)>
@@ -69,7 +69,7 @@ public class DefaultReportGeneratorTest
         Assert.AreEqual(panel1Range, rootPanel.Children[0].Range);
         Assert.AreEqual(panel4Range, rootPanel.Children[1].Range);
         Assert.AreEqual(panel7Range, rootPanel.Children[2].Range);
-        Assert.AreEqual(ws.NamedRange("Panel8").Ranges.First(), rootPanel.Children[3].Range);
+        Assert.AreEqual(ws.DefinedName("Panel8").Ranges.First(), rootPanel.Children[3].Range);
         Assert.AreEqual(rootPanel, panel1.Parent);
         Assert.AreEqual(rootPanel, panel4.Parent);
         Assert.AreEqual(rootPanel, panel7.Parent);
@@ -77,17 +77,17 @@ public class DefaultReportGeneratorTest
         Assert.IsNull(rootPanel.Parent);
 
         Assert.AreEqual(2, panel1.Children.Count);
-        Assert.AreEqual(ws.NamedRange("Panel2").Ranges.First(), panel1.Children[0].Range);
+        Assert.AreEqual(ws.DefinedName("Panel2").Ranges.First(), panel1.Children[0].Range);
         Assert.AreEqual(panel6Range, panel1.Children[1].Range);
         Assert.AreEqual(panel1, panel2.Parent);
         Assert.AreEqual(panel1, panel6.Parent);
 
         Assert.AreEqual(1, panel2.Children.Count);
-        Assert.AreEqual(wb.NamedRange("Panel3").Ranges.First(), panel2.Children[0].Range);
+        Assert.AreEqual(wb.DefinedName("Panel3").Ranges.First(), panel2.Children[0].Range);
         Assert.AreEqual(panel2, panel3.Parent);
 
         Assert.AreEqual(1, panel4.Children.Count);
-        Assert.AreEqual(ws.NamedRange("Panel5").Ranges.First(), panel4.Children[0].Range);
+        Assert.AreEqual(ws.DefinedName("Panel5").Ranges.First(), panel4.Children[0].Range);
         Assert.AreEqual(panel4, panel5.Parent);
     }
 
@@ -102,7 +102,7 @@ public class DefaultReportGeneratorTest
         panel2Range.AddToNamed("Panel2", XLScope.Worksheet);
 
         var panel1 = new ExcelPanel(panel1Range, new object(), Substitute.For<ITemplateProcessor>());
-        var panel2 = new ExcelDataSourcePanel("Stub", ws.NamedRange("Panel2"), new object(),
+        var panel2 = new ExcelDataSourcePanel("Stub", ws.DefinedName("Panel2"), new object(),
             Substitute.For<ITemplateProcessor>());
 
         IDictionary<string, (IExcelPanel, string)> panelsFlatView = new Dictionary<string, (IExcelPanel, string)>
@@ -123,7 +123,7 @@ public class DefaultReportGeneratorTest
         var panel3Range = ws.Range(3, 1, 5, 4);
         panel3Range.AddToNamed("Panel3", XLScope.Worksheet);
 
-        var panel3 = new ExcelDataSourcePanel("Stub", ws.NamedRange("Panel3"), new object(),
+        var panel3 = new ExcelDataSourcePanel("Stub", ws.DefinedName("Panel3"), new object(),
             Substitute.For<ITemplateProcessor>());
 
         panelsFlatView = new Dictionary<string, (IExcelPanel, string)>
@@ -166,7 +166,7 @@ public class DefaultReportGeneratorTest
         var method = reportGenerator.GetType()
             .GetMethod("GetPanelsNamedRanges", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        var result = (IList<IXLDefinedName>) method.Invoke(reportGenerator, new object[] {ws.NamedRanges});
+        var result = (IList<IXLDefinedName>) method.Invoke(reportGenerator, new object[] {ws.DefinedNames});
 
         Assert.AreEqual(6, result.Count);
         Assert.AreEqual("s_Panel1", result[0].Name);
@@ -199,25 +199,25 @@ public class DefaultReportGeneratorTest
 
         var range = ws.Range(ws.Cell(2, 2), ws.Cell(3, 3));
         range.AddToNamed("range1", XLScope.Worksheet);
-        namedRanges.Add(ws.NamedRange("range1"));
+        namedRanges.Add(ws.DefinedName("range1"));
         Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(10, 10)),
             method.Invoke(reportGenerator, new object[] {ws, namedRanges}));
 
         range = ws.Range(ws.Cell(2, 2), ws.Cell(10, 11));
         range.AddToNamed("range2", XLScope.Worksheet);
-        namedRanges.Add(ws.NamedRange("range2"));
+        namedRanges.Add(ws.DefinedName("range2"));
         Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(10, 11)),
             method.Invoke(reportGenerator, new object[] {ws, namedRanges}));
 
         range = ws.Range(ws.Cell(5, 5), ws.Cell(11, 10));
         range.AddToNamed("range3", XLScope.Worksheet);
-        namedRanges.Add(ws.NamedRange("range3"));
+        namedRanges.Add(ws.DefinedName("range3"));
         Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(11, 11)),
             method.Invoke(reportGenerator, new object[] {ws, namedRanges}));
 
         range = ws.Range(ws.Cell(18, 18), ws.Cell(18, 18));
         range.AddToNamed("range4", XLScope.Worksheet);
-        namedRanges.Add(ws.NamedRange("range4"));
+        namedRanges.Add(ws.DefinedName("range4"));
         Assert.AreEqual(ws.Range(ws.FirstCell(), ws.Cell(18, 18)),
             method.Invoke(reportGenerator, new object[] {ws, namedRanges}));
 
@@ -237,12 +237,12 @@ public class DefaultReportGeneratorTest
 
         var parentRange = sheet1.Range(2, 2, 3, 5);
         parentRange.AddToNamed("d_Parent", XLScope.Worksheet);
-        var parentNamedRange = sheet1.NamedRange("d_Parent");
+        var parentNamedRange = sheet1.DefinedName("d_Parent");
         parentNamedRange.Comment = "DataSource = m:DataProvider:GetIEnumerable();";
 
         var childRange = sheet1.Range(3, 2, 3, 5);
         childRange.AddToNamed("d_Child", XLScope.Workbook);
-        var childNamedRange = wb.NamedRange("d_Child");
+        var childNamedRange = wb.DefinedName("d_Child");
         childNamedRange.Comment =
             $"ParentPanel = d_Parent{Environment.NewLine}DataSource = m:DataProvider:GetChildIEnumerable(di:Name);GroupBy=1,4";
 
@@ -266,7 +266,7 @@ public class DefaultReportGeneratorTest
 
         var dynamicRange = sheet2.Range(2, 2, 4, 2);
         dynamicRange.AddToNamed("dyn_Dynamic", XLScope.Workbook);
-        var dynamicNamedRange = wb.NamedRange("dyn_Dynamic");
+        var dynamicNamedRange = wb.DefinedName("dyn_Dynamic");
         dynamicNamedRange.Comment = "DataSource = m:DataProvider:GetAllCustomersDataReader()";
 
         sheet2.Cell(2, 2).Value = "{Headers}";
@@ -275,13 +275,13 @@ public class DefaultReportGeneratorTest
 
         var totalsRange = sheet2.Range(6, 2, 6, 7);
         totalsRange.AddToNamed("t_Totals", XLScope.Worksheet);
-        var totalsNamedRange = sheet2.NamedRange("t_Totals");
+        var totalsNamedRange = sheet2.DefinedName("t_Totals");
         totalsNamedRange.Comment =
             "DataSource = m:DataProvider:GetIEnumerable(); BeforeRenderMethodName = TestExcelTotalsPanelBeforeRender; AfterRenderMethodName = TestExcelTotalsPanelAfterRender";
 
         var intRange = sheet2.Range(10, 2, 10, 2);
         intRange.AddToNamed("d_IntData", XLScope.Worksheet);
-        var intNamedRange = sheet2.NamedRange("d_IntData");
+        var intNamedRange = sheet2.DefinedName("d_IntData");
         intNamedRange.Comment = "DataSource = m:DataProvider:GetIntData()";
 
         sheet2.Cell(10, 2).Value = "{di:di}";
@@ -356,12 +356,12 @@ public class DefaultReportGeneratorTest
 
         var parentRange = sheet1.Range(2, 2, 3, 5);
         parentRange.AddToNamed("d_Parent", XLScope.Worksheet);
-        var parentNamedRange = sheet1.NamedRange("d_Parent");
+        var parentNamedRange = sheet1.DefinedName("d_Parent");
         parentNamedRange.Comment = "DataSource = m:DataProvider:GetIEnumerable()";
 
         var childRange = sheet1.Range(3, 2, 3, 5);
         childRange.AddToNamed("d_Child", XLScope.Workbook);
-        var childNamedRange = wb.NamedRange("d_Child");
+        var childNamedRange = wb.DefinedName("d_Child");
         childNamedRange.Comment =
             $"ParentPanel = d_Parent{Environment.NewLine}DataSource = m:DataProvider:GetChildIEnumerable(di:Name)";
 
@@ -379,14 +379,14 @@ public class DefaultReportGeneratorTest
 
         var intRange = sheet1.Range(2, 10, 2, 10);
         intRange.AddToNamed("d_IntData", XLScope.Worksheet);
-        var intNamedRange = sheet1.NamedRange("d_IntData");
+        var intNamedRange = sheet1.DefinedName("d_IntData");
         intNamedRange.Comment = "DataSource = m:DataProvider:GetIntData()";
 
         sheet1.Cell(2, 10).Value = "{di:self}";
 
         var dynamicRange = sheet2.Range(2, 2, 4, 2);
         dynamicRange.AddToNamed("dyn_Dynamic", XLScope.Workbook);
-        var dynamicNamedRange = wb.NamedRange("dyn_Dynamic");
+        var dynamicNamedRange = wb.DefinedName("dyn_Dynamic");
         dynamicNamedRange.Comment = "DataSource = m:DataProvider:GetAllCustomersDataReader()";
 
         sheet2.Cell(2, 2).Value = "{Headers}";
@@ -395,7 +395,7 @@ public class DefaultReportGeneratorTest
 
         var totalsRange = sheet2.Range(6, 2, 6, 7);
         totalsRange.AddToNamed("t_Totals", XLScope.Worksheet);
-        var totalsNamedRange = sheet2.NamedRange("t_Totals");
+        var totalsNamedRange = sheet2.DefinedName("t_Totals");
         totalsNamedRange.Comment =
             "DataSource = m:DataProvider:GetIEnumerable(); BeforeRenderMethodName = TestExcelTotalsPanelBeforeRender; AfterRenderMethodName = TestExcelTotalsPanelAfterRender";
 

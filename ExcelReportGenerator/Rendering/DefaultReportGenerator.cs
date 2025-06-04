@@ -163,7 +163,7 @@ public class DefaultReportGenerator
             return reportTemplate;
         }
 
-        IList<IXLDefinedName> workbookPanels = GetPanelsNamedRanges(reportTemplate.NamedRanges);
+        IList<IXLDefinedName> workbookPanels = GetPanelsNamedRanges(reportTemplate.DefinedNames);
         foreach (IXLWorksheet ws in worksheets)
         {
             SystemVariableProvider.SheetName = ws.Name;
@@ -176,7 +176,7 @@ public class DefaultReportGenerator
                 continue;
             }
 
-            IList<IXLDefinedName> worksheetPanels = GetPanelsNamedRanges(ws.NamedRanges);
+            IList<IXLDefinedName> worksheetPanels = GetPanelsNamedRanges(ws.DefinedNames);
             foreach (IXLDefinedName workbookPanel in workbookPanels)
             {
                 if (workbookPanel.Ranges.First().Worksheet == ws
