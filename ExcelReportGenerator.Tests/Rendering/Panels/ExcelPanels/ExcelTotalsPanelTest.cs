@@ -132,7 +132,7 @@ public class ExcelTotalsPanelTest
         dataTable.Rows.Add(null, null, null, null);
         dataTable.Rows.Add(2, 30.9m, "def", false);
 
-        var totalPanel = new ExcelTotalsPanel(dataTable, Substitute.For<IXLNamedRange>(), Substitute.For<object>(),
+        var totalPanel = new ExcelTotalsPanel(dataTable, Substitute.For<IXLDefinedName>(), Substitute.For<object>(),
             new TestReport().TemplateProcessor);
         IEnumerator enumerator = EnumeratorFactory.Create(dataTable);
         IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
@@ -208,7 +208,7 @@ public class ExcelTotalsPanelTest
     public void TestDoAggregationWithEmptyData()
     {
         var data = new List<Test>();
-        var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), Substitute.For<object>(),
+        var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLDefinedName>(), Substitute.For<object>(),
             Substitute.For<ITemplateProcessor>());
         IEnumerator enumerator = EnumeratorFactory.Create(data);
         IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
@@ -235,7 +235,7 @@ public class ExcelTotalsPanelTest
     {
         var data = new DataProvider().GetIntData();
 
-        var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), Substitute.For<object>(),
+        var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLDefinedName>(), Substitute.For<object>(),
             new TestReport().TemplateProcessor);
         IEnumerator enumerator = EnumeratorFactory.Create(data);
         IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
@@ -256,7 +256,7 @@ public class ExcelTotalsPanelTest
     {
         var data = GetTestData();
 
-        var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), Substitute.For<object>(),
+        var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLDefinedName>(), Substitute.For<object>(),
             new TestReport().TemplateProcessor);
         IEnumerator enumerator = EnumeratorFactory.Create(data);
         IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
@@ -292,7 +292,7 @@ public class ExcelTotalsPanelTest
     {
         var data = GetTestData();
 
-        var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), new TestReportForAggregation(),
+        var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLDefinedName>(), new TestReportForAggregation(),
             new TestReport().TemplateProcessor);
         IEnumerator enumerator = EnumeratorFactory.Create(data);
         IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>
@@ -337,7 +337,7 @@ public class ExcelTotalsPanelTest
     {
         var data = GetTestData();
 
-        var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLNamedRange>(), new TestReportForAggregation(),
+        var totalPanel = new ExcelTotalsPanel(data, Substitute.For<IXLDefinedName>(), new TestReportForAggregation(),
             new TestReport().TemplateProcessor);
         IEnumerator enumerator = EnumeratorFactory.Create(data);
         IList<ExcelTotalsPanel.ParsedAggregationFunc> totalCells = new List<ExcelTotalsPanel.ParsedAggregationFunc>

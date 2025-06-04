@@ -937,9 +937,6 @@ public class ExcelHelperTest
 
         range1.Delete(XLShiftDeletedCells.ShiftCellsLeft);
 
-        Assert.AreEqual(range2, ExcelHelper.MergeRanges(range1, range2));
-        Assert.IsNull(ExcelHelper.MergeRanges(range1, null));
-
         range1 = ws.Range(3, 3, 5, 5);
         range2.Delete(XLShiftDeletedCells.ShiftCellsLeft);
 

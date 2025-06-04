@@ -151,7 +151,7 @@ public class TotalsPanelRenderTest
     {
         public string Meth(double param1, decimal param2)
         {
-            return ((decimal) param1 + param2).ToString("F");
+            return ((decimal) param1 + param2).ToString("F2");
         }
 
         public decimal Round(decimal input, int precision)

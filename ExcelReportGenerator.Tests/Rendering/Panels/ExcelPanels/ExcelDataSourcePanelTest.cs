@@ -221,7 +221,7 @@ public class ExcelDataSourcePanelTest
         ws.Range(6, 12, 7, 12).Merge();
         ws.Range(9, 12, 10,12).Merge();
 
-        var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(),
+        var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLDefinedName>(), new object(),
             Substitute.For<ITemplateProcessor>())
         {
             GroupBy = "1,2, 3 , 4,5,6,7,8,9,10,11",
@@ -291,7 +291,7 @@ public class ExcelDataSourcePanelTest
 
         ws.Range(2, 7, 3, 7).Merge();
 
-        var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(),
+        var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLDefinedName>(), new object(),
             Substitute.For<ITemplateProcessor>())
         {
             GroupBy = "1,2, 3 , 4,5,6",
@@ -414,7 +414,7 @@ public class ExcelDataSourcePanelTest
         ws.Range(12, 6, 12, 7).Merge();
         ws.Range(12, 9, 12, 10).Merge();
 
-        var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(),
+        var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLDefinedName>(), new object(),
             Substitute.For<ITemplateProcessor>())
         {
             GroupBy = "1,2, 3 , 4,5,6,7,8,9,10,11",
@@ -485,7 +485,7 @@ public class ExcelDataSourcePanelTest
 
         ws.Range(7, 2, 7, 3).Merge();
 
-        var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(),
+        var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLDefinedName>(), new object(),
             Substitute.For<ITemplateProcessor>())
         {
             GroupBy = "1,2, 3 , 4,5,6",
@@ -527,7 +527,7 @@ public class ExcelDataSourcePanelTest
         ws.Cell(8, 3).Value = "Pear";
         ws.Cell(9, 3).Value = "Pear";
 
-        var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(),
+        var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLDefinedName>(), new object(),
             Substitute.For<ITemplateProcessor>()) {GroupBy = null};
 
         var method = panel.GetType().GetMethod("GroupResult", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -536,14 +536,14 @@ public class ExcelDataSourcePanelTest
 
         Assert.AreEqual(0, ws.MergedRanges.Count);
 
-        panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(),
+        panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLDefinedName>(), new object(),
             Substitute.For<ITemplateProcessor>()) {GroupBy = string.Empty};
         SetResultRange(panel, range);
         method.Invoke(panel, null);
 
         Assert.AreEqual(0, ws.MergedRanges.Count);
 
-        panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(),
+        panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLDefinedName>(), new object(),
             Substitute.For<ITemplateProcessor>()) {GroupBy = "  "};
         SetResultRange(panel, range);
         method.Invoke(panel, null);
@@ -563,7 +563,7 @@ public class ExcelDataSourcePanelTest
         ws.Cell(2, 2).Value = "One";
         ws.Cell(3, 2).Value = "One";
 
-        var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(),
+        var panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLDefinedName>(), new object(),
             Substitute.For<ITemplateProcessor>()) {GroupBy = "str"};
         var method = panel.GetType().GetMethod("GroupResult", BindingFlags.Instance | BindingFlags.NonPublic);
         SetResultRange(panel, range);
@@ -571,7 +571,7 @@ public class ExcelDataSourcePanelTest
         ExceptionAssert.ThrowsBaseException<InvalidCastException>(() => method.Invoke(panel, null),
             $"Parse \"GroupBy\" property failed. Cannot convert value \"str\" to {nameof(Int32)}");
 
-        panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLNamedRange>(), new object(),
+        panel = new ExcelDataSourcePanel("Stub", Substitute.For<IXLDefinedName>(), new object(),
             Substitute.For<ITemplateProcessor>()) {GroupBy = "1, 1.4"};
         SetResultRange(panel, range);
 

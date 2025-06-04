@@ -13,12 +13,12 @@ namespace ExcelReportGenerator.Rendering.Panels.ExcelPanels;
 
 internal class ExcelTotalsPanel : ExcelDataSourcePanel
 {
-    public ExcelTotalsPanel(string dataSourceTemplate, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor)
+    public ExcelTotalsPanel(string dataSourceTemplate, IXLDefinedName namedRange, object report, ITemplateProcessor templateProcessor)
         : base(dataSourceTemplate, namedRange, report, templateProcessor)
     {
     }
 
-    public ExcelTotalsPanel(object data, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor)
+    public ExcelTotalsPanel(object data, IXLDefinedName namedRange, object report, ITemplateProcessor templateProcessor)
         : base(data, namedRange, report, templateProcessor)
     {
     }

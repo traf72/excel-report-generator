@@ -15,12 +15,12 @@ internal class ExcelDataSourceDynamicPanel : ExcelDataSourcePanel
 {
     private readonly IColumnsProviderFactory _columnsFactory = new ColumnsProviderFactory();
 
-    public ExcelDataSourceDynamicPanel(string dataSourceTemplate, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor)
+    public ExcelDataSourceDynamicPanel(string dataSourceTemplate, IXLDefinedName namedRange, object report, ITemplateProcessor templateProcessor)
         : base(dataSourceTemplate, namedRange, report, templateProcessor)
     {
     }
 
-    public ExcelDataSourceDynamicPanel(object data, IXLNamedRange namedRange, object report, ITemplateProcessor templateProcessor)
+    public ExcelDataSourceDynamicPanel(object data, IXLDefinedName namedRange, object report, ITemplateProcessor templateProcessor)
         : base(data, namedRange, report, templateProcessor)
     {
     }
