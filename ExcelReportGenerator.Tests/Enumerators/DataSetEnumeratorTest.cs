@@ -48,8 +48,7 @@ public class DataSetEnumeratorTest
         Assert.IsFalse(enumerator.MoveNext());
         Assert.IsFalse(enumerator.MoveNext());
 
-        Assert.AreEqual(3, enumerator.Current.ItemArray[0]);
-        Assert.AreEqual(3, enumerator.Current.ItemArray[0]);
+        Assert.IsNull(enumerator.Current);
 
         Assert.AreEqual(3, result.Count);
         Assert.AreEqual(1, result[0]);
@@ -70,8 +69,8 @@ public class DataSetEnumeratorTest
         Assert.IsFalse(enumerator.MoveNext());
         Assert.IsFalse(enumerator.MoveNext());
 
-        Assert.AreEqual(333, enumerator.Current.ItemArray[0]);
-        Assert.AreEqual(333, enumerator.Current.ItemArray[0]);
+        Assert.IsNull(enumerator.Current);
+
         Assert.AreEqual(3, result.Count);
         Assert.AreEqual(111, result[0]);
         Assert.AreEqual(222, result[1]);

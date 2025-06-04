@@ -34,8 +34,7 @@ public class DataTableEnumeratorTest
         Assert.IsFalse(enumerator.MoveNext());
         Assert.IsFalse(enumerator.MoveNext());
 
-        Assert.AreEqual(3, enumerator.Current.ItemArray[0]);
-        Assert.AreEqual(3, enumerator.Current.ItemArray[0]);
+        Assert.IsNull(enumerator.Current);
 
         Assert.AreEqual(3, result.Count);
         Assert.AreEqual(1, result[0]);
@@ -60,8 +59,7 @@ public class DataTableEnumeratorTest
         Assert.IsFalse(enumerator.MoveNext());
         Assert.IsFalse(enumerator.MoveNext());
 
-        Assert.AreEqual(3, enumerator.Current.ItemArray[0]);
-        Assert.AreEqual(3, enumerator.Current.ItemArray[0]);
+        Assert.IsNull(enumerator.Current);
 
         Assert.AreEqual(3, result.Count);
         Assert.AreEqual(1, result[0]);
